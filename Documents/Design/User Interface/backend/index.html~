@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Full Layout - jQuery EasyUI Demo</title>
+	<link rel="stylesheet" type="text/css" href="assets/jquery-easyui/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="assets/jquery-easyui/themes/icon.css">
+	<script type="text/javascript" src="assets/jquery-easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="assets/jquery-easyui/jquery.easyui.min.js"></script>
+</head>
+
+<body class="easyui-layout">
+	<!-- Main Menu Start -->
+	<div data-options="region:'west',split:true,title:'Menu'" style="width:200px;">
+	    <ul id="tt" style="list-style:none;margin: 0;
+	padding: 0;">
+            <li><button style="width:100%">Movie</button></li>
+        </ul>
+	</div>
+	<!-- Main Menu End -->
+	<div data-options="region:'center',title:'Main'">
+	<!-- The Movie List Start -->
+	    <table class="easyui-datagrid" data-options="fitColumns:true,singleSelect:true,pagination:true" style="height:350px">
+            <thead>
+                <tr>
+                    <th data-options="field:'name',width:400">Name</th>
+                    <th data-options="field:'region',width:200">Region</th>
+                    <th data-options="field:'year',width:100">Year</th>
+                    <th data-options="field:'time',width:100">Time</th>
+                    <th data-options="field:'language',width:100">Language</th>
+                    <th data-options="field:'watched',width:100">Watched</th>
+                    <th data-options="field:'wanted',width:100">Wanted</th>
+                    <th data-options="field:'uninterested',width:100">Uninterested</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Transformers: Age of Extinction</td>
+                    <td>USA</td>
+                    <td>2014</td>
+                    <td>166</td>
+                    <td>English</td>
+                    <td>2323</td>
+                    <td>11264</td>
+                    <td>26548</td>
+                </tr>
+                <tr>
+                    <td>Transformers: Dark of the Moon</td>
+                    <td>USA</td>
+                    <td>2011</td>
+                    <td>157</td>
+                    <td>English</td>
+                    <td>2323</td>
+                    <td>15664</td>
+                    <td>648</td>
+                </tr>
+                <tr>
+                    <td>Transformers:Revenge of the Fallen</td>
+                    <td>USA</td>
+                    <td>2009</td>
+                    <td>150</td>
+                    <td>English</td>
+                    <td>5323</td>
+                    <td>19844</td>
+                    <td>578</td>
+                </tr>
+                <tr>
+                    <td>Transformers</td>
+                    <td>USA</td>
+                    <td>2006</td>
+                    <td>144</td>
+                    <td>English</td>
+                    <td>2343</td>
+                    <td>1944</td>
+                    <td>52</td>
+                </tr>
+            </tbody>
+        </table>
+	<!-- The movie List End -->
+	<!-- The movie detail Start -->
+	    <div class="easyui-panel" title="Detail"
+            style="height:150px;padding:10px;background:#fafafa;"
+            data-options="closable:false,collapsible:false,minimizable:false,maximizable:false,maximized:true">
+            <table border="1">
+                <tr>
+                    <td rowspan="7">
+                        <img src="assets/images/t4.jpg" width="100" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Name</td><td>Transformers: Age of Extinction</td>
+                </tr>
+                <tr>
+                    <td>Year</td><td>2014</td>
+                </tr>
+                <tr>
+                    <td>Region</td><td>USA</td>
+                </tr>
+                <tr>
+                    <td>Type</td><td>Unknown</td>
+                </tr>
+                <tr>
+                    <td>Time</td><td>166</td>
+                </tr>
+                <tr>
+                    <td>Language</td><td>English</td>
+                </tr>
+                <tr>
+                    <td>Intruduction</td>
+                    <td colspan="3">
+                        This ish fashd iadsh aisduf hasdf asdf 
+                        asdf asdf asdf asdf adsf asdf asdf asdfa 
+                        sdfasd fasd fasdf asdf asdf sdsdfg
+                        sdfgdfgsdfg sfdg sdfg sdfg sdfg sdfg sdfg 
+                        sfdgsdfgsdfgsdfg sdfg sdf gsdf gsdfg sdfg s
+                        sfdg sdfgsdf gsdfgsdfg  dfgsd fg
+                    </td>
+                </tr>
+            </table>
+        </div>
+	<!-- The movie detail End -->
+	<!-- Edit Movie Dialog Start -->
+	    <div id="dd" class="easyui-dialog" title="My Dialog" style="padding:10px;width:500px"
+            data-options="iconCls:'icon-save',resizable:true,modal:true">
+                <form id="ff" method="post">
+                    <table style="width:100%">
+                        <tr>
+                            <td>Name</td>
+                            <td><input type="text" name="name" style="width:97%" /></td>
+                        </tr>
+                        <tr>
+                            <td>Year</td>
+                            <td><input type="text" name="name" style="width:97%" /></td>
+                        </tr>
+                        <tr>
+                            <td>Region</td>
+                            <td><input type="text" name="name" style="width:97%" /></td>
+                        </tr>
+                        <tr>
+                            <td>Type</td>
+                            <td><input type="text" name="name" style="width:97%" /></td>
+                        </tr>
+                        <tr>
+                            <td>Time</td>
+                            <td><input type="text" name="name" style="width:97%" /></td>
+                        </tr>
+                        <tr>
+                            <td>Language</td>
+                            <td><input type="text" name="name" style="width:97%" /></td>
+                        </tr>
+                        <tr>
+                            <td>Intruduction</td>
+                            <td><textarea style="width:97%"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td>Poster</td>
+                            <td><input class="easyui-filebox" style="width:97%" /></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <button type="button">Save</button>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+        </div>
+	<!-- Edit Movie Dialog End -->
+	</div>
+</body>
+</html>
