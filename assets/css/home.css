@@ -1,0 +1,19 @@
+.l-home-list-container {
+    list-style: none;
+    margin: 0 0 0 0 ;
+    padding: 0 0 0 25px;
+    height: 236px;
+    border-top: 1px solid #C0C0C0;
+    border-bottom: 1px solid #C0C0C0;
+}
+
+.l-home-list-container li {
+    float: left;
+    height: 100px;
+    margin: 10px 5px 10px 5px;
+}
+
+.l-home-list-container img {
+    height: 215px;
+    width: 150px;
+}
