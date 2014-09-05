@@ -13,7 +13,53 @@
     margin: 10px 5px 10px 5px;
 }
 
-.l-home-list-container img {
+.l-home-list-item {
     height: 215px;
     width: 150px;
+    background-size: 100% 100%;
+    color: white;
+}
+
+.l-home-list-item-top-container {
+}
+
+.l-home-list-item-top-container button {
+    opacity: 0.8;
+}
+
+.l-home-list-item-bottom-container {
+    position: relative;
+    top: 123px;
+}
+
+.l-home-list-item-bottom-container button {
+    opacity: 0.8;
+}
+
+.l-home-list-item-img {
+    height: 215px;
+    width: 150px;
+}
+
+.l-home-list-arrow-left {
+    background-color: #908F9E;
+    position: absolute;
+    top: 90px;
+    height: 50px;
+    opacity: 0.6;
+    font-size: 3em;
+    width: 50px;
+    text-align: center;
+}
+
+.l-home-list-arrow-right {
+    background-color: #908F9E;
+    position: absolute;
+    top: 90px;
+    height: 50px;
+    opacity: 0.6;
+    font-size: 3em;
+    width: 50px;
+    text-align: center;
+    right: 15px;
 }
