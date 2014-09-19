@@ -1,0 +1,2959 @@
+{
+    "event": "suiteStart",
+    "suite": ".",
+    "tests": 190
+}{
+    "event": "suiteStart",
+    "suite": "X_Database_Database_Test",
+    "tests": 1
+}{
+    "event": "testStart",
+    "suite": "X_Database_Database_Test",
+    "test": "X_Database_Database_Test::test__construct"
+}{
+    "event": "test",
+    "suite": "X_Database_Database_Test",
+    "test": "X_Database_Database_Test::test__construct",
+    "status": "pass",
+    "time": 0.0041599273681641,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "X_Database_Mangement_Test",
+    "tests": 6
+}{
+    "event": "testStart",
+    "suite": "X_Database_Mangement_Test",
+    "test": "X_Database_Mangement_Test::testAddDb"
+}{
+    "event": "test",
+    "suite": "X_Database_Mangement_Test",
+    "test": "X_Database_Mangement_Test::testAddDb",
+    "status": "pass",
+    "time": 0.0034940242767334,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_Mangement_Test",
+    "test": "X_Database_Mangement_Test::testGetDb"
+}{
+    "event": "test",
+    "suite": "X_Database_Mangement_Test",
+    "test": "X_Database_Mangement_Test::testGetDb",
+    "status": "pass",
+    "time": 0.0021030902862549,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_Mangement_Test",
+    "test": "X_Database_Mangement_Test::testHasDb"
+}{
+    "event": "test",
+    "suite": "X_Database_Mangement_Test",
+    "test": "X_Database_Mangement_Test::testHasDb",
+    "status": "pass",
+    "time": 0.0022170543670654,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_Mangement_Test",
+    "test": "X_Database_Mangement_Test::testSwitchTo"
+}{
+    "event": "test",
+    "suite": "X_Database_Mangement_Test",
+    "test": "X_Database_Mangement_Test::testSwitchTo",
+    "status": "pass",
+    "time": 0.0074560642242432,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_Mangement_Test",
+    "test": "X_Database_Mangement_Test::testGetCurrentDbName"
+}{
+    "event": "test",
+    "suite": "X_Database_Mangement_Test",
+    "test": "X_Database_Mangement_Test::testGetCurrentDbName",
+    "status": "pass",
+    "time": 0.0026528835296631,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_Mangement_Test",
+    "test": "X_Database_Mangement_Test::testRemoveDb"
+}{
+    "event": "test",
+    "suite": "X_Database_Mangement_Test",
+    "test": "X_Database_Mangement_Test::testRemoveDb",
+    "status": "pass",
+    "time": 0.0036120414733887,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "tests": 69
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testRegisterEventHandler"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testRegisterEventHandler",
+    "status": "pass",
+    "time": 0.0041859149932861,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testOnAfterSave"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testOnAfterSave",
+    "status": "pass",
+    "time": 0.002424955368042,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testOnAfterInsert"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testOnAfterInsert",
+    "status": "pass",
+    "time": 0.0024011135101318,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testOnAfterUpdate"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testOnAfterUpdate",
+    "status": "pass",
+    "time": 0.0023751258850098,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testOnAfterValidate"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testOnAfterValidate",
+    "status": "pass",
+    "time": 0.0023751258850098,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testOnAfterFind"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testOnAfterFind",
+    "status": "pass",
+    "time": 0.0025219917297363,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testOnAfterDelete"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testOnAfterDelete",
+    "status": "pass",
+    "time": 0.0026860237121582,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testOnBeforeSave"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testOnBeforeSave",
+    "status": "pass",
+    "time": 0.0023989677429199,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testOnBeforeInsert"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testOnBeforeInsert",
+    "status": "pass",
+    "time": 0.0023748874664307,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testOnBeforeUpdate"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testOnBeforeUpdate",
+    "status": "pass",
+    "time": 0.0023970603942871,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testOnBeforeValidate"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testOnBeforeValidate",
+    "status": "pass",
+    "time": 0.0023901462554932,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testOnBeforeFind"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testOnBeforeFind",
+    "status": "pass",
+    "time": 0.0023660659790039,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testOnBeforeDelete"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testOnBeforeDelete",
+    "status": "pass",
+    "time": 0.0025160312652588,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testTrigerSelfEvent"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testTrigerSelfEvent",
+    "status": "pass",
+    "time": 0.0031440258026123,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testAfterSave"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testAfterSave",
+    "status": "pass",
+    "time": 0.002640962600708,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testAfterInser"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testAfterInser",
+    "status": "pass",
+    "time": 0.11623811721802,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testAfterUpdate"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testAfterUpdate",
+    "status": "pass",
+    "time": 0.0023989677429199,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testAfterValidate"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testAfterValidate",
+    "status": "pass",
+    "time": 0.0023438930511475,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testAfterFind"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testAfterFind",
+    "status": "pass",
+    "time": 0.0023741722106934,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testAfterDelete"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testAfterDelete",
+    "status": "pass",
+    "time": 0.0023529529571533,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testBeforeSave"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testBeforeSave",
+    "status": "pass",
+    "time": 0.0023860931396484,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testBeforeInsert"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testBeforeInsert",
+    "status": "pass",
+    "time": 0.0023858547210693,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testBeforeUpdate"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testBeforeUpdate",
+    "status": "pass",
+    "time": 0.0023269653320312,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testBeforeValidate"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testBeforeValidate",
+    "status": "pass",
+    "time": 0.0023620128631592,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testBeforeFind"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testBeforeFind",
+    "status": "pass",
+    "time": 0.0023348331451416,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testBeforeDelete"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testBeforeDelete",
+    "status": "pass",
+    "time": 0.0023658275604248,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testAddScope"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testAddScope",
+    "status": "pass",
+    "time": 0.0039680004119873,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testAddDefaultScope"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testAddDefaultScope",
+    "status": "pass",
+    "time": 0.0037779808044434,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testScope"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testScope",
+    "status": "pass",
+    "time": 0.0064170360565186,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testWithScope"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testWithScope",
+    "status": "pass",
+    "time": 0.18414402008057,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testWithoutScope"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testWithoutScope",
+    "status": "pass",
+    "time": 0.175616979599,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testMergeConditionWithScope"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testMergeConditionWithScope",
+    "status": "pass",
+    "time": 0.0065851211547852,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testDoFind"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testDoFind",
+    "status": "pass",
+    "time": 0.22199010848999,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testFind"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testFind",
+    "status": "pass",
+    "time": 0.19973206520081,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testFindBySql"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testFindBySql",
+    "status": "pass",
+    "time": 0.091331005096436,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testFindByAttribute"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testFindByAttribute",
+    "status": "pass",
+    "time": 0.093793869018555,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testFindByCondition"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testFindByCondition",
+    "status": "pass",
+    "time": 0.17722105979919,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testFindByPrimaryKey"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testFindByPrimaryKey",
+    "status": "pass",
+    "time": 0.17947196960449,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testFindAllBySql"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testFindAllBySql",
+    "status": "pass",
+    "time": 0.17788481712341,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testFindAllByAttributes"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testFindAllByAttributes",
+    "status": "pass",
+    "time": 0.18547487258911,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testFindAllByCondition"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testFindAllByCondition",
+    "status": "pass",
+    "time": 0.17511916160583,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testDelete"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testDelete",
+    "status": "pass",
+    "time": 0.13818407058716,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testDoDeleteAll"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testDoDeleteAll",
+    "status": "pass",
+    "time": 0.50634407997131,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testDeleteAllBySql"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testDeleteAllBySql",
+    "status": "pass",
+    "time": 0.3349289894104,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testDeleteAllByAttributes"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testDeleteAllByAttributes",
+    "status": "pass",
+    "time": 0.25099897384644,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testDeleteAllByCondition"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testDeleteAllByCondition",
+    "status": "pass",
+    "time": 0.30974292755127,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testDoUpdateAll"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testDoUpdateAll",
+    "status": "pass",
+    "time": 0.3663330078125,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testUpdateAllBySql"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testUpdateAllBySql",
+    "status": "pass",
+    "time": 0.25810885429382,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testUpdateAllByAttributes"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testUpdateAllByAttributes",
+    "status": "pass",
+    "time": 0.47942614555359,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testDoUpdateAllByCondition"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testDoUpdateAllByCondition",
+    "status": "pass",
+    "time": 0.25947999954224,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testDoSaveUpdate"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testDoSaveUpdate",
+    "status": "pass",
+    "time": 0.15652012825012,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testDoSaveInsert"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testDoSaveInsert",
+    "status": "pass",
+    "time": 0.084862947463989,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testSave"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testSave",
+    "status": "pass",
+    "time": 0.1878399848938,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testGetAttribute"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testGetAttribute",
+    "status": "pass",
+    "time": 0.0038571357727051,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testSetAttribute"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testSetAttribute",
+    "status": "pass",
+    "time": 0.0074949264526367,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testSetAttributes"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testSetAttributes",
+    "status": "pass",
+    "time": 0.004054069519043,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testHasAttribute"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testHasAttribute",
+    "status": "pass",
+    "time": 0.003026008605957,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testGetAttributeNames"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testGetAttributeNames",
+    "status": "pass",
+    "time": 0.0044989585876465,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testToArray"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testToArray",
+    "status": "pass",
+    "time": 0.0048580169677734,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testValidate"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testValidate",
+    "status": "pass",
+    "time": 0.0046799182891846,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testValidateAttribute"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testValidateAttribute",
+    "status": "pass",
+    "time": 0.0041570663452148,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testHasError"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testHasError",
+    "status": "pass",
+    "time": 0.0052790641784668,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testHasErrorOnAttribute"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testHasErrorOnAttribute",
+    "status": "pass",
+    "time": 0.0053958892822266,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testGetErrors"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testGetErrors",
+    "status": "pass",
+    "time": 0.0048470497131348,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testGetErrorOnAttribute"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testGetErrorOnAttribute",
+    "status": "pass",
+    "time": 0.0053780078887939,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testHasOne"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testHasOne",
+    "status": "pass",
+    "time": 0.25250101089478,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testHasMany"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testHasMany",
+    "status": "pass",
+    "time": 0.22714614868164,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testManyToMany"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testManyToMany",
+    "status": "pass",
+    "time": 0.3728449344635,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testBelongsTo"
+}{
+    "event": "test",
+    "suite": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test",
+    "test": "X\\Database\\Test\\ActiveRecord\\X_Database_ActiveRecord_ActiveRecord_Test::testBelongsTo",
+    "status": "pass",
+    "time": 0.2641270160675,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "tests": 17
+}{
+    "event": "testStart",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::test__construct"
+}{
+    "event": "test",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::test__construct",
+    "status": "pass",
+    "time": 0.0048859119415283,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::test__clone"
+}{
+    "event": "test",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::test__clone",
+    "status": "pass",
+    "time": 0.0026328563690186,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testSetRecord"
+}{
+    "event": "test",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testSetRecord",
+    "status": "pass",
+    "time": 0.0030372142791748,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testSetMinLength"
+}{
+    "event": "test",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testSetMinLength",
+    "status": "pass",
+    "time": 0.003169059753418,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testSetEmptiable"
+}{
+    "event": "test",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testSetEmptiable",
+    "status": "pass",
+    "time": 0.0033118724822998,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testGetIsPrimaryKey"
+}{
+    "event": "test",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testGetIsPrimaryKey",
+    "status": "pass",
+    "time": 0.0027258396148682,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testSetValue"
+}{
+    "event": "test",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testSetValue",
+    "status": "pass",
+    "time": 0.0030949115753174,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testGetValue"
+}{
+    "event": "test",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testGetValue",
+    "status": "pass",
+    "time": 0.0068309307098389,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testIsDirty"
+}{
+    "event": "test",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testIsDirty",
+    "status": "pass",
+    "time": 0.0028560161590576,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testAddError"
+}{
+    "event": "test",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testAddError",
+    "status": "pass",
+    "time": 0.0032968521118164,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testHasError"
+}{
+    "event": "test",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testHasError",
+    "status": "pass",
+    "time": 0.0034551620483398,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testGetErrors"
+}{
+    "event": "test",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testGetErrors",
+    "status": "pass",
+    "time": 0.0040898323059082,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testAddValidator"
+}{
+    "event": "test",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testAddValidator",
+    "status": "pass",
+    "time": 0.0033690929412842,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testValidate"
+}{
+    "event": "test",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testValidate",
+    "status": "pass",
+    "time": 0.009814977645874,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testGetIsAutoIncrease"
+}{
+    "event": "test",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testGetIsAutoIncrease",
+    "status": "pass",
+    "time": 0.0027379989624023,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testCleanDirty"
+}{
+    "event": "test",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testCleanDirty",
+    "status": "pass",
+    "time": 0.0031499862670898,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testRefresh"
+}{
+    "event": "test",
+    "suite": "X_Database_ActiveRecord_Column_Test",
+    "test": "X_Database_ActiveRecord_Column_Test::testRefresh",
+    "status": "pass",
+    "time": 0.0032281875610352,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "X_Database_Driver_Mysql_PDO_Test",
+    "tests": 6
+}{
+    "event": "testStart",
+    "suite": "X_Database_Driver_Mysql_PDO_Test",
+    "test": "X_Database_Driver_Mysql_PDO_Test::test__construct"
+}{
+    "event": "test",
+    "suite": "X_Database_Driver_Mysql_PDO_Test",
+    "test": "X_Database_Driver_Mysql_PDO_Test::test__construct",
+    "status": "pass",
+    "time": 0.0026938915252686,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_Driver_Mysql_PDO_Test",
+    "test": "X_Database_Driver_Mysql_PDO_Test::testExec"
+}{
+    "event": "test",
+    "suite": "X_Database_Driver_Mysql_PDO_Test",
+    "test": "X_Database_Driver_Mysql_PDO_Test::testExec",
+    "status": "pass",
+    "time": 0.0028469562530518,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_Driver_Mysql_PDO_Test",
+    "test": "X_Database_Driver_Mysql_PDO_Test::testQuery"
+}{
+    "event": "test",
+    "suite": "X_Database_Driver_Mysql_PDO_Test",
+    "test": "X_Database_Driver_Mysql_PDO_Test::testQuery",
+    "status": "pass",
+    "time": 0.0033628940582275,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_Driver_Mysql_PDO_Test",
+    "test": "X_Database_Driver_Mysql_PDO_Test::testQuote"
+}{
+    "event": "test",
+    "suite": "X_Database_Driver_Mysql_PDO_Test",
+    "test": "X_Database_Driver_Mysql_PDO_Test::testQuote",
+    "status": "pass",
+    "time": 0.00313401222229,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_Driver_Mysql_PDO_Test",
+    "test": "X_Database_Driver_Mysql_PDO_Test::testLastInsertId"
+}{
+    "event": "test",
+    "suite": "X_Database_Driver_Mysql_PDO_Test",
+    "test": "X_Database_Driver_Mysql_PDO_Test::testLastInsertId",
+    "status": "pass",
+    "time": 0.089260816574097,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_Driver_Mysql_PDO_Test",
+    "test": "X_Database_Driver_Mysql_PDO_Test::testQuoteTableName"
+}{
+    "event": "test",
+    "suite": "X_Database_Driver_Mysql_PDO_Test",
+    "test": "X_Database_Driver_Mysql_PDO_Test::testQuoteTableName",
+    "status": "pass",
+    "time": 0.0031161308288574,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "X_Database_Migration_ManagerTest",
+    "tests": 2
+}{
+    "event": "testStart",
+    "suite": "X_Database_Migration_ManagerTest",
+    "test": "X_Database_Migration_ManagerTest::testUp"
+}{
+    "event": "test",
+    "suite": "X_Database_Migration_ManagerTest",
+    "test": "X_Database_Migration_ManagerTest::testUp",
+    "status": "pass",
+    "time": 0.0036520957946777,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_Migration_ManagerTest",
+    "test": "X_Database_Migration_ManagerTest::testDown"
+}{
+    "event": "test",
+    "suite": "X_Database_Migration_ManagerTest",
+    "test": "X_Database_Migration_ManagerTest::testDown",
+    "status": "pass",
+    "time": 0.0023617744445801,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "X_Database_Migration_MigrateTest",
+    "tests": 1
+}{
+    "event": "testStart",
+    "suite": "X_Database_Migration_MigrateTest",
+    "test": "X_Database_Migration_MigrateTest::testMigrate"
+}{
+    "event": "test",
+    "suite": "X_Database_Migration_MigrateTest",
+    "test": "X_Database_Migration_MigrateTest::testMigrate",
+    "status": "pass",
+    "time": 2.1504139900208,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "X_Database_SQL_SQLBuilder_Test",
+    "tests": 5
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_SQLBuilder_Test",
+    "test": "X_Database_SQL_SQLBuilder_Test::testBuild"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_SQLBuilder_Test",
+    "test": "X_Database_SQL_SQLBuilder_Test::testBuild",
+    "status": "pass",
+    "time": 0.0021359920501709,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_SQLBuilder_Test",
+    "test": "X_Database_SQL_SQLBuilder_Test::testSelect"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_SQLBuilder_Test",
+    "test": "X_Database_SQL_SQLBuilder_Test::testSelect",
+    "status": "pass",
+    "time": 0.0021519660949707,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_SQLBuilder_Test",
+    "test": "X_Database_SQL_SQLBuilder_Test::testInsert"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_SQLBuilder_Test",
+    "test": "X_Database_SQL_SQLBuilder_Test::testInsert",
+    "status": "pass",
+    "time": 0.002187967300415,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_SQLBuilder_Test",
+    "test": "X_Database_SQL_SQLBuilder_Test::testUpdate"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_SQLBuilder_Test",
+    "test": "X_Database_SQL_SQLBuilder_Test::testUpdate",
+    "status": "pass",
+    "time": 0.0022740364074707,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_SQLBuilder_Test",
+    "test": "X_Database_SQL_SQLBuilder_Test::testDelete"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_SQLBuilder_Test",
+    "test": "X_Database_SQL_SQLBuilder_Test::testDelete",
+    "status": "pass",
+    "time": 0.0021770000457764,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "X_Database_SQL_Action_Action_With_Condition_Test",
+    "tests": 4
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Action_With_Condition_Test",
+    "test": "X_Database_SQL_Action_Action_With_Condition_Test::testWhere"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Action_With_Condition_Test",
+    "test": "X_Database_SQL_Action_Action_With_Condition_Test::testWhere",
+    "status": "pass",
+    "time": 0.0066730976104736,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Action_With_Condition_Test",
+    "test": "X_Database_SQL_Action_Action_With_Condition_Test::testOrderBy"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Action_With_Condition_Test",
+    "test": "X_Database_SQL_Action_Action_With_Condition_Test::testOrderBy",
+    "status": "pass",
+    "time": 0.0062220096588135,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Action_With_Condition_Test",
+    "test": "X_Database_SQL_Action_Action_With_Condition_Test::testLimit"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Action_With_Condition_Test",
+    "test": "X_Database_SQL_Action_Action_With_Condition_Test::testLimit",
+    "status": "pass",
+    "time": 0.0031709671020508,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Action_With_Condition_Test",
+    "test": "X_Database_SQL_Action_Action_With_Condition_Test::testOffset"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Action_With_Condition_Test",
+    "test": "X_Database_SQL_Action_Action_With_Condition_Test::testOffset",
+    "status": "pass",
+    "time": 0.0032138824462891,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "X_Database_SQL_Action_Base_Test",
+    "tests": 1
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Base_Test",
+    "test": "X_Database_SQL_Action_Base_Test::testToString"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Base_Test",
+    "test": "X_Database_SQL_Action_Base_Test::testToString",
+    "status": "pass",
+    "time": 0.0037720203399658,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "X_Database_SQL_Action_CreateTableTest",
+    "tests": 1
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_CreateTableTest",
+    "test": "X_Database_SQL_Action_CreateTableTest::testColumns"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_CreateTableTest",
+    "test": "X_Database_SQL_Action_CreateTableTest::testColumns",
+    "status": "pass",
+    "time": 0.0028879642486572,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "X_Database_SQL_Action_Delete_Test",
+    "tests": 5
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Delete_Test",
+    "test": "X_Database_SQL_Action_Delete_Test::testLowPriority"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Delete_Test",
+    "test": "X_Database_SQL_Action_Delete_Test::testLowPriority",
+    "status": "pass",
+    "time": 0.0041110515594482,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Delete_Test",
+    "test": "X_Database_SQL_Action_Delete_Test::testQuick"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Delete_Test",
+    "test": "X_Database_SQL_Action_Delete_Test::testQuick",
+    "status": "pass",
+    "time": 0.0041570663452148,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Delete_Test",
+    "test": "X_Database_SQL_Action_Delete_Test::testIgnore"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Delete_Test",
+    "test": "X_Database_SQL_Action_Delete_Test::testIgnore",
+    "status": "pass",
+    "time": 0.0040960311889648,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Delete_Test",
+    "test": "X_Database_SQL_Action_Delete_Test::testFrom"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Delete_Test",
+    "test": "X_Database_SQL_Action_Delete_Test::testFrom",
+    "status": "pass",
+    "time": 0.0057590007781982,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Delete_Test",
+    "test": "X_Database_SQL_Action_Delete_Test::testOrderBy"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Delete_Test",
+    "test": "X_Database_SQL_Action_Delete_Test::testOrderBy",
+    "status": "pass",
+    "time": 0.0029549598693848,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "X_Database_SQL_Action_DropTableTest",
+    "tests": 1
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_DropTableTest",
+    "test": "X_Database_SQL_Action_DropTableTest::testToString"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_DropTableTest",
+    "test": "X_Database_SQL_Action_DropTableTest::testToString",
+    "status": "pass",
+    "time": 0.0029709339141846,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "X_Database_SQL_Action_Insert_Test",
+    "tests": 7
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Insert_Test",
+    "test": "X_Database_SQL_Action_Insert_Test::testInto"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Insert_Test",
+    "test": "X_Database_SQL_Action_Insert_Test::testInto",
+    "status": "pass",
+    "time": 0.004824161529541,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Insert_Test",
+    "test": "X_Database_SQL_Action_Insert_Test::testColumns"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Insert_Test",
+    "test": "X_Database_SQL_Action_Insert_Test::testColumns",
+    "status": "pass",
+    "time": 0.0055069923400879,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Insert_Test",
+    "test": "X_Database_SQL_Action_Insert_Test::testValues"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Insert_Test",
+    "test": "X_Database_SQL_Action_Insert_Test::testValues",
+    "status": "pass",
+    "time": 0.0099101066589355,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Insert_Test",
+    "test": "X_Database_SQL_Action_Insert_Test::testSelect"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Insert_Test",
+    "test": "X_Database_SQL_Action_Insert_Test::testSelect",
+    "status": "pass",
+    "time": 0.0046019554138184,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Insert_Test",
+    "test": "X_Database_SQL_Action_Insert_Test::testOnDuplicateKeyUpdate"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Insert_Test",
+    "test": "X_Database_SQL_Action_Insert_Test::testOnDuplicateKeyUpdate",
+    "status": "pass",
+    "time": 0.0033419132232666,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Insert_Test",
+    "test": "X_Database_SQL_Action_Insert_Test::testIgnoreOnDuplicateKey"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Insert_Test",
+    "test": "X_Database_SQL_Action_Insert_Test::testIgnoreOnDuplicateKey",
+    "status": "pass",
+    "time": 0.0035631656646729,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Insert_Test",
+    "test": "X_Database_SQL_Action_Insert_Test::testPriority"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Insert_Test",
+    "test": "X_Database_SQL_Action_Insert_Test::testPriority",
+    "status": "pass",
+    "time": 0.0035998821258545,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "X_Database_SQL_Action_RenameTest",
+    "tests": 1
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_RenameTest",
+    "test": "X_Database_SQL_Action_RenameTest::testToString"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_RenameTest",
+    "test": "X_Database_SQL_Action_RenameTest::testToString",
+    "status": "pass",
+    "time": 0.002856969833374,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "X_Database_SQL_Action_Select_Test",
+    "tests": 9
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Select_Test",
+    "test": "X_Database_SQL_Action_Select_Test::testFilter"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Select_Test",
+    "test": "X_Database_SQL_Action_Select_Test::testFilter",
+    "status": "pass",
+    "time": 0.003331184387207,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Select_Test",
+    "test": "X_Database_SQL_Action_Select_Test::testColumns"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Select_Test",
+    "test": "X_Database_SQL_Action_Select_Test::testColumns",
+    "status": "pass",
+    "time": 0.0044100284576416,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Select_Test",
+    "test": "X_Database_SQL_Action_Select_Test::testExpressions"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Select_Test",
+    "test": "X_Database_SQL_Action_Select_Test::testExpressions",
+    "status": "pass",
+    "time": 0.004478931427002,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Select_Test",
+    "test": "X_Database_SQL_Action_Select_Test::testFrom"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Select_Test",
+    "test": "X_Database_SQL_Action_Select_Test::testFrom",
+    "status": "pass",
+    "time": 0.0043001174926758,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Select_Test",
+    "test": "X_Database_SQL_Action_Select_Test::testGroupBy"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Select_Test",
+    "test": "X_Database_SQL_Action_Select_Test::testGroupBy",
+    "status": "pass",
+    "time": 0.0058779716491699,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Select_Test",
+    "test": "X_Database_SQL_Action_Select_Test::testHaving"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Select_Test",
+    "test": "X_Database_SQL_Action_Select_Test::testHaving",
+    "status": "pass",
+    "time": 0.0068099498748779,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Select_Test",
+    "test": "X_Database_SQL_Action_Select_Test::testIntoOutFile"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Select_Test",
+    "test": "X_Database_SQL_Action_Select_Test::testIntoOutFile",
+    "status": "pass",
+    "time": 0.0038399696350098,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Select_Test",
+    "test": "X_Database_SQL_Action_Select_Test::testIntoDumpFile"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Select_Test",
+    "test": "X_Database_SQL_Action_Select_Test::testIntoDumpFile",
+    "status": "pass",
+    "time": 0.0034999847412109,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Select_Test",
+    "test": "X_Database_SQL_Action_Select_Test::testIntoVar"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Select_Test",
+    "test": "X_Database_SQL_Action_Select_Test::testIntoVar",
+    "status": "pass",
+    "time": 0.0034542083740234,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "X_Database_SQL_Action_TruncateTest",
+    "tests": 1
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_TruncateTest",
+    "test": "X_Database_SQL_Action_TruncateTest::testToString"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_TruncateTest",
+    "test": "X_Database_SQL_Action_TruncateTest::testToString",
+    "status": "pass",
+    "time": 0.0028629302978516,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "X_Database_SQL_Action_Update_Test",
+    "tests": 5
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Update_Test",
+    "test": "X_Database_SQL_Action_Update_Test::testLowPriority"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Update_Test",
+    "test": "X_Database_SQL_Action_Update_Test::testLowPriority",
+    "status": "pass",
+    "time": 0.0034210681915283,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Update_Test",
+    "test": "X_Database_SQL_Action_Update_Test::testIgnore"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Update_Test",
+    "test": "X_Database_SQL_Action_Update_Test::testIgnore",
+    "status": "pass",
+    "time": 0.0033421516418457,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Update_Test",
+    "test": "X_Database_SQL_Action_Update_Test::testTable"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Update_Test",
+    "test": "X_Database_SQL_Action_Update_Test::testTable",
+    "status": "pass",
+    "time": 0.0033178329467773,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Update_Test",
+    "test": "X_Database_SQL_Action_Update_Test::testSet"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Update_Test",
+    "test": "X_Database_SQL_Action_Update_Test::testSet",
+    "status": "pass",
+    "time": 0.0033450126647949,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Action_Update_Test",
+    "test": "X_Database_SQL_Action_Update_Test::testSetValues"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Action_Update_Test",
+    "test": "X_Database_SQL_Action_Update_Test::testSetValues",
+    "status": "pass",
+    "time": 0.0036680698394775,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "tests": 25
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testSetNameStyle"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testSetNameStyle",
+    "status": "pass",
+    "time": 0.0045440196990967,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::test__call"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::test__call",
+    "status": "pass",
+    "time": 0.0032739639282227,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testBuild"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testBuild",
+    "status": "pass",
+    "time": 0.0033500194549561,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testAddCondition"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testAddCondition",
+    "status": "pass",
+    "time": 0.0033779144287109,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testAddSigleCondition"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testAddSigleCondition",
+    "status": "pass",
+    "time": 0.0034840106964111,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testAddConnector"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testAddConnector",
+    "status": "pass",
+    "time": 0.0047869682312012,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testIs"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testIs",
+    "status": "pass",
+    "time": 0.0031800270080566,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testIsNot"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testIsNot",
+    "status": "pass",
+    "time": 0.0031111240386963,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testEquals"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testEquals",
+    "status": "pass",
+    "time": 0.0031747817993164,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testNotEquals"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testNotEquals",
+    "status": "pass",
+    "time": 0.0031471252441406,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testGreaterThan"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testGreaterThan",
+    "status": "pass",
+    "time": 0.0030858516693115,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testGreaterOrEquals"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testGreaterOrEquals",
+    "status": "pass",
+    "time": 0.0031149387359619,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testLessThan"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testLessThan",
+    "status": "pass",
+    "time": 0.0030999183654785,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testLessOrEquals"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testLessOrEquals",
+    "status": "pass",
+    "time": 0.0032129287719727,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testLike"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testLike",
+    "status": "pass",
+    "time": 0.003162145614624,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testStartWith"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testStartWith",
+    "status": "pass",
+    "time": 0.0031120777130127,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testEndWith"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testEndWith",
+    "status": "pass",
+    "time": 0.0030951499938965,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testBetween"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testBetween",
+    "status": "pass",
+    "time": 0.0032598972320557,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testIn"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testIn",
+    "status": "pass",
+    "time": 0.0035860538482666,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testNotIn"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testNotIn",
+    "status": "pass",
+    "time": 0.003593921661377,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testAndAlso"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testAndAlso",
+    "status": "pass",
+    "time": 0.0035219192504883,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testOrThat"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testOrThat",
+    "status": "pass",
+    "time": 0.0035479068756104,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testGroupStart"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testGroupStart",
+    "status": "pass",
+    "time": 0.0037670135498047,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testGroupEnd"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testGroupEnd",
+    "status": "pass",
+    "time": 0.003741979598999,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testToString"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Builder_Test",
+    "test": "X_Database_SQL_Condition_Builder_Test::testToString",
+    "status": "pass",
+    "time": 0.0037820339202881,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "X_Database_SQL_Condition_Condition_Test",
+    "tests": 2
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Condition_Test",
+    "test": "X_Database_SQL_Condition_Condition_Test::test__construct"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Condition_Test",
+    "test": "X_Database_SQL_Condition_Condition_Test::test__construct",
+    "status": "pass",
+    "time": 0.0021810531616211,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Condition_Test",
+    "test": "X_Database_SQL_Condition_Condition_Test::testToString"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Condition_Test",
+    "test": "X_Database_SQL_Condition_Condition_Test::testToString",
+    "status": "pass",
+    "time": 0.010027885437012,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "X_Database_SQL_Condition_Connector_Test",
+    "tests": 2
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Connector_Test",
+    "test": "X_Database_SQL_Condition_Connector_Test::test__construct"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Connector_Test",
+    "test": "X_Database_SQL_Condition_Connector_Test::test__construct",
+    "status": "pass",
+    "time": 0.0021917819976807,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Connector_Test",
+    "test": "X_Database_SQL_Condition_Connector_Test::testToString"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Connector_Test",
+    "test": "X_Database_SQL_Condition_Connector_Test::testToString",
+    "status": "pass",
+    "time": 0.0032839775085449,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "X_Database_SQL_Condition_Group_Test",
+    "tests": 2
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Group_Test",
+    "test": "X_Database_SQL_Condition_Group_Test::test__construct"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Group_Test",
+    "test": "X_Database_SQL_Condition_Group_Test::test__construct",
+    "status": "pass",
+    "time": 0.0021600723266602,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Condition_Group_Test",
+    "test": "X_Database_SQL_Condition_Group_Test::testToString"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Condition_Group_Test",
+    "test": "X_Database_SQL_Condition_Group_Test::testToString",
+    "status": "pass",
+    "time": 0.0032680034637451,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "X_Database_SQL_Func_Count_Test",
+    "tests": 1
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Func_Count_Test",
+    "test": "X_Database_SQL_Func_Count_Test::testToString"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Func_Count_Test",
+    "test": "X_Database_SQL_Func_Count_Test::testToString",
+    "status": "pass",
+    "time": 0.0026869773864746,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "X_Database_SQL_Func_Rand_Test",
+    "tests": 1
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Func_Rand_Test",
+    "test": "X_Database_SQL_Func_Rand_Test::testToString"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Func_Rand_Test",
+    "test": "X_Database_SQL_Func_Rand_Test::testToString",
+    "status": "pass",
+    "time": 0.0028409957885742,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "X_Database_SQL_Other_DefaultValue_Test",
+    "tests": 1
+}{
+    "event": "testStart",
+    "suite": "X_Database_SQL_Other_DefaultValue_Test",
+    "test": "X_Database_SQL_Other_DefaultValue_Test::testSQLBuilderDefaultValue"
+}{
+    "event": "test",
+    "suite": "X_Database_SQL_Other_DefaultValue_Test",
+    "test": "X_Database_SQL_Other_DefaultValue_Test::testSQLBuilderDefaultValue",
+    "status": "pass",
+    "time": 0.0021510124206543,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "X_Database_Table_ManagerTest",
+    "tests": 14
+}{
+    "event": "testStart",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testCreate"
+}{
+    "event": "test",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testCreate",
+    "status": "pass",
+    "time": 0.1242311000824,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testOpen"
+}{
+    "event": "test",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testOpen",
+    "status": "pass",
+    "time": 0.0021748542785645,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testDrop"
+}{
+    "event": "test",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testDrop",
+    "status": "pass",
+    "time": 0.11672115325928,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testTruncate"
+}{
+    "event": "test",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testTruncate",
+    "status": "pass",
+    "time": 0.3206639289856,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testRename"
+}{
+    "event": "test",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testRename",
+    "status": "pass",
+    "time": 0.25435400009155,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testAddColumn"
+}{
+    "event": "test",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testAddColumn",
+    "status": "pass",
+    "time": 0.48732495307922,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testDropColumn"
+}{
+    "event": "test",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testDropColumn",
+    "status": "pass",
+    "time": 0.42220091819763,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testRenameColumn"
+}{
+    "event": "test",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testRenameColumn",
+    "status": "pass",
+    "time": 0.1669762134552,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testChangeColumn"
+}{
+    "event": "test",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testChangeColumn",
+    "status": "pass",
+    "time": 0.40651798248291,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testAddIndex"
+}{
+    "event": "test",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testAddIndex",
+    "status": "pass",
+    "time": 0.40496897697449,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testDropIndex"
+}{
+    "event": "test",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testDropIndex",
+    "status": "pass",
+    "time": 0.37227892875671,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testAddPrimaryKey"
+}{
+    "event": "test",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testAddPrimaryKey",
+    "status": "pass",
+    "time": 0.35550403594971,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testDropPrimaryKey"
+}{
+    "event": "test",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testDropPrimaryKey",
+    "status": "pass",
+    "time": 0.63282203674316,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testAddUnique"
+}{
+    "event": "test",
+    "suite": "X_Database_Table_ManagerTest",
+    "test": "X_Database_Table_ManagerTest::testAddUnique",
+    "status": "pass",
+    "time": 0.45591902732849,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}

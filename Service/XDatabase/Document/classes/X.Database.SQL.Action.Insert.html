@@ -1,0 +1,1696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>API Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="https://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+    <script src="https://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">API Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/X.html">\X</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1863523278"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-1863523278" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1919825262"></a>
+                                <a href="../namespaces/X.html" style="margin-left: 30px; padding-left: 0">X</a>
+            </div>
+            <div id="namespace-1919825262" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1182909182"></a>
+                                <a href="../namespaces/X.Database.html" style="margin-left: 30px; padding-left: 0">Database</a>
+            </div>
+            <div id="namespace-1182909182" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-998735209"></a>
+                                <a href="../namespaces/X.Database.ActiveRecord.html" style="margin-left: 30px; padding-left: 0">ActiveRecord</a>
+            </div>
+            <div id="namespace-998735209" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/X.Database.ActiveRecord.ActiveRecord.html">ActiveRecord</a></li>
+                                                    <li class="class"><a href="../classes/X.Database.ActiveRecord.Column.html">Column</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-533913199"></a>
+                                <a href="../namespaces/X.Database.Driver.html" style="margin-left: 30px; padding-left: 0">Driver</a>
+            </div>
+            <div id="namespace-533913199" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1210136748"></a>
+                                <a href="../namespaces/X.Database.Driver.Mysql.html" style="margin-left: 30px; padding-left: 0">Mysql</a>
+            </div>
+            <div id="namespace-1210136748" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/X.Database.Driver.Mysql.PDO.html">PDO</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/X.Database.Driver.Driver.html">Driver</a></li>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-353027802"></a>
+                                <a href="../namespaces/X.Database.Migration.html" style="margin-left: 30px; padding-left: 0">Migration</a>
+            </div>
+            <div id="namespace-353027802" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/X.Database.Migration.Management.html">Management</a></li>
+                                                    <li class="class"><a href="../classes/X.Database.Migration.Migrate.html">Migrate</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1276365025"></a>
+                                <a href="../namespaces/X.Database.SQL.html" style="margin-left: 30px; padding-left: 0">SQL</a>
+            </div>
+            <div id="namespace-1276365025" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2084594420"></a>
+                                <a href="../namespaces/X.Database.SQL.Action.html" style="margin-left: 30px; padding-left: 0">Action</a>
+            </div>
+            <div id="namespace-2084594420" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/X.Database.SQL.Action.ActionAboutTable.html">ActionAboutTable</a></li>
+                                                    <li class="class"><a href="../classes/X.Database.SQL.Action.ActionWithCondition.html">ActionWithCondition</a></li>
+                                                    <li class="class"><a href="../classes/X.Database.SQL.Action.AlterTable.html">AlterTable</a></li>
+                                                    <li class="class"><a href="../classes/X.Database.SQL.Action.Base.html">Base</a></li>
+                                                    <li class="class"><a href="../classes/X.Database.SQL.Action.CreateTable.html">CreateTable</a></li>
+                                                    <li class="class"><a href="../classes/X.Database.SQL.Action.Delete.html">Delete</a></li>
+                                                    <li class="class"><a href="../classes/X.Database.SQL.Action.DropTable.html">DropTable</a></li>
+                                                    <li class="class"><a href="../classes/X.Database.SQL.Action.Insert.html">Insert</a></li>
+                                                    <li class="class"><a href="../classes/X.Database.SQL.Action.Rename.html">Rename</a></li>
+                                                    <li class="class"><a href="../classes/X.Database.SQL.Action.Select.html">Select</a></li>
+                                                    <li class="class"><a href="../classes/X.Database.SQL.Action.Truncate.html">Truncate</a></li>
+                                                    <li class="class"><a href="../classes/X.Database.SQL.Action.Update.html">Update</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-568069194"></a>
+                                <a href="../namespaces/X.Database.SQL.Condition.html" style="margin-left: 30px; padding-left: 0">Condition</a>
+            </div>
+            <div id="namespace-568069194" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/X.Database.SQL.Condition.Builder.html">Builder</a></li>
+                                                    <li class="class"><a href="../classes/X.Database.SQL.Condition.Condition.html">Condition</a></li>
+                                                    <li class="class"><a href="../classes/X.Database.SQL.Condition.Connector.html">Connector</a></li>
+                                                    <li class="class"><a href="../classes/X.Database.SQL.Condition.Group.html">Group</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-631729312"></a>
+                                <a href="../namespaces/X.Database.SQL.Func.html" style="margin-left: 30px; padding-left: 0">Func</a>
+            </div>
+            <div id="namespace-631729312" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/X.Database.SQL.Func.Count.html">Count</a></li>
+                                                    <li class="class"><a href="../classes/X.Database.SQL.Func.Func.html">Func</a></li>
+                                                    <li class="class"><a href="../classes/X.Database.SQL.Func.Rand.html">Rand</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1033515055"></a>
+                                <a href="../namespaces/X.Database.SQL.Other.html" style="margin-left: 30px; padding-left: 0">Other</a>
+            </div>
+            <div id="namespace-1033515055" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/X.Database.SQL.Other.DefaultValue.html">DefaultValue</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/X.Database.SQL.SQLBuilder.html">SQLBuilder</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1778886392"></a>
+                                <a href="../namespaces/X.Database.Table.html" style="margin-left: 30px; padding-left: 0">Table</a>
+            </div>
+            <div id="namespace-1778886392" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/X.Database.Table.Management.html">Management</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/X.Database.Base.html">Base</a></li>
+                                                    <li class="class"><a href="../classes/X.Database.Database.html">Database</a></li>
+                                                    <li class="class"><a href="../classes/X.Database.Exception.html">Exception</a></li>
+                                                    <li class="class"><a href="../classes/X.Database.Management.html">Management</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/X.Database.SQL.Action.html">\X\Database\SQL\Action</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\X\Database\SQL\Action</small>Insert</h1>
+                    <p><em>Insert</em></p>
+                    
+
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/X.Database.SQL.Action.Base.html#method_toString" class="">toString()</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#method_into" class="">into()</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#method_columns" class="">columns()</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#method_values" class="">values()</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#method_select" class="">select()</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#method_onDuplicateKeyUpdate" class="">onDuplicateKeyUpdate()</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#method_ignoreOnDuplicateKey" class="">ignoreOnDuplicateKey()</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#method_priority" class="">priority()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No public properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#constant_PRIORITY_LOW" class="">PRIORITY_LOW</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#constant_PRIORITY_DELAYED" class="">PRIORITY_DELAYED</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#constant_PRIORITY_HIGH" class="">PRIORITY_HIGH</a><br />
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#method_getBuildHandlers" class="">getBuildHandlers()</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Base.html#method_quoteColumnName" class="">quoteColumnName()</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Base.html#method_quoteColumnNames" class="">quoteColumnNames()</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Base.html#method_quoteTableName" class="">quoteTableName()</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#method_getActionNameString" class="">getActionNameString()</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#method_getIntoString" class="">getIntoString()</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#method_getColumnString" class="">getColumnString()</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#method_getValueString" class="">getValueString()</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#method_getSelectString" class="">getSelectString()</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#method_getOnDuplicateKeyUpdate" class="">getOnDuplicateKeyUpdate()</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#method_getIgnoreOnDuplicateKeyString" class="">getIgnoreOnDuplicateKeyString()</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#method_getPriorityString" class="">getPriorityString()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/X.Database.SQL.Action.Base.html#property_sqlCommand" class="">$sqlCommand</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#property_tblName" class="">$tblName</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#property_columns" class="">$columns</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#property_values" class="">$values</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#property_select" class="">$select</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#property_onDuplicateKeyUpdateHandlers" class="">$onDuplicateKeyUpdateHandlers</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#property_ignoreOnDuplicateKey" class="">$ignoreOnDuplicateKey</a><br />
+                                                                    <a href="../classes/X.Database.SQL.Action.Insert.html#property_priority" class="">$priority</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <em>No private methods found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No private properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/sql.actions.insert.php.html"><div class="path-wrapper">sql/actions/insert.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper"></div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+                                        <div class="namespace-wrapper">\stdClass</div>
+                                                                    
+                                        <div class="namespace-wrapper"><a href="../classes/X.Database.Base.html">\X\Database\Base</a></div>
+                                                                    
+                                        <div class="namespace-wrapper"><a href="../classes/X.Database.SQL.Action.Base.html">\X\Database\SQL\Action\Base</a></div>
+                                                                                                    <div class="namespace-wrapper">\X\Database\SQL\Action\Insert</div>
+                            </dd>
+
+                        
+                        
+                        
+                        
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr>
+                            <th>
+                                author
+                            </th>
+                            <td>
+                                                                    <p>Michael Luthor <a href="mailto:michael.the.ranidae@gmail.com">michael.the.ranidae@gmail.com</a></p>
+                                                            </td>
+                        </tr>
+                                            <tr>
+                            <th>
+                                since
+                            </th>
+                            <td>
+                                                                    
+                                                            </td>
+                        </tr>
+                                            <tr>
+                            <th>
+                                version
+                            </th>
+                            <td>
+                                                                    
+                                                            </td>
+                        </tr>
+                                            <tr>
+                            <th>
+                                todo
+                            </th>
+                            <td>
+                                                            </td>
+                        </tr>
+                                        </table>
+                </aside>
+            </div>
+
+                                    <a id="constants" name="constants"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Constants</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_PRIORITY_LOW" name="constant_PRIORITY_LOW" class="anchor"></a>
+            <article id="constant_PRIORITY_LOW" class="constant">
+                <h3 class="">PRIORITY_LOW</h3>
+                <pre class="signature">PRIORITY_LOW</pre>
+                <p><em>The priority name of low priority.</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_PRIORITY_DELAYED" name="constant_PRIORITY_DELAYED" class="anchor"></a>
+            <article id="constant_PRIORITY_DELAYED" class="constant">
+                <h3 class="">PRIORITY_DELAYED</h3>
+                <pre class="signature">PRIORITY_DELAYED</pre>
+                <p><em>The priority name of delayed.</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_PRIORITY_HIGH" name="constant_PRIORITY_HIGH" class="anchor"></a>
+            <article id="constant_PRIORITY_HIGH" class="constant">
+                <h3 class="">PRIORITY_HIGH</h3>
+                <pre class="signature">PRIORITY_HIGH</pre>
+                <p><em>The priority name of high priority.</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_sqlCommand" name="property_sqlCommand" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$sqlCommand</h3>
+                <pre class="signature">$sqlCommand : string</pre>
+                <p><em>This value contains each part of query string.</em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/X.Database.SQL.Action.Base.html"><div class="path-wrapper">\X\Database\SQL\Action\Base</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_tblName" name="property_tblName" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$tblName</h3>
+                <pre class="signature">$tblName : string</pre>
+                <p><em>The name of the table which would insert into. It can not be empty.</em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_columns" name="property_columns" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$columns</h3>
+                <pre class="signature">$columns : string[]</pre>
+                <p><em>The column name lists would be insert. It could be empty here.</em></p>
+                
+
+                                <h4>Type</h4>
+                string[]
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_values" name="property_values" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$values</h3>
+                <pre class="signature">$values : array</pre>
+                <p><em>The data would be insert into the record.</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_select" name="property_select" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$select</h3>
+                <pre class="signature">$select : \X\Database\SQL\Action\Select|string</pre>
+                <p><em>This value contains the select part in insert action. It could be a
+SQLBuilderActionSelect object or a select command string.</em></p>
+                
+
+                                <h4>Type</h4>
+                <a href="../classes/X.Database.SQL.Action.Select.html">\X\Database\SQL\Action\Select</a>|string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_onDuplicateKeyUpdateHandlers" name="property_onDuplicateKeyUpdateHandlers" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$onDuplicateKeyUpdateHandlers</h3>
+                <pre class="signature">$onDuplicateKeyUpdateHandlers : array</pre>
+                <p><em>An array contains all hanslers when key is duplicated.</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_ignoreOnDuplicateKey" name="property_ignoreOnDuplicateKey" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$ignoreOnDuplicateKey</h3>
+                <pre class="signature">$ignoreOnDuplicateKey : boolean</pre>
+                <p><em>Wether ignore the data when duplicate key exists during insert.</em></p>
+                
+
+                                <h4>Type</h4>
+                boolean
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_priority" name="property_priority" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$priority</h3>
+                <pre class="signature">$priority : string</pre>
+                <p><em>This value contains the priority of the insertelation.</em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                            
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_toString" name="method_toString" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">toString()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">toString() : string</pre>
+                <p><em>Convert this action into sql command string.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/X.Database.SQL.Action.Base.html"><div class="path-wrapper">\X\Database\SQL\Action\Base</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_into" name="method_into" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">into()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">into(\X\Database\SQL\Action\stirng <span class="argument">$table</span>) : \X\Database\SQL\Action\Insert</pre>
+                <p><em>Set the table name which would insert data into.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\X\Database\SQL\Action\stirng</td>
+                                <td>$table </td>
+                                <td><p>The name table to insert into</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/X.Database.SQL.Action.Insert.html">\X\Database\SQL\Action\Insert</a>
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_columns" name="method_columns" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">columns()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">columns(string <span class="argument">$name</span>) : \X\Database\SQL\Action\Insert</pre>
+                <p><em>Set the colum name list manualy, You can call this method with
+over one parms, so, each parm should be the name of the column.</em></p>
+                <pre>
+$insert->into('table')->columns('col1', 'col2')->values('val1', 'val2');
+</pre>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$name </td>
+                                <td><p>The name of column to match values</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/X.Database.SQL.Action.Insert.html">\X\Database\SQL\Action\Insert</a>
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_values" name="method_values" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">values()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">values(array|mixed <span class="argument">$values</span>) : \X\Database\SQL\Action\Insert</pre>
+                <p><em>Set the data would be insert into the record, you can call this method
+with over one parms, and if you do so, each parms would be the value
+of each columns. Also, you can call it with an array, and if the array&#039;s
+key is not numbers, then the keys would be the columns names to insert.</em></p>
+                <p>You can call this method over one time, so that you can insert over one
+record in one command.</p>
+<pre>
+$insert->into('table')->values(array('col1'=>'val1', 'col2'=>'val2'));
+$insert->into('table')->values($values)->values($values);
+$insert->into('table')->values(array('col1'=>new SQLBuilderDefaultValue(), 'col2'=>'val2'));
+</pre>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array|mixed</td>
+                                <td>$values </td>
+                                <td><p>The value to insert into.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/X.Database.SQL.Action.Insert.html">\X\Database\SQL\Action\Insert</a>
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_select" name="method_select" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">select()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">select(\X\Database\SQL\Action\Select|string <span class="argument">$select</span>) : \X\Database\SQL\Action\Insert</pre>
+                <p><em>Set the select part in insert command.</em></p>
+                <pre>
+$insert->into('table')->select( SQLBuilderActionSelect $select );
+$insert->into('table')->select( 'SELECT * FROM `table2`' );
+</pre>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/X.Database.SQL.Action.Select.html">\X\Database\SQL\Action\Select</a>|string</td>
+                                <td>$select </td>
+                                <td><p>The select query</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/X.Database.SQL.Action.Insert.html">\X\Database\SQL\Action\Insert</a>
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_onDuplicateKeyUpdate" name="method_onDuplicateKeyUpdate" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">onDuplicateKeyUpdate()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">onDuplicateKeyUpdate(mixed <span class="argument">$handler</span>) : \X\Database\SQL\Action\Insert</pre>
+                <p><em>Set the handlers when unquie column is duplicated. you can call
+this method with over one parms to set multi handlers or call
+it over one times to do the same thing.</em></p>
+                <pre>
+$insert->into('table')->onDuplicateKeyUpdate('col1 = col1+1', 'col2 = col2+1');
+</pre>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$handler </td>
+                                <td><p>The action on duplicated key exists.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/X.Database.SQL.Action.Insert.html">\X\Database\SQL\Action\Insert</a>
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_ignoreOnDuplicateKey" name="method_ignoreOnDuplicateKey" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">ignoreOnDuplicateKey()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">ignoreOnDuplicateKey() : \X\Database\SQL\Action\Insert</pre>
+                <p><em>Set wether ignore the data when duplicate key exists during insert.</em></p>
+                <pre>
+$insert->into('table')->values($values)->ignoreOnDuplicateKey();
+</pre>
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/X.Database.SQL.Action.Insert.html">\X\Database\SQL\Action\Insert</a>
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_priority" name="method_priority" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">priority()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">priority(string <span class="argument">$priority</span>) : \X\Database\SQL\Action\Insert</pre>
+                <p><em>Set the value of priority of the insertelation.</em></p>
+                <pre>
+$insert->into('table')->value($value)->priority(SQLBuilderActionInsert::PRIORITY_LOW)
+</pre>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$priority </td>
+                                <td><p>The name of priority.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/X.Database.SQL.Action.Insert.html">\X\Database\SQL\Action\Insert</a>
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getBuildHandlers" name="method_getBuildHandlers" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">getBuildHandlers()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getBuildHandlers() : string[]</pre>
+                <p><em>(non-PHPdoc)</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    string[]
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                                            <dt>See also</dt>
+                                                                <dd><a href="../classes/X.Database.SQL.Action.Base.html#method_getBuildHandlers"><span class="namespace-wrapper">Base::getBuildHandlers()</span></a></dd>
+                                                                </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_quoteColumnName" name="method_quoteColumnName" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">quoteColumnName()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">quoteColumnName(string <span class="argument">$name</span>) : string</pre>
+                <p><em>Quote the column&#039;s name for safty use in query string.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$name </td>
+                                <td><p>The name of column to quote.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/X.Database.SQL.Action.Base.html"><div class="path-wrapper">\X\Database\SQL\Action\Base</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_quoteColumnNames" name="method_quoteColumnNames" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">quoteColumnNames()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">quoteColumnNames(array <span class="argument">$names</span>) : array</pre>
+                <p><em>Quote the columns&#039; name for safty use in query string.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$names </td>
+                                <td><p>The column name list to quote.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/X.Database.SQL.Action.Base.html"><div class="path-wrapper">\X\Database\SQL\Action\Base</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_quoteTableName" name="method_quoteTableName" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">quoteTableName()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">quoteTableName(string <span class="argument">$name</span>) : string</pre>
+                <p><em>Quote the table name for safty use in query string.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$name </td>
+                                <td><p>The name of table to quote.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/X.Database.SQL.Action.Base.html"><div class="path-wrapper">\X\Database\SQL\Action\Base</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getActionNameString" name="method_getActionNameString" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">getActionNameString()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getActionNameString() : \X\Database\SQL\Action\Insert</pre>
+                <p><em>Add action name into string.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/X.Database.SQL.Action.Insert.html">\X\Database\SQL\Action\Insert</a>
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getIntoString" name="method_getIntoString" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">getIntoString()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getIntoString() : \X\Database\SQL\Action\Insert</pre>
+                <p><em>Get sql command part of insert table name. The method is called by
+toString() method to build the whole command.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/X.Database.SQL.Action.Insert.html">\X\Database\SQL\Action\Insert</a>
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getColumnString" name="method_getColumnString" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">getColumnString()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getColumnString() : \X\Database\SQL\Action\Insert</pre>
+                <p><em>Get sql command part of column list. The method is called by
+toString() method to build the whole command.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/X.Database.SQL.Action.Insert.html">\X\Database\SQL\Action\Insert</a>
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getValueString" name="method_getValueString" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">getValueString()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getValueString() : \X\Database\SQL\Action\Insert</pre>
+                <p><em>Get the command part of sql string. this method would be called by
+toString() method.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/X.Database.SQL.Action.Insert.html">\X\Database\SQL\Action\Insert</a>
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getSelectString" name="method_getSelectString" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">getSelectString()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getSelectString() : \X\Database\SQL\Action\Insert</pre>
+                <p><em>Get the select part of insert command. this method is called by
+toString() method.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/X.Database.SQL.Action.Insert.html">\X\Database\SQL\Action\Insert</a>
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOnDuplicateKeyUpdate" name="method_getOnDuplicateKeyUpdate" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">getOnDuplicateKeyUpdate()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOnDuplicateKeyUpdate() : \X\Database\SQL\Action\Insert</pre>
+                <p><em>Get the command part of sql string, this method is call by
+toString() method.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/X.Database.SQL.Action.Insert.html">\X\Database\SQL\Action\Insert</a>
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getIgnoreOnDuplicateKeyString" name="method_getIgnoreOnDuplicateKeyString" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">getIgnoreOnDuplicateKeyString()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getIgnoreOnDuplicateKeyString() : \X\Database\SQL\Action\Insert</pre>
+                <p><em>Get ignore part of insert command, this method is called by toString()
+method.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/X.Database.SQL.Action.Insert.html">\X\Database\SQL\Action\Insert</a>
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getPriorityString" name="method_getPriorityString" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">getPriorityString()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getPriorityString() : \X\Database\SQL\Action\Insert</pre>
+                <p><em>Get the proority part of the command, this method is called by
+toString() method.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/X.Database.SQL.Action.Insert.html">\X\Database\SQL\Action\Insert</a>
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">insert.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/sql/actions/insert.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/X.html">\X</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on April 16th, 2014 at 23:28.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>

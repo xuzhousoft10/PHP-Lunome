@@ -1,0 +1,16 @@
+Commands :
+    * use (service|module) {$name}
+      -- $name : the name of service or module that you want to operated.
+    active the service or module to operate, if you do not use this command, 
+    you are going to operate the core configurations. use this command to 
+    switch to the target service or module which you want to operate. 
+    
+    [ Module commands ]
+    module list
+    module create {$name}
+    module delete {$name}
+    
+    [ Service commands ]
+    service list
+    * service create {$name} [{$module}]
+    * service delete {$name}
