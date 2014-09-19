@@ -5,5 +5,9 @@ array (
   array (
     'enable' => true,
   ),
+  'Lunome' => 
+  array (
+    'enable' => false,
+  ),
 )
 ;
