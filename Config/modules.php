@@ -7,7 +7,7 @@ array (
   ),
   'Lunome' => 
   array (
-    'enable' => false,
+    'enable' => true,
   ),
 )
 ;

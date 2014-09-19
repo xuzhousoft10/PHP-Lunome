@@ -19,6 +19,14 @@ Commands :
     delete the module by given name, it would delete all the stuff under module
     folder.
     
+    * module enable {$name}
+      -- $name : the name of module to enable.
+    enable the module by given name
+    
+    * module disable {$name}
+      -- $name : the name of module to disable.
+    disable the module by given name
+    
     [ Service commands ]
     service list
     * service create {$name} [{$module}]

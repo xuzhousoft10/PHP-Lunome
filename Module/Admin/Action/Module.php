@@ -34,7 +34,13 @@ class Module extends \X\Service\XAction\Core\Action {
         }
         
         $actionHandler = sprintf('action%s', ucfirst($subAction));
-        call_user_func_array(array($this, $actionHandler), array($console, $parameters));
+        
+        if ( method_exists($this, $actionHandler) ) {
+            call_user_func_array(array($this, $actionHandler), array($console, $parameters));
+        } else {
+            $console->printLine('Command has not been supported.');
+        }
+        
     }
     
     /**
@@ -48,6 +54,39 @@ class Module extends \X\Service\XAction\Core\Action {
         foreach ( $modules as $moduleName ) {
             $stausMark = $moduleManager->isEnable($moduleName) ? 'O' : 'X';
             $console->printLine('[%s] %s', $stausMark, $moduleName);
+        }
+    }
+    
+    /**
+     * Enable the module by given name.
+     * 
+     * @param Console $console
+     * @param string $name The name of module to enable.
+     */
+    protected function actionEnable( Console $console, $name ) {
+        try {
+            X::system()->getModuleManager()->enable($name);
+        } catch ( Exception $e ) {
+            $console->printLine('Unable to enable this module.');
+        }
+    }
+    
+    /**
+     * Enable the module by given name.
+     *
+     * @param Console $console
+     * @param string $name The name of module to disable.
+     */
+    protected function actionDisable( Console $console, $name ) {
+        if ( 'ADMIN' === strtoupper($name) ) {
+            $console->printLine('You can not disable admin module.');
+            return;
+        }
+        
+        try {
+            X::system()->getModuleManager()->disable($name);
+        } catch ( Exception $e ) {
+            $console->printLine('Unable to disable this module.');
         }
     }
     

@@ -211,6 +211,36 @@ class ModuleManagement extends \X\Core\Basic {
         return isset($this->configuration['modules'][$name]) && $this->configuration['modules'][$name]['enable'];
     }
     
+    /**
+     * Enable the module by given name.
+     * 
+     * @param string $name The name of module to enable.
+     * @return void
+     */
+    public function enable( $name ) {
+        if ( !$this->has($name) ) {
+            throw new Exception(sprintf('Module "%s" does not exists.', $name));
+        }
+        
+        $this->configuration['modules'][$name]['enable'] = true;
+        $this->saveConfigurations();
+    }
+    
+    /**
+     * Disable the module by given name.
+     * 
+     * @param string $name The name of module to disable.
+     * @return void
+     */
+    public function disable( $name ) {
+        if ( !$this->has($name) ) {
+            throw new Exception(sprintf('Module "%s" does not exists.', $name));
+        }
+        
+        $this->configuration['modules'][$name]['enable'] = false;
+        $this->saveConfigurations();
+    }
+    
     public function has( $moduleName ) {
         return isset($this->modules[$moduleName]);
     }
