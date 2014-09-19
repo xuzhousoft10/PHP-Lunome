@@ -6,9 +6,18 @@ Commands :
     switch to the target service or module which you want to operate. 
     
     [ Module commands ]
-    module list
-    module create {$name}
-    module delete {$name}
+    * module list
+    list all the modules defined in the framework.
+    
+    * module create {$name}
+      -- $name : the name of the new module
+    create a new module, the new module would not be enabled after you create 
+    it. you need to enable it manually.
+      
+    * module delete {$name}
+      -- $name : the name of the module to delete.
+    delete the module by given name, it would delete all the stuff under module
+    folder.
     
     [ Service commands ]
     service list
