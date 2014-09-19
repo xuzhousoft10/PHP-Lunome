@@ -1,18 +1,29 @@
 <?php
+/**
+ * The module management handler.
+ */
 namespace X\Module\Admin\Action;
+
+/**
+ * Use statements
+ */
 use X\Core\X;
 use X\Core\Module\Exception;
 use X\Module\Admin\Util\Console;
+
 /**
+ * The class to manage modules.
  * 
- * Commands:
- *  module list
- *  module create {$name}
- *  
- * @author michael
- *
+ * @author Michael Luthor <michaelluthor@163.com>
  */
 class Module extends \X\Service\XAction\Core\Action {
+    /**
+     * Handle the module command.
+     * 
+     * @param Console $console
+     * @param string $parameters
+     * @return void
+     */
     public function runAction( Console $console, $parameters ) {
         $separatorPos = strpos($parameters, ' ');
         if ( false !== $separatorPos ) {
@@ -23,13 +34,20 @@ class Module extends \X\Service\XAction\Core\Action {
         }
         
         $actionHandler = sprintf('action%s', ucfirst($subAction));
-        return call_user_func_array(array($this, $actionHandler), array($console, $parameters));
+        call_user_func_array(array($this, $actionHandler), array($console, $parameters));
     }
     
+    /**
+     * Action to list all modules
+     * 
+     * @param Console $console
+     */
     protected function actionList( Console $console ) {
-        $modules = X::system()->getModuleManager()->getList();
+        $moduleManager = X::system()->getModuleManager();
+        $modules = $moduleManager->getList();
         foreach ( $modules as $moduleName ) {
-            $console->printLine($moduleName);
+            $stausMark = $moduleManager->isEnable($moduleName) ? 'O' : 'X';
+            $console->printLine('[%s] %s', $stausMark, $moduleName);
         }
     }
     

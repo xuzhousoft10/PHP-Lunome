@@ -201,6 +201,16 @@ class ModuleManagement extends \X\Core\Basic {
         return array_keys($this->modules);
     }
     
+    /**
+     * Check wether the module is enabled. return true is the module is enabled.
+     * 
+     * @param string $name The name of module to check.
+     * @return boolean
+     */
+    public function isEnable( $name ) {
+        return isset($this->configuration['modules'][$name]) && $this->configuration['modules'][$name]['enable'];
+    }
+    
     public function has( $moduleName ) {
         return isset($this->modules[$moduleName]);
     }
