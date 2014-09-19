@@ -26,6 +26,5 @@ class SettingController extends \X\Core\Service\SettingController {
     public function actionCreate( $name, $type, $module ) {
         $action = new Create();
         $action->run($name, $type, $module);
-        
     }
 }
