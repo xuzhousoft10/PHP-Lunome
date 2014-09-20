@@ -14,6 +14,35 @@ use X\Core\Util\XUtil;
  */
 abstract class XService extends \X\Core\Basic {
     /**
+     * Get the service name from given name.
+     * 
+     * @param string $className
+     * @return string
+     */
+    private static function getServiceNameFromClassName( $className ) {
+        $className = explode('\\', $className);
+        return str_replace('Service', '', array_pop($className));
+    }
+    
+    /**
+     * Get service name by a non-static way.
+     * 
+     * @return string
+     */
+    public function getName() {
+        return self::getServiceNameFromClassName(get_class($this));
+    }
+    
+    /**
+     * The static way to get service name.
+     * 
+     * @return string
+     */
+    public static function getServiceName() {
+        return self::getServiceNameFromClassName(get_called_class());
+    }
+    
+    /**
      * This value holds the service instace.
      * 
      * @var XService
@@ -32,12 +61,6 @@ abstract class XService extends \X\Core\Basic {
         }
         
         return static::$service;
-    }
-    
-    public function getName() {
-        $class = get_class($this);
-        $class = explode('\\', $class);
-        return str_replace('Service', '', array_pop($class));
     }
     
     /**
