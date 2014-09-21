@@ -43,7 +43,9 @@ class XActionService extends \X\Core\Service\XService {
      * Add group to action service.
      * 
      * @param string $group The name of group
-     * @param string $namespace The name of namespace for the group.
+     * @param string $namespace The name of namespace for the group. 
+     *                          you can easilly use __NAMESPACE__
+     *                          for this parameter.
      */
     public function add( $group, $namespace ){
         $this->groups[$group] = array();
@@ -202,7 +204,7 @@ class XActionService extends \X\Core\Service\XService {
         $actionClass = explode('/', $action);
         $actionClass = array_map('ucfirst', $actionClass);
         $actionClass = implode('\\', $actionClass);
-        $namespace = $this->groups[$group]['namespace'];
+        $namespace = $this->groups[$group]['namespace'].'\\Action';
         $actionClass = $namespace.'\\'.$actionClass;
         if ( !class_exists($actionClass) ) {
             throw new Exception(sprintf('Can not find Action "%s" in group "%s".', $action, $group));
