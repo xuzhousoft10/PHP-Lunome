@@ -51,9 +51,12 @@ class Module extends \X\Service\XAction\Core\Action {
     protected function actionList( Console $console ) {
         $moduleManager = X::system()->getModuleManager();
         $modules = $moduleManager->getList();
+        $console->printLine('| Name                 | Enable | Default |');
         foreach ( $modules as $moduleName ) {
             $stausMark = $moduleManager->isEnable($moduleName) ? 'O' : 'X';
-            $console->printLine('[%s] %s', $stausMark, $moduleName);
+            $defaultMark = $moduleManager->isDefault($moduleName) ? 'O' : 'X';
+            $message = '| %s |   %s    |    %s    |';
+            $console->printLine($message, str_pad($moduleName, 20, ' '), $stausMark, $defaultMark);
         }
     }
     
@@ -87,6 +90,25 @@ class Module extends \X\Service\XAction\Core\Action {
             X::system()->getModuleManager()->disable($name);
         } catch ( Exception $e ) {
             $console->printLine('Unable to disable this module.');
+        }
+    }
+    
+    /**
+     * Set default module by given name.
+     * 
+     * @param Console $console
+     * @param string $name
+     */
+    protected function actionDefault(  Console $console, $name  ) {
+        if ( 'ADMIN' === strtoupper($name) ) {
+            $console->printLine('You can not set admin module as default module.');
+            return;
+        }
+        
+        try {
+            X::system()->getModuleManager()->setDefault('none'===$name ? null : $name);
+        } catch ( Exception $e ) {
+            $console->printLine('Unable to set this module as default.');
         }
     }
     

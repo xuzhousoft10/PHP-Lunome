@@ -27,6 +27,11 @@ Commands :
       -- $name : the name of module to disable.
     disable the module by given name
     
+    * module default [{$name}|none]
+      -- $name : the name of module to set as default module.
+    set default module to framework. if the name is none, the no module would
+    be default module.
+    
     [ Service commands ]
     service list
     * service create {$name} [{$module}]

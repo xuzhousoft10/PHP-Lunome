@@ -139,7 +139,7 @@ class ModuleManagement extends \X\Core\Basic {
             return false;
         }
         
-        if ( isset($this->configuration['modules'][$name]['default']) &&  $this->configuration['modules'][$name]['default'] ) {
+        if ( $this->isDefault($name) ) {
             $this->configuration['defaultModule'] = $name;
         }
         
@@ -310,6 +310,41 @@ class ModuleManagement extends \X\Core\Basic {
         $this->configuration['modules'][$moduleName] = array('enable'=>false);
         $this->saveConfigurations();
         $this->loadModule($moduleName);
+    }
+    
+    /**
+     * Set the module as default module by given name.
+     * if $name is null, then all the modules would not be default module.
+     * 
+     * @param string $name
+     * @throws Exception
+     */
+    public function setDefault( $name = null ) {
+        if ( !is_null(null) &&  !$this->has($name) ) {
+            throw new Exception(sprintf('Can not find module "%s".', $name));
+        }
+        
+        foreach ( $this->configuration['modules'] as $moduleName => $moduleConfig ) {
+            $this->configuration['modules'][$moduleName]['default'] = false;
+        }
+        $this->configuration['defaultModule'] = null;
+        
+        if ( !is_null($name) ) {
+            $this->configuration['modules'][$name]['default'] = true;
+            $this->configuration['defaultModule'] = $name;
+        }
+        
+        $this->saveConfigurations();
+    }
+    
+    /**
+     * Check if a module is default module.
+     * 
+     * @param string $name
+     * @return boolean
+     */
+    public function isDefault( $name ) {
+        return isset($this->configuration['modules'][$name]['default']) &&  $this->configuration['modules'][$name]['default'];
     }
     
     public function delete( $name ) {
