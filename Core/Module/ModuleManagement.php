@@ -267,25 +267,34 @@ class ModuleManagement extends \X\Core\Basic {
             throw new Exception(sprintf('Module "%s" has already exists.', $name));
         }
         
+        /* Create module folders and readme text file. */
         $basePath = X::system()->getPath('Module/'.$moduleName);
         mkdir($basePath);
+        $actionPath = X::system()->getPath('Module/'.$moduleName.'/Action');
+        mkdir($actionPath);
+        file_put_contents($actionPath.DIRECTORY_SEPARATOR.'readme.txt', 'This folder contains all actions.');
+        $viewPath = X::system()->getPath('Module/'.$moduleName.'/View');
+        mkdir($viewPath);
+        file_put_contents($viewPath.DIRECTORY_SEPARATOR.'readme.txt', 'This folder contains all views.');
         
-        $moduleFile = <<<EOT
-<?php
-namespace X\\Module\\$moduleName;
-class Module extends \\X\\Core\\Module\\XModule {
-    /**
-     * (non-PHPdoc)
-     * @see \X\Core\Module\XModule::run()
-     */
-    public function run(\$parameters = array()) {
-        echo "This is a new module.";
-    }
-}
-EOT;
-        $moduleFilePath = X::system()->getPath("Module/$moduleName/Module.php");
+        /* Create module file */
+        $moduleFile = array();
+        $moduleFile[] = '<?php';
+        $moduleFile[] = sprintf('namespace X\\Module\\%s', $moduleName);
+        $moduleFile[] = 'class Module extends \\X\\Core\\Module\\XModule {';
+        $moduleFile[] = '    /**';
+        $moduleFile[] = '     * (non-PHPdoc)';
+        $moduleFile[] = '     * @see \X\Core\Module\XModule::run()';
+        $moduleFile[] = '     */';
+        $moduleFile[] = '    public function run(\$parameters = array()) {';
+        $moduleFile[] = '        /* @TODO: Input your own code here. */';
+        $moduleFile[] = '    }';
+        $moduleFile[] = '}';
+        $moduleFile = implode("\n", $moduleFile);
+        $moduleFilePath = $basePath.DIRECTORY_SEPARATOR.'Module.php';
         file_put_contents($moduleFilePath, $moduleFile);
         
+        /* Update module management configurations. */
         $this->configuration['modules'][$moduleName] = array('enable'=>false);
         $this->saveConfigurations();
         $this->loadModule($moduleName);
