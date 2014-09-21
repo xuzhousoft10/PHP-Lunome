@@ -85,4 +85,15 @@ abstract class Visual extends Basic {
         
         parent::beforeRunAction();
     }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \X\Service\XAction\Core\Action::afterRunAction()
+     */
+    protected function afterRunAction() {
+        $this->getView()->addCssLink('bootstrap', 'Assets/library/bootstrap/css/bootstrap.css');
+        $this->getView()->addCssLink('bootstrap-theme', 'Assets/library/bootstrap/css/bootstrap-theme.css');
+        $this->getView()->addScriptFile('bootstrap', 'Assets/library/bootstrap/js/bootstrap.js');
+        $this->getView()->display();
+    }
 }

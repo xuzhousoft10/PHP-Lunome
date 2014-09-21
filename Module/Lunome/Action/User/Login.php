@@ -26,6 +26,5 @@ class Login extends Visual {
         $option = array();
         $data   = array();
         $this->getView()->loadParticle($name, $path, $option, $data);
-        $this->getView()->display();
     }
 }
