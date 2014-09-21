@@ -7,7 +7,9 @@ namespace X\Service\XView\Core\Handler;
 /**
  * Use statement
  */
-use X\Service\XView\Exception;
+use X\Core\X;
+use X\Service\XView\XViewService;
+use X\Service\XView\Core\Exception;
 
 /**
  * The view handler for html page.
@@ -82,18 +84,15 @@ class Html extends \X\Service\XView\Core\View {
     
     /**
      * The style list that current page used.
-     * -- key : (string) The item of the css
-     * -- val : (array) The content of css
-     *          -- key : The attribute of style on item.
-     *          -- val : The value of css attribute.
-     *  
+     * 
      * @var array
      */
     protected $styles = array(
-    /* 'body' => array(
-     *      'width'=>'100px',
-     *      'height'=>'200px'
-     *  ),
+    /* 'body@screen' => array(
+     *   'item'  => 'body'
+     *   'style' => array('background-color'=>'red'),
+     *   'media' => 'screen',
+     * ),
      */
     );
     
@@ -103,16 +102,19 @@ class Html extends \X\Service\XView\Core\View {
      * @param string $item The name of item.
      * @param array $style The css attributes of the item.
      */
-    public function addStyle( $item, array $style ) {
+    public function addStyle( $item, array $style, $media=null ) {
         if ( empty($item) || empty($style) ) {
             throw new Exception('$item or $style can not be empty.');
         }
         
-        if ( !isset($this->styles[$item]) ) {
-            $this->styles[$item] = $style;
+        $key = $this->getKeyForStyles($item, $media);
+        if ( !isset($this->styles[$key]) ) {
+            $this->styles[$key]['style'] = $style;
         } else {
-            $this->styles[$item] = array_merge($this->styles[$item], $style);
+            $this->styles[$key]['style'] = array_merge($this->styles[$key]['style'], $style);
         }
+        $this->styles[$key]['item'] = $item;
+        $this->styles[$key]['media'] = $media;
     }
     
     /**
@@ -124,15 +126,17 @@ class Html extends \X\Service\XView\Core\View {
      * 
      * @return void
      */
-    public function setStyle( $item, $attribute, $value ) {
+    public function setStyle( $item, $attribute, $value, $media=null ) {
         if ( empty($item) || empty($attribute) || empty($value) ) {
             throw new Exception('$item, $attribute or $value can not be empty.');
         }
         
-        if ( !isset($this->styles[$item]) ) {
-            $this->styles[$item] = array();
+        $key = $this->getKeyForStyles($item, $media);
+        if ( !isset($this->styles[$key]) ) {
+            $this->styles[$key] = array();
+            $this->styles[$key]['media'] = $media;
         }
-        $this->styles[$item][$attribute] = $value;
+        $this->styles[$key]['style'][$attribute] = $value;
     }
     
     /**
@@ -152,13 +156,14 @@ class Html extends \X\Service\XView\Core\View {
      * 
      * @return mixed
      */
-    public function getStyleValue( $item, $attribute) {
-        if ( !isset($this->styles[$item]) ) {
+    public function getStyleValue( $item, $attribute, $media=null) {
+        $key = $this->getKeyForStyles($item, $media);
+        if ( !isset($this->styles[$key]) ) {
             return null;
-        } else if ( !isset($this->styles[$item][$attribute]) ) {
+        } else if ( !isset($this->styles[$key]['style'][$attribute]) ) {
             return null;
         } else {
-            return $this->styles[$item][$attribute];
+            return $this->styles[$key]['style'][$attribute];
         }
     }
     
@@ -167,9 +172,10 @@ class Html extends \X\Service\XView\Core\View {
      * 
      * @param string $item The item to remove.
      */
-    public function removeStyle( $item ) {
-        if ( isset($this->styles[$item]) ) {
-            unset($this->styles[$item]);
+    public function removeStyle( $item, $media=null ) {
+        $key = $this->getKeyForStyles($item, $media);
+        if ( isset($this->styles[$key]) ) {
+            unset($this->styles[$key]);
         }
     }
     
@@ -179,18 +185,19 @@ class Html extends \X\Service\XView\Core\View {
      * @param string $item The name of item.
      * @param string $name The name of attribute.
      */
-    public function removeStyleAttribute( $item, $name) {
-        if ( !isset($this->styles[$item]) ) {
+    public function removeStyleAttribute( $item, $name, $media ) {
+        $key = $this->getKeyForStyles($item, $media);
+        if ( !isset($this->styles[$key]) ) {
             return;
         }
         
-        if ( !isset($this->styles[$item][$name]) ) {
+        if ( !isset($this->styles[$key]['style'][$name]) ) {
             return;
         }
         
-        unset($this->styles[$item][$name]);
-        if ( 0 === count($this->styles[$item]) ) {
-            unset($this->styles[$item]);
+        unset($this->styles[$key]['style'][$name]);
+        if ( 0 === count($this->styles[$key]['style']) ) {
+            unset($this->styles[$key]);
         }
     }
     
@@ -205,16 +212,31 @@ class Html extends \X\Service\XView\Core\View {
         }
         
         $styleList = array();
-        foreach ( $this->styles as $item => $attributes ) {
-            $attributeList = array();
-            foreach ( $attributes as $name => $value ) {
-                $attributeList[] = sprintf('%s:%s', $name, $value);
+        foreach ( $this->styles as $item => $attribute ) {
+            $itemStyle = array();
+            foreach ( $attribute['style'] as $name => $value ) {
+                $itemStyle[] = sprintf('%s:%s', $name, $value);
             }
-            $styleList[] = sprintf('%s {%s;}', $item, implode(';', $attributeList));
+            $itemStyle = sprintf('%s {%s;}', $attribute['item'], implode(';', $itemStyle));
+            if ( !is_null($attribute['media']) ) {
+                $itemStyle = sprintf('@media %s{ %s }', $attribute['media'], $itemStyle);
+            }
+            $styleList[] = $itemStyle;
         }
         $styleList = implode("\n", $styleList);
         $styleList = sprintf("<style type=\"text/css\">\n%s\n</style>", $styleList);
         return $styleList;
+    }
+    
+    /**
+     * Get the key for getting data from styles array.
+     * 
+     * @param string $item
+     * @param string $media
+     * @return string
+     */
+    private function getKeyForStyles( $item, $media ) {
+        return is_null($media) ? $item : sprintf('%s@%s', $item, $media);
     }
     
     /**
@@ -979,12 +1001,31 @@ class Html extends \X\Service\XView\Core\View {
      */
     protected $layout = array('view'=>null, 'data'=>array(), 'content'=>null);
     
+    /* System layout names */
+    const LAYOUT_SINGLE_COLUMN              = 'SingleColumn';
+    const LAYOUT_SINGLE_COLUMN_FULL_WIDTH   = 'SingleColumnFullWidth';
+    const LAYOUT_TWO_COLUMNS                = 'TwoColumns';
+    const LAYOUT_TWO_COLUMNS_FULL_WIDTH     = 'TwoColumnsFullWidth';
+    const LAYOUT_THREE_COLUMNS              = 'ThreeColumns';
+    const LAYOUT_THREE_COLUMNS_FULL_WIDTH   = 'ThreeColumnsFullWidth';
+    
     /**
-     * Load layout into this view.
+     * Load layout into this view, You can pass the $name a file path to use 
+     * custom layout, or a name to use system layout. 
+     * The system layout names are defined by const which starts with LAYOUT_.
      *
-     * @param string $name -- The name of the layout
+     * @param string $name The name of the layout
      */
     public function loadLayout( $name ) {
+        if ( !is_file($name) ) {
+            $viewService = X::system()->getServiceManager()->get(XViewService::getServiceName());
+            $name = $viewService->getServicePath('Core/HandlerData/Html/Layout/'.$name.'.php');
+        }
+        
+        if ( !is_file($name) ) {
+            throw new Exception(sprintf('Can not find layout "%s".', $name));
+        }
+        
         $this->layout['view'] = $name;
     }
     

@@ -155,10 +155,12 @@ abstract class XService extends \X\Core\Basic {
      * 
      * @return string
      */
-    public function getServicePath() {
+    public function getServicePath( $path='' ) {
         $service = new \ReflectionClass(get_class($this));
         $servicePath = dirname($service->getFileName());
-        return $servicePath;
+        $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
+        $path = $servicePath.DIRECTORY_SEPARATOR.$path;
+        return $path;
     }
     
     /**

@@ -2,7 +2,7 @@
 /**
  * Namespace defination
  */
-namespace X\Service\XView;
+namespace X\Service\XView\Core;
 
 /**
  * The exception class for xview service.
