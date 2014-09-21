@@ -1185,12 +1185,13 @@ class Html extends \X\Service\XView\Core\View {
     /**
      * Load paritcle view into current view.
      * 
-     * @param string $view -- The view's name
-     * @param array $option -- Options to this view
-     * @param array $data -- An array contains all data to this view
+     * @param string $name
+     * @param string $path
+     * @param array $option
+     * @param array $data
      */
-    public function loadParticle( $name, $view, $option=array(), $data=array() ) {
-        $this->particles[$name] = array('view'=>$view, 'data'=>$data, 'option'=>$option, 'content'=>null);
+    public function loadParticle( $name, $path, $option=array(), $data=array() ) {
+        $this->particles[$name] = array('view'=>$path, 'data'=>$data, 'option'=>$option, 'content'=>null);
     }
     
     /**

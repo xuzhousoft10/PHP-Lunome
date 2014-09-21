@@ -55,7 +55,7 @@ abstract class Visual extends Basic {
     }
     
     /**
-     * Get the view path by given name. For example,
+     * Get the particle view path by given name. For example,
      * If the $view is 'Particle/User/Login', can the module of this action is 
      * 'Test', then you can get view path like this :
      * '{$root_path}/Module/Test/View/Particle/User/Login.php'
@@ -63,8 +63,8 @@ abstract class Visual extends Basic {
      * @param string $view The view name
      * @return string
      */
-    public function getViewPath( $view ) {
-        $view = sprintf('View/%s.php', $view);
+    public function getParticleViewPath( $view ) {
+        $view = sprintf('View/Particle/%s.php', $view);
         $view = $this->getModule()->getModulePath($view);
         return $view;
     }
