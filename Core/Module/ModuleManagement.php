@@ -59,7 +59,12 @@ class ModuleManagement extends \X\Core\Basic {
      *
      * @var array
      */
-    protected $configuration = array();
+    protected $configuration = array(
+        /* Module config informations */
+        'modules' => array(),
+        /* The module name of default module. */
+        'defaultModule' => null,
+    );
     
     /**
      * Load management configurations
@@ -134,6 +139,10 @@ class ModuleManagement extends \X\Core\Basic {
             return false;
         }
         
+        if ( isset($this->configuration['modules'][$name]['default']) &&  $this->configuration['modules'][$name]['default'] ) {
+            $this->configuration['defaultModule'] = $name;
+        }
+        
         $moduleClass = sprintf('X\\Module\\%s\\Module', $name);
         if ( !class_exists($moduleClass) ) {
             throw new Exception(sprintf('Module handler "%s" can not be found.', $moduleClass));
@@ -158,7 +167,10 @@ class ModuleManagement extends \X\Core\Basic {
      */
     public function run() {
         $parameters = X::system()->getParameters();
-        $moduleName = isset($parameters['module']) ? $parameters['module'] : $this->configuration['default'];
+        $moduleName = isset($parameters['module']) ? $parameters['module'] : $this->configuration['defaultModule'];
+        if ( is_null($moduleName) ) {
+            throw new Exception('Can not find any module to execute.');
+        }
         $moduleName = ucfirst($moduleName);
         
         if ( !isset($this->modules[$moduleName]) ) {
