@@ -9,7 +9,7 @@ array (
   'Lunome' => 
   array (
     'enable' => true,
-    'default' => false,
+    'default' => true,
   ),
 )
 ;
