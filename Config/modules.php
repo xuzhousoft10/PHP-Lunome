@@ -11,5 +11,9 @@ array (
     'enable' => true,
     'default' => true,
   ),
+  'test' => 
+  array (
+    'default' => false,
+  ),
 )
 ;

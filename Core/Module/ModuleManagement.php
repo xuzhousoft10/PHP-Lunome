@@ -292,14 +292,15 @@ class ModuleManagement extends \X\Core\Basic {
         /* Create module file */
         $moduleFile = array();
         $moduleFile[] = '<?php';
-        $moduleFile[] = sprintf('namespace X\\Module\\%s', $moduleName);
+        $moduleFile[] = sprintf('namespace X\\Module\\%s;', $moduleName);
         $moduleFile[] = 'class Module extends \\X\\Core\\Module\\XModule {';
         $moduleFile[] = '    /**';
         $moduleFile[] = '     * (non-PHPdoc)';
         $moduleFile[] = '     * @see \X\Core\Module\XModule::run()';
         $moduleFile[] = '     */';
-        $moduleFile[] = '    public function run(\$parameters = array()) {';
+        $moduleFile[] = '    public function run($parameters = array()) {';
         $moduleFile[] = '        /* @TODO: Input your own code here. */';
+        $moduleFile[] = sprintf('        echo "The module \"%s\" has been created.";', $moduleName);
         $moduleFile[] = '    }';
         $moduleFile[] = '}';
         $moduleFile = implode("\n", $moduleFile);
