@@ -196,7 +196,11 @@ class ModuleManagement extends \X\Core\Basic {
     }
     
     /************  Management  *************************************************/
-    
+    /**
+     * List all modules in the system.
+     * 
+     * @return array
+     */
     public function getList() {
         return array_keys($this->modules);
     }
@@ -241,10 +245,22 @@ class ModuleManagement extends \X\Core\Basic {
         $this->saveConfigurations();
     }
     
+    /**
+     * Check if the module exists by given name.
+     * 
+     * @param string $moduleName
+     * @return boolean
+     */
     public function has( $moduleName ) {
         return isset($this->modules[$moduleName]);
     }
     
+    /**
+     * Create a new module by given name.
+     * 
+     * @param string $name The name of new module.
+     * @throws Exception
+     */
     public function create( $name ) {
         $moduleName = ucfirst($name);
         if ( $this->has($moduleName) ) {
