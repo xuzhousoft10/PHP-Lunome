@@ -7,14 +7,14 @@ require dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'NonFullW
 <div id="content">
     <div id="content-left">
         <?php foreach ( $this->particles as $name => $particle ) : ?>
-            <?php if ('left' === $particle['zone']) : ?>
+            <?php if (isset($particle['zone']) && 'left' === $particle['zone']) : ?>
                 <?php echo $particle['content']; ?>
             <?php endif; ?>
         <?php endforeach; ?>
     </div>
     <div id="content-right">
         <?php foreach ( $this->particles as $name => $particle ) : ?>
-            <?php if ('right' === $particle['zone']) : ?>
+            <?php if (isset($particle['zone']) && 'right' === $particle['zone']) : ?>
                 <?php echo $particle['content']; ?>
             <?php endif; ?>
         <?php endforeach; ?>
