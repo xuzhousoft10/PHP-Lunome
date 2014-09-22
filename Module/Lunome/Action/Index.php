@@ -21,7 +21,7 @@ class Index extends Visual {
      */ 
     public function runAction( /* @TODO Add parameters here if you need. */ ) {
         /* Load layout. */
-        $this->getView()->loadLayout(Html::LAYOUT_SINGLE_COLUMN_FULL_WIDTH);
+        $this->getView()->loadLayout(Html::LAYOUT_SINGLE_COLUMN);
         
         /* Load navigation bar */
         $name   = 'INDEX_NAV_BAR';
