@@ -96,7 +96,9 @@ abstract class Visual extends Basic {
         $this->getView()->addCssLink('application', 'Assets/css/application.css');
         $this->getView()->addCssLink('bootstrap-ext', 'Assets/css/bootstrap-ext.css');
         
+        $this->getView()->addScriptFile('jquery', 'Assets/library/jquery/jquery-1.11.1.js');
         $this->getView()->addScriptFile('bootstrap', 'Assets/library/bootstrap/js/bootstrap.js');
+        
         
         $this->getView()->display();
     }
