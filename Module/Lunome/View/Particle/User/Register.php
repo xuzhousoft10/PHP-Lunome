@@ -8,25 +8,21 @@
         <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
       </div>
       <div class="form-group">
-        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-      </div>
-      <div class="form-group">
         <div class="input-group">
-          <input type="text" class="form-control" placeholder="Verify code">
-          <span class="input-group-addon"><img src="Assets/image/verify-code-pic.png" height="20" /></span>
+          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
           <span class="input-group-btn">
             <button class="btn btn-default" type="button">
-              <span class="glyphicon glyphicon-refresh"></span>
+              <span class="glyphicon glyphicon-eye-open"></span>
             </button>
           </span>
         </div>
       </div>
       <div class="btn-group btn-group-justified">
         <div class="btn-group">
-          <a class="btn btn-default" href="/?module=lunome&action=user/register">Register</a>
+          <a href="/?module=lunome&action=user/login" class="btn btn-default">Login</a>
         </div>
         <div class="btn-group">
-          <button type="button" class="btn btn-primary">Login</button>
+          <button type="button" class="btn btn-primary">Register</button>
         </div>
       </div>
     </form>
