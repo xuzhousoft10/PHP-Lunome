@@ -134,6 +134,7 @@ class Html extends \X\Service\XView\Core\View {
         $key = $this->getKeyForStyles($item, $media);
         if ( !isset($this->styles[$key]) ) {
             $this->styles[$key] = array();
+            $this->styles[$key]['item'] = $item;
             $this->styles[$key]['media'] = $media;
         }
         $this->styles[$key]['style'][$attribute] = $value;
