@@ -93,7 +93,11 @@ abstract class Visual extends Basic {
     protected function afterRunAction() {
         $this->getView()->addCssLink('bootstrap', 'Assets/library/bootstrap/css/bootstrap.css');
         $this->getView()->addCssLink('bootstrap-theme', 'Assets/library/bootstrap/css/bootstrap-theme.css');
+        $this->getView()->addCssLink('application', 'Assets/css/application.css');
+        $this->getView()->addCssLink('bootstrap-ext', 'Assets/css/bootstrap-ext.css');
+        
         $this->getView()->addScriptFile('bootstrap', 'Assets/library/bootstrap/js/bootstrap.js');
+        
         $this->getView()->display();
     }
 }
