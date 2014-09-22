@@ -7,21 +7,21 @@ require dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'FullWidt
 <div id="content">
     <div id="content-left">
         <?php foreach ( $this->particles as $name => $particle ) : ?>
-            <?php if (isset($particle['zone']) && 'left' === $particle['zone']) : ?>
+            <?php if (isset($particle['option']['zone']) && 'left' === $particle['option']['zone']) : ?>
                 <?php echo $particle['content']; ?>
             <?php endif; ?>
         <?php endforeach; ?>
     </div>
     <div id="content-middle">
         <?php foreach ( $this->particles as $name => $particle ) : ?>
-            <?php if (isset($particle['zone']) && 'middle' === $particle['zone']) : ?>
+            <?php if (!isset($particle['zone']) || 'middle' === $particle['zone'] || 'content'===$particle['option']['zone']) : ?>
                 <?php echo $particle['content']; ?>
             <?php endif; ?>
         <?php endforeach; ?>
     </div>
     <div id="content-right">
         <?php foreach ( $this->particles as $name => $particle ) : ?>
-            <?php if (isset($particle['zone']) && 'right' === $particle['zone']) : ?>
+            <?php if (isset($particle['option']['zone']) && 'right' === $particle['option']['zone']) : ?>
                 <?php echo $particle['content']; ?>
             <?php endif; ?>
         <?php endforeach; ?>
