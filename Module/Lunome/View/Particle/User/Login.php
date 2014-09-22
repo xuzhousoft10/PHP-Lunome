@@ -3,7 +3,7 @@
 ?>
 <div class="row lnm-height-100">
   <div class="col-md-3 col-md-offset-8" style="top:15%">
-    <form>
+    <form action="/?module=lunome&action=index" method="post">
       <div class="form-group">
         <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
       </div>
@@ -26,7 +26,7 @@
           <a class="btn btn-default" href="/?module=lunome&action=user/register">Register</a>
         </div>
         <div class="btn-group">
-          <button type="button" class="btn btn-primary">Login</button>
+          <button type="submit" class="btn btn-primary">Login</button>
         </div>
       </div>
     </form>
