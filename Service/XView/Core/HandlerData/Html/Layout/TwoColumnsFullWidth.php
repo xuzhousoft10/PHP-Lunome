@@ -1,6 +1,7 @@
 <?php 
 /* @var $this \X\Service\XView\Core\Handler\Html */
 require dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'LayoutSetup.php';
+require dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'FullWidthLayoutSetup.php';
 ?>
 <?php require dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'LayoutHeaderSetup.php'; ?>
 <div id="content">
