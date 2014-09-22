@@ -62,10 +62,14 @@ class Create {
         /* generate the content of action file. */
         $content = array();
         $content[] = '<?php';
+        $content[] = "/**\n * The action file for $name action.\n */";
         $content[] = sprintf('namespace %s;', $actionNamespace);
+        $content[] = '';
+        $content[] = "/**\n * The action class for $name action.\n * @author Unknown\n */";
         $content[] = sprintf('class %s extends %s { ', $actionClassName, $handlerClassName);
+        $content[] = "    /** \n     * The action handle for index action.\n     * @return void\n     */ ";
         $content[] = sprintf('    public function %s( /* @TODO Add parameters here if you need. */ ) {', $actionHandlerName);
-        $content[] = '    /* @TODO Input your own code here. */';
+        $content[] = '        /* @TODO Input your own code here. */';
         $content[] = '    }';
         $content[] = '}';
         $content = implode("\n", $content);
