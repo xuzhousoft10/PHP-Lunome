@@ -34,7 +34,7 @@ class Commander extends \X\Core\Basic {
     public function start() {
         $group = 'admin';
         $actionService = X::system()->getServiceManager()->get('XAction');
-        $actionService->add($group, 'X\\Module\\Admin\\Action');
+        $actionService->add($group, 'X\\Module\\Admin');
         $this->actionService = $actionService;
         
         while ( true ) {
