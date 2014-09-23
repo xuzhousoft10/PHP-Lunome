@@ -25,7 +25,9 @@
     <div class="clearfix" style="width: 1100px; margin-left:auto; margin-right:auto">
       <div class="pull-left" style="text-align: center;line-height: 3em;width:200px;margin: 0px 10px;">
         <div style="background-image:url('/Assets/image/post/001.jpg'); background-size: 200px 300px; height: 300px; width:200px;" ></div>
-        Kongfu Panda
+        <div>
+            <strong>Kongfu Panda</strong>
+        </div>
       </div>
       
       <div class="pull-left" style="text-align: center;line-height: 3em;width:200px;margin: 0px 10px;">
@@ -45,25 +47,33 @@
             </div>
           </div>
         </div>
-        Fantasic 4 
+        <div>
+            <strong>Kongfu Panda</strong>
+        </div>
       </div>
       
       <div class="pull-left" style="text-align: center;line-height: 3em;width:200px;margin: 0px 10px;">
         <div style="background-image:url('/Assets/image/post/003.jpg'); background-size: 200px 300px; height: 300px; width:200px;" ></div>
-        Super Spider Man
+        <div>
+            <strong>Kongfu Panda</strong>
+        </div>
       </div>
       
       <div class="pull-left" style="text-align: center;line-height: 3em;width:200px;margin: 0px 10px;">
         <div style="background-image:url('/Assets/image/post/004.jpg'); background-size: 200px 300px; height: 300px; width:200px;" ></div>
-        Super Man 2 -- Reburn
+        <div>
+            <strong>Kongfu Panda</strong>
+        </div>
       </div>
       
       <div class="pull-left" style="text-align: center;line-height: 3em;width:200px;margin: 0px 10px;">
         <div style="background-image:url('/Assets/image/post/005.jpg'); background-size: 200px 300px; height: 300px;width:200px;" ></div>
-        Transform 2 -- The dark side of the moon
+        <div>
+            <strong title="Kongfu Panda Kongfu Panda Kongfu Panda ">Kongfu Panda Kongfu ...</strong>
+        </div>
       </div>
     </div>
-    <div class="clearfix" style="position: relative;top: -270px;">
+    <div class="clearfix" style="position: absolute;top: 270px;width: 1110px;">
       <button type="button" class="btn btn-default btn-lg pull-left">
         <span class="glyphicon glyphicon-chevron-left"></span>
       </button>
