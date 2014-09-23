@@ -44,6 +44,20 @@ class Index extends Visual {
         $data   = array();
         $this->getView()->loadParticle($name, $path, $option, $data);
         
+        /* Load movie particle view. */
+        $name   = 'INDEX_TV';
+        $path   = $this->getParticleViewPath('TV/Index');
+        $option = array();
+        $data   = array();
+        $this->getView()->loadParticle($name, $path, $option, $data);
+        
+        /* Load movie particle view. */
+        $name   = 'INDEX_BOOK';
+        $path   = $this->getParticleViewPath('Book/Index');
+        $option = array();
+        $data   = array();
+        $this->getView()->loadParticle($name, $path, $option, $data);
+        
         /* Load footer view */
         $name   = 'FOOTER';
         $path   = $this->getParticleViewPath('Util/Footer');

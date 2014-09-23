@@ -1,5 +1,6 @@
 <?php 
 /* @var $this \X\Service\XView\Core\Handler\Html */
+$this->addStyle('html,body,#content', array('height'=>'100%'));
 ?>
 <div class="row lnm-height-100">
   <div class="col-md-3 col-md-offset-8" style="top:15%">
