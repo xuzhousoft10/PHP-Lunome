@@ -73,7 +73,7 @@
         </div>
       </div>
     </div>
-    <div class="clearfix" style="position: absolute;top: 270px;width: 1110px;">
+    <div class="clearfix" style="position: absolute;top: 530px;;width: 1110px;">
       <button type="button" class="btn btn-default btn-lg pull-left">
         <span class="glyphicon glyphicon-chevron-left"></span>
       </button>

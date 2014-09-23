@@ -1,6 +1,6 @@
 <?php 
 /* @var $this \X\Service\XView\Core\Handler\Html */
-$this->addStyle('body', array('padding-top'=>'70px'));
+$this->addStyle('body', array('padding-top'=>'50px'));
 ?>
 <nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
   <div class="container">

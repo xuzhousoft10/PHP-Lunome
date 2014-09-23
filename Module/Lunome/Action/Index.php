@@ -30,9 +30,16 @@ class Index extends Visual {
         $data   = array();
         $this->getView()->loadParticle($name, $path, $option, $data);
         
+        /* Load User Board */
+        $name   = 'USER_BOARD';
+        $path   = $this->getParticleViewPath('User/Board');
+        $option = array();
+        $data   = array();
+        $this->getView()->loadParticle($name, $path, $option, $data);
+        
         /* Load movie particle view. */
         $name   = 'INDEX_MOVIE';
-        $path   = $this->getParticleViewPath('Index/Movie');
+        $path   = $this->getParticleViewPath('Movie/Index');
         $option = array();
         $data   = array();
         $this->getView()->loadParticle($name, $path, $option, $data);
