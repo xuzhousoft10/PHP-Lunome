@@ -43,5 +43,12 @@ class Index extends Visual {
         $option = array();
         $data   = array();
         $this->getView()->loadParticle($name, $path, $option, $data);
+        
+        /* Load footer view */
+        $name   = 'FOOTER';
+        $path   = $this->getParticleViewPath('Util/Footer');
+        $option = array('zone'=>'footer');
+        $data   = array();
+        $this->getView()->loadParticle($name, $path, $option, $data);
     }
 }
