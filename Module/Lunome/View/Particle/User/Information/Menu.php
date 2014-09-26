@@ -7,12 +7,12 @@ $this->addStyle('#content-left', array(
 ?>
 
 <div class="list-group">
-  <a href="#" class="list-group-item active">Basic</a>
-  <a href="#" class="list-group-item">Current Status</a>
-  <a href="#" class="list-group-item">Contact</a>
-  <a href="#" class="list-group-item">Working History</a>
-  <a href="#" class="list-group-item">Education History</a>
-  <a href="#" class="list-group-item">Lived Places</a>
-  <a href="#" class="list-group-item">Hobbies</a>
-  <a href="#" class="list-group-item">Memories</a>
+  <a href="/?module=lunome&action=user/information/basic" class="list-group-item">Basic</a>
+  <a href="/?module=lunome&action=user/information/photo" class="list-group-item">Photo</a>
+  <a href="/?module=lunome&action=user/information/status" class="list-group-item">Status</a>
+  <a href="/?module=lunome&action=user/information/contact" class="list-group-item">Contact</a>
+  <a href="/?module=lunome&action=user/information/working" class="list-group-item">Working History</a>
+  <a href="/?module=lunome&action=user/information/education" class="list-group-item">Education History</a>
+  <a href="/?module=lunome&action=user/information/lived" class="list-group-item">Lived Places</a>
+  <a href="/?module=lunome&action=user/information/hobbies" class="list-group-item">Hobbies</a>
 </div>

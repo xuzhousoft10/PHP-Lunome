@@ -7,8 +7,8 @@ namespace X\Module\Lunome\Action;
 /**
  * Use statements
  */
-use X\Util\Action\Visual;
 use X\Service\XView\Core\Handler\Html;
+use X\Module\Lunome\Util\Action\Visual;
 
 /**
  * The action class for index action.
@@ -22,20 +22,6 @@ class Index extends Visual {
     public function runAction( /* @TODO Add parameters here if you need. */ ) {
         /* Load layout. */
         $this->getView()->loadLayout(Html::LAYOUT_SINGLE_COLUMN);
-        
-        /* Load navigation bar */
-        $name   = 'INDEX_NAV_BAR';
-        $path   = $this->getParticleViewPath('Util/Navigation');
-        $option = array('zone'=>'header');
-        $data   = array();
-        $this->getView()->loadParticle($name, $path, $option, $data);
-        
-        /* Load User Board */
-        $name   = 'USER_BOARD';
-        $path   = $this->getParticleViewPath('User/Board');
-        $option = array();
-        $data   = array();
-        $this->getView()->loadParticle($name, $path, $option, $data);
         
         /* Load movie particle view. */
         $name   = 'INDEX_MOVIE';
@@ -55,13 +41,6 @@ class Index extends Visual {
         $name   = 'INDEX_BOOK';
         $path   = $this->getParticleViewPath('Book/Index');
         $option = array();
-        $data   = array();
-        $this->getView()->loadParticle($name, $path, $option, $data);
-        
-        /* Load footer view */
-        $name   = 'FOOTER';
-        $path   = $this->getParticleViewPath('Util/Footer');
-        $option = array('zone'=>'footer');
         $data   = array();
         $this->getView()->loadParticle($name, $path, $option, $data);
     }

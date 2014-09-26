@@ -14,7 +14,7 @@ use X\Module\Lunome\Util\Action\UserInfoSetting;
  * The action class for user/information/basic action.
  * @author Unknown
  */
-class Basic extends UserInfoSetting { 
+class Hobbies extends UserInfoSetting { 
     /** 
      * The action handle for index action.
      * @return void
@@ -25,7 +25,7 @@ class Basic extends UserInfoSetting {
         
         /* Load information menu. */
         $name   = 'INFORMATION_BASIC';
-        $path   = $this->getParticleViewPath('User/Information/Basic');
+        $path   = $this->getParticleViewPath('User/Information/Hobbies');
         $option = array('zone'=>'right');
         $data   = array();
         $this->getView()->loadParticle($name, $path, $option, $data);
