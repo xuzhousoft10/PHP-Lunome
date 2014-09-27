@@ -31,14 +31,14 @@ $this->addStyle('body', array('padding-top'=>'50px'));
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="/?module=lunome&action=user/setting/basic">
                 <span class="glyphicon glyphicon-cog"></span>
                 Personal Setting
               </a>
             </li>
             <li class="divider"></li>
             <li>
-              <a href="#">
+              <a href="/?module=lunome&action=user/login">
                 <span class="glyphicon glyphicon-off"></span>
                 Exit
               </a>
