@@ -25,7 +25,7 @@ $this->addStyle('body', array('padding-top'=>'50px'));
             </li>
             <li class="divider"></li>
             <li>
-              <a href="#">
+              <a href="/?module=lunome&action=security/password">
                 <span class="glyphicon glyphicon-heart"></span>
                 Security Center
               </a>
