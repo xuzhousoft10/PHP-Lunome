@@ -32,7 +32,7 @@ class Index extends Visual {
         
         /* Load movie particle view. */
         $name   = 'INDEX_TV';
-        $path   = $this->getParticleViewPath('TV/Index');
+        $path   = $this->getParticleViewPath('Tv/Index');
         $option = array();
         $data   = array();
         $this->getView()->loadParticle($name, $path, $option, $data);

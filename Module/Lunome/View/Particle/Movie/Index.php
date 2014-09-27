@@ -83,6 +83,6 @@
     </div>
   </div>
   <div class="panel-footer clearfix">
-    <button type="button" class="btn btn-primary btn-sm pull-right">All</button>
+    <a href="/?module=lunome&action=movie/unwatched" class="btn btn-primary btn-sm pull-right">All</a>
   </div>
 </div>
