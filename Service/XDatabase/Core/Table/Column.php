@@ -31,7 +31,7 @@ class Column extends Basic {
      * @return \X\Service\XDatabase\Core\Table\Column
      */
     public static function create( $name ) {
-        $column = new Column();
+        $column = new Column($name);
         return $column;
     }
     
@@ -70,7 +70,7 @@ class Column extends Basic {
      * @return \X\Service\XDatabase\Core\Table\Column
      */
     public function set( $name, $value ) {
-        if ( !isset($this->attributes[$name]) ) {
+        if ( !array_key_exists($name, $this->attributes) ) {
             throw new Exception(sprintf('"%s" is not a validate attribute.', $name));
         }
         
@@ -86,7 +86,7 @@ class Column extends Basic {
      * @return mixed
      */
     public function get( $name ) {
-        if ( !isset($this->attributes[$name]) ) {
+        if ( !array_key_exists($name, $this->attributes) ) {
             throw new Exception(sprintf('"%s" is not a validate attribute.', $name));
         }
         return $this->attributes[$name];
@@ -98,7 +98,6 @@ class Column extends Basic {
      */
     public function toString() {
         $column = array();
-        $column['name'] = $this->getName();
         $column['type'] = $this->getType();
         if ( !is_null($this->getLength()) ) {
             $column['type'] .= sprintf('(%d)', $this->getLength());
@@ -142,6 +141,17 @@ class Column extends Basic {
         $name = substr($name, 3);
         $name = lcfirst($name);
         return $this->get($name);
+    }
+    
+    /**
+     * 
+     * @param unknown $name
+     * @param unknown $parms
+     */
+    public function __call( $name, $parms ) {
+        if ( 'get' === substr($name, 0, 3) ) {
+            return $this->get(lcfirst(substr($name, 3)));
+        }
     }
     
     /**

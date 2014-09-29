@@ -2,7 +2,7 @@
 /**
  * create.table.php
  */
-namespace X\Service\XDB\SQL\Action;
+namespace X\Service\XDatabase\Core\SQL\Action;
 
 /**
  * CreateTable
@@ -51,8 +51,9 @@ class CreateTable extends ActionAboutTable {
      */
     protected function getColumnString() {
         $columns = array();
-        foreach ( $this->columns as $name => $column ) {
-            $columns[] = sprintf('%s %s', $this->quoteColumnName($name), $column);
+        foreach ( $this->columns as $column ) {
+            /* @var $column \X\Service\XDatabase\Core\Table\Column */
+            $columns[] = sprintf('%s %s', $this->quoteColumnName($column->getName()), $column);
         }
         $this->sqlCommand[] = sprintf('(%s)', implode(',', $columns));
     }

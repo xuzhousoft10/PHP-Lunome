@@ -30,10 +30,8 @@ class Manager extends Basic {
             ->columns($columns)
             ->toString();
         
-        if ( !self::executeSQLQueryWithOutResult($sql) ) {
-            return false;
-        }
-        return new Management($name);
+        self::executeSQLQueryWithOutResult($sql);
+        return new Manager($name);
     }
     
     /**
