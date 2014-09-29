@@ -8,6 +8,7 @@ namespace X\Core\Module;
  * Use statements
  */
 use X\Core\X;
+use X\Core\Util\XUtil;
 
 /**
  * The module management class.
@@ -443,6 +444,37 @@ class ModuleManagement extends \X\Core\Basic {
         $content = implode("\n", $content);
         $migrationClassPath = X::system()->getPath(sprintf('Module/%s/Migration/%s.php', $moduleName, $migrationClassName));
         file_put_contents($migrationClassPath, $content);
+    }
+    
+    /**
+     * Execute the up action for migration.
+     * 
+     * @param unknown $name
+     */
+    public function  migrateUp( $name ) {
+        $moduleName = ucfirst($name);
+        if ( !$this->has($moduleName) ) {
+            throw new Exception(sprintf('Can not find module "%s".', $moduleName));
+        }
+        
+        /* Get migration file list. */
+        $migrationPath = X::system()->getPath(sprintf('Module/%s/Migration', $moduleName));
+        $files = scandir($migrationPath);
+        $historyPath = X::system()->getPath(sprintf('Module/%s/Migration/History.php', $moduleName));
+        $history = is_file($historyPath) ? require $historyPath : array();
+        /* Remove history item from migrate list. */
+        $migrations = array_diff($files, $history, array('.', '..'));
+        
+        $namespace = sprintf('\\X\\Module\\%s\\Migration', $moduleName);
+        /* Execute the up action */
+        foreach ( $migrations as $index => $migration ) {
+            $className = basename($migration, '.php');
+            $classFullName = $namespace.'\\'.$className;
+            $migration = new $classFullName();
+            $migration->up();
+            $migrations[] = $migration;
+            XUtil::storeArrayToPHPFile($historyPath, $migrations);
+        }
     }
 //     /**
 //      * Shutdown the management.
