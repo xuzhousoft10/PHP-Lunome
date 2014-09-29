@@ -396,6 +396,54 @@ class ModuleManagement extends \X\Core\Basic {
         return rmdir($path);
     }
     
+    /**
+     * Create a module migration by given name.
+     * 
+     * @param unknown $name
+     */
+    public function migrateCreate( $module, $name ) {
+        $moduleName = ucfirst($module);
+        if ( !$this->has($moduleName) ) {
+            throw new Exception(sprintf('Can not find module "%s".', $moduleName));
+        }
+        
+        /* Create migration folder */
+        $path = X::system()->getPath(sprintf('Module/%s/Migration', $moduleName));
+        if ( !is_dir($path) ) {
+            mkdir($path);
+        }
+        
+        /* Generate the migraion class name. */
+        $hasHistory = file_exists(X::system()->getPath(sprintf('Module/%s/Migration/History.php', $moduleName)));
+        $migrationCount = count(scandir($path));
+        $migrationCount -= 2;
+        if ( $hasHistory ) {
+            $migrationCount --;
+        }
+        $migrationClassName = sprintf('M%05d_%s', $migrationCount, $name);
+        
+        /* Generate the migration file */
+        $content = array();
+        $content[] = '<?';
+        $content[] = "/** \n * Migration file for $name \n */";
+        $content[] = sprintf('namespace X\\Module\\%s\\Migration;', $moduleName);
+        $content[] = '';
+        $content[] = "/** \n * $migrationClassName \n */";
+        $content[] = sprintf('class %s extends \\X\\Core\\Module\\Migrate {', $migrationClassName);
+        $content[] = "    /** \n     * (non-PHPdoc)\n     * @see \\X\\Core\\Module\\InterfaceMigrate::up()\n     */";
+        $content[] = '    public function up() {';
+        $content[] = '        /*@TODO: Add your migration code here.*/';
+        $content[] = '    }';
+        $content[] = '';
+        $content[] = "    /** \n     * (non-PHPdoc)\n     * @see \\X\\Core\\Module\\InterfaceMigrate::down()\n     */";
+        $content[] = '    public function down() {';
+        $content[] = '        /*@TODO: Add your migration code here. */';
+        $content[] = '    }';
+        $content[] = '}';
+        $content = implode("\n", $content);
+        $migrationClassPath = X::system()->getPath(sprintf('Module/%s/Migration/%s.php', $moduleName, $migrationClassName));
+        file_put_contents($migrationClassPath, $content);
+    }
 //     /**
 //      * Shutdown the management.
 //      * With this method, you can get clean manager afer you call getManager().

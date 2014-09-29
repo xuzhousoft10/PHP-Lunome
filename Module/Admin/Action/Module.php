@@ -25,22 +25,21 @@ class Module extends \X\Service\XAction\Core\Action {
      * @return void
      */
     public function runAction( Console $console, $parameters ) {
-        $separatorPos = strpos($parameters, ' ');
-        if ( false !== $separatorPos ) {
-            $subAction = substr($parameters, 0, $separatorPos);
-            $parameters = substr($parameters, $separatorPos+1);
-        } else {
-            $subAction = $parameters;
+        $parameters = explode(' ', $parameters);
+        $actionHandler = 'action';
+        while ( 0 < count($parameters) ) {
+            $actionHandler .= ucfirst(array_shift($parameters));
+            if ( method_exists($this, $actionHandler) ) {
+                break;
+            }
         }
-        
-        $actionHandler = sprintf('action%s', ucfirst($subAction));
-        
-        if ( method_exists($this, $actionHandler) ) {
-            call_user_func_array(array($this, $actionHandler), array($console, $parameters));
-        } else {
+        if ( !method_exists($this, $actionHandler) ) {
             $console->printLine('Command has not been supported.');
+            return;
         }
         
+        array_unshift($parameters, $console);
+        call_user_func_array(array($this, $actionHandler), $parameters);
     }
     
     /**
@@ -112,6 +111,12 @@ class Module extends \X\Service\XAction\Core\Action {
         }
     }
     
+    /**
+     * Create a new module by given name.
+     * 
+     * @param Console $console
+     * @param unknown $name
+     */
     protected function actionCreate( Console $console, $name ) {
         $name = trim($name);
         try {
@@ -121,10 +126,29 @@ class Module extends \X\Service\XAction\Core\Action {
         }
     }
     
+    /**
+     * Delete a module by given name.
+     * @param Console $console
+     * @param unknown $name
+     */
     protected function actionDelete( Console $console, $name ) {
         $name = trim($name);
         try {
             X::system()->getModuleManager()->delete($name);
+        } catch ( Exception $e ) {
+            $console->printLine($e->getMessage());
+        }
+    }
+    
+    /**
+     * 
+     * @param Console $console
+     * @param unknown $name
+     */
+    protected function actionMigrateCreate( Console $console, $module, $name ) {
+        $name = trim($name);
+        try {
+            X::system()->getModuleManager()->migrateCreate($module, $name);
         } catch ( Exception $e ) {
             $console->printLine($e->getMessage());
         }

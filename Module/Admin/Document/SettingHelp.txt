@@ -32,6 +32,11 @@ Commands :
     set default module to framework. if the name is none, the no module would
     be default module.
     
+    * module migrate create {$module_name} {$migration_name}
+      -- $module_name : The name of module to add migration.
+      -- $migration_name : The name of migraion 
+    Add migraion into a module by given module name.
+    
     [ Service commands ]
     service list
     * service create {$name} [{$module}]

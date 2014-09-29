@@ -1,7 +1,7 @@
 <?php
 return array(
 'handler' => array(
-    'type'      => 'database',
+    'type'      => 'none',
     'dsn'       => 'mysql:host=localhost;dbname=x-lunome',
     'user'      => 'root',
     'password'  => '',

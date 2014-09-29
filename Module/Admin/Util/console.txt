@@ -1,1 +1,1 @@
-module delete Test
+module migrate create Lunome test
