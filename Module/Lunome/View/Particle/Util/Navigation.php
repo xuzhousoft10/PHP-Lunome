@@ -5,7 +5,7 @@ $this->addStyle('body', array('padding-top'=>'50px'));
 <nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
   <div class="container">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">Lunome</a>
+      <a class="navbar-brand" href="/?module=lunome&action=index">Lunome</a>
     </div>
     
     <div class="collapse navbar-collapse">
@@ -18,27 +18,27 @@ $this->addStyle('body', array('padding-top'=>'50px'));
           </a>
           <ul class="dropdown-menu">
             <li>
-              <a href="#">
+              <a href="/?module=lunome&action=user/information/basic">
                 <span class="glyphicon glyphicon-user"></span>
                 My Profile
               </a>
             </li>
             <li class="divider"></li>
             <li>
-              <a href="#">
+              <a href="/?module=lunome&action=security/password">
                 <span class="glyphicon glyphicon-heart"></span>
                 Security Center
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="/?module=lunome&action=user/setting/basic">
                 <span class="glyphicon glyphicon-cog"></span>
                 Personal Setting
               </a>
             </li>
             <li class="divider"></li>
             <li>
-              <a href="#">
+              <a href="/?module=lunome&action=user/login">
                 <span class="glyphicon glyphicon-off"></span>
                 Exit
               </a>

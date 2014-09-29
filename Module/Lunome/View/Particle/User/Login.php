@@ -7,9 +7,19 @@ $this->addStyle('html,body,#content', array('height'=>'100%'));
     <form action="/?module=lunome&action=index" method="post">
       <div class="form-group">
         <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+        <div class="text-right">
+            <a href="/?module=lunome&action=user/account/forget">
+                <small>Forget account?</small>
+            </a>
+        </div>
       </div>
       <div class="form-group">
         <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+        <div class="text-right">
+            <a href="/?module=lunome&action=user/password/forget">
+                <small>Forget password?</small>
+            </a>
+        </div>
       </div>
       <div class="form-group">
         <div class="input-group">

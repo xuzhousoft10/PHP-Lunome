@@ -2,7 +2,7 @@
 return array(
 'handler' => array(
     'type'      => 'database',
-    'dsn'       => 'mysql:host=127.0.0.1;dbname=x-stumoc',
+    'dsn'       => 'mysql:host=localhost;dbname=x-lunome',
     'user'      => 'root',
     'password'  => '',
     'table'     => 'sessions',),
