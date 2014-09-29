@@ -348,6 +348,11 @@ class ModuleManagement extends \X\Core\Basic {
         return isset($this->configuration['modules'][$name]['default']) &&  $this->configuration['modules'][$name]['default'];
     }
     
+    /**
+     * Delete the module by given name.
+     * 
+     * @param unknown $name
+     */
     public function delete( $name ) {
         $name = ucfirst($name);
         $path = X::system()->getPath("Module/$name");
@@ -358,6 +363,10 @@ class ModuleManagement extends \X\Core\Basic {
         unset($this->modules[$name]);
     }
     
+    /**
+     * Save the configuration file into fs.
+     * @return void
+     */
     private function saveConfigurations() {
         $path = X::system()->getCoreConfigFilePath('modules');
         $content = array();
@@ -369,6 +378,11 @@ class ModuleManagement extends \X\Core\Basic {
         file_put_contents($path, $content);
     }
     
+    /**
+     * Delete path and his subfiles.
+     * @param unknown $path
+     * @return boolean
+     */
     private function deleteFolder( $path ) {
         if ( !file_exists($path) ) {
             return false;
