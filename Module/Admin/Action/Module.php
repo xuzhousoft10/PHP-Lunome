@@ -153,4 +153,17 @@ class Module extends \X\Service\XAction\Core\Action {
             $console->printLine($e->getMessage());
         }
     }
+    
+    /**
+     * Upgrade the module 
+     * @return void
+     */
+    protected function actionMigrateUp( Console $console, $name ) {
+        $name = trim($name);
+        try {
+            X::system()->getModuleManager()->migrateUp($name);
+        } catch ( Exception $e ) {
+            $console->printLine($e->getMessage());
+        }
+    }
 }

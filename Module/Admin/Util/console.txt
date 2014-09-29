@@ -1,1 +1,1 @@
-module migrate create Lunome test
+module migrate up Lunome
