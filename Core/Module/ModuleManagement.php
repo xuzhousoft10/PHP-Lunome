@@ -425,7 +425,7 @@ class ModuleManagement extends \X\Core\Basic {
         
         /* Generate the migration file */
         $content = array();
-        $content[] = '<?';
+        $content[] = '<?php';
         $content[] = "/** \n * Migration file for $name \n */";
         $content[] = sprintf('namespace X\\Module\\%s\\Migration;', $moduleName);
         $content[] = '';
