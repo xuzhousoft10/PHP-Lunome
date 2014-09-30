@@ -463,17 +463,17 @@ class ModuleManagement extends \X\Core\Basic {
         $historyPath = X::system()->getPath(sprintf('Module/%s/Migration/History.php', $moduleName));
         $history = is_file($historyPath) ? require $historyPath : array();
         /* Remove history item from migrate list. */
-        $migrations = array_diff($files, $history, array('.', '..'));
+        $migrations = array_diff($files, $history, array('.', '..', 'History.php'));
         
         $namespace = sprintf('\\X\\Module\\%s\\Migration', $moduleName);
         /* Execute the up action */
         foreach ( $migrations as $index => $migration ) {
             $className = basename($migration, '.php');
             $classFullName = $namespace.'\\'.$className;
-            $migration = new $classFullName();
-            $migration->up();
-            $migrations[] = $migration;
-            XUtil::storeArrayToPHPFile($historyPath, $migrations);
+            $migrationObject = new $classFullName();
+            $migrationObject->up();
+            $history[] = $migration;
+            XUtil::storeArrayToPHPFile($historyPath, $history);
         }
     }
 //     /**
