@@ -39,6 +39,16 @@ class Module extends \X\Service\XAction\Core\Action {
         }
         
         array_unshift($parameters, $console);
+        
+        $method = new \ReflectionMethod(__CLASS__, $actionHandler);
+        $numberOfParameters = $method->getNumberOfParameters();
+        if ( $numberOfParameters !== count($parameters) ) {
+            $message = '%d parameters required, %d were given.';
+            $message = sprintf($message, $numberOfParameters, count($parameters));
+            $console->printLine($message);
+            return;
+        }
+        
         call_user_func_array(array($this, $actionHandler), $parameters);
     }
     
