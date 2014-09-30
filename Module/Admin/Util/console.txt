@@ -1,1 +1,1 @@
-module migrate up Lunome
+module migrate down Lunome 1

@@ -1,42 +1,17 @@
 Commands :
     * use (service|module) {$name}
-      -- $name : the name of service or module that you want to operated.
-    active the service or module to operate, if you do not use this command, 
-    you are going to operate the core configurations. use this command to 
-    switch to the target service or module which you want to operate. 
     
     [ Module commands ]
     * module list
-    list all the modules defined in the framework.
-    
     * module create {$name}
-      -- $name : the name of the new module
-    create a new module, the new module would not be enabled after you create 
-    it. you need to enable it manually.
-      
     * module delete {$name}
-      -- $name : the name of the module to delete.
-    delete the module by given name, it would delete all the stuff under module
-    folder.
-    
     * module enable {$name}
-      -- $name : the name of module to enable.
-    enable the module by given name
-    
     * module disable {$name}
-      -- $name : the name of module to disable.
-    disable the module by given name
-    
     * module default [{$name}|none]
-      -- $name : the name of module to set as default module.
-    set default module to framework. if the name is none, the no module would
-    be default module.
-    
     * module migrate create {$module_name} {$migration_name}
-      -- $module_name : The name of module to add migration.
-      -- $migration_name : The name of migraion 
-    Add migraion into a module by given module name.
-    
+    * module migrate up {$module_name}
+    * module migrate down {$module_name} {$setp_count}
+        
     [ Service commands ]
     service list
     * service create {$name} [{$module}]

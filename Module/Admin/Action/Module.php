@@ -166,4 +166,20 @@ class Module extends \X\Service\XAction\Core\Action {
             $console->printLine($e->getMessage());
         }
     }
+    
+    /**
+     * Degrade the module.
+     * 
+     * @param Console $console
+     * @param unknown $name
+     * @param unknown $step
+     */
+    protected function actionMigrateDown( Console $console, $name, $step ) {
+        $name = trim($name);
+        try {
+            X::system()->getModuleManager()->migrateDown($name, $step);
+        } catch ( Exception $e ) {
+            $console->printLine($e->getMessage());
+        }
+    }
 }
