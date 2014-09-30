@@ -476,6 +476,38 @@ class ModuleManagement extends \X\Core\Basic {
             XUtil::storeArrayToPHPFile($historyPath, $history);
         }
     }
+    
+    /**
+     * Degrade the module by given name.
+     * 
+     * @param unknown $name
+     * @param unknown $stepCount
+     * @throws Exception
+     */
+    public function migrateDown( $name, $stepCount ) {
+        $moduleName = ucfirst($name);
+        if ( !$this->has($moduleName) ) {
+            throw new Exception(sprintf('Can not find module "%s".', $moduleName));
+        }
+        
+        /* Get migration file list. */
+        $historyPath = X::system()->getPath(sprintf('Module/%s/Migration/History.php', $moduleName));
+        $history = is_file($historyPath) ? require $historyPath : array();
+        
+        $namespace = sprintf('\\X\\Module\\%s\\Migration', $moduleName);
+        /* Execute the up action */
+        while ( 0 < $stepCount ) {
+            $migration = array_pop($history);
+            if ( is_null($migration) ) {
+                break;
+            }
+            $className = basename($migration, '.php');
+            $classFullName = $namespace.'\\'.$className;
+            $migrationObject = new $classFullName();
+            $migrationObject->down();
+            XUtil::storeArrayToPHPFile($historyPath, $history);
+        }
+    }
 //     /**
 //      * Shutdown the management.
 //      * With this method, you can get clean manager afer you call getManager().
