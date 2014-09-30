@@ -27,6 +27,8 @@ class M00000_create_db_table_accounts extends \X\Core\Module\Migrate {
         $table = TableManager::create('accounts', $columns);
         
         $table->addPrimaryKey('id');
+        $table->addUnique('id');
+        $table->addUnique('account');
     }
 
     /** 
