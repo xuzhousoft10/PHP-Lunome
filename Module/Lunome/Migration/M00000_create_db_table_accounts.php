@@ -24,7 +24,9 @@ class M00000_create_db_table_accounts extends \X\Core\Module\Migrate {
         $columns[] = Column::create('account')->int()->notNull();
         $columns[] = Column::create('created_at')->datetime()->notNull();
         $columns[] = Column::create('status')->int(Column::T_TINYINT)->notNull()->defaultVal(0);
-        TableManager::create('accounts', $columns);
+        $table = TableManager::create('accounts', $columns);
+        
+        $table->addPrimaryKey('id');
     }
 
     /** 
