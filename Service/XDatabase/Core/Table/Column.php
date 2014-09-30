@@ -106,7 +106,7 @@ class Column extends Basic {
             $column['nullable'] = 'NOT NULL';
         }
         if ( !is_null($this->getDefault()) ) {
-            $column['default'] = sprintf('"%s"', $this->getDefault());
+            $column['default'] = sprintf('DEFAULT "%s"', $this->getDefault());
         }
         if ( $this->getIsAutoIncrement() ) {
             $column['isAutoIncrement'] = 'AUTO INCREMENT';

@@ -5,6 +5,7 @@
 namespace X\Service\XDatabase\Core\Driver\Mysql;
 use X\Service\XDatabase\Core\Basic;
 use X\Service\XDatabase\Core\Driver\XDriver;
+use X\Service\XDatabase\Core\Exception;
 /**
  * PDO
  * 
@@ -18,7 +19,7 @@ class PDO extends Basic implements XDriver {
      * 
      * @var \PDO
      */
-    protected $condition = null;
+    protected $connection = null;
     
     /**
      * Initiate current driver PDO object by given config information.
@@ -26,7 +27,7 @@ class PDO extends Basic implements XDriver {
      * @param array $config
      */
     public function __construct( $config ) {
-        $this->condition = new \PDO($config['dsn'], $config['username'], $config['password']);
+        $this->connection = new \PDO($config['dsn'], $config['username'], $config['password']);
         $this->exec(sprintf('SET NAMES %s', $config['charset']));
     }
     
@@ -37,9 +38,11 @@ class PDO extends Basic implements XDriver {
      * @return boolean
      */
     public function exec( $query ) {
-        $this->condition->exec($query);
-        $errorCode = $this->condition->errorCode();
-        return '00000' === $errorCode;
+        $this->connection->exec($query);
+        $errorCode = $this->connection->errorCode();
+        if ( '00000' !== $errorCode ) {
+            throw new Exception(print_r($this->connection->errorInfo(), true), $errorCode);
+        }
     }
     
     /**
@@ -50,7 +53,7 @@ class PDO extends Basic implements XDriver {
      * @return boolean|array
      */
     public function query( $query ) {
-        $result = $this->condition->query($query);
+        $result = $this->connection->query($query);
         if ( false === $result ) {
             return false;
         }
@@ -66,7 +69,7 @@ class PDO extends Basic implements XDriver {
      * @return string
      */
     public function quote($string) {
-        return $this->condition->quote($string);
+        return $this->connection->quote($string);
     }
     
     /**
@@ -75,7 +78,7 @@ class PDO extends Basic implements XDriver {
      * @return integer
      */
     public function lastInsertId() {
-        return $this->condition->lastInsertId();
+        return $this->connection->lastInsertId();
     }
     
     /**

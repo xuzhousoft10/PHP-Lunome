@@ -41,7 +41,9 @@ class Manager extends Basic {
      * @return boolean
      */
     protected static function executeSQLQueryWithOutResult( $query ) {
-        return X::system()->getServiceManager()->get('XDb')->getDb()->exec($query);
+        /* @var $dbService \X\Service\XDatabase\XDatabaseService */
+        $dbService = X::system()->getServiceManager()->get(XDatabaseService::getServiceName());
+        $dbService->getDb()->exec($query);
     }
     
     /**
@@ -222,12 +224,13 @@ class Manager extends Basic {
      * 
      * @param string $action The action name for alter tabel.
      * @param array $parms The parms to that action
-     * @return Management|boolean
+     * @return Management
      */
     protected function doAlterAction( $action, $parms=array() ) {
         $builder = SQLBuilder::build()->alterTable()->name($this->name);
         $builder = call_user_func_array(array($builder, $action), $parms);
-        return self::executeSQLQueryWithOutResult($builder->toString()) ? $this : false;
+        self::executeSQLQueryWithOutResult($builder->toString());
+        return $this;
     }
     
     protected function query( $sql ) {
