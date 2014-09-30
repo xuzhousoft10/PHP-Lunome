@@ -1,4 +1,4 @@
-<?
+<?php
 /** 
  * Migration file for create_db_table_accounts 
  */
