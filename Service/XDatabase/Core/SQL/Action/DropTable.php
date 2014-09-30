@@ -1,8 +1,13 @@
 <?php
 /**
- * drop.table.php
+ * DropTable.php
  */
-namespace X\Service\XDB\SQL\Action;
+namespace X\Service\XDatabase\Core\SQL\Action;
+
+/**
+ * 
+ */
+use X\Service\XDatabase\Core\Exception;
 
 /**
  * DropTable
@@ -19,7 +24,7 @@ class DropTable extends ActionAboutTable {
      */
     protected function getNameString() {
         if ( is_null($this->name) ) {
-            throw new \X\Database\Exception(sprintf('Name can not be empty to delete the table.', $this->name));
+            throw new Exception(sprintf('Name can not be empty to delete the table.', $this->name));
         }
         
         $this->sqlCommand[] = sprintf('DROP TABLE %s', $this->quoteColumnName($this->name));

@@ -81,7 +81,8 @@ class Manager extends Basic {
         $sql = SQLBuilder::build()->dropTable()
             ->name($this->name)
             ->toString();
-        return self::executeSQLQueryWithOutResult($sql);
+        self::executeSQLQueryWithOutResult($sql);
+        return $this;
     }
     
     /**
