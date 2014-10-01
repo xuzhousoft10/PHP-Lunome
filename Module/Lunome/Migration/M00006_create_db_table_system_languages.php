@@ -16,8 +16,8 @@ class M00006_create_db_table_system_languages extends \X\Core\Module\Migrate {
      */
     public function up() {
         $columns = array();
-        $columns = Column::create('id')->varchar(13)->notNull();
-        $columns = Column::create('name')->varchar(64)->notNull();
+        $columns[] = Column::create('id')->varchar(13)->notNull();
+        $columns[] = Column::create('name')->varchar(64)->notNull();
         $table = Manager::create('system_languages', $columns);
         $table->addPrimaryKey('id');
         $table->addUnique('id');
