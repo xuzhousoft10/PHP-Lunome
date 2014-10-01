@@ -94,7 +94,8 @@ class Manager extends Basic {
         $query = SQLBuilder::build()->truncate()
             ->name($this->name)
             ->toString();
-        return self::executeSQLQueryWithOutResult($query) ? $this : false;
+        self::executeSQLQueryWithOutResult($query);
+        return $this;
     }
     
     /**
@@ -106,7 +107,8 @@ class Manager extends Basic {
     public function insert( $values ) {
         $query = SQLBuilder::build()->insert()
             ->into($this->name)->values($values)->toString();
-        return self::executeSQLQueryWithOutResult($query) ? $this : false;
+        self::executeSQLQueryWithOutResult($query);
+        return $this;
     }
     
     /**
@@ -120,11 +122,9 @@ class Manager extends Basic {
             ->name($this->name)
             ->newName($name)
             ->toString();
-        $isRenamed = self::executeSQLQueryWithOutResult($query);
-        if ( $isRenamed ) {
-            $this->name = $name;
-        }
-        return $isRenamed ? $this : false;
+        self::executeSQLQueryWithOutResult($query);
+        $this->name = $name;
+        return $this;
     }
     
     /**
@@ -234,6 +234,12 @@ class Manager extends Basic {
         return $this;
     }
     
+    /**
+     * Execute a query an return the result.
+     * @param unknown $sql
+     * @throws Exception
+     * @return unknown
+     */
     protected function query( $sql ) {
         $result = X::system()->getServiceManager()->get(XDatabaseService::SERVICE_NAME)->getDb()->query($sql);
         if ( false === $result ) {
@@ -242,6 +248,10 @@ class Manager extends Basic {
         return $result;
     }
     
+    /**
+     * Get the information about table.
+     * @return unknown
+     */
     public function getInformation() {
         $sql = SQLBuilder::build()->describe()->table($this->name)->toString();
         $result = $this->query($sql);
