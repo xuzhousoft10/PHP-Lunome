@@ -401,6 +401,7 @@ class ModuleManagement extends \X\Core\Basic {
      * Create a module migration by given name.
      * 
      * @param unknown $name
+     * @return string The path of new migration
      */
     public function migrateCreate( $module, $name ) {
         $moduleName = ucfirst($module);
@@ -433,17 +434,20 @@ class ModuleManagement extends \X\Core\Basic {
         $content[] = sprintf('class %s extends \\X\\Core\\Module\\Migrate {', $migrationClassName);
         $content[] = "    /** \n     * (non-PHPdoc)\n     * @see \\X\\Core\\Module\\InterfaceMigrate::up()\n     */";
         $content[] = '    public function up() {';
-        $content[] = '        /*@TODO: Add your migration code here.*/';
+        $content[] = '        /*@TODO: Add your migration up code here.*/';
         $content[] = '    }';
         $content[] = '';
         $content[] = "    /** \n     * (non-PHPdoc)\n     * @see \\X\\Core\\Module\\InterfaceMigrate::down()\n     */";
         $content[] = '    public function down() {';
-        $content[] = '        /*@TODO: Add your migration code here. */';
+        $content[] = '        /*@TODO: Add your migration down code here. */';
         $content[] = '    }';
         $content[] = '}';
         $content = implode("\n", $content);
         $migrationClassPath = X::system()->getPath(sprintf('Module/%s/Migration/%s.php', $moduleName, $migrationClassName));
         file_put_contents($migrationClassPath, $content);
+        
+        /* Return the migration path. */
+        return $migrationClassPath;
     }
     
     /**
