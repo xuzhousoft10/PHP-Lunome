@@ -20,7 +20,7 @@ class CreateMigration  {
      * @param unknown $module
      * @param unknown $table
      */
-    public function run( $module, $table ) {
+    public function run( $table, $module ) {
         /* Generate the original migration */
         $module = ucfirst($module);
         $migrationName = sprintf('create_db_table_%s', $table);

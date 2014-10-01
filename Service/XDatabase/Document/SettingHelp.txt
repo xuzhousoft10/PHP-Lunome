@@ -1,6 +1,6 @@
 Commands : 
     create model {$table_name} {$module_name}
-    
+    create migrate {$table_name} {$module_name}
 Configurations :
     databases.{$dbname}.dsn         The connection string to database.
     databases.{$dbname}.username    The username to database.

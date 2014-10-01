@@ -20,9 +20,9 @@ class SettingController extends \X\Core\Service\SettingController {
      * @param unknown $module
      * @param unknown $table
      */
-    public function actionCreateMigration( $module, $table ) {
+    public function actionCreateMigration( $table, $module ) {
         $handler = new CreateMigration();
-        return $handler->run($module, $table);
+        return $handler->run($table, $module);
     }
     
     /**
