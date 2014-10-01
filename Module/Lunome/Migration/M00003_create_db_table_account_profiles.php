@@ -27,9 +27,15 @@ class M00003_create_db_table_account_profiles extends \X\Core\Module\Migrate {
         $columns[] = Column::create('realname')->varchar(64);
         $columns[] = Column::create('sex')->int(Column::T_TINYINT);
         $columns[] = Column::create('birthday')->date();
-        /* @TODO: About birthplace, how to save them as int. */
+        $columns[] = Column::create('nationality')->int();
+        $columns[] = Column::create('blood_type')->int();
+        $columns[] = Column::create('sexual_orientation')->int();
+        $columns[] = Column::create('religious')->int();
+        $table = TableManager::create('account_profiles', $columns);
         
-        TableManager::create('account_profiles', $columns);
+        $table->addPrimaryKey('id');
+        $table->addUnique('id');
+        $table->addUnique('account');
     }
 
     /** 
@@ -37,6 +43,6 @@ class M00003_create_db_table_account_profiles extends \X\Core\Module\Migrate {
      * @see \X\Core\Module\InterfaceMigrate::down()
      */
     public function down() {
-        /*@TODO: Add your migration code here. */
+        TableManager::open('account_profiles')->drop();
     }
 }
