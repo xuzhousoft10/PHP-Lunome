@@ -1,8 +1,33 @@
 <?php
+/**
+ * The setting Controller file for XDatabase service.
+ */
 namespace X\Service\XDatabase\Controller;
+
+/**
+ * Use statements.
+ */
 use X\Core\X;
 use X\Service\XDatabase\Core\Table\Manager as TableManager;
+
+/**
+ * The controller class.
+ */
 class SettingController extends \X\Core\Service\SettingController {
+    /**
+     * Create a db migration for given module.
+     * 
+     * @param unknown $module
+     * @param unknown $table
+     */
+    public function actionCreateMigration( $module, $table ) {
+        $handler = new CreateMigration();
+        return $handler->run($module, $table);
+    }
+    
+    /**
+     * 
+     */
     public function actionCreateModel( $table, $module ) {
         $moduleName = $module;
         $tableName = $table;

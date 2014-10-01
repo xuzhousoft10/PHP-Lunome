@@ -401,7 +401,7 @@ class Column extends Basic {
      * 
      * @return \X\Service\XDatabase\Core\Table\Column
      */
-    public function zeroFill() {
+    public function zerofill() {
         return $this->setIsZeroFill(true);
     }
     
