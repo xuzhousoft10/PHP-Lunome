@@ -3,6 +3,10 @@
  * table.php
  */
 namespace X\Service\XDatabase\Core\Table;
+
+/**
+ * Use statements
+ */
 use X\Core\X;
 use X\Service\XDatabase\Core\Basic;
 use X\Service\XDatabase\XDatabaseService;
@@ -17,6 +21,15 @@ use X\Service\XDatabase\Core\SQL\Builder as SQLBuilder;
  * @version 0.0.0
  */
 class Manager extends Basic {
+    /**
+     * Get table names in the database.
+     */
+    public static function getTables() {
+        $service = self::getService();
+        $tables = $service->getDb()->getTables();
+        return $tables;
+    }
+    
     /**
      * Create a new table.
      * 
@@ -41,8 +54,7 @@ class Manager extends Basic {
      * @return boolean
      */
     protected static function executeSQLQueryWithOutResult( $query ) {
-        /* @var $dbService \X\Service\XDatabase\XDatabaseService */
-        $dbService = X::system()->getServiceManager()->get(XDatabaseService::getServiceName());
+        $dbService = self::getService();
         $dbService->getDb()->exec($query);
     }
     
@@ -241,10 +253,7 @@ class Manager extends Basic {
      * @return unknown
      */
     protected function query( $sql ) {
-        $result = X::system()->getServiceManager()->get(XDatabaseService::SERVICE_NAME)->getDb()->query($sql);
-        if ( false === $result ) {
-            throw new Exception(sprintf('Failed to execute query: %s', $sql));
-        }
+        $result = self::getService()->getDb()->query($sql);
         return $result;
     }
     
@@ -256,5 +265,14 @@ class Manager extends Basic {
         $sql = SQLBuilder::build()->describe()->table($this->name)->toString();
         $result = $this->query($sql);
         return $result;
+    }
+    
+    /**
+     * Get the xdatabse service.
+     * 
+     * @return \X\Service\XDatabase\XDatabaseService
+     */
+    private static function getService() {
+        return X::system()->getServiceManager()->get(XDatabaseService::getServiceName());
     }
 }
