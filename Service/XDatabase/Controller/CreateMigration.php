@@ -21,6 +21,21 @@ class CreateMigration  {
      * @param unknown $table
      */
     public function run( $table, $module ) {
+        $tables = array($table);
+        if ( 'ALL' === strtoupper($table) ) {
+            $tables = Manager::getTables();
+        }
+        foreach ( $tables as $table ) {
+            $this->generateMigration($table, $module);
+        }
+    }
+    
+    /**
+     * 
+     * @param unknown $table
+     * @param unknown $module
+     */
+    private function generateMigration( $table, $module ) {
         /* Generate the original migration */
         $module = ucfirst($module);
         $migrationName = sprintf('create_db_table_%s', $table);
