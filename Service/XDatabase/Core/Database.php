@@ -55,9 +55,10 @@ class Database extends Basic {
      * @return \X\Database\Driver\Driver
      */
     protected function getDriver() {
-        return $this->driver = ( is_null($this->driver) )
-        ? $this->getDriverByConfig()
-        : $this->driver;
+        if ( null === $this->driver ) {
+            $this->driver = $this->getDriverByConfig();
+        }
+        return $this->driver;
     }
     
     /**
