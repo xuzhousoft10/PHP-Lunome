@@ -37,10 +37,11 @@ class Manager extends Basic {
      * @param array $columns The column definitions.
      * @return Management
      */
-    public static function create( $name, $columns ) {
+    public static function create( $name, $columns, $primaryKey ) {
         $sql = SQLBuilder::build()->createTable()
             ->name($name)
             ->columns($columns)
+            ->primaryKey($primaryKey)
             ->toString();
         
         self::executeSQLQueryWithOutResult($sql);
