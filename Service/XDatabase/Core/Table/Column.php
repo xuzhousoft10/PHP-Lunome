@@ -102,9 +102,6 @@ class Column extends Basic {
         if ( !is_null($this->getLength()) ) {
             $column['type'] .= sprintf('(%d)', $this->getLength());
         }
-        if ( !$this->getNullable() ) {
-            $column['nullable'] = 'NOT NULL';
-        }
         if ( $this->getIsZeroFill() ) {
             $column['isZeroFill'] = 'ZEROFILL';
         }
@@ -116,6 +113,9 @@ class Column extends Basic {
         }
         if ( $this->getIsAutoIncrement() ) {
             $column['isAutoIncrement'] = 'AUTO_INCREMENT';
+        }
+        if ( !$this->getNullable() ) {
+            $column['nullable'] = 'NOT NULL';
         }
         if ( !is_null($this->getDefault()) ) {
             $column['default'] = sprintf('DEFAULT "%s"', $this->getDefault());

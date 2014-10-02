@@ -96,7 +96,7 @@ class CreateMigration  {
             $length             = is_null($length) ? null : $length[0];
             $isUnsigned         = false !== strpos($columnInfo['Type'], 'unsigned');
             $isZerofill         = false !== strpos($columnInfo['Type'], 'zerofill');
-            $isNullable         = 'NO' === $columnInfo['Null'];
+            $isNullable         = 'NO' !== $columnInfo['Null'];
             $isPrimaryKey       = 'PRI' === $columnInfo['Key'];
             $isAutoIncrement    = 'auto_increment' === $columnInfo['Extra'];
             $default            = $columnInfo['Default'];
@@ -134,11 +134,14 @@ class CreateMigration  {
             
             $code[] = $column;
         }
-        $code[] = "        \$table = TableManager::create('$tableName', \$columns);";
-        if ( !is_null($tablePrimaryKey) ) {
-            $code[] = "        \$table->addPrimaryKey('$tablePrimaryKey');";
+        
+        if ( null === $tablePrimaryKey ) {
+            $code[] = "        \$table = TableManager::create('$tableName', \$columns);";
+        } else {
+            $code[] = "        \$table = TableManager::create('$tableName', \$columns, '$tablePrimaryKey');";
             $code[] = "        \$table->addUnique('$tablePrimaryKey');";
         }
+        
         return $code;
     }
 }

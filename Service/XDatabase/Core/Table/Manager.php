@@ -37,7 +37,7 @@ class Manager extends Basic {
      * @param array $columns The column definitions.
      * @return Management
      */
-    public static function create( $name, $columns, $primaryKey ) {
+    public static function create( $name, $columns, $primaryKey=null ) {
         $sql = SQLBuilder::build()->createTable()
             ->name($name)
             ->columns($columns)
