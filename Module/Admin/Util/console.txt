@@ -1,1 +1,4 @@
-module migrate down Lunome 1
+module migrate up Lunome
+quit
+use service XDatabase
+create migration all Lunome
