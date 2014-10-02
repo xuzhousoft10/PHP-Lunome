@@ -5,6 +5,11 @@
 namespace X\Service\XDatabase\Core\SQL\Action;
 
 /**
+ * Use statements
+ */
+use X\Service\XDatabase\Core\Exception;
+
+/**
  * CreateTable
  * 
  * @author  Michael Luthor <michael.the.ranidae@gmail.com>
@@ -19,7 +24,7 @@ class CreateTable extends ActionAboutTable {
      */
     protected function getNameString() {
         if ( is_null($this->name) ) {
-            throw new \X\Database\Exception(sprintf('Name can not be empty to create the table.', $this->name));
+            throw new  Exception(sprintf('Name can not be empty to create the table.', $this->name));
         }
         
         $this->sqlCommand[] = sprintf('CREATE TABLE %s', $this->quoteTableName($this->name));
