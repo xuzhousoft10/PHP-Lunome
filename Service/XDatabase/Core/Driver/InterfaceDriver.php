@@ -11,7 +11,7 @@ namespace X\Service\XDatabase\Core\Driver;
  * @since   0.0.0
  * @version 0.0.0
  */
-interface XDriver {
+interface InterfaceDriver {
     /**
      * Execute the query, and return true on successed and false if failed.
      * 
@@ -51,4 +51,11 @@ interface XDriver {
      * @return integer
      */
     public function lastInsertId();
+    
+    /**
+     * Get the list of table names
+     * 
+     * @return array
+     */
+    public function getTables();
 }

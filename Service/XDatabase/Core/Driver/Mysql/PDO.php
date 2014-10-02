@@ -3,9 +3,14 @@
  * PDO.php
  */
 namespace X\Service\XDatabase\Core\Driver\Mysql;
+
+/**
+ * Use statements
+ */
 use X\Service\XDatabase\Core\Basic;
-use X\Service\XDatabase\Core\Driver\XDriver;
 use X\Service\XDatabase\Core\Exception;
+use X\Service\XDatabase\Core\Driver\InterfaceDriver;
+
 /**
  * PDO
  * 
@@ -13,7 +18,7 @@ use X\Service\XDatabase\Core\Exception;
  * @since   0.0.0
  * @version 0.0.0
  */
-class PDO extends Basic implements XDriver {
+class PDO extends Basic implements InterfaceDriver {
     /**
      * The PDO object for current connection.
      * 
@@ -89,5 +94,20 @@ class PDO extends Basic implements XDriver {
      */
     public function quoteTableName($name) {
         return sprintf('`%s`', $name);
+    }
+    
+    /**
+     * Get the name list of table.
+     * 
+     * @return array
+     */
+    public function getTables() {
+        $tables = array();
+        $result = $this->query('SHOW TABLES');
+        foreach ( $result as $table ) {
+            $table = array_values($table);
+            array_push($tables, $table[0]);
+        }
+        return $tables;
     }
 }
