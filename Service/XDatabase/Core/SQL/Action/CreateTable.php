@@ -60,7 +60,32 @@ class CreateTable extends ActionAboutTable {
             /* @var $column \X\Service\XDatabase\Core\Table\Column */
             $columns[] = sprintf('%s %s', $this->quoteColumnName($column->getName()), $column);
         }
-        $this->sqlCommand[] = sprintf('(%s)', implode(',', $columns));
+        $this->sqlCommand[] = sprintf('%s', implode(',', $columns));
+    }
+    
+    /**
+     * @var string
+     */
+    protected $primaryKey = null;
+    
+    /**
+     * 
+     * @param unknown $name
+     * @return \X\Service\XDatabase\Core\SQL\Action\CreateTable
+     */
+    public function primaryKey( $name ) {
+        $this->primaryKey = $name;
+        return $this;
+    }
+    
+    /**
+     * 
+     */
+    protected function getPrimaryKeyString() {
+        if ( null === $this->primaryKey ) {
+            return;
+        }
+        $this->sqlCommand[] = sprintf(', PRIMARY KEY (%s)', $this->quoteColumnName($this->primaryKey));
     }
     
     /**
@@ -71,6 +96,6 @@ class CreateTable extends ActionAboutTable {
      * @return array
      */
     protected function getBuildHandlers() {
-        return array('getNameString', 'getColumnString');
+        return array('getNameString','(', 'getColumnString','getPrimaryKeyString',')');
     }
 }

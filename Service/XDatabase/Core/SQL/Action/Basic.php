@@ -40,7 +40,11 @@ abstract class Basic extends \X\Service\XDatabase\Core\Basic {
      */
     public function toString() {
         foreach ( $this->getBuildHandlers() as $handler ) {
-            call_user_func_array(array($this, $handler), array());
+            if ( method_exists($this, $handler) ) {
+                call_user_func_array(array($this, $handler), array());
+            } else {
+                $this->sqlCommand[] = $handler;
+            }
         }
         
         return implode(' ', $this->sqlCommand);
