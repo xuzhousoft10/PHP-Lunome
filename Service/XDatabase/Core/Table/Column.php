@@ -105,12 +105,6 @@ class Column extends Basic {
         if ( !$this->getNullable() ) {
             $column['nullable'] = 'NOT NULL';
         }
-        if ( !is_null($this->getDefault()) ) {
-            $column['default'] = sprintf('DEFAULT "%s"', $this->getDefault());
-        }
-        if ( $this->getIsAutoIncrement() ) {
-            $column['isAutoIncrement'] = 'AUTO INCREMENT';
-        }
         if ( $this->getIsZeroFill() ) {
             $column['isZeroFill'] = 'ZEROFILL';
         }
@@ -119,6 +113,12 @@ class Column extends Basic {
         }
         if ( $this->getIsBinary() ) {
             $column['isBinary'] = 'BINARY';
+        }
+        if ( $this->getIsAutoIncrement() ) {
+            $column['isAutoIncrement'] = 'AUTO_INCREMENT';
+        }
+        if ( !is_null($this->getDefault()) ) {
+            $column['default'] = sprintf('DEFAULT "%s"', $this->getDefault());
         }
         
         $column = implode(' ', $column);
