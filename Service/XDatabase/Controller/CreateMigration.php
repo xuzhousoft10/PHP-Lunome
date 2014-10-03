@@ -140,6 +140,7 @@ class CreateMigration  {
             $code[] = $column;
         }
         
+        /* table's name could not contains special characters */
         if ( null === $tablePrimaryKey ) {
             $code[] = "        \$table = TableManager::create('$tableName', \$columns);";
         } else {
