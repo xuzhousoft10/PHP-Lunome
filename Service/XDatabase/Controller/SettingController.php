@@ -9,6 +9,7 @@ namespace X\Service\XDatabase\Controller;
  */
 use X\Core\X;
 use X\Service\XDatabase\Core\Table\Manager as TableManager;
+use X\Service\XDatabase\Core\Exception;
 
 /**
  * The controller class.
@@ -21,8 +22,12 @@ class SettingController extends \X\Core\Service\SettingController {
      * @param unknown $table
      */
     public function actionCreateMigration( $table, $module ) {
-        $handler = new CreateMigration();
-        return $handler->run($table, $module );
+        try {
+            $handler = new CreateMigration();
+            return $handler->run($table, $module );
+        } catch ( Exception $e ) {
+            echo $e->getMessage();
+        }
     }
     
     /**
