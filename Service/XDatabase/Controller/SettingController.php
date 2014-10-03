@@ -23,7 +23,7 @@ class SettingController extends \X\Core\Service\SettingController {
      */
     public function actionCreateMigration( $table, $module ) {
         try {
-            $handler = new CreateMigration();
+            $handler = new ActionCreateMigration();
             return $handler->run($table, $module );
         } catch ( Exception $e ) {
             echo $e->getMessage();

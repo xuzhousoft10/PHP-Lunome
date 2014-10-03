@@ -15,7 +15,7 @@ use X\Service\XDatabase\Core\Table\Manager;
  * 
  * @author Michael Luthor <michaelluthor@163.com>
  */
-class CreateMigration  {
+class ActionCreateMigration  {
     /**
      * Execute the creation. If $table is 'all', then all the tables in 
      * active database would be created. 
