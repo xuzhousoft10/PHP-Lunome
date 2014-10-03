@@ -21,7 +21,7 @@ class M00027_create_db_table_movie_stars extends \X\Core\Module\Migrate {
      */
     public function up() {
         $columns = array();
-        $columns[] = Column::create('id')->setType(ColumnType::T_INT)->setNullable(false);
+        $columns[] = Column::create('id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false)->setIsAutoIncrement(true);
         $columns[] = Column::create('movie_id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false);
         $columns[] = Column::create('actor_id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false);
         $table = TableManager::create('movie_stars', $columns, 'id');

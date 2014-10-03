@@ -21,7 +21,7 @@ class M00018_create_db_table_book_types extends \X\Core\Module\Migrate {
      */
     public function up() {
         $columns = array();
-        $columns[] = Column::create('id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false);
+        $columns[] = Column::create('id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false)->setIsAutoIncrement(true);
         $columns[] = Column::create('book_id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false);
         $columns[] = Column::create('type_id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false);
         $table = TableManager::create('book_types', $columns, 'id');
