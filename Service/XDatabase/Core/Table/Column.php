@@ -11,17 +11,7 @@ use X\Service\XDatabase\Core\Basic;
 use X\Service\XDatabase\Core\Exception;
 
 /**
- * The column class
  * 
- * @method string getName()
- * @method string getType()
- * @method string getLength()
- * @method string getNullable()
- * @method string getDefault()
- * @method string getIsAutoIncrement()
- * @method string getIsZeroFill()
- * @method string getIsUnsigned()
- * @method string getIsBinary()
  */
 class Column extends Basic {
     /**
@@ -59,6 +49,7 @@ class Column extends Basic {
         'isZeroFill'        => false,
         'isUnsigned'        => false,
         'isBinary'          => false,
+        'isPimaryKey'       => false,
     );
     
     /**
@@ -69,7 +60,7 @@ class Column extends Basic {
      * @throws Exception
      * @return \X\Service\XDatabase\Core\Table\Column
      */
-    public function set( $name, $value ) {
+    protected function set( $name, $value ) {
         if ( !array_key_exists($name, $this->attributes) ) {
             throw new Exception(sprintf('"%s" is not a validate attribute.', $name));
         }
@@ -85,7 +76,7 @@ class Column extends Basic {
      * @throws Exception
      * @return mixed
      */
-    public function get( $name ) {
+    protected function get( $name ) {
         if ( !array_key_exists($name, $this->attributes) ) {
             throw new Exception(sprintf('"%s" is not a validate attribute.', $name));
         }
@@ -118,73 +109,12 @@ class Column extends Basic {
             $column['nullable'] = 'NOT NULL';
         }
         if ( !is_null($this->getDefault()) ) {
-            $column['default'] = sprintf('DEFAULT "%s"', $this->getDefault());
+            $column['default'] = sprintf('DEFAULT "%s"', addslashes($this->getDefault()));
         }
         
         $column = implode(' ', $column);
         return $column;
     }
-    
-    /**
-     * (non-PHPdoc)
-     * @see \X\Core\Basic::__set()
-     */
-    public function __set($name, $value) {
-        $this->set($name, $value);
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see \X\Core\Basic::__get()
-     */
-    public function __get($name) {
-        $name = substr($name, 3);
-        $name = lcfirst($name);
-        return $this->get($name);
-    }
-    
-    /**
-     * 
-     * @param unknown $name
-     * @param unknown $parms
-     */
-    public function __call( $name, $parms ) {
-        if ( 'get' === substr($name, 0, 3) ) {
-            return $this->get(lcfirst(substr($name, 3)));
-        }
-    }
-    
-    /**
-     * Convert this column to description string.
-     * @return string
-     */
-    public function __toString() {
-        return $this->toString();
-    }
-    
-    /* column types */
-    const T_INT         = 'INT';
-    const T_TINYINT     = 'TINYINT';
-    const T_SMALLINT    = 'SMALLINT';
-    const T_MEDIUMINT   = 'MEDIUMINT';
-    const T_BIGINT      = 'BIGINT';
-    const T_FLOAT       = 'FLOAT';
-    const T_DOUBLE      = 'DOUBLE';
-    const T_DATE        = 'DATE';
-    const T_TIME        = 'TIME';
-    const T_YEAR        = 'YEAR';
-    const T_DATETIME    = 'DATETIME';
-    const T_TIMESTAMP   = 'TIMESTAMP';
-    const T_CHAR        = 'CHAR';
-    const T_VARCHAR     = 'VARCHAR';
-    const T_TINYBLOB    = 'TINYBLOB';
-    const T_TINYTEXT    = 'TINYTEXT';
-    const T_BLOB        = 'BLOB';
-    const T_TEXT        = 'TEXT';
-    const T_MEDIUMBLOB  = 'MEDIUMBLOB';
-    const T_MEDIUMTEXT  = 'MEDIUMTEXT';
-    const T_LOGNGBLOB   = 'LOGNGBLOB';
-    const T_LONGTEXT    = 'LONGTEXT';
     
     /**
      * Set column name
@@ -268,158 +198,81 @@ class Column extends Basic {
     }
     
     /**
-     * Set column type as int
-     * @param string $type
+     * @param unknown $value
      * @return \X\Service\XDatabase\Core\Table\Column
      */
-    public function int( $type=self::T_INT ) {
-        return $this->setType($type);
+    public function setIsPimaryKey( $value ) {
+        return $this->set('isPimaryKey', $value);
     }
     
     /**
-     * Set column type as float
-     * @return \X\Service\XDatabase\Core\Table\Column
+     * @return string
      */
-    public function float() {
-        return $this->setType(self::T_FLOAT);
+    public function getNmae() {
+        return $this->get('name');
     }
     
     /**
-     * Set column type as double
-     * @return \X\Service\XDatabase\Core\Table\Column
+     * @return string
      */
-    public function double() {
-        return $this->setType(self::T_DOUBLE);
+    public function getType() {
+        return $this->get('type');
     }
     
     /**
-     * Set column type as date
-     * @return \X\Service\XDatabase\Core\Table\Column
+     * @return integer
      */
-    public function date() {
-        return $this->setType(self::T_DATE);
+    public function getLength() {
+        return $this->get('length');
     }
     
     /**
-     * Set column type as time
-     * @return \X\Service\XDatabase\Core\Table\Column
+     * @return boolean
      */
-    public function time() {
-        return $this->setType(self::T_TIME);
+    public function getNullable() {
+        return $this->get('nullable');
     }
     
     /**
-     * Set column type as year
-     * @return \X\Service\XDatabase\Core\Table\Column
+     * @return mixed
      */
-    public function year(){
-        return $this->setType(self::T_YEAR);
+    public function getDefault() {
+        return $this->get('default');
     }
     
     /**
-     * Set column type as datetime
-     * @return \X\Service\XDatabase\Core\Table\Column
+     * @return boolean
      */
-    public function datetime() {
-        return $this->setType(self::T_DATETIME);
+    public function getIsAutoIncrement() {
+        return $this->get('isAutoIncrement');
     }
     
     /**
-     * Set column type as timestamp
-     * @return \X\Service\XDatabase\Core\Table\Column
+     * @return boolean
      */
-    public function timestamp() {
-        return $this->setType(self::T_TIMESTAMP);
+    public function getIsZeroFill() {
+        return $this->get('isZeroFill');
     }
     
     /**
-     * Set column type as char
-     * @param string $length
-     * @return \X\Service\XDatabase\Core\Table\Column
+     * @return boolean
      */
-    public function char($length) {
-        $this->setLength($length);
-        return $this->setType(self::T_CHAR);
+    public function getIsUnsigned() {
+        return $this->get('isUnsigned');
     }
     
     /**
-     * Set column type as varchar
-     * @param string $length
-     * @return \X\Service\XDatabase\Core\Table\Column
+     * @return boolean
      */
-    public function varchar($length){
-        $this->setLength($length);
-        return $this->setType(self::T_VARCHAR);
+    public function getIsBinary() {
+        return $this->get('isBinary');
     }
     
     /**
-     * Set column type as blob
-     * @param string $type
-     * @return \X\Service\XDatabase\Core\Table\Column
+     * @return boolean
      */
-    public function blob($type=self::T_BLOB) {
-        return $this->setType($type);
+    public function getIsPimaryKey() {
+        return $this->get('isPimaryKey');
     }
-    
-    /**
-     * Set column type as text
-     * @param string $type
-     * @return \X\Service\XDatabase\Core\Table\Column
-     */
-    public function text($type=self::T_TEXT) {
-        return $this->setType($type);
-    }
-    
-    /**
-     * Set column is not nullable.
-     * @return \X\Service\XDatabase\Core\Table\Column
-     */
-    public function notNull() {
-        return $this->setNullable(false);
-    }
-    
-    /**
-     * Set default value for column.
-     * 
-     * @return \X\Service\XDatabase\Core\Table\Column
-     */
-    public function defaultVal( $val ) {
-        return $this->setDefault($val);
-    }
-    
-    /**
-     * Set column as an auto increment column.
-     * 
-     * @return \X\Service\XDatabase\Core\Table\Column
-     */
-    public function autoIncrement() {
-        return $this->setIsAutoIncrement(true);
-    }
-    
-    /**
-     * Set column as zerofill.
-     * 
-     * @return \X\Service\XDatabase\Core\Table\Column
-     */
-    public function zerofill() {
-        return $this->setIsZeroFill(true);
-    }
-    
-    /**
-     * Set column as unsigned
-     * 
-     * @return \X\Service\XDatabase\Core\Table\Column
-     */
-    public function unsigned(){
-        return $this->setIsUnsigned(true);
-    }
-    
-    /**
-     * Set column as binary.
-     * 
-     * @return \X\Service\XDatabase\Core\Table\Column
-     */
-    public function binary() {
-        return $this->setIsBinary(true);
-    }
+
 }

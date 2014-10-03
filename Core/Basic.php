@@ -44,4 +44,20 @@ class Basic extends \stdClass {
         
         $this->$setter($value);
     }
+    
+    /**
+     * 
+     * @return string
+     */
+    public function __toString() {
+        return $this->toString();
+    }
+    
+    /**
+     * 
+     * @return string
+     */
+    public function toString() {
+        return __CLASS__;
+    }
 }
