@@ -46,7 +46,7 @@ class PDO extends Basic implements InterfaceDriver {
         $this->connection->exec($query);
         $errorCode = $this->connection->errorCode();
         if ( '00000' !== $errorCode ) {
-            throw new Exception(print_r($this->connection->errorInfo(), true), $errorCode);
+            throw new Exception($this->getErrorMessage());
         }
     }
     
@@ -60,7 +60,7 @@ class PDO extends Basic implements InterfaceDriver {
     public function query( $query ) {
         $result = $this->connection->query($query);
         if ( false === $result ) {
-            return false;
+            throw new Exception($this->getErrorMessage());
         }
         
         $result = $result->fetchAll(\PDO::FETCH_ASSOC);
@@ -109,5 +109,15 @@ class PDO extends Basic implements InterfaceDriver {
             array_push($tables, $table[0]);
         }
         return $tables;
+    }
+    
+    /**
+     * Returns an string of error information about the last operation performed by this database handle
+     * 
+     * @return string
+     */
+    private function getErrorMessage() {
+        $error = $this->connection->errorInfo();
+        return isset($error[2]) ? $error[2] : '';
     }
 }
