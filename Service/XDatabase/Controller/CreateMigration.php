@@ -1,6 +1,6 @@
 <?php
 /**
- * The action file for creating a db migration.
+ * This file implemented the handler class to create migrations.
  */
 namespace X\Service\XDatabase\Controller;
 
@@ -11,14 +11,17 @@ use X\Core\X;
 use X\Service\XDatabase\Core\Table\Manager;
 
 /**
- * The create nugration handler class
+ * This is the handler class for creating database migration.
+ * 
+ * @author Michael Luthor <michaelluthor@163.com>
  */
 class CreateMigration  {
     /**
-     * Handle the creation.
+     * Execute the creation. If $table is 'all', then all the tables in 
+     * active database would be created. 
      * 
-     * @param unknown $module
-     * @param unknown $table
+     * @param string $table The name of table or 'all'
+     * @param string $module The name of module to store the migration.
      */
     public function run( $table, $module ) {
         $tables = array($table);
@@ -31,9 +34,10 @@ class CreateMigration  {
     }
     
     /**
+     * Generate the migration file for single table by given name.
      * 
-     * @param unknown $table
-     * @param unknown $module
+     * @param string $table The name of table to created with.
+     * @param string $module The name of module to store the migration.
      */
     private function generateMigration( $table, $module ) {
         /* Generate the original migration */
@@ -75,8 +79,9 @@ class CreateMigration  {
     
     /**
      * Generate the migrate up code.
-     * @param unknown $tableName
-     * @return string
+     * 
+     * @param string $tableName The name of table.
+     * @return array
      */
     private function getMigrateUpCode( $tableName ) {
         /* Insert up code to create the table. */
