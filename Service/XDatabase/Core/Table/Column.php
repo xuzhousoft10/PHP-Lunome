@@ -208,7 +208,7 @@ class Column extends Basic {
     /**
      * @return string
      */
-    public function getNmae() {
+    public function getName() {
         return $this->get('name');
     }
     

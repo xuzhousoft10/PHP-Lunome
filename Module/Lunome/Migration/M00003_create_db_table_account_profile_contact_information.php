@@ -7,8 +7,9 @@ namespace X\Module\Lunome\Migration;
 /**
  * Use statements
  */
-use X\Service\XDatabase\Core\Table\Manager as TableManager;
 use X\Service\XDatabase\Core\Table\Column;
+use X\Service\XDatabase\Core\Table\ColumnType;
+use X\Service\XDatabase\Core\Table\Manager as TableManager;
 
 /** 
  * M00003_create_db_table_account_profile_contact_information 
@@ -20,9 +21,9 @@ class M00003_create_db_table_account_profile_contact_information extends \X\Core
      */
     public function up() {
         $columns = array();
-        $columns[] = Column::create('id')->int()->unsigned()->notNull()->autoIncrement();
-        $columns[] = Column::create('account_id')->int()->unsigned()->notNull();
-        $columns[] = Column::create('email')->varchar(128)->notNull();
+        $columns[] = Column::create('id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false)->setIsAutoIncrement(true);
+        $columns[] = Column::create('account_id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false);
+        $columns[] = Column::create('email')->setType(ColumnType::T_VARCHAR)->setLength(128)->setNullable(false);
         $table = TableManager::create('account_profile_contact_information', $columns, 'id');
         $table->addUnique('id');
     }

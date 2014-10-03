@@ -7,8 +7,9 @@ namespace X\Module\Lunome\Migration;
 /**
  * Use statements
  */
-use X\Service\XDatabase\Core\Table\Manager as TableManager;
 use X\Service\XDatabase\Core\Table\Column;
+use X\Service\XDatabase\Core\Table\ColumnType;
+use X\Service\XDatabase\Core\Table\Manager as TableManager;
 
 /** 
  * M00050_create_db_table_tvs 
@@ -20,15 +21,15 @@ class M00050_create_db_table_tvs extends \X\Core\Module\Migrate {
      */
     public function up() {
         $columns = array();
-        $columns[] = Column::create('id')->int()->unsigned()->notNull()->autoIncrement();
-        $columns[] = Column::create('name')->varchar(256)->notNull();
-        $columns[] = Column::create('production_company_id')->int()->unsigned();
-        $columns[] = Column::create('region_id')->int()->unsigned();
-        $columns[] = Column::create('episode_count')->setType(Column::T_SMALLINT)->unsigned();
-        $columns[] = Column::create('episode_lenght')->setType(Column::T_SMALLINT)->unsigned();
-        $columns[] = Column::create('season_count')->setType(Column::T_TINYINT)->unsigned();
-        $columns[] = Column::create('language_id')->int()->unsigned();
-        $columns[] = Column::create('color')->setType(Column::T_TINYINT)->unsigned();
+        $columns[] = Column::create('id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false)->setIsAutoIncrement(true);
+        $columns[] = Column::create('name')->setType(ColumnType::T_VARCHAR)->setLength(256)->setNullable(false);
+        $columns[] = Column::create('production_company_id')->setType(ColumnType::T_INT)->setIsUnsigned(true);
+        $columns[] = Column::create('region_id')->setType(ColumnType::T_INT)->setIsUnsigned(true);
+        $columns[] = Column::create('episode_count')->setType(ColumnType::T_SMALLINT)->setIsUnsigned(true);
+        $columns[] = Column::create('episode_lenght')->setType(ColumnType::T_SMALLINT)->setIsUnsigned(true);
+        $columns[] = Column::create('season_count')->setType(ColumnType::T_TINYINT)->setIsUnsigned(true);
+        $columns[] = Column::create('language_id')->setType(ColumnType::T_INT)->setIsUnsigned(true);
+        $columns[] = Column::create('color')->setType(ColumnType::T_TINYINT)->setIsUnsigned(true);
         $table = TableManager::create('tvs', $columns, 'id');
         $table->addUnique('id');
     }

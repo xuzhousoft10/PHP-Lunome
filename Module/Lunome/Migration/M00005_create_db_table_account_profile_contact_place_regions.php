@@ -7,8 +7,9 @@ namespace X\Module\Lunome\Migration;
 /**
  * Use statements
  */
-use X\Service\XDatabase\Core\Table\Manager as TableManager;
 use X\Service\XDatabase\Core\Table\Column;
+use X\Service\XDatabase\Core\Table\ColumnType;
+use X\Service\XDatabase\Core\Table\Manager as TableManager;
 
 /** 
  * M00005_create_db_table_account_profile_contact_place_regions 
@@ -20,10 +21,10 @@ class M00005_create_db_table_account_profile_contact_place_regions extends \X\Co
      */
     public function up() {
         $columns = array();
-        $columns[] = Column::create('id')->int()->unsigned()->notNull()->autoIncrement();
-        $columns[] = Column::create('account_id')->int()->unsigned()->notNull();
-        $columns[] = Column::create('level')->varchar(45);
-        $columns[] = Column::create('region_id')->int()->unsigned()->notNull();
+        $columns[] = Column::create('id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false)->setIsAutoIncrement(true);
+        $columns[] = Column::create('account_id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false);
+        $columns[] = Column::create('level')->setType(ColumnType::T_VARCHAR)->setLength(45);
+        $columns[] = Column::create('region_id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false);
         $table = TableManager::create('account_profile_contact_place_regions', $columns, 'id');
         $table->addUnique('id');
     }

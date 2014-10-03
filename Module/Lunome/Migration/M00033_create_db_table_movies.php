@@ -7,8 +7,9 @@ namespace X\Module\Lunome\Migration;
 /**
  * Use statements
  */
-use X\Service\XDatabase\Core\Table\Manager as TableManager;
 use X\Service\XDatabase\Core\Table\Column;
+use X\Service\XDatabase\Core\Table\ColumnType;
+use X\Service\XDatabase\Core\Table\Manager as TableManager;
 
 /** 
  * M00033_create_db_table_movies 
@@ -20,19 +21,19 @@ class M00033_create_db_table_movies extends \X\Core\Module\Migrate {
      */
     public function up() {
         $columns = array();
-        $columns[] = Column::create('id')->int()->unsigned()->notNull()->autoIncrement();
-        $columns[] = Column::create('name')->varchar(256)->notNull();
-        $columns[] = Column::create('region_id')->int()->unsigned();
-        $columns[] = Column::create('length')->setType(Column::T_SMALLINT)->unsigned();
-        $columns[] = Column::create('overview')->varchar(1024);
-        $columns[] = Column::create('is_adult')->setType(Column::T_TINYINT)->unsigned();
-        $columns[] = Column::create('language_id')->int()->unsigned();
-        $columns[] = Column::create('released_at')->date();
-        $columns[] = Column::create('directors_id')->int()->unsigned()->notNull();
-        $columns[] = Column::create('budget')->int()->unsigned();
-        $columns[] = Column::create('color')->setType(Column::T_TINYINT)->unsigned();
-        $columns[] = Column::create('production_company_id')->int()->unsigned();
-        $columns[] = Column::create('box_office')->int()->unsigned();
+        $columns[] = Column::create('id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false)->setIsAutoIncrement(true);
+        $columns[] = Column::create('name')->setType(ColumnType::T_VARCHAR)->setLength(256)->setNullable(false);
+        $columns[] = Column::create('region_id')->setType(ColumnType::T_INT)->setIsUnsigned(true);
+        $columns[] = Column::create('length')->setType(ColumnType::T_SMALLINT)->setIsUnsigned(true);
+        $columns[] = Column::create('overview')->setType(ColumnType::T_VARCHAR)->setLength(1024);
+        $columns[] = Column::create('is_adult')->setType(ColumnType::T_TINYINT)->setIsUnsigned(true);
+        $columns[] = Column::create('language_id')->setType(ColumnType::T_INT)->setIsUnsigned(true);
+        $columns[] = Column::create('released_at')->setType(ColumnType::T_DATE);
+        $columns[] = Column::create('directors_id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false);
+        $columns[] = Column::create('budget')->setType(ColumnType::T_INT)->setIsUnsigned(true);
+        $columns[] = Column::create('color')->setType(ColumnType::T_TINYINT)->setIsUnsigned(true);
+        $columns[] = Column::create('production_company_id')->setType(ColumnType::T_INT)->setIsUnsigned(true);
+        $columns[] = Column::create('box_office')->setType(ColumnType::T_INT)->setIsUnsigned(true);
         $table = TableManager::create('movies', $columns, 'id');
         $table->addUnique('id');
     }

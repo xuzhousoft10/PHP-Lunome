@@ -7,8 +7,9 @@ namespace X\Module\Lunome\Migration;
 /**
  * Use statements
  */
-use X\Service\XDatabase\Core\Table\Manager as TableManager;
 use X\Service\XDatabase\Core\Table\Column;
+use X\Service\XDatabase\Core\Table\ColumnType;
+use X\Service\XDatabase\Core\Table\Manager as TableManager;
 
 /** 
  * M00015_create_db_table_account_unverified_registration 
@@ -20,11 +21,11 @@ class M00015_create_db_table_account_unverified_registration extends \X\Core\Mod
      */
     public function up() {
         $columns = array();
-        $columns[] = Column::create('id')->int()->unsigned()->notNull()->autoIncrement();
-        $columns[] = Column::create('email')->varchar(128)->notNull();
-        $columns[] = Column::create('password')->varchar(128)->notNull();
-        $columns[] = Column::create('registered_at')->datetime()->notNull();
-        $columns[] = Column::create('expired_at')->datetime()->notNull();
+        $columns[] = Column::create('id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false)->setIsAutoIncrement(true);
+        $columns[] = Column::create('email')->setType(ColumnType::T_VARCHAR)->setLength(128)->setNullable(false);
+        $columns[] = Column::create('password')->setType(ColumnType::T_VARCHAR)->setLength(128)->setNullable(false);
+        $columns[] = Column::create('registered_at')->setType(ColumnType::T_DATETIME)->setNullable(false);
+        $columns[] = Column::create('expired_at')->setType(ColumnType::T_DATETIME)->setNullable(false);
         $table = TableManager::create('account_unverified_registration', $columns, 'id');
         $table->addUnique('id');
     }

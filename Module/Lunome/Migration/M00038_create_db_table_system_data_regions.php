@@ -7,8 +7,9 @@ namespace X\Module\Lunome\Migration;
 /**
  * Use statements
  */
-use X\Service\XDatabase\Core\Table\Manager as TableManager;
 use X\Service\XDatabase\Core\Table\Column;
+use X\Service\XDatabase\Core\Table\ColumnType;
+use X\Service\XDatabase\Core\Table\Manager as TableManager;
 
 /** 
  * M00038_create_db_table_system_data_regions 
@@ -20,9 +21,9 @@ class M00038_create_db_table_system_data_regions extends \X\Core\Module\Migrate 
      */
     public function up() {
         $columns = array();
-        $columns[] = Column::create('id')->int()->unsigned()->notNull()->autoIncrement();
-        $columns[] = Column::create('name')->varchar(64)->notNull();
-        $columns[] = Column::create('level')->setType(Column::T_TINYINT)->unsigned()->notNull();
+        $columns[] = Column::create('id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false)->setIsAutoIncrement(true);
+        $columns[] = Column::create('name')->setType(ColumnType::T_VARCHAR)->setLength(64)->setNullable(false);
+        $columns[] = Column::create('level')->setType(ColumnType::T_TINYINT)->setIsUnsigned(true)->setNullable(false);
         $table = TableManager::create('system_data_regions', $columns, 'id');
         $table->addUnique('id');
     }

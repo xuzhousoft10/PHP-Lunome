@@ -7,8 +7,9 @@ namespace X\Module\Lunome\Migration;
 /**
  * Use statements
  */
-use X\Service\XDatabase\Core\Table\Manager as TableManager;
 use X\Service\XDatabase\Core\Table\Column;
+use X\Service\XDatabase\Core\Table\ColumnType;
+use X\Service\XDatabase\Core\Table\Manager as TableManager;
 
 /** 
  * M00006_create_db_table_account_profile_education_history 
@@ -20,11 +21,11 @@ class M00006_create_db_table_account_profile_education_history extends \X\Core\M
      */
     public function up() {
         $columns = array();
-        $columns[] = Column::create('id')->int()->unsigned()->notNull()->autoIncrement();
-        $columns[] = Column::create('account_id')->int()->unsigned()->notNull();
-        $columns[] = Column::create('started_at')->date();
-        $columns[] = Column::create('ended_at')->date();
-        $columns[] = Column::create('school_id')->int()->unsigned()->notNull();
+        $columns[] = Column::create('id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false)->setIsAutoIncrement(true);
+        $columns[] = Column::create('account_id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false);
+        $columns[] = Column::create('started_at')->setType(ColumnType::T_DATE);
+        $columns[] = Column::create('ended_at')->setType(ColumnType::T_DATE);
+        $columns[] = Column::create('school_id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false);
         $table = TableManager::create('account_profile_education_history', $columns, 'id');
         $table->addUnique('id');
     }

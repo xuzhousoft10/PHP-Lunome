@@ -7,8 +7,9 @@ namespace X\Module\Lunome\Migration;
 /**
  * Use statements
  */
-use X\Service\XDatabase\Core\Table\Manager as TableManager;
 use X\Service\XDatabase\Core\Table\Column;
+use X\Service\XDatabase\Core\Table\ColumnType;
+use X\Service\XDatabase\Core\Table\Manager as TableManager;
 
 /** 
  * M00018_create_db_table_book_types 
@@ -20,9 +21,9 @@ class M00018_create_db_table_book_types extends \X\Core\Module\Migrate {
      */
     public function up() {
         $columns = array();
-        $columns[] = Column::create('id')->int()->unsigned()->notNull();
-        $columns[] = Column::create('book_id')->int()->unsigned()->notNull();
-        $columns[] = Column::create('type_id')->int()->unsigned()->notNull();
+        $columns[] = Column::create('id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false);
+        $columns[] = Column::create('book_id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false);
+        $columns[] = Column::create('type_id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false);
         $table = TableManager::create('book_types', $columns, 'id');
         $table->addUnique('id');
     }

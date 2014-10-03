@@ -7,8 +7,9 @@ namespace X\Module\Lunome\Migration;
 /**
  * Use statements
  */
-use X\Service\XDatabase\Core\Table\Manager as TableManager;
 use X\Service\XDatabase\Core\Table\Column;
+use X\Service\XDatabase\Core\Table\ColumnType;
+use X\Service\XDatabase\Core\Table\Manager as TableManager;
 
 /** 
  * M00001_create_db_table_account_profile_basic 
@@ -20,17 +21,17 @@ class M00001_create_db_table_account_profile_basic extends \X\Core\Module\Migrat
      */
     public function up() {
         $columns = array();
-        $columns[] = Column::create('id')->int()->unsigned()->notNull()->autoIncrement();
-        $columns[] = Column::create('account_id')->int()->unsigned()->notNull();
-        $columns[] = Column::create('nickname')->varchar(32)->notNull();
-        $columns[] = Column::create('photo')->int()->unsigned();
-        $columns[] = Column::create('realname')->varchar(64);
-        $columns[] = Column::create('sex')->setType(Column::T_TINYINT);
-        $columns[] = Column::create('birthday')->date();
-        $columns[] = Column::create('nationality')->int()->unsigned();
-        $columns[] = Column::create('blood_type')->setType(Column::T_TINYINT)->unsigned();
-        $columns[] = Column::create('sexual_orientation')->setType(Column::T_TINYINT)->unsigned();
-        $columns[] = Column::create('religiou_id')->int()->unsigned()->notNull();
+        $columns[] = Column::create('id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false)->setIsAutoIncrement(true);
+        $columns[] = Column::create('account_id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false);
+        $columns[] = Column::create('nickname')->setType(ColumnType::T_VARCHAR)->setLength(32)->setNullable(false);
+        $columns[] = Column::create('photo')->setType(ColumnType::T_INT)->setIsUnsigned(true);
+        $columns[] = Column::create('realname')->setType(ColumnType::T_VARCHAR)->setLength(64);
+        $columns[] = Column::create('sex')->setType(ColumnType::T_TINYINT);
+        $columns[] = Column::create('birthday')->setType(ColumnType::T_DATE);
+        $columns[] = Column::create('nationality')->setType(ColumnType::T_INT)->setIsUnsigned(true);
+        $columns[] = Column::create('blood_type')->setType(ColumnType::T_TINYINT)->setIsUnsigned(true);
+        $columns[] = Column::create('sexual_orientation')->setType(ColumnType::T_TINYINT)->setIsUnsigned(true);
+        $columns[] = Column::create('religiou_id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false);
         $table = TableManager::create('account_profile_basic', $columns, 'id');
         $table->addUnique('id');
     }

@@ -58,8 +58,9 @@ class ActionCreateMigration  {
                 $dbMigration[] = '/**';
                 $dbMigration[] = ' * Use statements';
                 $dbMigration[] = ' */';
-                $dbMigration[] = 'use X\\Service\\XDatabase\\Core\\Table\\Manager as TableManager;';
                 $dbMigration[] = 'use X\\Service\\XDatabase\\Core\\Table\\Column;';
+                $dbMigration[] = 'use X\\Service\\XDatabase\\Core\\Table\\ColumnType;';
+                $dbMigration[] = 'use X\\Service\\XDatabase\\Core\\Table\\Manager as TableManager;';
             } else if ( '        /*@TODO: Add your migration up code here.*/' === $content ) {
                 /* Insert up code to create the table. */
                 $content = $this->getMigrateUpCode($table);
@@ -109,27 +110,25 @@ class ActionCreateMigration  {
             $lengthRequired = array('VARCHAR', 'CHAR');
             
             $column  = "        \$columns[] = Column::create('$name')";
+            $column .= "->setType(ColumnType::T_$typeUpper)";
             if ( in_array($typeUpper, $lengthRequired) ) {
-                $column .= "->$typeLower($length)";
-            } else if ( method_exists('\\X\\Service\\XDatabase\\Core\\Table\\Column', $typeLower)) {
-                $column .= "->$typeLower()";
-            } else {
-                $column .= "->setType(Column::T_$typeUpper)";
+                $column .= "->setLength($length)";
             }
             if ( $isUnsigned ) {
-                $column .= '->unsigned()';
+                $column .= '->setIsUnsigned(true)';
             }
             if ( $isZerofill ) {
-                $column .= '->zerofill()';
+                $column .= '->setIsZeroFill(true)';
             }
             if ( !$isNullable ) {
-                $column .= '->notNull()';
+                $column .= '->setNullable(false)';
             }
             if ( $isAutoIncrement ) {
-                $column .= '->autoIncrement()';
+                $column .= '->setIsAutoIncrement(true)';
             }
             if ( !is_null($default) ) {
-                $column .= "->defaultVal('$default')";
+                $default = addslashes($default);
+                $column .= "->setDefault('$default')";
             }
             $column .= ";";
             
