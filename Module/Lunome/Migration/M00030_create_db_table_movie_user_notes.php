@@ -1,6 +1,6 @@
 <?php
 /** 
- * Migration file for create_db_table_account_profile_contact_information 
+ * Migration file for create_db_table_movie_user_notes 
  */
 namespace X\Module\Lunome\Migration;
 
@@ -11,9 +11,9 @@ use X\Service\XDatabase\Core\Table\Manager as TableManager;
 use X\Service\XDatabase\Core\Table\Column;
 
 /** 
- * M00003_create_db_table_account_profile_contact_information 
+ * M00030_create_db_table_movie_user_notes 
  */
-class M00003_create_db_table_account_profile_contact_information extends \X\Core\Module\Migrate {
+class M00030_create_db_table_movie_user_notes extends \X\Core\Module\Migrate {
     /** 
      * (non-PHPdoc)
      * @see \X\Core\Module\InterfaceMigrate::up()
@@ -22,8 +22,11 @@ class M00003_create_db_table_account_profile_contact_information extends \X\Core
         $columns = array();
         $columns[] = Column::create('id')->int()->unsigned()->notNull()->autoIncrement();
         $columns[] = Column::create('account_id')->int()->unsigned()->notNull();
-        $columns[] = Column::create('email')->varchar(128)->notNull();
-        $table = TableManager::create('account_profile_contact_information', $columns, 'id');
+        $columns[] = Column::create('movie_id')->int()->unsigned()->notNull();
+        $columns[] = Column::create('language_id')->int()->unsigned()->notNull();
+        $columns[] = Column::create('content')->varchar(512)->notNull();
+        $columns[] = Column::create('wrote_at')->date()->notNull();
+        $table = TableManager::create('movie_user_notes', $columns, 'id');
         $table->addUnique('id');
     }
 
@@ -32,6 +35,6 @@ class M00003_create_db_table_account_profile_contact_information extends \X\Core
      * @see \X\Core\Module\InterfaceMigrate::down()
      */
     public function down() {
-        TableManager::open('account_profile_contact_information')->drop();
+        TableManager::open('movie_user_notes')->drop();
     }
 }

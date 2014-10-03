@@ -1,6 +1,6 @@
 <?php
 /** 
- * Migration file for create_db_table_account_profile_contact_information 
+ * Migration file for create_db_table_book_user_read 
  */
 namespace X\Module\Lunome\Migration;
 
@@ -11,9 +11,9 @@ use X\Service\XDatabase\Core\Table\Manager as TableManager;
 use X\Service\XDatabase\Core\Table\Column;
 
 /** 
- * M00003_create_db_table_account_profile_contact_information 
+ * M00020_create_db_table_book_user_read 
  */
-class M00003_create_db_table_account_profile_contact_information extends \X\Core\Module\Migrate {
+class M00020_create_db_table_book_user_read extends \X\Core\Module\Migrate {
     /** 
      * (non-PHPdoc)
      * @see \X\Core\Module\InterfaceMigrate::up()
@@ -22,8 +22,9 @@ class M00003_create_db_table_account_profile_contact_information extends \X\Core
         $columns = array();
         $columns[] = Column::create('id')->int()->unsigned()->notNull()->autoIncrement();
         $columns[] = Column::create('account_id')->int()->unsigned()->notNull();
-        $columns[] = Column::create('email')->varchar(128)->notNull();
-        $table = TableManager::create('account_profile_contact_information', $columns, 'id');
+        $columns[] = Column::create('book_id')->int()->unsigned()->notNull();
+        $columns[] = Column::create('rate')->setType(Column::T_TINYINT)->unsigned();
+        $table = TableManager::create('book_user_read', $columns, 'id');
         $table->addUnique('id');
     }
 
@@ -32,6 +33,6 @@ class M00003_create_db_table_account_profile_contact_information extends \X\Core
      * @see \X\Core\Module\InterfaceMigrate::down()
      */
     public function down() {
-        TableManager::open('account_profile_contact_information')->drop();
+        TableManager::open('book_user_read')->drop();
     }
 }
