@@ -14,7 +14,7 @@ use X\Service\XDatabase\Core\Table\Manager as TableManager;
 /** 
  * M00022_create_db_table_book_writers 
  */
-class M00022_create_db_table_book_writers extends \X\Core\Module\Migrate {
+class M00022_create_db_table_book_data_writers extends \X\Core\Module\Migrate {
     /** 
      * (non-PHPdoc)
      * @see \X\Core\Module\InterfaceMigrate::up()
@@ -23,7 +23,7 @@ class M00022_create_db_table_book_writers extends \X\Core\Module\Migrate {
         $columns = array();
         $columns[] = Column::create('id')->setType(ColumnType::T_INT)->setIsUnsigned(true)->setNullable(false)->setIsAutoIncrement(true);
         $columns[] = Column::create('name')->setType(ColumnType::T_VARCHAR)->setLength(64)->setNullable(false);
-        $table = TableManager::create('book_writers', $columns, 'id');
+        $table = TableManager::create('book_data_writers', $columns, 'id');
         $table->addUnique('id');
     }
 
@@ -32,6 +32,6 @@ class M00022_create_db_table_book_writers extends \X\Core\Module\Migrate {
      * @see \X\Core\Module\InterfaceMigrate::down()
      */
     public function down() {
-        TableManager::open('book_writers')->drop();
+        TableManager::open('book_data_writers')->drop();
     }
 }
