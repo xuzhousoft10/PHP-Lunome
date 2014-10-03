@@ -48,6 +48,7 @@ class Custom extends \X\Service\XAction\Core\Action {
             }
             
             call_user_func_array(array($controller, $action), $parameters);
+            echo "\n";
             return;
         }
         
