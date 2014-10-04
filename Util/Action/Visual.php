@@ -70,6 +70,17 @@ abstract class Visual extends Basic {
     }
     
     /**
+     * 
+     * @param unknown $layout
+     * @return Ambigous <string, unknown>
+     */
+    public function getLayoutViewPath( $layout ) {
+        $view = sprintf('View/Layout/%s.php', $layout);
+        $view = $this->getModule()->getModulePath($view);
+        return $view;
+    }
+    
+    /**
      * (non-PHPdoc)
      * @see \X\Service\XAction\Core\Action::beforeRunAction()
      */

@@ -21,13 +21,6 @@ abstract class Visual extends \X\Util\Action\Visual {
         $option = array('zone'=>'header');
         $data   = array();
         $this->getView()->loadParticle($name, $path, $option, $data);
-        
-        /* Load User Board */
-        $name   = 'USER_BOARD';
-        $path   = $this->getParticleViewPath('User/Board');
-        $option = array('zone'=>'header');
-        $data   = array();
-        $this->getView()->loadParticle($name, $path, $option, $data);
     }
     
     /**
