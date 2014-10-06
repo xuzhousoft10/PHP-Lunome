@@ -17,7 +17,7 @@ use X\Service\XAction\Core\Exception;
  * @version 0.0.0
  * @since   Version 0.0.0
  */
-class XActionService extends \X\Core\Service\XService {
+class Service extends \X\Core\Service\XService {
     /**
      * This value holds the service instace.
      *

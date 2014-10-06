@@ -11,7 +11,7 @@ namespace X\Service\XView;
  * @since   0.0.0
  * @version 0.0.0
  */
-class XViewService extends \X\Core\Service\XService {
+class Service extends \X\Core\Service\XService {
     /**
      * This value holds the service instace.
      *
