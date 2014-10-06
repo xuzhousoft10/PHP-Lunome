@@ -8,6 +8,7 @@ namespace X\Core\Service;
  * Use statements
  */
 use X\Core\X;
+use X\Core\Util\XUtil;
 
 /**
  * The service management class.
@@ -59,7 +60,7 @@ class ServiceManagement extends \X\Core\Basic {
          * 'services' => array(
          *      'service_name'=> array(
          *          'enable' =>true, 
-         *          'path'   =>'service/path'))
+         *          'class'   =>'namespace\\class'))
          */
     );
     
@@ -111,18 +112,11 @@ class ServiceManagement extends \X\Core\Basic {
      * @param array $configuration The configuration for the service.
      */
     public function loadService($name, $configuration) {
-        $basePath = X::system()->getRoot();
-        $servicePath = $basePath.DIRECTORY_SEPARATOR.$configuration['path'];
-        if ( !is_file($servicePath) ) {
-            throw new Exception(sprintf('Can not find service "%s" in "%s".', $name, $servicePath));
+        $serviceClass = $configuration['class'];
+        if ( !class_exists($configuration['class']) ) {
+            throw new Exception(sprintf('Can not find service "%s"', $name));
         }
         
-        $namespace = require $servicePath;
-        $namespace = is_string($namespace) ? $namespace : '';
-        $serviceClass = $namespace.'\\'.$name.'Service';
-        if ( !class_exists($serviceClass, false) ) {
-            throw new Exception(sprintf('Can not find service "%s".', $name));
-        }
         if ( !( is_subclass_of($serviceClass, '\\X\\Core\\Service\\XService') ) ) {
             throw new Exception(sprintf('"%s" is not a available service.'));
         }
@@ -161,7 +155,79 @@ class ServiceManagement extends \X\Core\Basic {
     }
     
     /************ Management ***********************************/
+    /**
+     * Create a new service by given name.
+     * 
+     * @param string $name The name service.
+     * @param string $module The module that the service belongs to, if null then it belongs to system.
+     */
+    public function create ( $name, $module=null ) {
+        if ( $this->has($name) ) {
+            throw new Exception(sprintf('Service "%s" already exists.', $name));
+        }
+        if ( null === $module && !X::system()->getModuleManager()->has($module) ) {
+            throw new Exception(sprintf('Module "%s" does not exists.', $name));
+        }
+        
+        /* Generate the namespace of servie */
+        $namespace = "X\\Service\\$name";
+        if ( null !== $module ) {
+            $namespace = "X\\Module\\$module\\Service\\$name";
+        }
+        
+        /* Generate the service file content. */
+        $content    = array();
+        $content[]  = "<?php";
+        $content[]  = "/**\n * This file implements the service Movie\n */";
+        $content[]  = "namespace $namespace;";
+        $content[]  = "";
+        $content[]  = "/**\n * The service class\n */";
+        $content[]  = "class Service extends \\X\\Core\\Service\\XService {";
+        $content[]  = "}";
+        $content = implode("\n", $content);
+        
+        /* Generate the path of service */
+        $path = X::system()->getPath("Service/$name");
+        if ( null !== $module ) {
+            $path = X::system()->getPath("Module/$module/Service");
+            if ( !is_dir($path) ) {
+                mkdir($path);
+            }
+            $path = X::system()->getPath("Module/$module/Service/$name");
+        }
+        if ( !is_dir($path) ) {
+            mkdir($path);
+        }
+        $path = $path.DIRECTORY_SEPARATOR.'Service.php';
+        
+        /* Save the service */
+        file_put_contents($path, $content);
+        
+        /* Update the configuration */
+        $this->configuration['services'][$name]['enable'] = false;
+        $this->configuration['services'][$name]['class'] = "$namespace\\Service";
+        $this->saveConfigurations();
+    }
+    
+    /**
+     * Check the service exists by given name.
+     * 
+     * @param string $name The name of service to check.
+     */
+    public function has( $name ) {
+        return array_key_exists($name, $this->services);
+    }
+    
     public function getList() {
         return array_keys($this->services);
+    }
+    
+    /**
+     * Save the configuration file into fs.
+     * @return void
+     */
+    private function saveConfigurations() {
+        $path = X::system()->getCoreConfigFilePath('services');
+        XUtil::storeArrayToPHPFile($path, $this->configuration['services']);
     }
 }
