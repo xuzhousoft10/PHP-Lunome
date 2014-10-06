@@ -66,16 +66,8 @@
         </div>
       </div>
     </div>
-    <div class="clearfix" style="position: absolute;top: 530px;;width: 1110px;">
-      <button type="button" class="btn btn-default btn-lg pull-left">
-        <span class="glyphicon glyphicon-chevron-left"></span>
-      </button>
-      <button type="button" class="btn btn-default btn-lg pull-right">
-        <span class="glyphicon glyphicon-chevron-right"></span>
-      </button>
-    </div>
   </div>
   <div class="panel-footer clearfix">
-    <a href="/?module=lunome&action=movie/unwatched" class="btn btn-primary btn-sm pull-right">All</a>
+    <a href="/?module=lunome&action=movie/unwatched" class="btn btn-primary btn-sm pull-right">Next</a>
   </div>
 </div>
