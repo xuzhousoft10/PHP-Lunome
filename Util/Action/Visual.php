@@ -94,6 +94,7 @@ abstract class Visual extends Basic {
         $this->view['object'] = $viewService->create($viewName, $viewType);
         $this->view['name'] = $viewType;
         
+        $this->view['object']->setCharset('UTF-8');
         parent::beforeRunAction();
     }
     

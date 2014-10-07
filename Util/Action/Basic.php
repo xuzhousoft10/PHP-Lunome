@@ -14,7 +14,7 @@ use X\Core\X;
  * 
  * @author Michael Luthor <michaelluthor@163.com>
  */
-abstract class Basic extends \X\Service\XAction\Core\Action {
+abstract class Basic extends \X\Service\XAction\Core\Handler\WebAction {
     /**
      * The activated module instance.
      *
@@ -32,5 +32,19 @@ abstract class Basic extends \X\Service\XAction\Core\Action {
             $this->module = X::system()->getModuleManager()->get($this->getGroup());
         }
         return $this->module;
+    }
+    
+    public function __call( $name, $parms ) {
+        if ( 'get' === substr($name, 0, 3) && 'Service' === substr($name, strlen($name)-7)){
+            $serviceName = substr($name, 3);
+            $serviceName = substr($serviceName, 0, strlen($serviceName)-7);
+            return $this->getService($serviceName);
+        } else {
+            ;// nothing
+        }
+    }
+    
+    protected function getService( $name ) {
+        return X::system()->getServiceManager()->get($name);
     }
 }

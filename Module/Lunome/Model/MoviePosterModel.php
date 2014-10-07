@@ -10,9 +10,10 @@ use X\Service\XDatabase\Core\ActiveRecord\Column;
 
 /**
  * @property string $id
- * @property string $name
+ * @property string $movie_id
+ * @property string $data
  **/
-class MovieModel extends Basic {
+class MoviePosterModel extends Basic {
     /**
      * (non-PHPdoc)
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::describe()
@@ -20,7 +21,8 @@ class MovieModel extends Basic {
     protected function describe() {
         $columns = array();
         $columns[] = Column::create('id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setIsPrimaryKey(true)->setNullable(false);
-        $columns[] = Column::create('name')->setType(ColumnType::T_VARCHAR)->setLength(128);
+        $columns[] = Column::create('movie_id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setNullable(false);
+        $columns[] = Column::create('data')->setType(ColumnType::T_TEXT);
         return $columns;
     }
 
@@ -29,6 +31,6 @@ class MovieModel extends Basic {
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::getTableName()
      */
     protected function getTableName() {
-        return 'movies';
+        return 'movie_posters';
     }
 }
