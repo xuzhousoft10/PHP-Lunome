@@ -8,7 +8,7 @@ namespace X\Module\Lunome;
  * Use statements
  */
 use X\Core\X;
-use X\Service\XAction\XActionService;
+use X\Service\XAction\Service as XActionService;
 
 /**
  * The module class

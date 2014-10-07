@@ -7,7 +7,9 @@ namespace X\Module\Lunome\Action\Movie;
 /**
  * Use statements
  */
+use X\Core\X;
 use X\Module\Lunome\Util\Action\VisualMain;
+use X\Module\Lunome\Service\Movie\Service as MovieService;
 
 /**
  * The action class for movie/index action.
@@ -19,6 +21,10 @@ class Index extends VisualMain {
      * @return void
      */ 
     public function runAction( ) {
+        /* @var $service \X\Module\Lunome\Service\Movie\Service */
+        $service = X::system()->getServiceManager()->get(MovieService::getServiceName());
+        $movies = $service->getUnmarkedMovies();
+        
         $name   = 'MOVIE_INDEX';
         $path   = $this->getParticleViewPath('Movie/Index');
         $option = array(); 
