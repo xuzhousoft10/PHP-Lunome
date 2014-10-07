@@ -21,6 +21,7 @@ abstract class XService extends \X\Core\Basic {
      */
     private static function getServiceNameFromClassName( $className ) {
         $className = explode('\\', $className);
+        array_pop($className);
         return str_replace('Service', '', array_pop($className));
     }
     
