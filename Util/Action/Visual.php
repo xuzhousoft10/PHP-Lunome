@@ -8,7 +8,7 @@ namespace X\Util\Action;
  * Use statements
  */
 use X\Core\X;
-use X\Service\XView\XViewService;
+use X\Service\XView\Service as XViewService;
 
 /**
  * The basic action class
