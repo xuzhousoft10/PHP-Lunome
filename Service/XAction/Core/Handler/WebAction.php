@@ -33,6 +33,12 @@ abstract class WebAction extends \X\Service\XAction\Core\Action {
         exit();
     }
     
+    public function goBack() {
+        $url = isset($_SERVER['HTTP_REFERER']) ?  $_SERVER['HTTP_REFERER'] : '/';
+        header(sprintf('Location: %s', $url));
+        exit();
+    }
+    
     /**
      * The handler of 404 page.
      * 
