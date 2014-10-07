@@ -14,19 +14,4 @@ use X\Service\XDatabase\Core\Basic;
  * @since   0.0.0
  * @version 0.0.0
  */
-abstract class XFunction extends Basic {
-    /**
-     * Convert current function object to string for using in query
-     * 
-     * @return string
-     */
-    abstract public function toString();
-    
-    /**
-     * 
-     * @return string
-     */
-    public function __toString() {
-        return $this->toString();
-    }
-}
+abstract class XFunction extends Basic {}

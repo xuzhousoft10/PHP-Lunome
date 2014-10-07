@@ -8,7 +8,7 @@ namespace X\Service\XDatabase\Core\SQL\Action;
  * Use statements
  */
 use X\Core\X;
-use X\Service\XDatabase\XDatabaseService;
+use X\Service\XDatabase\Service as XDatabaseService;
 
 /**
  * Base
