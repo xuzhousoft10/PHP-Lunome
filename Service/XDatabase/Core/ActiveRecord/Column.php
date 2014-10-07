@@ -96,14 +96,14 @@ class Column extends TableColumn {
      */
     public function getValue() {
         $value = null;
-        if ( null !== $this->value ) {
-            $value = $this->value;
+        if ( null !== $this->newValue ) {
+            $value = $this->newValue;
         } else if ( null !== $this->valueBuilder && is_callable($this->valueBuilder) ) {
             $value = call_user_func_array($this->valueBuilder, array($this->record));
         } else {
             $value = $this->getDefault();
         }
-        $this->value = $value;
+        $this->newValue = $value;
         return $value;
     }
     
@@ -188,14 +188,14 @@ class Column extends TableColumn {
     public function validate() {
         $this->errors = array();
         
-        if ( $this->isAutoIncrease ) {
+        if ( $this->getIsAutoIncrement() ) {
             return true;
         }
         
         $value = $this->getValue();
         
         $validateItems = array(
-            'NotNull',  'DataType',     'Emptiable',    'Length', 
+            'NotNull',  'DataType',     'Length', 
             'Unique',   'PrimaryKey',   'Unsigned');
         
         foreach ( $validateItems as $item ) {
@@ -350,7 +350,7 @@ class Column extends TableColumn {
      * @return boolean
      */
     protected function validatePrimaryKey( $value ) {
-        if( $this->getIsPimaryKey() 
+        if( $this->getIsPrimaryKey()
         &&  $this->getIsDirty() 
         &&  $this->record->exists(array($this->getName()=>$value)) ) {
             $this->addError(sprintf('The key "%s" of "%s" already exists.', $value, get_class($this->record)));
