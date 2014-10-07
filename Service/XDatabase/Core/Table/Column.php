@@ -272,7 +272,7 @@ class Column extends Basic {
     /**
      * @return boolean
      */
-    public function getIsPimaryKey() {
+    public function getIsPrimaryKey() {
         return $this->get('isPimaryKey');
     }
 
