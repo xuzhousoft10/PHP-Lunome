@@ -5,6 +5,11 @@
 namespace X\Service\XDatabase\Core\SQL\Action;
 
 /**
+ * Use statements
+ */
+use X\Service\XDatabase\Core\Exception as DBException;
+
+/**
  * Delete
  * 
  * <pre>
@@ -158,7 +163,7 @@ class Delete extends ActionWithCondition {
     protected function getTableNameString() {
         if ( 0 == count($this->tables) ) {
             $messages = 'Delete action requires at least one table to delete from.';
-            throw new \X\Database\Exception($messages);
+            throw new DBException($messages);
         }
         
         $tables = array();
@@ -187,7 +192,7 @@ class Delete extends ActionWithCondition {
         if ( $this->hasOrder() && 0 < count($this->tables)) {
             $message =  'Delete action does not support "order by" '.
                         'when delete from multi tables.';
-            throw new \X\Database\Exception($message);
+            throw new DBException($message);
         }
         
         parent::getOrderString();

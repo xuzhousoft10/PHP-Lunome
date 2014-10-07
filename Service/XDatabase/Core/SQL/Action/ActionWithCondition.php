@@ -9,6 +9,7 @@ namespace X\Service\XDatabase\Core\SQL\Action;
  */
 use X\Service\XDatabase\Core\SQL\Condition\Builder as ConditionBuilder;
 use X\Service\XDatabase\Core\SQL\Action\Basic;
+use X\Service\XDatabase\Core\SQL\Func\XFunction;
 
 /**
  * ActionWithCondition
@@ -140,7 +141,7 @@ abstract class ActionWithCondition extends Basic {
         $orders = array();
         foreach ( $this->orders as $order ) {
             $expr = $order['expr'];
-            if ( $expr instanceof \X\Database\SQL\Func\Func ) {
+            if ( $expr instanceof XFunction ) {
                 $expr = $expr->toString();
             }
             else {
