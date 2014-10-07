@@ -14,8 +14,8 @@ use X\Service\XDatabase\Core\SQL\Func\Count as SQLFuncCount;
 use X\Service\XDatabase\Core\SQL\Condition\Condition as SQLCondition;
 use X\Service\XDatabase\Core\SQL\Condition\Builder as ConditionBuilder;
 use X\Service\XDatabase\Core\Basic;
-use X\Service\XDatabase\XDatabaseService;
 use X\Service\XDatabase\Core\SQL\Condition\Query;
+use X\Service\XDatabase\Service as XDatabaseService;
 
 /**
  * ActiveRecord
@@ -26,19 +26,36 @@ use X\Service\XDatabase\Core\SQL\Condition\Query;
  * @version 0.0.0
  */
 abstract class XActiveRecord extends Basic implements \Iterator {
-    /**
-     * Initialite the active record by setting informations.
-     *
-     * @return \X\Database\ActiveRecord\ActiveRecord
-     */
+    /*********************** Init the active record *************************/
     public function __construct() {
-        $this->initTableColumns();
+        $this->initColumnsByDeacribe();
         $this->relationships();
         $this->scopes();
         $this->beforeInit();
         $this->init();
         $this->afterInit();
     }
+    
+    /**
+     * This value contains all the attributes about this object.
+     * Here is an example about this value :
+     * <pre>
+     *  array(
+     *      'column1'   => $columnObject,
+     *      ...
+     *  );
+     * </pre>
+     * @see X\Database\ActiveRecord\Column What's Column object.
+     * @var X\Database\ActiveRecord\Column[]
+     */
+    protected $columns = array();
+    
+    protected function initColumnsByDeacribe() {
+        foreach ( $this->describe() as $column ) {
+            $this->columns[$column->getName()] = $column;
+        }
+    }
+    
     
     /**
      * Magic get method to get the attributes or relationships 
@@ -1016,40 +1033,6 @@ abstract class XActiveRecord extends Basic implements \Iterator {
     }
     
     /****************** Attributes ********************/
-    
-    /**
-     * Column informations about each table. when you create a
-     * active record, it would try to get information from this
-     * value, so that, we can save the time to parse the describe
-     * string.
-     * Here is an example about this value:
-     * <pre>
-     *  array(
-     *      'tableName1' => array(
-     *          'columName' => $columnObject,
-     *          ...
-     *      ),
-     *      ...
-     *  )
-     * </pre>
-     * @var array
-     */
-    protected static $tableColumnInformations = array();
-    
-    /**
-     * This value contains all the attributes about this object.
-     * Here is an example about this value :
-     * <pre>
-     *  array(
-     *      'column1'   => $columnObject,
-     *      ...
-     *  );
-     * </pre>
-     * @see X\Database\ActiveRecord\Column What's Column object.
-     * @var X\Database\ActiveRecord\Column[]
-     */
-    protected $columns = array();
-    
     /**
      * 
      * @param unknown $name
@@ -1133,38 +1116,6 @@ abstract class XActiveRecord extends Basic implements \Iterator {
             $attributes[$name] = $column->getValue();
         }
         return $attributes;
-    }
-    
-    /**
-     * Init table column by describe
-     *
-     * @see ActiveRecord::describe() How to describe the attributes.
-     * @return void
-     */
-    protected function initTableColumnsByDescribe() {
-        $columns = $this->describe();
-        $table = $this->getTableFullName();
-        self::$tableColumnInformations[$table] = array();
-        foreach ( $columns as $name => $describe ) {
-            self::$tableColumnInformations[$table][$name] = new Column($this, $name, $describe);
-        }
-    }
-    
-    /**
-     * Initiate the columns for current active record object.
-     * 
-     * @return void
-     */
-    protected function initTableColumns() {
-        $table = $this->getTableFullName();
-        if ( !isset(self::$tableColumnInformations[$table]) ) {
-            $this->initTableColumnsByDescribe();
-        }
-    
-        foreach ( self::$tableColumnInformations[$table] as $name => $column ) {
-            $this->columns[$name] = clone $column;
-            $this->columns[$name]->setRecord($this);
-        }
     }
     
     /**

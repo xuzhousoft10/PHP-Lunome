@@ -13,88 +13,11 @@ namespace X\Service\XDatabase\Core\SQL\Condition;
  */
 class Builder extends \X\Service\XDatabase\Core\Basic {
     /**
-     * The style name of camel that table column named by.
-     * 
-     * @var integer
+     * This value contains all the conditions
+     *
+     * @var Condition[]
      */
-    const NAME_STYLE_CAMEL = 1;
-    
-    /**
-     * The style name of anake that table column named by.
-     * 
-     * @var integer
-     */
-    const NAME_STYLE_SNAKE = 2;
-    
-    /**
-     * Name styles that column named by.
-     * 
-     * @default SQLConditionBuilder::NAME_STYLE_CAMEL
-     * @var integer
-     */
-    protected static $nameStyle = self::NAME_STYLE_CAMEL;
-    
-    /**
-     * Set the naming style of column.
-     * 
-     * @param integer $style -- SQLConditionBuilder::NAME_STYLE_*
-     */
-    public static function setNameStyle( $style ) {
-        self::$nameStyle = $style;
-    }
-    
-    /**
-     * Build condition with magic method, The mgaic call format is "columnCodition"
-     * It looks like this:
-     * <pre>
-     *      $Builder->columnAIs('valA');
-     * </pre>
-     * 
-     * @param string $name The magic call name
-     * @param array $parms The params to magic call
-     * @return Builder
-     */
-    public function __call( $name, $parms ) {
-        preg_match($this->getMagicCallMatchPattern(), $name, $matches);
-        list( $name, $column, $handler ) = $matches;
-        if ( self::NAME_STYLE_SNAKE == self::$nameStyle ) {
-            $column = $this->convertNameToSnakeStyleFromCamelStyle($column);
-        }
-        $handler = lcfirst($handler);
-        array_unshift($parms, $column);
-        return call_user_func_array(array($this, $handler), $parms);
-    }
-    
-    /**
-     * Get the pattern for magic call.
-     * 
-     * @return string
-     */
-    protected function getMagicCallMatchPattern() {
-        $methods = array(
-                'Is',               'IsNot',        'Equals',
-                'NotEquals',        'GreaterThan',  'GreaterOrEquals',
-                'LessThan',         'LessOrEquals', 'Like',
-                'StartWith',        'EndWith',      'Between',
-                'In',               'NotIn');
-        return sprintf('/^(.*?)(%s)$/', implode('|', $methods));
-    }
-    
-    /**
-     * Convert the column name to match table style
-     * 
-     * @param string $name The name of column
-     * @return string
-     */
-    protected function convertNameToSnakeStyleFromCamelStyle( $name ) {
-        $name = str_split($name);
-        foreach ( $name as &$char ) {
-            if ( ctype_upper($char) ) {
-                $char = '_'.strtolower($char);
-            }
-        }
-        return implode('', $name);
-    }
+    protected $conditions = array();
     
     /**
      * Create a new condition Builder.
@@ -109,13 +32,6 @@ class Builder extends \X\Service\XDatabase\Core\Basic {
         }
         return $builder;
     }
-    
-    /**
-     * This value contains all the conditions
-     * 
-     * @var Condition[]
-     */
-    protected $conditions = array();
     
     /**
      * Add condition part to condition Builder. 
@@ -351,6 +267,26 @@ class Builder extends \X\Service\XDatabase\Core\Basic {
      */
     public function notIn( $name, $values ) {
         $this->addSigleCondition($name, Condition::OPERATOR_NOT_IN, $values);
+        return $this;
+    }
+    
+    /**
+     * 
+     * @param unknown $condition
+     * @return \X\Service\XDatabase\Core\SQL\Condition\Builder
+     */
+    public function exists( $condition ) {
+        $this->addSigleCondition(null, Condition::OPERATOR_EXISTS, $condition);
+        return $this;
+    }
+    
+    /**
+     * 
+     * @param unknown $condition
+     * @return \X\Service\XDatabase\Core\SQL\Condition\Builder
+     */
+    public function notExists( $condition ) {
+        $this->addSigleCondition(null, Condition::OPERATOR_NOT_EXISTS, $condition);
         return $this;
     }
     

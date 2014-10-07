@@ -21,7 +21,8 @@ class Column extends Basic {
      * @return \X\Service\XDatabase\Core\Table\Column
      */
     public static function create( $name ) {
-        $column = new Column($name);
+        $class = get_called_class();
+        $column = new $class($name);
         return $column;
     }
     
@@ -201,7 +202,7 @@ class Column extends Basic {
      * @param unknown $value
      * @return \X\Service\XDatabase\Core\Table\Column
      */
-    public function setIsPimaryKey( $value ) {
+    public function setIsPrimaryKey( $value ) {
         return $this->set('isPimaryKey', $value);
     }
     

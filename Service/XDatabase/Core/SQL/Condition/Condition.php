@@ -9,8 +9,9 @@ namespace X\Service\XDatabase\Core\SQL\Condition;
  */
 use X\Core\X;
 use X\Service\XDatabase\Core\Basic;
-use X\Service\XDatabase\XDatabaseService;
 use X\Service\XDatabase\Core\Exception;
+use X\Service\XDatabase\Service as XDatabaseService;
+use X\Service\XDatabase\Core\SQL\Expression as SQLExpression ;
 
 /**
  * Condition
@@ -21,103 +22,13 @@ use X\Service\XDatabase\Core\Exception;
  */
 class Condition extends Basic {
     /**
-     * The operator mark of equal
-     * 
-     * @var integer
-     */
-    const OPERATOR_EQUAL            = 0;
-    
-    /**
-     * The operator mark of "not equal"
-     *
-     * @var integer
-     */
-    const OPERATOR_NOT_EQUAL        = 1;
-    
-    /**
-     * The operator mark of "greater than"
-     *
-     * @var integer
-     */
-    const OPERATOR_GREATER_THAN     = 2;
-    
-    /**
-     * The operator mark of "greater or equal"
-     *
-     * @var integer
-     */
-    const OPERATOR_GREATER_OR_EQUAL = 3;
-    
-    /**
-     * The operator mark of "less than"
-     *
-     * @var integer
-     */
-    const OPERATOR_LESS_THAN        = 4;
-    
-    /**
-     * The operator mark of "less or equal"
-     *
-     * @var integer
-     */
-    const OPERATOR_LESS_OR_EQUAL    = 5;
-
-    /**
-     * The operator mark of "like"
-     *
-     * @var integer
-     */
-    const OPERATOR_LIKE             = 6;
-
-    /**
-     * The operator mark of "start with"
-     *
-     * @var integer
-     */
-    const OPERATOR_START_WITH       = 7;
-
-    /**
-     * The operator mark of "end with"
-     *
-     * @var integer
-     */
-    const OPERATOR_END_WITH         = 8;
-
-    /**
-     * The operator mark of "between"
-     *
-     * @var integer
-     */
-    const OPERATOR_BETWEEN          = 9;
-
-    /**
-     * The operator mark of "in"
-     *
-     * @var integer
-     */
-    const OPERATOR_IN               = 10;
-
-    /**
-     * The operator mark of "not in"
-     *
-     * @var integer
-     */
-    const OPERATOR_NOT_IN           = 11;
-    
-    /**
-     * 
-     * @var unknown
-     */
-    const OPERATOR_INCLUDES          = 12;
-    
-    /**
      * This value contains all supported operators.
      * 
      * @var array
      */
     protected static $operators = array(
         '=', '<>', '>', '>=', '<', '<=', 'Like', 'StartWith', 
-        'EndWith', 'Between', 'In', 'NotIn', 'Includes');
+        'EndWith', 'Between', 'In', 'NotIn', 'Includes', 'Exists', 'NotExists');
     
     /**
      * The column name that current Condition object effected.
@@ -275,13 +186,46 @@ class Condition extends Basic {
     }
     
     /**
+     * 
+     * @return string
+     */
+    protected function stringBuilderExists() {
+        return sprintf('EXISTS ( %s )', $this->value);
+    }
+    
+    protected function stringBuilderNotExists() {
+        return sprintf('NOT EXISTS ( %s )', $this->value);
+    }
+    
+    /**
      * Quote the string value
      * 
      * @param unknown $value
      * @return string
      */
     protected function quoteValue( $value ) {
-        $dbService = X::system()->getServiceManager()->get(XDatabaseService::SERVICE_NAME);
-        return $dbService->getDb()->quote($value);
+        if ( $value instanceof SQLExpression ) {
+            $value = $value->toString();
+        } else {
+            $dbService = X::system()->getServiceManager()->get(XDatabaseService::SERVICE_NAME);
+            $value = $dbService->getDb()->quote($value);
+        }
+        return $value;
     }
+    
+    const OPERATOR_EQUAL            = 0;
+    const OPERATOR_NOT_EQUAL        = 1;
+    const OPERATOR_GREATER_THAN     = 2;
+    const OPERATOR_GREATER_OR_EQUAL = 3;
+    const OPERATOR_LESS_THAN        = 4;
+    const OPERATOR_LESS_OR_EQUAL    = 5;
+    const OPERATOR_LIKE             = 6;
+    const OPERATOR_START_WITH       = 7;
+    const OPERATOR_END_WITH         = 8;
+    const OPERATOR_BETWEEN          = 9;
+    const OPERATOR_IN               = 10;
+    const OPERATOR_NOT_IN           = 11;
+    const OPERATOR_INCLUDES         = 12;
+    const OPERATOR_EXISTS           = 13;
+    const OPERATOR_NOT_EXISTS       = 14;
 }
