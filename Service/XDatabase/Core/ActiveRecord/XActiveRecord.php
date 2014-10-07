@@ -28,7 +28,7 @@ use X\Service\XDatabase\Service as XDatabaseService;
 abstract class XActiveRecord extends Basic implements \Iterator {
     /*********************** Init the active record *************************/
     public function __construct() {
-        $this->initColumnsByDeacribe();
+        $this->initAttributesByDeacribe();
         $this->relationships();
         $this->scopes();
         $this->beforeInit();
@@ -36,64 +36,62 @@ abstract class XActiveRecord extends Basic implements \Iterator {
         $this->afterInit();
     }
     
-    /**
-     * This value contains all the attributes about this object.
-     * Here is an example about this value :
-     * <pre>
-     *  array(
-     *      'column1'   => $columnObject,
-     *      ...
-     *  );
-     * </pre>
-     * @see X\Database\ActiveRecord\Column What's Column object.
-     * @var X\Database\ActiveRecord\Column[]
-     */
-    protected $columns = array();
-    
-    protected function initColumnsByDeacribe() {
+    protected function initAttributesByDeacribe() {
         foreach ( $this->describe() as $column ) {
+            $column->setRecord($this);
             $this->columns[$column->getName()] = $column;
         }
     }
     
+    /*********************** Attribute Operation *****************************/
+    protected $columns = array();
     
-    /**
-     * Magic get method to get the attributes or relationships 
-     * of the record.
-     * You can not call this method directly, instead, you can 
-     * treat the attributes and relationship getter as a protype
-     * to use. 
-     * 
-     * @param string $name The name of getter
-     * @see ActiveRecord::relationships() How to add relationships.
-     * @see ActiveRecord::describe() How to describe record attributes.
-     * @throws \X\Database\Exception Throw an execption if getter can not be found.
-     * @return ActiveRecord|mixed Return related active record or attribute value.
-     */
+    public function has( $name ) {
+        return  array_key_exists($name, $this->columns);
+    }
+    
+    public function get( $name ) {
+        return $this->columns[$name]->getValue();
+    }
+    
+    public function set( $name, $value ) {
+        $this->columns[$name]->setValue($value);
+        return $this;
+    }
+    
     public function __get( $name ) {
-        if ( $this->hasAttribute($name) ) {
-            return $this->getAttribute($name);
+        if ( $this->has($name) ) {
+            return $this->get($name);
         }
         $relationshipGetter = sprintf('get%s', ucfirst($name));
         if ( isset($this->relationships[$relationshipGetter]) ) {
             return $this->getDataFromRelationship($relationshipGetter);
         }
-        
-        throw new \X\Database\Exception(sprintf('Can not find getter for "%s" in "%s"', $name, get_class($this)));
+    
+        throw new Exception(sprintf('Can not find getter for "%s" in "%s"', $name, get_class($this)));
     }
     
-    /**
-     * Magic set method. An easy way to set active record's attribute.
-     * You can not call this method directly, instead, you can treat 
-     * the attribute as a writable protype of active record object.
-     *
-     * @param string $name The name of the attribute.
-     * @param mixed $value The value to set to the attribute.
-     * @return void
-     */
     public function __set( $name, $value ) {
-        $this->setAttribute($name, $value);
+        $this->set($name, $value);
     }
+    
+    protected function getAttribute( $name ) {
+        return $this->columns[$name];
+    }
+    
+    public function fill( $values ) {
+        foreach ( $values as $name => $value ) {
+            $this->setAttribute($name, $value);
+        }
+        return $this;
+    }
+    
+    
+    
+    
+    
+    
+    
     
     /**
      * Magic caller, You can not call this method directly, but you can
@@ -442,7 +440,7 @@ abstract class XActiveRecord extends Basic implements \Iterator {
      */
     protected function afterInsert() {
         foreach ( $this->columns as $name => $column ) {
-            if ( $column->getIsAutoIncrease() ) {
+            if ( $column->getIsAutoIncrement() ) {
                 $column->setValue($this->getDb()->lastInsertId());
             }
         }
@@ -1010,9 +1008,8 @@ abstract class XActiveRecord extends Basic implements \Iterator {
         $sql = SQLBuilder::build()->insert()
             ->into($this->getTableFullName())
             ->values($this)->toString();
-        $isInserted = $this->execute($sql);
-        $isInserted ? $this->afterInsert() : null;
-        return $isInserted;
+        $this->execute($sql);
+        $this->afterInsert();
     }
     
     /**
@@ -1033,68 +1030,7 @@ abstract class XActiveRecord extends Basic implements \Iterator {
     }
     
     /****************** Attributes ********************/
-    /**
-     * 
-     * @param unknown $name
-     * @return \X\Service\XDB\ActiveRecord\Column
-     */
-    public function getAttrObject( $name ) {
-        return $this->columns[$name];
-    }
-    
-    /**
-     * Get attribute value from current active record object.
-     * 
-     * @param string $name The name of attribute.
-     * @throws \X\Database\Exception Throw an exception if attribute does not exists.
-     * @return mixed The value of attribute.
-     */
-    public function getAttribute( $name ) {
-        if ( !isset($this->columns[$name]) ) {
-            throw new Exception(sprintf('Attribute "%s" can not be found in %s.', $name, get_class($this)));
-        }
-        return $this->columns[$name]->getValue();
-    }
-    
-    /**
-     * Update attribute of current active record object.
-     * 
-     * @param string $name The name of the attribute.
-     * @param mixed $value The new value to attribute.
-     * @throws \Exception Throw exception if attribute does not exists.
-     * @return ActiveRecord
-     */
-    public function setAttribute( $name, $value ) {
-        if ( !isset($this->columns[$name]) ) {
-            throw new Exception(sprintf('Attribute "%s" can not be found in %s.', $name, get_class($this)));
-        }
-        
-        $this->columns[$name]->setValue($value);
-        return $this;
-    }
-    
-    /**
-     * Update attributes of current active record object by given values.
-     * 
-     * @param array $values The values to update
-     * @return ActiveRecord
-     */
-    public function setAttributes( $values ) {
-        foreach ( $values as $name => $value ) {
-            $this->setAttribute($name, $value);
-        }
-        return $this;
-    }
-    
-    /**
-     * Check whether the attribute exists.
-     * 
-     * @param string $name The name of attribute to check
-     * @return boolean
-     */
-    public function hasAttribute( $name ) {
-        return isset( $this->columns[$name] );
-    }
+  
     
     /**
      * Get the attribute name list from current active record object.
@@ -1657,7 +1593,7 @@ abstract class XActiveRecord extends Basic implements \Iterator {
     
         if ( !is_null($attributes) ) {
             foreach ( $attributes as $name => $value ) {
-                $model->setAttribute($name, $value);
+                $model->set($name, $value);
             }
         }
     
@@ -1703,10 +1639,7 @@ abstract class XActiveRecord extends Basic implements \Iterator {
      * @return boolean
      */
     protected function execute( $query ) {
-        $result = $this->getDb()->exec($query);
-        if ( true !== $result ) {
-            throw new Exception(sprintf('Failed to execute query : %s', $query));
-        }
+        $this->getDb()->exec($query);
     }
     
     /**
