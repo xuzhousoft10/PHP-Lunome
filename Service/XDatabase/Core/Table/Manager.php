@@ -9,8 +9,8 @@ namespace X\Service\XDatabase\Core\Table;
  */
 use X\Core\X;
 use X\Service\XDatabase\Core\Basic;
-use X\Service\XDatabase\XDatabaseService;
 use X\Service\XDatabase\Core\Exception;
+use X\Service\XDatabase\Service as XDatabaseService;
 use X\Service\XDatabase\Core\SQL\Builder as SQLBuilder;
 
 /**
