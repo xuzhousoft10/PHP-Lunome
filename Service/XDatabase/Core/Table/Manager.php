@@ -49,41 +49,26 @@ class Manager extends Basic {
     }
     
     /**
-     * executeSQLQueryWithOutResult
-     * 
-     * @param string $query The query to execute
-     * @return boolean
-     */
-    protected static function executeSQLQueryWithOutResult( $query ) {
-        $dbService = self::getService();
-        $dbService->getDb()->exec($query);
-    }
-    
-    /**
      * Get a new table object by name.
      * 
      * @param string $name The name of table to open for operation.
      * @return Manager
      */
     public static function open( $name ) {
-        return new Manager($name);
+        $manager = new Manager($name);
+        $manager->getInformation();
+        return $manager;
     }
     
     /**
-     * The name of the target table.
-     * 
-     * @var string
+     * Get the information about table.
+     * @return unknown
      */
-    protected $name = null;
-    
-    /**
-     * Initiate the object by given table name
-     * 
-     * @param string $name The name of table to operate.
-     */
-    protected function __construct( $name ) {
-        $this->name = $name;
-    } 
+    public function getInformation() {
+        $sql = SQLBuilder::build()->describe()->table($this->name)->toString();
+        $result = $this->query($sql);
+        return $result;
+    }
     
     /**
      * Drop the operating table.
@@ -240,7 +225,7 @@ class Manager extends Basic {
      * @param array $parms The parms to that action
      * @return Management
      */
-    protected function doAlterAction( $action, $parms=array() ) {
+    private function doAlterAction( $action, $parms=array() ) {
         $builder = SQLBuilder::build()->alterTable()->name($this->name);
         $builder = call_user_func_array(array($builder, $action), $parms);
         self::executeSQLQueryWithOutResult($builder->toString());
@@ -253,19 +238,25 @@ class Manager extends Basic {
      * @throws Exception
      * @return unknown
      */
-    protected function query( $sql ) {
+    private function query( $sql ) {
         $result = self::getService()->getDb()->query($sql);
         return $result;
     }
     
     /**
-     * Get the information about table.
-     * @return unknown
+     * The name of the target table.
+     *
+     * @var string
      */
-    public function getInformation() {
-        $sql = SQLBuilder::build()->describe()->table($this->name)->toString();
-        $result = $this->query($sql);
-        return $result;
+    private $name = null;
+    
+    /**
+     * Initiate the object by given table name
+     *
+     * @param string $name The name of table to operate.
+     */
+    private function __construct( $name ) {
+        $this->name = $name;
     }
     
     /**
@@ -275,5 +266,16 @@ class Manager extends Basic {
      */
     private static function getService() {
         return X::system()->getServiceManager()->get(XDatabaseService::getServiceName());
+    }
+    
+    /**
+     * executeSQLQueryWithOutResult
+     *
+     * @param string $query The query to execute
+     * @return boolean
+     */
+    private static function executeSQLQueryWithOutResult( $query ) {
+        $dbService = self::getService();
+        $dbService->getDb()->exec($query);
     }
 }
