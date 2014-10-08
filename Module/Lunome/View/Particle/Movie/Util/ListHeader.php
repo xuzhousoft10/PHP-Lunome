@@ -26,11 +26,6 @@ $markInfo = $vars['markInfo'];
                 <?php unset($name); ?>
                 <?php unset($mark); ?>
                 </ul>
-                <form class="navbar-form navbar-right">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search movies">
-                    </div>
-                </form>
             </div>
         </div>
     </nav>
