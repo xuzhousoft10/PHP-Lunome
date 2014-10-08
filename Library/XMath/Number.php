@@ -28,10 +28,9 @@ class Number {
             for ( $i=0; $i<$max; $i++ ) {
                 $items[] = $i;
             }
-        }
-        else {
+        } else {
             $halfLength = intval($size/2);
-            $number = (0 < $number-$halfLength) ? $number-$halfLength : 0;
+            $number = (0 < $number-$halfLength) ? $number-$halfLength : $min;
             if ( $number + $size > $max ) {
                 $number = $max - $size + 1;
             }
