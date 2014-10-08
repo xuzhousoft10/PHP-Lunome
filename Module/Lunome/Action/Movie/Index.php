@@ -10,6 +10,7 @@ namespace X\Module\Lunome\Action\Movie;
 use X\Core\X;
 use X\Module\Lunome\Util\Action\VisualMainMediaList;
 use X\Module\Lunome\Service\Movie\Service as MovieService;
+use X\Library\XMath\Number;
 
 /**
  * The action class for movie/index action.
@@ -32,13 +33,6 @@ class Index extends VisualMainMediaList {
             $movies = $this->getMovieService()->getMarkedMovies($mark, $length, $position);
         }
         
-        /* setup pager data */
-        $pager = array();
-        $pager['current']   = $page;
-        $pager['prev']      = ( 1 == $page ) ? 1 : $page-1;
-        $pager['next']      = $page + 1;
-        $pager['mark']      = $mark;
-        
         /* Mark information */
         $markInfo = array();
         $markInfo['actived']    = $mark;
@@ -46,6 +40,18 @@ class Index extends VisualMainMediaList {
         $markInfo['interested'] = $this->getMovieService()->countMarked(MovieService::MARK_INTERESTED);
         $markInfo['watched']    = $this->getMovieService()->countMarked(MovieService::MARK_WATCHED);
         $markInfo['ignored']    = $this->getMovieService()->countMarked(MovieService::MARK_IGNORED);
+        
+        /* setup pager data */
+        $movieCount = $markInfo[$mark];
+        $pager = array();
+        $pager['current']   = $page;
+        $pager['total']     = (0===$movieCount%$pageSize) ? $movieCount/$pageSize : intval($movieCount/$pageSize)+1;
+        $pager['canPrev']   = ( 1 < $page );
+        $pager['canNext']   = ( $pager['total'] > $page );
+        $pager['prev']      = $pager['canPrev'] ? $page-1 : 1;
+        $pager['next']      = $pager['canNext'] ? $page + 1 : $pager['total'];
+        $pager['mark']      = $mark;
+        $pager['items']     = Number::getRound($page, $this->getPageItemCount(), 1, $pager['total']);
         
         /* Load index view */
         $name   = 'MOVIE_INDEX';

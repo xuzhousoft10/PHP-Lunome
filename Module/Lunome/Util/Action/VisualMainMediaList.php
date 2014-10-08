@@ -11,4 +11,8 @@ abstract class VisualMainMediaList extends VisualMain {
     protected function getPageSize() {
         return 20;
     }
+    
+    protected function getPageItemCount() {
+        return 15;
+    }
 }

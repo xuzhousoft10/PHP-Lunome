@@ -22,7 +22,7 @@ class MoviePosterModel extends Basic {
         $columns = array();
         $columns[] = Column::create('id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setIsPrimaryKey(true)->setNullable(false);
         $columns[] = Column::create('movie_id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setNullable(false);
-        $columns[] = Column::create('data')->setType(ColumnType::T_TEXT);
+        $columns[] = Column::create('data')->setType(ColumnType::T_LONGTEXT);
         return $columns;
     }
 
