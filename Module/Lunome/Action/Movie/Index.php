@@ -22,6 +22,8 @@ class Index extends VisualMainMediaList {
      * @return void
      */ 
     public function runAction($mark=MovieService::MARK_NAME_UNMARKED, $page=1) {
+        $this->activeMenuItem(self::MENU_ITEM_MOVIE);
+        
         /* Get unmarked movies */
         $pageSize = $this->getPageSize();
         $condition  = array();
