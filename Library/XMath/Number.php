@@ -23,7 +23,6 @@ class Number {
      * @return integer[]
      */
     public static function getRound($number, $size, $min, $max) {
-        var_dump(func_get_args());
         $items = array();
         if ( $max < $size ) {
             for ( $i=$min; $i<$max; $i++ ) {
