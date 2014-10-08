@@ -10,12 +10,9 @@ namespace X\Module\Lunome\Service\Movie;
 use X\Module\Lunome\Util\Exception;
 use X\Module\Lunome\Model\MovieModel;
 use X\Module\Lunome\Model\MoviePosterModel;
-use X\Module\Lunome\Model\MovieUserWatchedModel;
-use X\Module\Lunome\Model\MovieUserIgnoredModel;
-use X\Module\Lunome\Model\MovieUserInterestedModel;
-use X\Service\XDatabase\Core\Exception as DBException;
 use X\Service\XDatabase\Core\SQL\Expression as SQLExpression;
 use X\Service\XDatabase\Core\SQL\Condition\Builder as ConditionBuilder;
+use X\Module\Lunome\Model\MovieUserMarkModel;
 
 /**
  * The service class
@@ -46,8 +43,8 @@ class Service extends \X\Core\Service\XService {
     }
     
     public function countMarked( $mark ) {
-        $mark = $this->getModelNameByMovieMarkName($mark);
-        $count = $mark::model()->count(array('account_id'=>$this->getCurrentUserId()));
+        $condition = array('account_id'=>$this->getCurrentUserId(),'type'=>$mark);
+        $count = MovieUserMarkModel::model()->count($condition);
         return $count;
     }
     
@@ -67,43 +64,34 @@ class Service extends \X\Core\Service\XService {
     
     public function markMovie( $movieId, $mark ) {
         $condition = array('account_id'=>$this->getCurrentUserId(), 'movie_id'=>$movieId);
+        MovieUserMarkModel::model()->deleteAllByAttributes($condition);
         
-        /* Delete old marks */
-        $markModel = MovieUserIgnoredModel::model()->findByAttribute($condition);
-        (null === $markModel) ? null : $markModel->delete();
-        $markModel = MovieUserInterestedModel::model()->findByAttribute($condition);
-        (null === $markModel) ? null : $markModel->delete();
-        $markModel =MovieUserWatchedModel::model()->findByAttribute($condition);
-        (null === $markModel) ? null : $markModel->delete();
-        
-        /* Add new Mark */
-        $mark = $this->getModelNameByMovieMarkName($mark);
-        $mark = new $mark();
-        $mark->account_id = $this->getCurrentUserId($condition);
-        $mark->movie_id = $movieId;
-        $mark->save();
+        $mark = $this->convertMarkNameToMarkValue($mark);
+        $markModel = new MovieUserMarkModel();
+        $markModel->account_id = $this->getCurrentUserId();
+        $markModel->movie_id = $movieId;
+        $markModel->type = $mark;
+        $markModel->save();
     }
     
     public function unmarkMovie( $movieId, $mark ) {
-        $condition = array('account_id'=>$this->getCurrentUserId(), 'movie_id'=>$movieId);
-        $mark = $this->getModelNameByMovieMarkName($mark);
-        $mark = $mark::model()->findByAttribute($condition);
-        $mark->delete();
+        $mark = $this->convertMarkNameToMarkValue($mark);
+        $condition = array('account_id'=>$this->getCurrentUserId(), 'movie_id'=>$movieId, 'type'=>$mark);
+        MovieUserMarkModel::model()->deleteAllByAttributes($condition);
     }
     
     private function getCurrentUserId() {
         return 'DEMO-ACCOUNT-ID';
     }
     
-    private function getModelNameByMovieMarkName($mark) {
-        return sprintf('\\X\\Module\\Lunome\\Model\\MovieUser%sModel', ucfirst($mark));
-    }
-    
     private function getMarkedMovieCondition($mark) {
-        $mark = $this->getModelNameByMovieMarkName($mark);
-        $markedMovieCondition = array('movie_id'=>new SQLExpression('movies.id'), 'account_id'=>$this->getCurrentUserId());
-        $markedMovieActiveColumn = array('movie_id');
-        $markCondition = $mark::query()->activeColumns($markedMovieActiveColumn)->find($markedMovieCondition);
+        $mark = $this->convertMarkNameToMarkValue($mark);
+        $markedMovieCondition = array(
+            'movie_id'   => new SQLExpression('movies.id'), 
+            'account_id' => $this->getCurrentUserId(),
+            'type'       => $mark
+        );
+        $markCondition = MovieUserMarkModel::query()->activeColumns(array('movie_id'))->find($markedMovieCondition);
         $basicCondition = ConditionBuilder::build()->exists($markCondition);
         return $basicCondition;
     }
@@ -112,19 +100,27 @@ class Service extends \X\Core\Service\XService {
         /* Generate basic condition to ignore marked movies. */
         $markedMovieCondition = array('movie_id'=>new SQLExpression('movies.id'), 'account_id'=>$this->getCurrentUserId());
         $markedMovieActiveColumn = array('movie_id');
-        $watchedMovies = MovieUserWatchedModel::query()->activeColumns($markedMovieActiveColumn)->find($markedMovieCondition);
-        $ignoredMovies = MovieUserIgnoredModel::query()->activeColumns($markedMovieActiveColumn)->find($markedMovieCondition);
-        $interestedMovies = MovieUserInterestedModel::query()->activeColumns($markedMovieActiveColumn)->find($markedMovieCondition);
-        $basicCondition = ConditionBuilder::build()
-        ->notExists($watchedMovies)
-        ->andAlso()
-        ->notExists($ignoredMovies)
-        ->andAlso()
-        ->notExists($interestedMovies);
+        $markedMovies = MovieUserMarkModel::query()->activeColumns($markedMovieActiveColumn)->find($markedMovieCondition);
+        $basicCondition = ConditionBuilder::build()->notExists($markedMovies);
         return $basicCondition;
     }
     
-    const MARK_INTERESTED   = 'interested';
-    const MARK_WATCHED      = 'watched';
-    const MARK_IGNORED      = 'ignored';
+    const MARK_INTERESTED   = 1;
+    const MARK_WATCHED      = 2;
+    const MARK_IGNORED      = 3;
+    
+    const MARK_NAME_UNMARKED    = 'unmarked';
+    const MARK_NAME_INTERESTED  = 'interested';
+    const MARK_NAME_WATCHED     = 'watched';
+    const MARK_NAME_IGNORED     = 'ignored';
+    
+    private function convertMarkNameToMarkValue( $name ) {
+        $map = array(
+            self::MARK_NAME_UNMARKED    => 0,
+            self::MARK_NAME_INTERESTED  => self::MARK_INTERESTED,
+            self::MARK_NAME_WATCHED     => self::MARK_WATCHED,
+            self::MARK_NAME_IGNORED     => self::MARK_IGNORED,
+        );
+        return $map[$name];
+    }
 }

@@ -20,13 +20,13 @@ class Index extends VisualMainMediaList {
      * The action handle for index action.
      * @return void
      */ 
-    public function runAction($mark='unmarked', $page=1) {
+    public function runAction($mark=MovieService::MARK_NAME_UNMARKED, $page=1) {
         /* Get unmarked movies */
         $pageSize = $this->getPageSize();
         $condition  = array();
         $length     = $pageSize;
         $position   = $pageSize * ($page-1);
-        if ( 'unmarked' === $mark ) {
+        if ( MovieService::MARK_NAME_UNMARKED === $mark ) {
             $movies = $this->getMovieService()->getUnmarkedMovies($condition, $length, $position);
         } else {
             $movies = $this->getMovieService()->getMarkedMovies($mark, $length, $position);
