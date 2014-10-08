@@ -140,7 +140,7 @@ class Column extends TableColumn {
      * @return Column
      */
     public function addError( $message ) {
-        $this->errors[] = $message;
+        $this->errors[] = call_user_func_array('sprintf', func_get_args());
         return $this;
     }
     
@@ -264,6 +264,22 @@ class Column extends TableColumn {
             $this->addError(sprintf('The value of "%s" is not a validated integer.', $this->name));
             return false;
         }
+        return true;
+    }
+    
+    protected function validateDataTypeTinyint($value) {
+        if ( null === $value ) {
+            return true;
+        }
+        
+        if ( !is_int($value) 
+        || ( ($this->getIsUnsigned()) ? ($value < 0 || 255 < $value) : ( $value < -128 || 128 < $value ) )
+        ) {
+            $this->addError(sprintf('The value of "%s" is not a validated integer.', $this->name));
+            return false;
+        }
+        
+        
         return true;
     }
     
