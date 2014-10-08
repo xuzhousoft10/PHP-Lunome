@@ -45,7 +45,7 @@ class Index extends VisualMainMediaList {
         $movieCount = $markInfo[$mark];
         $pager = array();
         $pager['current']   = $page;
-        $pager['total']     = (0===$movieCount%$pageSize) ? $movieCount/$pageSize : intval($movieCount/$pageSize)+1;
+        $pager['total']     = (0!=$movieCount && 0===$movieCount%$pageSize) ? $movieCount/$pageSize : intval($movieCount/$pageSize)+1;
         $pager['canPrev']   = ( 1 < $page );
         $pager['canNext']   = ( $pager['total'] > $page );
         $pager['prev']      = $pager['canPrev'] ? $page-1 : 1;
