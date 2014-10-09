@@ -30,10 +30,10 @@ class Index extends VisualMainMediaList {
      */
     protected function getMarkInformation() {
         $markInfo = array();
-        $markInfo['unmarked']   = $this->getMovieService()->countUnmarked();
-        $markInfo['interested'] = $this->getMovieService()->countMarked(MovieService::MARK_INTERESTED);
-        $markInfo['watched']    = $this->getMovieService()->countMarked(MovieService::MARK_WATCHED);
-        $markInfo['ignored']    = $this->getMovieService()->countMarked(MovieService::MARK_IGNORED);
+        $markInfo[MovieService::MARK_UNMARKED]      = $this->getMovieService()->countUnmarked();
+        $markInfo[MovieService::MARK_INTERESTED]    = $this->getMovieService()->countMarked(MovieService::MARK_INTERESTED);
+        $markInfo[MovieService::MARK_WATCHED]       = $this->getMovieService()->countMarked(MovieService::MARK_WATCHED);
+        $markInfo[MovieService::MARK_IGNORED]       = $this->getMovieService()->countMarked(MovieService::MARK_IGNORED);
         return $markInfo;
     }
     
@@ -57,7 +57,8 @@ class Index extends VisualMainMediaList {
      * The action handle for index action.
      * @return void
      */ 
-    public function runAction($mark=MovieService::MARK_NAME_UNMARKED, $page=1) {
-        $this->currentMark = ( MovieService::MARK_NAME_UNMARKED == $mark ) ? null : $mark;
+    public function runAction($mark=MovieService::MARK_UNMARKED, $page=1) {
+        $this->currentMark = $mark;
+        $this->currentPage = $page;
     }
 }

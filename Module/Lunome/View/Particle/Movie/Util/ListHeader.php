@@ -1,10 +1,11 @@
 <?php 
+use X\Module\Lunome\Service\Movie\Service as MovieService;
 $vars = get_defined_vars();
 $marks = array();
-$marks['unmarked']      = array('name'=>'所有',   'link'=>'/?module=lunome&action=movie/index');
-$marks['interested']    = array('name'=>'想看',   'link'=>'/?module=lunome&action=movie/index&mark=interested');
-$marks['watched']       = array('name'=>'已看',   'link'=>'/?module=lunome&action=movie/index&mark=watched');
-$marks['ignored']       = array('name'=>'不喜欢', 'link'=>'/?module=lunome&action=movie/index&mark=ignored');
+$marks[MovieService::MARK_UNMARKED]      = array('name'=>'所有',   'link'=>'/?module=lunome&action=movie/index');
+$marks[MovieService::MARK_INTERESTED]    = array('name'=>'想看',   'link'=>'/?module=lunome&action=movie/index&mark='.MovieService::MARK_INTERESTED);
+$marks[MovieService::MARK_WATCHED]       = array('name'=>'已看',   'link'=>'/?module=lunome&action=movie/index&mark='.MovieService::MARK_WATCHED);
+$marks[MovieService::MARK_IGNORED]       = array('name'=>'不喜欢', 'link'=>'/?module=lunome&action=movie/index&mark='.MovieService::MARK_IGNORED);
 $markInfo = $vars['markInfo'];
 ?>
 <div class="panel-heading" style="padding: 0px;">
@@ -16,7 +17,7 @@ $markInfo = $vars['markInfo'];
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                 <?php foreach ( $marks as $name => $mark ) :?>
-                    <li class="<?php if ($markInfo['active'] === $name) :?>active<?php endif; ?>">
+                    <li class="<?php if ($markInfo['active'] == $name) :?>active<?php endif; ?>">
                         <a href="<?php echo $mark['link']?>">
                             <?php echo $mark['name'];?> (<?php echo $markInfo[$name]; ?>)
                         </a>

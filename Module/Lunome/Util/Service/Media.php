@@ -4,7 +4,12 @@
  */
 namespace X\Module\Lunome\Util\Service;
 
+/**
+ * 
+ */
 use X\Module\Lunome\Util\Exception;
+use X\Module\Lunome\Model\MediaPostersModel;
+use X\Module\Lunome\Model\MediaUserMarksModel;
 use X\Service\XDatabase\Core\SQL\Expression as SQLExpression;
 use X\Service\XDatabase\Core\SQL\Condition\Builder as ConditionBuilder;
 
@@ -21,9 +26,9 @@ abstract class Media extends \X\Core\Service\XService {
      * @return array
      */
     public function getUnmarked($condition=array(), $length=0, $position=0) {
-        $mediaModel = $this->getMediaModelName();
+        $mediaModelName = $this->getMediaModelName();
         $basicCondition = $this->getUnmarkedMediaCondition();
-        $medias = $mediaModel::model()->findAll($basicCondition, $length, $position);
+        $medias = $mediaModelName::model()->findAll($basicCondition, $length, $position);
         foreach ( $medias as $index => $media ) {
             $medias[$index] = $media->toArray();
         }
@@ -38,9 +43,9 @@ abstract class Media extends \X\Core\Service\XService {
      * @return unknown
      */
     public function getMarked( $mark, $length=0, $position=0 ) {
-        $mediaModel = $this->getMediaModelName();
+        $mediaModelName = $this->getMediaModelName();
         $basicCondition = $this->getMarkedMediaCondition($mark);
-        $medias = $mediaModel::model()->findAll($basicCondition, $length, $position);
+        $medias = $mediaModelName::model()->findAll($basicCondition, $length, $position);
         foreach ( $medias as $index => $media ) {
             $medias[$index] = $media->toArray();
         }
@@ -64,9 +69,13 @@ abstract class Media extends \X\Core\Service\XService {
      * @return number
      */
     public function countMarked( $mark ) {
-        $markModelName = $this->getMediaMarkModelName();
-        $condition = array('account_id'=>$this->getCurrentUserId(),'type'=>$mark);
-        $count = $markModelName::model()->count($condition);
+        $mediaModelName = $this->getMediaModelName();
+        
+        $condition = array();
+        $condition['media_type'] = $mediaModelName;
+        $condition['mark'] = $mark;
+        $condition['account_id'] = $this->getCurrentUserId();
+        $count = MediaUserMarksModel::model()->count($condition);
         return $count;
     }
     
@@ -77,9 +86,11 @@ abstract class Media extends \X\Core\Service\XService {
      * @return string
      */
     public function getPoster( $id ) {
-        $posterModelName = $this->getMediaPosterModelName();
-        $key = $posterModelName::model()->getMediaKey();
-        $poster = $posterModelName::model()->findByAttribute(array($key=>$id));
+        $mediaModelName = $this->getMediaModelName();
+        $condition = array();
+        $condition['media_type'] = $mediaModelName;
+        $condition['media_id'] = $id;
+        $poster = MediaPostersModel::model()->findByAttribute($condition);
         if ( null === $poster ) {
             throw new Exception("Can not find poster $id");
         }
@@ -98,16 +109,19 @@ abstract class Media extends \X\Core\Service\XService {
      * @param unknown $mark
      */
     public function mark( $id, $mark ) {
-        $markModelName = $this->getMediaMarkModelName();
-        $key = $markModelName::model()->getMediaKey();
-        $condition = array('account_id'=>$this->getCurrentUserId(), $key=>$id);
-        $markModelName::model()->deleteAllByAttributes($condition);
-    
-        $mark = $this->convertMarkNameToMarkValue($mark);
-        $markModel = new $markModelName();
+        $mediaModelName = $this->getMediaModelName();
+        
+        $deleteCondition = array();
+        $deleteCondition['media_type'] = $mediaModelName;
+        $deleteCondition['media_id'] = $id;
+        $deleteCondition['account_id'] = $this->getCurrentUserId();
+        MediaUserMarksModel::model()->deleteAllByAttributes($deleteCondition);
+        
+        $markModel = new MediaUserMarksModel();
+        $markModel->media_id = $id;
+        $markModel->media_type = $mediaModelName;
         $markModel->account_id = $this->getCurrentUserId();
-        $markModel->$key = $id;
-        $markModel->type = $mark;
+        $markModel->mark = $mark;
         $markModel->save();
     }
     
@@ -117,11 +131,13 @@ abstract class Media extends \X\Core\Service\XService {
      * @param unknown $mark
      */
     public function unmark( $id, $mark ) {
-        $markModelName = $this->getMediaMarkModelName();
-        $key = $markModelName::model()->getMediaKey();
-        $mark = $this->convertMarkNameToMarkValue($mark);
-        $condition = array('account_id'=>$this->getCurrentUserId(), $key=>$id, 'type'=>$mark);
-        $markModelName::model()->deleteAllByAttributes($condition);
+        $mediaModelName = $this->getMediaModelName();
+        
+        $deleteCondition = array();
+        $deleteCondition['media_type'] = $mediaModelName;
+        $deleteCondition['media_id'] = $id;
+        $deleteCondition['account_id'] = $this->getCurrentUserId();
+        MediaUserMarksModel::model()->deleteAllByAttributes($deleteCondition);
     }
     
     /**
@@ -130,15 +146,15 @@ abstract class Media extends \X\Core\Service\XService {
      * @return \X\Service\XDatabase\Core\SQL\Condition\Builder
      */
     protected function getUnmarkedMediaCondition() {
-        $markModelName = $this->getMediaMarkModelName();
-        $key = $markModelName::model()->getMediaKey();
-        
         $mediaModelName = $this->getMediaModelName();
         $mediaTable = $mediaModelName::model()->getTableFullName();
         
         /* Generate basic condition to ignore marked movies. */
-        $markedCondition = array($key=>new SQLExpression($mediaTable.'.id'), 'account_id'=>$this->getCurrentUserId());
-        $markedMedias = $markModelName::query()->activeColumns(array($key))->find($markedCondition);
+        $markedCondition = array();
+        $markedCondition['media_id'] = new SQLExpression($mediaTable.'.id');
+        $markedCondition['media_type'] = $mediaModelName;
+        $markedCondition['account_id'] = $this->getCurrentUserId();
+        $markedMedias = MediaUserMarksModel::query()->activeColumns(array('media_id'))->find($markedCondition);
         $basicCondition = ConditionBuilder::build()->notExists($markedMedias);
         return $basicCondition;
     }
@@ -148,19 +164,16 @@ abstract class Media extends \X\Core\Service\XService {
      * @param unknown $mark
      */
     protected function getMarkedMediaCondition($mark) {
-        $markModelName = $this->getMediaMarkModelName();
-        $key = $markModelName::model()->getMediaKey();
-        
         $mediaModelName = $this->getMediaModelName();
         $mediaTable = $mediaModelName::model()->getTableFullName();
         
-        $mark = $this->convertMarkNameToMarkValue($mark);
-        $markedCondition = array(
-            $key   => new SQLExpression($mediaTable.'.id'),
-            'account_id' => $this->getCurrentUserId(),
-            'type'       => $mark
-        );
-        $markCondition = $markModelName::query()->activeColumns(array($key))->find($markedCondition);
+        $markedCondition = array();
+        $markedCondition['media_type'] = $mediaModelName;
+        $markedCondition['media_id'] = new SQLExpression($mediaTable.'.id');
+        $markedCondition['account_id'] = $this->getCurrentUserId();
+        $markedCondition['mark'] = $mark;
+
+        $markCondition = MediaUserMarksModel::query()->activeColumns(array('media_id'))->find($markedCondition);
         $basicCondition = ConditionBuilder::build()->exists($markCondition);
         return $basicCondition;
     }
@@ -177,20 +190,4 @@ abstract class Media extends \X\Core\Service\XService {
      * Get the name of media model.
      */
     abstract protected function getMediaModelName();
-    
-    /**
-     * Get the name of marked media
-     */
-    abstract protected function getMediaMarkModelName();
-    
-    /**
-     * Get the name of media poster.
-     */
-    abstract protected function getMediaPosterModelName();
-    
-    /**
-     * 
-     * @param unknown $name
-     */
-    abstract protected function convertMarkNameToMarkValue($name);
 }
