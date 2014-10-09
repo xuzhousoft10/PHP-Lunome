@@ -1508,7 +1508,7 @@ abstract class XActiveRecord extends Basic implements \Iterator {
      * 
      * @return string
      */
-    protected function getTableFullName() {
+    public function getTableFullName() {
         return $this->getTableNamePrefix().$this->getTableName();
     }
     
