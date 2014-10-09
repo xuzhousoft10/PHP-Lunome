@@ -2,17 +2,18 @@
 /**
  * The visual action of lunome module.
  */
-namespace X\Module\Lunome\Util\Action;
+namespace X\Module\Lunome\Util\Action\Media;
 
 /**
  * Use statements
  */
 use X\Library\XMath\Number;
+use X\Module\Lunome\Util\Action\VisualMain;
 
 /**
  * Visual action class
  */
-abstract class VisualMainMediaList extends VisualMain {
+abstract class Index extends VisualMain {
     protected $currentMark = 0;
     protected $currentPage = 1;
     
@@ -94,7 +95,12 @@ abstract class VisualMainMediaList extends VisualMain {
     /**
      * @return \X\Module\Lunome\Util\Service\Media
      */
-    abstract protected function getMediaService();
+    protected function getMediaService() {
+        $class = explode('\\', get_class($this));
+        array_pop($class);
+        $media = array_pop($class);
+        return $this->getService($media);
+    }
     
     /**
      * @return array

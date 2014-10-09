@@ -8,22 +8,14 @@ namespace X\Module\Lunome\Action\Tv;
  * Use statements
  */
 use X\Core\X;
-use X\Module\Lunome\Util\Action\VisualMainMediaList;
 use X\Module\Lunome\Service\Tv\Service as TvService;
+use X\Module\Lunome\Util\Action\Media\Index as MediaIndex;
 
 /**
  * The action class for tv/index action.
  * @author Unknown
  */
-class Index extends VisualMainMediaList {
-    /**
-     * (non-PHPdoc)
-     * @see \X\Module\Lunome\Util\Action\VisualMainMediaList::getMediaService()
-     */
-    protected function getMediaService() {
-        return $this->getTvService();
-    }
-
+class Index extends MediaIndex {
     /**
      * (non-PHPdoc)
      * @see \X\Module\Lunome\Util\Action\VisualMainMediaList::getMarkInformation()
