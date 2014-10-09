@@ -272,7 +272,7 @@ class Column extends TableColumn {
             return true;
         }
         
-        if ( !is_int($value) 
+        if ( (!is_numeric($value) || (int)$value != $value ) 
         || ( ($this->getIsUnsigned()) ? ($value < 0 || 255 < $value) : ( $value < -128 || 128 < $value ) )
         ) {
             $this->addError(sprintf('The value of "%s" is not a validated integer.', $this->name));

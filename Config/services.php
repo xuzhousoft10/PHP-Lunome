@@ -20,4 +20,9 @@ return array (
     'enable' => true,
     'class' => 'X\\Module\\Lunome\\Service\\Movie\\Service',
   ),
+  'Tv' => 
+  array (
+    'enable' => true,
+    'class' => 'X\\Module\\Lunome\\Service\\Tv\\Service',
+  ),
 );

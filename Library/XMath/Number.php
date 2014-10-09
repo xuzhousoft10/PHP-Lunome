@@ -25,7 +25,7 @@ class Number {
     public static function getRound($number, $size, $min, $max) {
         $items = array();
         if ( $max < $size ) {
-            for ( $i=$min; $i<$max; $i++ ) {
+            for ( $i=$min; $i<=$max; $i++ ) {
                 $items[] = $i;
             }
         } else {

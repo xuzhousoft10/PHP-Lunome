@@ -13,7 +13,7 @@ use X\Library\XMath\Number;
  * Visual action class
  */
 abstract class VisualMainMediaList extends VisualMain {
-    protected $currentMark = null;
+    protected $currentMark = 0;
     protected $currentPage = 1;
     
     /**
@@ -23,9 +23,9 @@ abstract class VisualMainMediaList extends VisualMain {
     protected function afterRunAction() {
         $this->activeMenuItem($this->getActiveMenuItem());
         
-        $movies     = $this->getMediaData();
+        $medias     = $this->getMediaData();
         $markInfo   = $this->getMarkInformation();
-        $total      = ( null === $this->currentMark ) ? $markInfo['unmarked'] : $markInfo[$this->currentMark];
+        $total      = $markInfo[$this->currentMark];
         $pager      = $this->getPagerData($total);
         $markInfo['active'] = $this->currentMark;
         
@@ -33,7 +33,7 @@ abstract class VisualMainMediaList extends VisualMain {
         $name   = 'MOVIE_INDEX';
         $path   = $this->getMediaIndexView();
         $option = array();
-        $data   = array('movies'=>$movies, 'markInfo'=>$markInfo, 'pager'=>$pager);
+        $data   = array('medias'=>$medias, 'markInfo'=>$markInfo, 'pager'=>$pager);
         $this->getView()->loadParticle($name, $path, $option, $data);
         
         parent::afterRunAction();
@@ -48,10 +48,10 @@ abstract class VisualMainMediaList extends VisualMain {
         $condition  = array();
         $length     = $pageSize;
         $position   = $pageSize * ($this->currentPage-1);
-        if ( null === $this->currentMark ) {
-            $medias = $this->getMovieService()->getUnmarked($condition, $length, $position);
+        if ( empty($this->currentMark) ) {
+            $medias = $this->getMediaService()->getUnmarked($condition, $length, $position);
         } else {
-            $medias = $this->getMovieService()->getMarked($this->currentMark, $length, $position);
+            $medias = $this->getMediaService()->getMarked($this->currentMark, $length, $position);
         }
         
         return $medias;

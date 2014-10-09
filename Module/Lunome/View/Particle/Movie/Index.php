@@ -1,6 +1,6 @@
 <?php 
 $vars = get_defined_vars();
-$movies = $vars['movies'];
+$movies = $vars['medias'];
 $pager = $vars['pager'];
 $mark = $vars['markInfo']['active'];
 ?>
