@@ -16,7 +16,7 @@ $markInfo = $vars['markInfo'];
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                 <?php foreach ( $marks as $name => $mark ) :?>
-                    <li class="<?php if ($markInfo['actived'] === $name) :?>active<?php endif; ?>">
+                    <li class="<?php if ($markInfo['active'] === $name) :?>active<?php endif; ?>">
                         <a href="<?php echo $mark['link']?>">
                             <?php echo $mark['name'];?> (<?php echo $markInfo[$name]; ?>)
                         </a>

@@ -2,7 +2,7 @@
 $vars = get_defined_vars();
 $movies = $vars['movies'];
 $pager = $vars['pager'];
-$mark = $vars['mark'];
+$mark = $vars['markInfo']['active'];
 ?>
 <div class="panel panel-default">
     <?php require dirname(__FILE__).DIRECTORY_SEPARATOR.'Util'.DIRECTORY_SEPARATOR.'ListHeader.php'; ?>
@@ -10,7 +10,7 @@ $mark = $vars['mark'];
     <div class="panel-body">
         <div class="clearfix" style="width: 900px; margin-left:auto; margin-right:auto">
             <?php foreach ( $movies as $index => $movie ) : ?>
-                <?php require dirname(__FILE__).DIRECTORY_SEPARATOR.'Util'.DIRECTORY_SEPARATOR.ucfirst($mark).'Item.php'; ?>
+                <?php require dirname(__FILE__).DIRECTORY_SEPARATOR.'Util'.DIRECTORY_SEPARATOR.(empty($mark)?'Unmarked':ucfirst($mark)).'Item.php'; ?>
             <?php endforeach; ?>
             <?php unset($index); ?>
             <?php unset($movie); ?>

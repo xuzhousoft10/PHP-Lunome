@@ -8,6 +8,7 @@ namespace X\Module\Lunome\Util\Action;
  * Visual action class
  * 
  * @method \X\Module\Lunome\Service\Movie\Service getMovieService()
+ * @method \X\Module\Lunome\Service\Tv\Service getTvService()
  */
 abstract class Visual extends \X\Util\Action\Visual {
     /**

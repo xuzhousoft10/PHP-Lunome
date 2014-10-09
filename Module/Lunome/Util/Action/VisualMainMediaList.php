@@ -13,19 +13,49 @@ use X\Library\XMath\Number;
  * Visual action class
  */
 abstract class VisualMainMediaList extends VisualMain {
+    protected $currentMark = null;
+    protected $currentPage = 1;
+    
     /**
      * (non-PHPdoc)
      * @see \X\Module\Lunome\Util\Action\VisualMain::afterRunAction()
      */
     protected function afterRunAction() {
-        $this->getView()->setDataToParticle($this->pagerData['view'], 'pager', $this->pagerData);
+        $this->activeMenuItem($this->getActiveMenuItem());
+        
+        $movies     = $this->getMediaData();
+        $markInfo   = $this->getMarkInformation();
+        $total      = ( null === $this->currentMark ) ? $markInfo['unmarked'] : $markInfo[$this->currentMark];
+        $pager      = $this->getPagerData($total);
+        $markInfo['active'] = $this->currentMark;
+        
+        /* Load index view */
+        $name   = 'MOVIE_INDEX';
+        $path   = $this->getMediaIndexView();
+        $option = array();
+        $data   = array('movies'=>$movies, 'markInfo'=>$markInfo, 'pager'=>$pager);
+        $this->getView()->loadParticle($name, $path, $option, $data);
+        
         parent::afterRunAction();
     }
     
     /**
-     * @var array
+     * 
+     * @return array
      */
-    protected $pagerData = array();
+    protected function getMediaData() {
+        $pageSize   = $this->getPageSize();
+        $condition  = array();
+        $length     = $pageSize;
+        $position   = $pageSize * ($this->currentPage-1);
+        if ( null === $this->currentMark ) {
+            $medias = $this->getMovieService()->getUnmarked($condition, $length, $position);
+        } else {
+            $medias = $this->getMovieService()->getMarked($this->currentMark, $length, $position);
+        }
+        
+        return $medias;
+    }
     
     /**
      * Setup the pager data.
@@ -34,12 +64,14 @@ abstract class VisualMainMediaList extends VisualMain {
      * @param unknown $total
      * @param unknown $params
      */
-    protected function setPager( $view, $current, $total, $params=array() ) {
-        $pageSize = $this->getPageSize();
-        $total = (0!=$total && 0===$total%$pageSize) ? $total/$pageSize : intval($total/$pageSize)+1;
+    protected function getPagerData($total) {
+        $current    = $this->currentPage;
+        $params     = array('mark'=>$this->currentMark);
+        
+        $pageSize   = $this->getPageSize();
+        $total      = (0!=$total && 0===$total%$pageSize) ? $total/$pageSize : intval($total/$pageSize)+1;
         
         $pager = array();
-        $pager['view']      = $view;
         $pager['current']   = $current;
         $pager['total']     = $total;
         $pager['canPrev']   = ( 1 < $current );
@@ -48,7 +80,7 @@ abstract class VisualMainMediaList extends VisualMain {
         $pager['next']      = $pager['canNext'] ? $current + 1 : $total;
         $pager['items']     = Number::getRound($current, $this->getPageItemCount(), 1, $total);
         $pager['params']    = $params;
-        $this->pagerData    = $pager;
+        return $pager;
     }
     
     protected function getPageSize() {
@@ -58,4 +90,24 @@ abstract class VisualMainMediaList extends VisualMain {
     protected function getPageItemCount() {
         return 15;
     }
+    
+    /**
+     * @return \X\Module\Lunome\Util\Service\Media
+     */
+    abstract protected function getMediaService();
+    
+    /**
+     * @return array
+     */
+    abstract protected function getMarkInformation();
+    
+    /**
+     * 
+     */
+    abstract protected function getMediaIndexView();
+    
+    /**
+     * 
+     */
+    abstract protected function getActiveMenuItem();
 }

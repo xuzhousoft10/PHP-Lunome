@@ -16,41 +16,48 @@ use X\Module\Lunome\Service\Movie\Service as MovieService;
  * @author Unknown
  */
 class Index extends VisualMainMediaList { 
+    /**
+     * (non-PHPdoc)
+     * @see \X\Module\Lunome\Util\Action\VisualMainMediaList::getMediaService()
+     */
+    protected function getMediaService() {
+        return $this->getMovieService();
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \X\Module\Lunome\Util\Action\VisualMainMediaList::getMarkInformation()
+     */
+    protected function getMarkInformation() {
+        $markInfo = array();
+        $markInfo['unmarked']   = $this->getMovieService()->countUnmarked();
+        $markInfo['interested'] = $this->getMovieService()->countMarked(MovieService::MARK_INTERESTED);
+        $markInfo['watched']    = $this->getMovieService()->countMarked(MovieService::MARK_WATCHED);
+        $markInfo['ignored']    = $this->getMovieService()->countMarked(MovieService::MARK_IGNORED);
+        return $markInfo;
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \X\Module\Lunome\Util\Action\VisualMainMediaList::getMediaIndexView()
+     */
+    protected function getMediaIndexView() {
+        return $this->getParticleViewPath('Movie/Index');
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \X\Module\Lunome\Util\Action\VisualMainMediaList::getActiveMenuItem()
+     */
+    protected function getActiveMenuItem() {
+        return self::MENU_ITEM_MOVIE;
+    }
+    
     /** 
      * The action handle for index action.
      * @return void
      */ 
     public function runAction($mark=MovieService::MARK_NAME_UNMARKED, $page=1) {
-        $this->activeMenuItem(self::MENU_ITEM_MOVIE);
-        
-        /* Get unmarked movies */
-        $pageSize = $this->getPageSize();
-        $condition  = array();
-        $length     = $pageSize;
-        $position   = $pageSize * ($page-1);
-        if ( MovieService::MARK_NAME_UNMARKED === $mark ) {
-            $movies = $this->getMovieService()->getUnmarked($condition, $length, $position);
-        } else {
-            $movies = $this->getMovieService()->getMarked($mark, $length, $position);
-        }
-        
-        /* Mark information */
-        $markInfo = array();
-        $markInfo['actived']    = $mark;
-        $markInfo['unmarked']   = $this->getMovieService()->countUnmarked();
-        $markInfo['interested'] = $this->getMovieService()->countMarked(MovieService::MARK_INTERESTED);
-        $markInfo['watched']    = $this->getMovieService()->countMarked(MovieService::MARK_WATCHED);
-        $markInfo['ignored']    = $this->getMovieService()->countMarked(MovieService::MARK_IGNORED);
-        
-        /* Load index view */
-        $name   = 'MOVIE_INDEX';
-        $path   = $this->getParticleViewPath('Movie/Index');
-        $option = array(); 
-        $data   = array('movies'=>$movies, 'markInfo'=>$markInfo, 'mark'=>$mark);
-        $this->getView()->loadParticle($name, $path, $option, $data);
-        
-        /* setup pager data */
-        $movieCount = $markInfo[$mark];
-        $this->setPager('MOVIE_INDEX', $page, $movieCount, array('mark'=>$mark));
+        $this->currentMark = ( MovieService::MARK_NAME_UNMARKED == $mark ) ? null : $mark;
     }
 }
