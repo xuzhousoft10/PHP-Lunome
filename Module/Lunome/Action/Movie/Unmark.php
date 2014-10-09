@@ -19,7 +19,7 @@ class Unmark extends Basic {
      * @return void
      */ 
     public function runAction( $id, $mark ) {
-        $this->getMovieService()->unmarkMovie($id, $mark);
+        $this->getMovieService()->unmark($id, $mark);
         $this->goBack();
     }
 }

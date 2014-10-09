@@ -6,7 +6,7 @@ namespace X\Module\Lunome\Model;
  */
 use X\Service\XDatabase\Core\Table\ColumnType;
 use X\Service\XDatabase\Core\ActiveRecord\Column;
-use X\Util\Model\Basic;
+use X\Module\Lunome\Util\Model\MediaUserMark;
 
 /**
  * @property string $id
@@ -14,7 +14,15 @@ use X\Util\Model\Basic;
  * @property string $account_id
  * @property string $type
  **/
-class MovieUserMarkModel extends Basic {
+class MovieUserMarkModel extends MediaUserMark {
+    /**
+     * 
+     * @return string
+     */
+    public function getMediaKey() {
+        return 'movie_id';
+    }
+    
     /**
      * (non-PHPdoc)
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::describe()

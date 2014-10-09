@@ -19,7 +19,7 @@ class Mark extends Basic {
      * @return void
      */ 
     public function runAction( $id, $mark ) {
-        $this->getMovieService()->markMovie($id, $mark);
+        $this->getMovieService()->mark($id, $mark);
         $this->goBack();
     }
 }

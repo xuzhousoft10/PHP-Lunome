@@ -4,16 +4,24 @@ namespace X\Module\Lunome\Model;
 /**
  * Use statements
  */
-use X\Util\Model\Basic;
 use X\Service\XDatabase\Core\Table\ColumnType;
 use X\Service\XDatabase\Core\ActiveRecord\Column;
+use X\Module\Lunome\Util\Model\Poster;
 
 /**
  * @property string $id
  * @property string $movie_id
  * @property string $data
  **/
-class MoviePosterModel extends Basic {
+class MoviePosterModel extends Poster {
+    /**
+     * 
+     * @return string
+     */
+    public function getMediaKey() {
+        return 'movie_id';
+    }
+    
     /**
      * (non-PHPdoc)
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::describe()
