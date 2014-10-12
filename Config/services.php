@@ -30,4 +30,9 @@ return array (
     'enable' => true,
     'class' => 'X\\Module\\Lunome\\Service\\Comic\\Service',
   ),
+  'Book' =>
+  array (
+    'enable' => true,
+    'class' => 'X\\Module\\Lunome\\Service\\Book\\Service',
+ ),
 );
