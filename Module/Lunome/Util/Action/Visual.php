@@ -7,6 +7,7 @@ namespace X\Module\Lunome\Util\Action;
 /**
  * Visual action class
  * 
+ * @method \X\Module\Lunome\Service\User\Service getUserService()
  * @method \X\Module\Lunome\Service\Movie\Service getMovieService()
  * @method \X\Module\Lunome\Service\Tv\Service getTvService()
  */
@@ -19,10 +20,11 @@ abstract class Visual extends \X\Util\Action\Visual {
         parent::beforeRunAction();
         
         /* Load navigation bar */
+        
         $name   = 'INDEX_NAV_BAR';
         $path   = $this->getParticleViewPath('Util/Navigation');
         $option = array('zone'=>'header');
-        $data   = array();
+        $data   = array('user'=>$this->getCurrentUserData());
         $this->getView()->loadParticle($name, $path, $option, $data);
     }
     
@@ -39,5 +41,17 @@ abstract class Visual extends \X\Util\Action\Visual {
         $this->getView()->loadParticle($name, $path, $option, $data);
         
         parent::afterRunAction();
+    }
+    
+    protected function getCurrentUserData() {
+        $userData = array();
+        $userData['isGuest'] = $this->getUserService()->getIsGuest();
+        if ( !$userData['isGuest'] ) {
+            $data = $this->getUserService()->getCurrentUser();
+            $userData['id']         = $data['ID'];
+            $userData['nickname']   = $data['NICKNAME'];
+            $userData['photo']      = $data['PHOTO'];
+        }
+        return $userData;
     }
 }

@@ -15,6 +15,7 @@ use X\Util\Model\Basic;
  * @property string $nickname
  * @property string $status
  * @property string $enabled_at
+ * @property string $photo
  * 
  * delimiter $$
 
@@ -30,7 +31,7 @@ CREATE TABLE `accounts` (
 
 
  **/
-class AccountsModel extends Basic {
+class AccountModel extends Basic {
     /**
      * (non-PHPdoc)
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::describe()
@@ -43,6 +44,7 @@ class AccountsModel extends Basic {
         $columns[] = Column::create('nickname')->setType(ColumnType::T_VARCHAR)->setLength(64);
         $columns[] = Column::create('status')->setType(ColumnType::T_TINYINT)->setNullable(false);
         $columns[] = Column::create('enabled_at')->setType(ColumnType::T_DATETIME);
+        $columns[] = Column::create('photo')->setType(ColumnType::T_VARCHAR)->setLength(256);
         return $columns;
     }
 

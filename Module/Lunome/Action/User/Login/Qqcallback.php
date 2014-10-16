@@ -21,6 +21,6 @@ class Qqcallback extends Basic {
      */ 
     public function runAction( ) {
         $this->getService(Service::getServiceName())->loginByQQCallBack();
-        echo 'OK';
+        $this->gotoURL('/index.php');
     }
 }

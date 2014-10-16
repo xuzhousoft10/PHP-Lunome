@@ -34,6 +34,7 @@ abstract class VisualMain extends Visual {
         
         $layout = $this->getLayoutViewPath('Main');
         $this->getView()->loadLayout($layout);
+        $this->getView()->addData('user', $this->getCurrentUserData());
         $this->initMainMenuItems();
     }
     

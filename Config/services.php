@@ -1,5 +1,10 @@
 <?php
 return array (
+  'XSession' =>
+  array (
+    'enable' => true,
+    'class' => 'X\\Service\\XSession\\Service',
+  ),
   'XDatabase' => 
   array (
     'enable' => true,

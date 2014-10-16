@@ -16,6 +16,7 @@ use X\Service\XDatabase\Core\SQL\Condition\Builder as ConditionBuilder;
 use X\Service\XDatabase\Core\Basic;
 use X\Service\XDatabase\Core\SQL\Condition\Query;
 use X\Service\XDatabase\Service as XDatabaseService;
+use X\Service\XDatabase\Core\SQL\Func\Max;
 
 /**
  * ActiveRecord
@@ -443,6 +444,7 @@ abstract class XActiveRecord extends Basic implements \Iterator {
             if ( $column->getIsAutoIncrement() ) {
                 $column->setValue($this->getDb()->lastInsertId());
             }
+            $column->setOldValue($column->getValue());
         }
         $this->isNew = false;
         $this->triggerEvent(self::ON_AFTER_INSERT);
@@ -456,6 +458,9 @@ abstract class XActiveRecord extends Basic implements \Iterator {
      * @return void
      */
     protected function afterUpdate() {
+        foreach ( $this->columns as $name => $column ) {
+            $column->setOldValue($column->getValue());
+        }
         $this->triggerEvent(self::ON_AFTER_UPDATE);
     }
     
@@ -1558,6 +1563,16 @@ abstract class XActiveRecord extends Basic implements \Iterator {
     
         $result = $this->doQuery($sql);
         return $result[0]['count'];
+    }
+    
+    public function getMax( $column, $condition=null ) {
+        $sql = SQLBuilder::build()->select()
+            ->columns(array('max'=> new Max($column)))
+            ->from($this->getTableFullName())
+            ->where($condition)
+            ->toString();
+        $result = $this->doQuery($sql);
+        return $result[0]['max'];
     }
     
     /**

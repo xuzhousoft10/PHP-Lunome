@@ -14,6 +14,7 @@ abstract class Poster extends Basic {
      */
     public function runAction( $id ) {
         $content = $this->getMediaService()->getPoster($id);
+        header("content-type:image/jpeg");
         echo $content;
     }
 }

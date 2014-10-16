@@ -151,8 +151,6 @@ class Connect {
     
     private $APIMap = array();
     public function __construct($access_token = "", $openid = ""){
-        session_start();
-        
         $this->basicParams = array(
             "oauth_consumer_key"    => self::$appid,
             "access_token"          => $access_token,

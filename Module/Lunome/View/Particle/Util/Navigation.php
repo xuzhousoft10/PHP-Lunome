@@ -1,6 +1,8 @@
 <?php 
 /* @var $this \X\Service\XView\Core\Handler\Html */
 $this->addStyle('body', array('padding-top'=>'50px'));
+$vars = get_defined_vars();
+$user = $vars['user'];
 ?>
 <nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
   <div class="container">
@@ -12,11 +14,12 @@ $this->addStyle('body', array('padding-top'=>'50px'));
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <img src="http://www.gravatar.com/avatar/5b5854d237940c86212d59ff12590e6e?size=20" class="img-circle" />
-            Michael Luthor 
+            <img src="<?php echo $user['photo']; ?>" class="img-circle" width="20" />
+            <?php echo $user['nickname']; ?> 
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
+            <!-- 
             <li>
               <a href="/?module=lunome&action=user/information/basic">
                 <span class="glyphicon glyphicon-user"></span>
@@ -37,8 +40,9 @@ $this->addStyle('body', array('padding-top'=>'50px'));
               </a>
             </li>
             <li class="divider"></li>
+             -->
             <li>
-              <a href="/?module=lunome&action=user/login">
+              <a href="/?module=lunome&action=user/logout">
                 <span class="glyphicon glyphicon-off"></span>
                 Exit
               </a>

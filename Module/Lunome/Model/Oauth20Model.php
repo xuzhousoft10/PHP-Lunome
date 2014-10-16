@@ -51,4 +51,7 @@ class Oauth20Model extends Basic {
     protected function getTableName() {
         return 'oauth_20';
     }
+    
+    /* OAuthr services */
+    const SERVER_QQ = 'qq';
 }

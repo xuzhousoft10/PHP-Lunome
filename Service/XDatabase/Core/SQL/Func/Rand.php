@@ -2,7 +2,7 @@
 /**
  * rand.php
  */
-namespace X\Database\SQL\Func;
+namespace X\Service\XDatabase\Core\SQL\Func;
 /**
  * Rand
  * 
@@ -10,7 +10,7 @@ namespace X\Database\SQL\Func;
  * @since   0.0.0
  * @version 0.0.0
  */
-class Rand extends Func {
+class Rand extends XFunction {
     /**
      * (non-PHPdoc)
      * @see \X\Database\SQL\Func\Func::toString() Func::toString()

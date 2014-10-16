@@ -7,11 +7,13 @@ namespace X\Module\Lunome\Util\Service;
 /**
  * 
  */
+use X\Core\X;
 use X\Module\Lunome\Util\Exception;
 use X\Module\Lunome\Model\MediaPostersModel;
 use X\Module\Lunome\Model\MediaUserMarksModel;
 use X\Service\XDatabase\Core\SQL\Expression as SQLExpression;
 use X\Service\XDatabase\Core\SQL\Condition\Builder as ConditionBuilder;
+use X\Module\Lunome\Service\User\Service as UserService;
 
 /**
  * 
@@ -183,7 +185,9 @@ abstract class Media extends \X\Core\Service\XService {
      * @return string
      */
     protected function getCurrentUserId() {
-        return 'DEMO-ACCOUNT-ID';
+        $userService = X::system()->getServiceManager()->get(UserService::getServiceName());
+        $currentUser = $userService->getCurrentUser();
+        return $currentUser['ID'];
     }
     
     /**

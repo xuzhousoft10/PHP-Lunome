@@ -3,10 +3,15 @@
 $this->addStyle('body', array('padding-top'=>'70px'));
 $vars = get_defined_vars();
 $mainMenu = $vars['mainMenu'];
+$user = $vars['user'];
 ?>
 <div class="container">
     <div class="row">
         <div class="col-md-2">
+            <div class="text-center well well-sm">
+                <img src="<?php echo $user['photo']; ?>" alt="..." class="img-thumbnail"><br/>
+                <h4><?php echo $user['nickname']; ?></h4>
+            </div>
             <div class="list-group">
                 <?php foreach ( $mainMenu as $index => $item ) :?>
                     <a  href="<?php echo $item['link']?>" 

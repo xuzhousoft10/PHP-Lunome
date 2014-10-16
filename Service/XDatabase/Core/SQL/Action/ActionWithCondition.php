@@ -115,7 +115,11 @@ abstract class ActionWithCondition extends Basic {
             return $this;
         }
         foreach ( $orders as $name => $order ) {
-            $this->orderBy($name, $order);
+            if ( is_numeric($name) ) {
+                $this->orderBy($order);
+            } else {
+                $this->orderBy($name, $order);
+            }
         }
         return $this;
     }
