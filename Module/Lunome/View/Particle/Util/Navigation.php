@@ -7,7 +7,7 @@ $user = $vars['user'];
 <nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
   <div class="container">
     <div class="navbar-header">
-      <a class="navbar-brand" href="/?module=lunome&action=index">Lunome</a>
+      <a class="navbar-brand" href="/">Lunome</a>
     </div>
     
     <div class="collapse navbar-collapse">
