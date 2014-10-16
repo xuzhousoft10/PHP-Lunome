@@ -5,7 +5,13 @@
 namespace X\Module\Lunome\Util\Action;
 
 /**
- * Visual action class
+ * 
+ */
+use X\Module\Lunome\Service\User\Service as UserService;
+
+/**
+ * 该Action是当用户直接登录后进入的用户主页的Action基类。
+ * 该类加载了一个布局， 以及维护一个用户菜单。
  */
 abstract class VisualMain extends Visual {
     /**
@@ -19,6 +25,11 @@ abstract class VisualMain extends Visual {
      * @see \X\Util\Action\Visual::beforeRunAction()
      */
     protected function beforeRunAction() {
+        $isGuest = $this->getService(UserService::getServiceName())->getIsGuest();
+        if ( $isGuest ) {
+            $this->gotoURL('/index.php?module=lunome&action=user/login/index');
+        }
+        
         parent::beforeRunAction();
         
         $layout = $this->getLayoutViewPath('Main');

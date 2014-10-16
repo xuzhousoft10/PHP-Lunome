@@ -25,19 +25,24 @@ return array (
     'enable' => true,
     'class' => 'X\\Module\\Lunome\\Service\\Tv\\Service',
   ),
-  'Comic' =>
+  'Comic' => 
   array (
     'enable' => true,
     'class' => 'X\\Module\\Lunome\\Service\\Comic\\Service',
   ),
-  'Book' =>
+  'Book' => 
   array (
     'enable' => true,
     'class' => 'X\\Module\\Lunome\\Service\\Book\\Service',
- ),
-    'Game' =>
-    array (
-        'enable' => true,
-        'class' => 'X\\Module\\Lunome\\Service\\Game\\Service',
-    ),
+  ),
+  'Game' => 
+  array (
+    'enable' => true,
+    'class' => 'X\\Module\\Lunome\\Service\\Game\\Service',
+  ),
+  'User' => 
+  array (
+    'enable' => true,
+    'class' => 'X\\Module\\Lunome\\Service\\User\\Service',
+  ),
 );

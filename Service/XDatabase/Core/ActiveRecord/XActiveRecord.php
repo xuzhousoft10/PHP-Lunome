@@ -713,8 +713,7 @@ abstract class XActiveRecord extends Basic implements \Iterator {
     
         $class = get_class($this);
         foreach ( $result as $index => $attributes ) {
-            $result[$index] = $class::create($attributes);
-            $result[$index]->setIsNew(false);
+            $result[$index] = $class::create($attributes, false);
             if ( $triggerEvent ) {
                 $result[$index]->triggerEvent(self::ON_AFTER_FIND);
             }
@@ -977,7 +976,7 @@ abstract class XActiveRecord extends Basic implements \Iterator {
         $this->beforeUpdate();
         $changes = array();
         foreach ( $this->columns as $name => $column ) {
-            if ( !$column->isDirty() ) {
+            if ( !$column->getIsDirty() ) {
                 continue;
             }
             $changes[$name] = $column->getValue();
@@ -1170,7 +1169,10 @@ abstract class XActiveRecord extends Basic implements \Iterator {
     public function validate() {
         $this->beforeValidate();
         foreach ( $this->columns as $column ) {
-            $column->validate();
+            /* @var $column \X\Service\XDatabase\Core\ActiveRecord\Column */
+            if ( $column->getIsDirty() ) {
+                $column->validate();
+            }
         }
         $this->afterValidate();
     
@@ -1587,16 +1589,22 @@ abstract class XActiveRecord extends Basic implements \Iterator {
      * @param array $attributes The value to new object.
      * @return ActiveRecord
      */
-    public static function create( $attributes=null ) {
+    public static function create( $attributes=null, $isNew=true ) {
         $class = get_called_class();
         $model = new $class();
-    
-        if ( !is_null($attributes) ) {
-            foreach ( $attributes as $name => $value ) {
-                $model->set($name, $value);
+        $model->setIsNew($isNew);
+        
+        if ( null === $model ) {
+            return $model;
+        }
+        
+        foreach ( $attributes as $name => $value ) {
+            $model->getAttribute($name)->setValue($value);
+            if ( !$isNew ) {
+                $model->getAttribute($name)->setOldValue($value);
             }
         }
-    
+        
         return $model;
     }
     

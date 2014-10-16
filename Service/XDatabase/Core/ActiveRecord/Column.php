@@ -81,6 +81,11 @@ class Column extends TableColumn {
     protected $newValue = null;
     protected $oldValue = null;
     
+    public function setOldValue( $oldValue ) {
+        $this->oldValue = $oldValue;
+        return $this;
+    }
+    
     /**
      * @return \X\Service\XDatabase\Core\ActiveRecord\Column
      */
