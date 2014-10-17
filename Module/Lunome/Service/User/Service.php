@@ -133,6 +133,7 @@ class Service extends \X\Core\Service\XService {
     
     protected function loginAccount( AccountModel $account ) {
         $_SESSION['LUNOME']['USER']['ID']           = $account->id;
+        $_SESSION['LUNOME']['USER']['ACCOUNT']      = $account->account;
         $_SESSION['LUNOME']['USER']['NICKNAME']     = $account->nickname;
         $_SESSION['LUNOME']['USER']['PHOTO']        = $account->photo;
         $_SESSION['LUNOME']['USER']['OAUTH20ID']    = $account->oauth20_id;

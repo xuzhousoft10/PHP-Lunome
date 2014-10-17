@@ -51,6 +51,7 @@ abstract class Visual extends \X\Util\Action\Visual {
             $userData['id']         = $data['ID'];
             $userData['nickname']   = $data['NICKNAME'];
             $userData['photo']      = $data['PHOTO'];
+            $userData['account']    = $data['ACCOUNT'];
         }
         return $userData;
     }
