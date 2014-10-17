@@ -11,7 +11,9 @@ $user = $vars['user'];
             <div class="text-center well well-sm">
                 <img src="<?php echo $user['photo']; ?>" alt="..." class="img-thumbnail"><br/>
                 <h4><?php echo $user['nickname']; ?></h4>
-                <small>帐号：<?php echo $user['account']; ?></small>
+                <div class="text-left">
+                    <small>帐号：<?php echo $user['account']; ?></small><br/>
+                </div>
             </div>
             <div class="list-group">
                 <?php foreach ( $mainMenu as $index => $item ) :?>
