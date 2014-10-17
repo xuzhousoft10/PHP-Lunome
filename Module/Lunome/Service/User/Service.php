@@ -150,6 +150,22 @@ class Service extends \X\Core\Service\XService {
         setcookie(session_name(),'',time()-3600);
     }
     
+    /**
+     * @var \X\Module\Lunome\Service\User\Friend
+     */
+    private $friend = null;
+    
+    /**
+     * 
+     * @return \X\Module\Lunome\Service\User\Friend
+     */
+    public function getFriend() {
+        if ( null === $this->friend ) {
+            $this->friend = new Friend($this);
+        }
+        return $this->friend;
+    }
+    
     /* User indentity consts. */
     const UI_GUEST  = 1;
     const UI_NORMAL = 2;
