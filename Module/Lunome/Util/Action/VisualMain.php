@@ -76,10 +76,12 @@ abstract class VisualMain extends Visual {
         $items[self::MENU_ITEM_GAME]['isActive']    = false;
         $items[self::MENU_ITEM_GAME]['link']        = '/?module=lunome&action=game/index';
         
+        /*
         $items[self::MENU_ITEM_FRIEND] = array();
         $items[self::MENU_ITEM_FRIEND]['label']       = '好友';
         $items[self::MENU_ITEM_FRIEND]['isActive']    = false;
         $items[self::MENU_ITEM_FRIEND]['link']        = '/?module=lunome&action=user/friend/index';
+        */
         
         $this->menuItems = $items;
     }
