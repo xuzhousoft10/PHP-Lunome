@@ -3,7 +3,7 @@
 $this->refreshTo('/index.php', 3);
 ?>
 <div class="container" style="padding-top: 50px">
-    <div class="alert alert-success" role="alert">
+    <div class="alert alert-success">
         <p>内容已经成功发送～～～， 小伙伴们要忙起来了～～～</p>
     </div>
     
