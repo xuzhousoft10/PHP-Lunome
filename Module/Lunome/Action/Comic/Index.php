@@ -22,39 +22,55 @@ class Index extends MediaIndex {
      */
     protected function getMarkInformation() {
         $marks = array();
-        $marks[ComicService::MARK_UNMARKED]     = $this->getComicService()->countUnmarked();
-        $marks[ComicService::MARK_INTERESTED]   = $this->getComicService()->countMarked(ComicService::MARK_INTERESTED);
-        $marks[ComicService::MARK_WATCHING]     = $this->getComicService()->countMarked(ComicService::MARK_WATCHING);
-        $marks[ComicService::MARK_WATCHED]      = $this->getComicService()->countMarked(ComicService::MARK_WATCHED);
-        $marks[ComicService::MARK_IGNORED]      = $this->getComicService()->countMarked(ComicService::MARK_IGNORED);
+        $marks[ComicService::MARK_UNMARKED]     = array('name'=>'所有', 'count'=>$this->getComicService()->countUnmarked());
+        $marks[ComicService::MARK_INTERESTED]   = array('name'=>'想看', 'count'=>$this->getComicService()->countMarked(ComicService::MARK_INTERESTED));
+        $marks[ComicService::MARK_WATCHING]     = array('name'=>'在看', 'count'=>$this->getComicService()->countMarked(ComicService::MARK_WATCHING));
+        $marks[ComicService::MARK_WATCHED]      = array('name'=>'已看', 'count'=>$this->getComicService()->countMarked(ComicService::MARK_WATCHED));
+        $marks[ComicService::MARK_IGNORED]      = array('name'=>'不喜欢', 'count'=>$this->getComicService()->countMarked(ComicService::MARK_IGNORED));
         return $marks;
     }
-
+    
     /**
-     *  (non-PHPdoc)
-     * @see \X\Module\Lunome\Util\Action\VisualMainMediaList::getMediaIndexView()
+     * (non-PHPdoc)
+     * @see \X\Module\Lunome\Util\Action\Media\Index::getMarkActions()
      */
-    protected function getMediaIndexView() {
-        return $this->getParticleViewPath('Comic/Index');
+    protected function getMarkActions() {
+        $actions = array();
+        switch ( $this->currentMark ) {
+        case ComicService::MARK_UNMARKED:
+            $actions[ComicService::MARK_INTERESTED] = array( 'name'=>'想看',    'style'=>'success');
+            $actions[ComicService::MARK_WATCHING]   = array( 'name'=>'在看',    'style'=>'primary');
+            $actions[ComicService::MARK_WATCHED]    = array( 'name'=>'看过了',   'style'=>'info');
+            $actions[ComicService::MARK_IGNORED]    = array( 'name'=>'不喜欢',   'style'=>'default');
+            break;
+        case ComicService::MARK_INTERESTED:
+            $actions[ComicService::MARK_UNMARKED]   = array( 'name'=>'不想看了', 'style'=>'success');
+            $actions[ComicService::MARK_WATCHING]   = array( 'name'=>'在看',    'style'=>'primary');
+            $actions[ComicService::MARK_WATCHED]    = array( 'name'=>'看过了',   'style'=>'info');
+            break;
+        case ComicService::MARK_WATCHING:
+            $actions[ComicService::MARK_WATCHED]    = array( 'name'=>'看完了',   'style'=>'info');
+            $actions[ComicService::MARK_IGNORED]    = array( 'name'=>'不喜欢',   'style'=>'default');
+            break;
+        case ComicService::MARK_WATCHED:
+            $actions[ComicService::MARK_INTERESTED] = array( 'name'=>'还想看',    'style'=>'success');
+            $actions[ComicService::MARK_IGNORED]    = array( 'name'=>'不喜欢',   'style'=>'default');
+            break;
+        case ComicService::MARK_IGNORED:
+            $actions[ComicService::MARK_INTERESTED] = array( 'name'=>'想看了',    'style'=>'success');
+            $actions[ComicService::MARK_WATCHING]   = array( 'name'=>'在看',    'style'=>'primary');
+            $actions[ComicService::MARK_WATCHED]    = array( 'name'=>'看过了',   'style'=>'info');
+            break;
+        default:break;
+        }
+        return $actions;
     }
 
     /**
      * (non-PHPdoc)
-     * @see \X\Module\Lunome\Util\Action\VisualMainMediaList::getActiveMenuItem()
+     * @see \X\Module\Lunome\Util\Action\Media\Index::getMediaTypeName()
      */
-    protected function getActiveMenuItem() {
-        return self::MENU_ITEM_COMIC;
-    }
-    
-    /**
-     * 
-     * @param unknown $mark
-     * @param number $page
-     */
-    public function runAction( $mark=ComicService::MARK_UNMARKED, $page=1 ) {
-        $this->getView()->title = "动漫 | Lunome";
-        
-        $this->currentMark = intval($mark);
-        $this->currentPage = $page;
+    protected function getMediaTypeName() {
+        return '动漫';
     }
 }

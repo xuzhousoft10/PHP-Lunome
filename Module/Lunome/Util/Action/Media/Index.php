@@ -18,23 +18,45 @@ abstract class Index extends VisualMain {
     protected $currentPage = 1;
     
     /**
+     *
+     * @param unknown $mark
+     * @param number $page
+     */
+    public function runAction( $mark=0, $page=1 ) {
+        $this->currentMark = intval($mark);
+        $this->currentPage = $page;
+    }
+    
+    /**
      * (non-PHPdoc)
      * @see \X\Module\Lunome\Util\Action\VisualMain::afterRunAction()
      */
     protected function afterRunAction() {
+        $this->getView()->title = sprintf('%s | Lunome', $this->getMediaTypeName());
         $this->activeMenuItem($this->getActiveMenuItem());
         
         $medias     = $this->getMediaData();
         $markInfo   = $this->getMarkInformation();
-        $total      = $markInfo[$this->currentMark];
+        foreach ( $markInfo as $name => $info ) {
+            $markInfo[$name]['isActive'] = $this->currentMark === $name;
+        }
+        $total      = $markInfo[$this->currentMark]['count'];
         $pager      = $this->getPagerData($total);
-        $markInfo['active'] = $this->currentMark;
+        $markActions= $this->getMarkActions();
         
         /* Load index view */
-        $name   = 'MOVIE_INDEX';
-        $path   = $this->getMediaIndexView();
+        $name   = 'MEDIA_INDEX';
+        $path   = $this->getParticleViewPath('Util/Media/Index');
         $option = array();
-        $data   = array('medias'=>$medias, 'markInfo'=>$markInfo, 'pager'=>$pager);
+        $data   = array(
+            'medias'        => $medias, 
+            'marks'         => $markInfo, 
+            'pager'         => $pager, 
+            'activeMark'    => $this->currentMark, 
+            'markActions'   => $markActions,
+            'mediaType'     => strtolower($this->getMediaType()),
+            'mediaTypeName' => $this->getMediaTypeName(),
+        );
         $this->getView()->loadParticle($name, $path, $option, $data);
         
         parent::afterRunAction();
@@ -92,14 +114,27 @@ abstract class Index extends VisualMain {
         return 15;
     }
     
+    protected function getMediaType() {
+        $class = explode('\\', get_class($this));
+        array_pop($class);
+        $media = array_pop($class);
+        return $media;
+    }
+    
     /**
      * @return \X\Module\Lunome\Util\Service\Media
      */
     protected function getMediaService() {
-        $class = explode('\\', get_class($this));
-        array_pop($class);
-        $media = array_pop($class);
-        return $this->getService($media);
+        return $this->getService($this->getMediaType());
+    }
+    
+    /**
+     *
+     */
+    protected function getActiveMenuItem(){
+        $class = new \ReflectionClass($this);
+        $activeItem = $class->getConstant(sprintf('MENU_ITEM_%s', strtoupper($this->getMediaType())));
+        return $activeItem;
     }
     
     /**
@@ -110,10 +145,10 @@ abstract class Index extends VisualMain {
     /**
      * 
      */
-    abstract protected function getMediaIndexView();
+    abstract protected function getMarkActions();
     
     /**
      * 
      */
-    abstract protected function getActiveMenuItem();
+    abstract protected function getMediaTypeName();
 }

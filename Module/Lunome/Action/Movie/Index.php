@@ -22,37 +22,48 @@ class Index extends MediaIndex {
      */
     protected function getMarkInformation() {
         $markInfo = array();
-        $markInfo[MovieService::MARK_UNMARKED]      = $this->getMovieService()->countUnmarked();
-        $markInfo[MovieService::MARK_INTERESTED]    = $this->getMovieService()->countMarked(MovieService::MARK_INTERESTED);
-        $markInfo[MovieService::MARK_WATCHED]       = $this->getMovieService()->countMarked(MovieService::MARK_WATCHED);
-        $markInfo[MovieService::MARK_IGNORED]       = $this->getMovieService()->countMarked(MovieService::MARK_IGNORED);
+        $markInfo[MovieService::MARK_UNMARKED]      = array('name'=>'所有', 'count'=>$this->getMovieService()->countUnmarked());
+        $markInfo[MovieService::MARK_INTERESTED]    = array('name'=>'想看', 'count'=>$this->getMovieService()->countMarked(MovieService::MARK_INTERESTED));
+        $markInfo[MovieService::MARK_WATCHED]       = array('name'=>'已看', 'count'=>$this->getMovieService()->countMarked(MovieService::MARK_WATCHED));
+        $markInfo[MovieService::MARK_IGNORED]       = array('name'=>'不喜欢', 'count'=>$this->getMovieService()->countMarked(MovieService::MARK_IGNORED));
         return $markInfo;
     }
     
     /**
      * (non-PHPdoc)
-     * @see \X\Module\Lunome\Util\Action\VisualMainMediaList::getMediaIndexView()
+     * @see \X\Module\Lunome\Util\Action\Media\Index::getMarkActions()
      */
-    protected function getMediaIndexView() {
-        return $this->getParticleViewPath('Movie/Index');
+    protected function getMarkActions() {
+        $actions = array();
+        switch ( $this->currentMark ) {
+        case MovieService::MARK_UNMARKED:
+            $actions[MovieService::MARK_INTERESTED]    = array('name'=>'想看',     'style'=>'success');
+            $actions[MovieService::MARK_WATCHED]       = array('name'=>'已看',     'style'=>'info');
+            $actions[MovieService::MARK_IGNORED]       = array('name'=>'不喜欢',    'style'=>'default');
+            break;
+        case MovieService::MARK_INTERESTED:
+            $actions[MovieService::MARK_UNMARKED]      = array('name'=>'不想看了',  'style'=>'warning');
+            $actions[MovieService::MARK_WATCHED]       = array('name'=>'已看',     'style'=>'info');
+            $actions[MovieService::MARK_IGNORED]       = array('name'=>'不喜欢',    'style'=>'default');
+            break;
+        case MovieService::MARK_WATCHED:
+            $actions[MovieService::MARK_INTERESTED]    = array('name'=>'还想看',     'style'=>'success');
+            $actions[MovieService::MARK_IGNORED]       = array('name'=>'不喜欢',    'style'=>'default');
+            break;
+        case MovieService::MARK_IGNORED:
+            $actions[MovieService::MARK_INTERESTED]    = array('name'=>'想看',     'style'=>'success');
+            $actions[MovieService::MARK_WATCHED]       = array('name'=>'已看',     'style'=>'info');
+            break;
+        default:break;
+        }
+        return $actions;
     }
-    
+
     /**
      * (non-PHPdoc)
-     * @see \X\Module\Lunome\Util\Action\VisualMainMediaList::getActiveMenuItem()
+     * @see \X\Module\Lunome\Util\Action\Media\Index::getMediaTypeName()
      */
-    protected function getActiveMenuItem() {
-        return self::MENU_ITEM_MOVIE;
-    }
-    
-    /** 
-     * The action handle for index action.
-     * @return void
-     */ 
-    public function runAction($mark=MovieService::MARK_UNMARKED, $page=1) {
-        $this->getView()->title = "电影 | Lunome";
-        
-        $this->currentMark = $mark;
-        $this->currentPage = $page;
+    protected function getMediaTypeName() {
+        return '电影';
     }
 }

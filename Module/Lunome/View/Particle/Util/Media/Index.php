@@ -1,0 +1,99 @@
+<?php 
+$vars = get_defined_vars();
+$marks = $vars['marks'];
+$medias = $vars['medias'];
+$markActions = $vars['markActions'];
+$pager = $vars['pager'];
+$mediaType = $vars['mediaType'];
+$mediaTypeName = $vars['mediaTypeName'];
+?>
+<div class="panel panel-default">
+    <!-- Media Index Header Start -->
+    <div class="panel-heading" style="padding: 0px;">
+        <nav class="navbar navbar-default navbar-static-top navbar navbar-inverse" style="margin-bottom: 0px;">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/?module=lunome&action=<?php echo $mediaType;?>/index"><?php echo $mediaTypeName; ?></a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                    <?php foreach ( $marks as $markCode => $mark ) :?>
+                        <li class="<?php if ($mark['isActive']) :?>active<?php endif; ?>">
+                            <a href="<?php printf('/?module=lunome&action=%s/index&mark=%s', $mediaType,$markCode); ?>">
+                                <?php echo $mark['name'];?> (<?php echo $mark['count']; ?>)
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!-- Media Index Header End -->
+    
+    <!-- Media List Start -->
+    <div class="panel-body">
+        <div class="clearfix" style="width: 900px; margin-left:auto; margin-right:auto">
+            <?php foreach ( $medias as $index => $media ) : ?>
+                <div class="pull-left" style="text-align: center;line-height: 3em;width:200px;margin: 0px 10px;">
+                    <div class="movie-item" style="background-image:url('/?module=lunome&action=<?php echo $mediaType;?>/poster&id=<?php echo $media['id'];?>'); background-size: 200px 300px; height: 300px; width:200px;" >
+                        <div class="btn-group btn-group-justified" style="position: relative;top: 270px; display:none">
+                            <?php foreach ( $markActions as $markCode => $markAction ) : ?>
+                            <div class="btn-group btn-group-sm">
+                                <a  class="btn btn-<?php echo $markAction['style'];?>" 
+                                    href="<?php printf('/?module=lunome&action=%s/mark&mark=%s&id=%s', $mediaType, $markCode, $media['id']); ?>"
+                                ><?php echo $markAction['name'];?></a>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                    <div style="white-space: nowrap;">
+                        <strong><?php echo $media['name'];?></strong>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <script type="text/javascript">
+        $(document).ready(function() {
+            $('.movie-item').mouseenter(function() {
+                $(this).children().show();
+            });
+            $('.movie-item').mouseleave(function() {
+                $(this).children().hide();
+            });
+        });
+        </script>
+    </div>
+    <!-- Media List End -->
+  
+    <!-- Pager -->
+    <div class="panel-footer clearfix">
+        <ul class="pagination pull-right">
+            <li>
+                <a  href    = "/?module=lunome&action=<?php echo $mediaType;?>/index&mark=<?php echo $pager['params']['mark'];?>" 
+                    class   = "<?php if (!$pager['canPrev']):?>disabled<?php endif;?>"
+                >首页</a>
+            </li>
+            <li>
+                <a  href    = "/?module=lunome&action=<?php echo $mediaType;?>/index&mark=<?php echo $pager['params']['mark'];?>&page=<?php echo $pager['prev'];?>" 
+                    class   = "<?php if (!$pager['canPrev']):?>disabled<?php endif;?>"
+                >上一页</a>
+            </li>
+            <?php foreach ($pager['items'] as $pageItem ) : ?>
+                <li <?php if ($pageItem == $pager['current']) :?>class="active"<?php endif;?>>
+                    <a href="/?module=lunome&action=<?php echo $mediaType;?>/index&mark=<?php echo $pager['params']['mark'];?>&page=<?php echo $pageItem;?>"><?php echo $pageItem;?></a>
+                </li>
+            <?php endforeach; ?>
+            <li>
+                <a  href    = "/?module=lunome&action=<?php echo $mediaType;?>/index&mark=<?php echo $pager['params']['mark'];?>&page=<?php echo $pager['next'];?>" 
+                    class   = "<?php if (!$pager['canNext']):?>disabled<?php endif;?>"
+                >下一页</a>
+            </li>
+            <li>
+                <a  href    = "/?module=lunome&action=<?php echo $mediaType;?>/index&mark=<?php echo $pager['params']['mark'];?>&page=<?php echo $pager['total'];?>" 
+                    class   = "<?php if (!$pager['canPrev']):?>disabled<?php endif;?>"
+                >尾页</a>
+            </li>
+        </ul>
+    </div>
+</div>

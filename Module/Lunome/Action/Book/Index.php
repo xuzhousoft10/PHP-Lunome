@@ -22,39 +22,55 @@ class Index extends MediaIndex {
      */
     protected function getMarkInformation() {
         $marks = array();
-        $marks[BookService::MARK_UNMARKED]      = $this->getBookService()->countUnmarked();
-        $marks[BookService::MARK_INTERESTED]    = $this->getBookService()->countMarked(BookService::MARK_INTERESTED);
-        $marks[BookService::MARK_READING]       = $this->getBookService()->countMarked(BookService::MARK_READING);
-        $marks[BookService::MARK_READ]          = $this->getBookService()->countMarked(BookService::MARK_READ);
-        $marks[BookService::MARK_IGNORED]       = $this->getBookService()->countMarked(BookService::MARK_IGNORED);
+        $marks[BookService::MARK_UNMARKED]      = array('name'=>'所有',   'count'=>$this->getBookService()->countUnmarked());
+        $marks[BookService::MARK_INTERESTED]    = array('name'=>'想读',   'count'=>$this->getBookService()->countMarked(BookService::MARK_INTERESTED));
+        $marks[BookService::MARK_READING]       = array('name'=>'在读',   'count'=>$this->getBookService()->countMarked(BookService::MARK_READING));
+        $marks[BookService::MARK_READ]          = array('name'=>'读过了',  'count'=>$this->getBookService()->countMarked(BookService::MARK_READ));
+        $marks[BookService::MARK_IGNORED]       = array('name'=>'不喜欢',  'count'=>$this->getBookService()->countMarked(BookService::MARK_IGNORED));
         return $marks;
-    }
-
-    /**
-     *  (non-PHPdoc)
-     * @see \X\Module\Lunome\Util\Action\VisualMainMediaList::getMediaIndexView()
-     */
-    protected function getMediaIndexView() {
-        return $this->getParticleViewPath('Book/Index');
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \X\Module\Lunome\Util\Action\VisualMainMediaList::getActiveMenuItem()
-     */
-    protected function getActiveMenuItem() {
-        return self::MENU_ITEM_BOOK;
     }
     
     /**
-     * 
-     * @param unknown $mark
-     * @param number $page
+     * (non-PHPdoc)
+     * @see \X\Module\Lunome\Util\Action\Media\Index::getMarkActions()
+    */
+    protected function getMarkActions() {
+        $actions = array();
+        switch ( $this->currentMark ) {
+        case BookService::MARK_UNMARKED :
+            $actions[BookService::MARK_INTERESTED] = array( 'name'=>'想读', 'style'=>'success');
+            $actions[BookService::MARK_READING]    = array( 'name'=>'在读', 'style'=>'primary');
+            $actions[BookService::MARK_READ]       = array( 'name'=>'已读',  'style'=>'info');
+            $actions[BookService::MARK_IGNORED]    = array( 'name'=>'不喜欢', 'style'=>'default');
+            break;
+        case BookService::MARK_INTERESTED:
+            $actions[BookService::MARK_READING]    = array( 'name'=>'在读', 'style'=>'primary');
+            $actions[BookService::MARK_READ]       = array( 'name'=>'已读',  'style'=>'info');
+            $actions[BookService::MARK_IGNORED]    = array( 'name'=>'不喜欢', 'style'=>'default');
+            break;
+        case BookService::MARK_READING:
+            $actions[BookService::MARK_READ]       = array( 'name'=>'读完了', 'style'=>'success');
+            $actions[BookService::MARK_IGNORED]    = array( 'name'=>'不喜欢', 'style'=>'default');
+            break;
+        case BookService::MARK_READ:
+            $actions[BookService::MARK_INTERESTED] = array( 'name'=>'还想读', 'style'=>'success');
+            $actions[BookService::MARK_IGNORED]    = array( 'name'=>'不喜欢', 'style'=>'default');
+            break;
+        case BookService::MARK_IGNORED:
+            $actions[BookService::MARK_INTERESTED] = array( 'name'=>'想读', 'style'=>'success');
+            $actions[BookService::MARK_READING]    = array( 'name'=>'在读', 'style'=>'primary');
+            $actions[BookService::MARK_READ]       = array( 'name'=>'已读',  'style'=>'info');
+            break;
+        default: break;
+        }
+        return $actions;
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \X\Module\Lunome\Util\Action\Media\Index::getMediaTypeName()
      */
-    public function runAction( $mark=BookService::MARK_UNMARKED, $page=1 ) {
-        $this->getView()->title = "图书 | Lunome";
-        
-        $this->currentMark = intval($mark);
-        $this->currentPage = $page;
+    protected function getMediaTypeName() {
+        return '图书';
     }
 }
