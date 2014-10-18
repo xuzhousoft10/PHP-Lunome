@@ -4,7 +4,7 @@ $this->addStyle('body', array(
     'background'=>'url(/Assets/image/background.jpg)', 
     'background-size'=>'100% auto'));
 ?>
-<div class="container-fluid" style="padding-top:100px">
+<div class="container-fluid margin-top-100">
     <div class="row">
         <div class="col-md-8"></div>
         <div class="col-md-4">

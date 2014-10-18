@@ -9,8 +9,8 @@ $mediaTypeName = $vars['mediaTypeName'];
 ?>
 <div class="panel panel-default">
     <!-- Media Index Header Start -->
-    <div class="panel-heading" style="padding: 0px;">
-        <nav class="navbar navbar-default navbar-static-top navbar navbar-inverse" style="margin-bottom: 0px;">
+    <div class="panel-heading padding-0">
+        <nav class="navbar navbar-default navbar-static-top navbar navbar-inverse margin-bottom-0">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="/?module=lunome&action=<?php echo $mediaType;?>/index"><?php echo $mediaTypeName; ?></a>
@@ -33,11 +33,11 @@ $mediaTypeName = $vars['mediaTypeName'];
     
     <!-- Media List Start -->
     <div class="panel-body">
-        <div class="clearfix" style="width: 900px; margin-left:auto; margin-right:auto">
+        <div class="clearfix lnm-media-list-container">
             <?php foreach ( $medias as $index => $media ) : ?>
-                <div class="pull-left" style="text-align: center;line-height: 3em;width:200px;margin: 0px 10px;">
-                    <div class="movie-item" style="background-image:url('/?module=lunome&action=<?php echo $mediaType;?>/poster&id=<?php echo $media['id'];?>'); background-size: 200px 300px; height: 300px; width:200px;" >
-                        <div class="btn-group btn-group-justified" style="position: relative;top: 270px; display:none">
+                <div class="pull-left lnm-media-list-item-container">
+                    <div class="lnm-media-list-item" style="background-image:url('/?module=lunome&action=<?php echo $mediaType;?>/poster&id=<?php echo $media['id'];?>');" >
+                        <div class="btn-group btn-group-justified lnm-media-list-item-mark-container">
                             <?php foreach ( $markActions as $markCode => $markAction ) : ?>
                             <div class="btn-group btn-group-sm">
                                 <a  class="btn btn-<?php echo $markAction['style'];?>" 
@@ -47,7 +47,7 @@ $mediaTypeName = $vars['mediaTypeName'];
                             <?php endforeach; ?>
                         </div>
                     </div>
-                    <div style="white-space: nowrap;">
+                    <div class="white-space-nowrap">
                         <strong><?php echo $media['name'];?></strong>
                     </div>
                 </div>
@@ -55,10 +55,10 @@ $mediaTypeName = $vars['mediaTypeName'];
         </div>
         <script type="text/javascript">
         $(document).ready(function() {
-            $('.movie-item').mouseenter(function() {
+            $('.lnm-media-list-item').mouseenter(function() {
                 $(this).children().show();
             });
-            $('.movie-item').mouseleave(function() {
+            $('.lnm-media-list-item').mouseleave(function() {
                 $(this).children().hide();
             });
         });
