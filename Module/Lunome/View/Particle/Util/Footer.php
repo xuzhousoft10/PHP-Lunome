@@ -4,7 +4,8 @@ $this->addStyle('#footer', array('border-top'=>'1px solid #E5E5E5'));
 ?>
 <div class="text-center" id="main-footer">
   <br/>
-  <P><a href="#">Help</a> | <a href="#">About</a> | <a href="#">@Twitter</a> | <a href="#">Connect Us</a></P>
+  <P><a href="/index.php?module=lunome&action=advise">意见建议</a> |
+  Help | <a href="#">About</a> | <a href="#">@Twitter</a> | <a href="#">Connect Us</a></P>
 </div>
 <br/><br/>
 <script>
