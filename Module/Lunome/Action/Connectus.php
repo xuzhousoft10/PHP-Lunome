@@ -19,6 +19,8 @@ class Connectus extends Visual {
      * @return void
      */ 
     public function runAction( ) {
+        $this->getView()->title = "联系我们 | Lunome";
+        
         $this->getView()->loadLayout($this->getLayoutViewPath('Blank'));
         
         /* Load particle view. */

@@ -20,6 +20,8 @@ class Advise extends Visual {
      * @return void
      */ 
     public function runAction( $content, $email, $send ) {
+        $this->getView()->title = "意见建议 | Lunome";
+        
         $this->getView()->loadLayout($this->getLayoutViewPath('Blank'));
         if ( 'send' !== $send ) {
             $name   = 'ADVISE_EDIT';

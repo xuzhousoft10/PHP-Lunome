@@ -52,6 +52,8 @@ class Index extends MediaIndex {
      * @param number $page
      */
     public function runAction( $mark=BookService::MARK_UNMARKED, $page=1 ) {
+        $this->getView()->title = "图书 | Lunome";
+        
         $this->currentMark = intval($mark);
         $this->currentPage = $page;
     }

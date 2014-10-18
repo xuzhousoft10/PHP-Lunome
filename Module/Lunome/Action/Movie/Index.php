@@ -50,6 +50,8 @@ class Index extends MediaIndex {
      * @return void
      */ 
     public function runAction($mark=MovieService::MARK_UNMARKED, $page=1) {
+        $this->getView()->title = "电影 | Lunome";
+        
         $this->currentMark = $mark;
         $this->currentPage = $page;
     }

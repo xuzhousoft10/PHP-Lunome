@@ -19,6 +19,7 @@ class Index extends Visual {
      * @return void
      */ 
     public function runAction( ) {
+        $this->getView()->title = "登录 | Lunome";
         $this->getView()->loadLayout($this->getLayoutViewPath('Blank'));
         $this->getView()->removeParticle('INDEX_NAV_BAR');
         

@@ -52,6 +52,8 @@ class Index extends MediaIndex {
      * @param number $page
      */
     public function runAction( $mark=TvService::MARK_UNMARKED, $page=1 ) {
+        $this->getView()->title = "电视 | Lunome";
+        
         $this->currentMark = intval($mark);
         $this->currentPage = $page;
     }
