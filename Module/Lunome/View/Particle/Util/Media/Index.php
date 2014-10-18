@@ -53,16 +53,6 @@ $mediaTypeName = $vars['mediaTypeName'];
                 </div>
             <?php endforeach; ?>
         </div>
-        <script type="text/javascript">
-        $(document).ready(function() {
-            $('.lnm-media-list-item').mouseenter(function() {
-                $(this).children().show();
-            });
-            $('.lnm-media-list-item').mouseleave(function() {
-                $(this).children().hide();
-            });
-        });
-        </script>
     </div>
     <!-- Media List End -->
   

@@ -110,7 +110,7 @@ abstract class Visual extends Basic {
         
         $this->getView()->addScriptFile('jquery', 'Assets/library/jquery/jquery-1.11.1.js');
         $this->getView()->addScriptFile('bootstrap', 'Assets/library/bootstrap/js/bootstrap.js');
-        
+        $this->getView()->addScriptFile('application', 'Assets/js/application.js');
         
         $this->getView()->display();
     }
