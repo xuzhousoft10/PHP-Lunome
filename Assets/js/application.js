@@ -32,7 +32,6 @@ $(document).ready(function() {
              var media = $(this).attr('data-media-type');
              $(this).css('background-image', 'url("/?module=lunome&action='+media+'/poster&id='+posterId+'")');
              $(this).attr('data-poster-loaded', true);
-             console.log($.trim($(this).next().text())+': Loading...'); 
         }
     }, { offset: '100%' });
 });
