@@ -20,4 +20,19 @@ $(document).ready(function() {
     $('.lnm-media-list-item').mouseleave(function() {
         $(this).children().hide();
     });
+    
+    /* 仅当media处于可视区域时加载背景图片。 */
+    $('.lnm-media-list-item').waypoint(function(direction) {
+        if ( 'up' == direction ){
+            return;
+        }
+        var isLoaded = $(this).attr('data-poster-loaded');
+        if ( 'undefined' == typeof(isLoaded) ) {
+             var posterId = $(this).attr('data-poster');
+             var media = $(this).attr('data-media-type');
+             $(this).css('background-image', 'url("/?module=lunome&action='+media+'/poster&id='+posterId+'")');
+             $(this).attr('data-poster-loaded', true);
+             console.log($.trim($(this).next().text())+': Loading...'); 
+        }
+    }, { offset: '100%' });
 });
