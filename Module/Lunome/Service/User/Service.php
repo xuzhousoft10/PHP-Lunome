@@ -49,20 +49,12 @@ class Service extends \X\Core\Service\XService {
     }
     
     public function loginByQQ() {
-        QQConnect::$appid = '101161224';
-        QQConnect::$appkey = 'f03143e996578b9222180fc85d594473';
-        QQConnect::$callback = urlencode('http://lunome.kupoy.com/index.php?module=lunome&action=user/login/qqcallback');
-        
-        $qqConnect = new QQConnect();
+        $qqConnect = $this->getQQConnect();
         $qqConnect->login();
     }
     
     public function loginByQQCallBack() {
-        QQConnect::$appid = '101161224';
-        QQConnect::$appkey = 'f03143e996578b9222180fc85d594473';
-        QQConnect::$callback = urlencode('http://lunome.kupoy.com/index.php?module=lunome&action=user/login/qqcallback');
-        
-        $qqConnect = new QQConnect();
+        $qqConnect = $this->getQQConnect();
         $qqConnect->setup();
         $token = $qqConnect->getTokenInfo();
         
@@ -80,6 +72,17 @@ class Service extends \X\Core\Service\XService {
         $oauth->save();
         $account = $this->getAccountByOAuth($oauth, $qqConnect);
         $this->loginAccount($account);
+    }
+    
+    protected function getQQConnect() {
+        $host = $_SERVER['HTTP_HOST'];
+        $callBack = sprintf('http://%s/index.php?module=lunome&action=user/login/qqcallback', $host);
+        QQConnect::$appid = '101161224';
+        QQConnect::$appkey = 'f03143e996578b9222180fc85d594473';
+        QQConnect::$callback = urlencode($callBack);
+        
+        $qqConnect = new QQConnect();
+        return $qqConnect;
     }
     
     protected function getAccountByOAuth( Oauth20Model $oauth, QQConnect $qqConnect ) {
