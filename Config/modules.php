@@ -11,9 +11,9 @@ array (
     'enable' => true,
     'default' => true,
   ),
-  'test' => 
+  'Backend' => 
   array (
-    'default' => false,
+    'enable' => true,
   ),
 )
 ;
