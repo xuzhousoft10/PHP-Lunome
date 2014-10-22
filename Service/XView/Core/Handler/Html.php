@@ -8,8 +8,8 @@ namespace X\Service\XView\Core\Handler;
  * Use statement
  */
 use X\Core\X;
-use X\Service\XView\XViewService;
 use X\Service\XView\Core\Exception;
+use X\Service\XView\Service as XViewService;
 
 /**
  * The view handler for html page.
