@@ -154,6 +154,21 @@ class Service extends \X\Core\Service\XService {
     }
     
     /**
+     * @var \X\Module\Lunome\Service\User\Account
+     */
+    private $account = null;
+    
+    /**
+     * @return \X\Module\Lunome\Service\User\Account
+     */
+    public function getAccount() {
+        if ( null === $this->account ) {
+            $this->account = new Account();
+        }
+        return $this->account;
+    }
+    
+    /**
      * @var \X\Module\Lunome\Service\User\Friend
      */
     private $friend = null;
