@@ -20,6 +20,21 @@ use X\Module\Lunome\Service\User\Service as UserService;
  */
 abstract class Media extends \X\Core\Service\XService {
     /**
+     * 
+     * @param unknown $condition
+     * @param unknown $position
+     * @param unknown $limit
+     */
+    public function findAll( $condition=null, $position=0, $length=0 ) {
+        $mediaModelName = $this->getMediaModelName();
+        $medias = $mediaModelName::model()->findAll($condition, $length, $position);
+        foreach ( $medias as $index => $media ) {
+            $medias[$index] = $media->toArray();
+        }
+        return $medias;
+    }
+    
+    /**
      * Get unmarked medias.
      * 
      * @param unknown $condition
