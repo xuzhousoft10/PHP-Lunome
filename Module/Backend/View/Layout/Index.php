@@ -1,5 +1,8 @@
 <?php 
 /* @var $this X\Service\XView\Core\Handler\Html */
+$vars = get_defined_vars();
+$menu = $vars['menu'];
+$activeMenuItem = $vars['activeMenuItem'];
 ?>
 <nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
     <div class="container-fluid">
@@ -15,12 +18,11 @@
     <div class="row">
         <div class="col-sm-2">
             <div class="list-group">
-                <a href="#" class="list-group-item active">会员帐号管理</a>
-                <a href="#" class="list-group-item">电影资源管理</a>
-                <a href="#" class="list-group-item">电视资源管理</a>
-                <a href="#" class="list-group-item">动漫资源管理</a>
-                <a href="#" class="list-group-item">书籍资源管理</a>
-                <a href="#" class="list-group-item">游戏资源管理</a>
+            <?php foreach ( $menu as $itemName => $menuItem ) : ?>
+                <a href="<?php echo $menuItem['link'];?>" class="list-group-item <?php if ($activeMenuItem===$itemName):?>active<?php endif;?>">
+                    <?php echo $menuItem['name'];?>
+                </a>
+            <?php endforeach; ?>
             </div>
         </div>
         <div class="col-sm-10">

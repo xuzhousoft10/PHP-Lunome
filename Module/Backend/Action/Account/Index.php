@@ -20,16 +20,26 @@ class Index extends IndexAction {
      * The action handle for index action.
      * @return void
      */ 
-    public function runAction( ) {
+    public function runAction( $page=1 ) {
+        $this->setActiveItem(self::MENU_ACCOUNT_MANAGEMENT);
+        
         /* @var $userService \X\Module\Lunome\Service\User\Service */
         $userService = X::system()->getServiceManager()->get(UserService::getServiceName());
-        $accounts = $userService->getAccount()->getAll();
+        $accounts = $userService->getAccount()->findAll(null, ($page-1)*20, 20);
         
         /* Load account index view */
         $name   = 'ACCOUNT_INDEX';
         $path   = $this->getParticleViewPath('Account/Index');
         $option = array();
         $data   = array('accounts'=>$accounts);
+        $this->getView()->loadParticle($name, $path, $option, $data);
+        
+        /* Load pager view */
+        $count = $userService->getAccount()->count();
+        $name   = 'UTIL_PAGER';
+        $path   = $this->getParticleViewPath('Util/Pager');
+        $option = array();
+        $data   = array('total'=>$count, 'current'=>$page, 'size'=>20, 'url'=>'/index.php?module=backend&action=account/index&page=%d');
         $this->getView()->loadParticle($name, $path, $option, $data);
     }
 }

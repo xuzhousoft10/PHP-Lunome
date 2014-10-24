@@ -38,7 +38,7 @@ class Number {
                 $number = 0;
             }
         
-            for ( $i=0; $i<$size && $number < $max; $i++ ) {
+            for ( $i=0; $i<$size && $number <= $max; $i++ ) {
                 $items[] = $number;
                 $number++;
             }
