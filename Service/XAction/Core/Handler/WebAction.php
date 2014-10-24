@@ -33,8 +33,14 @@ abstract class WebAction extends \X\Service\XAction\Core\Action {
         exit();
     }
     
+    public function getReferer( ) {
+        $url = isset($_SERVER['HTTP_REFERER']) ?  $_SERVER['HTTP_REFERER'] : null;
+        return $url;
+    }
+    
     public function goBack() {
-        $url = isset($_SERVER['HTTP_REFERER']) ?  $_SERVER['HTTP_REFERER'] : '/';
+        $referer = $this->getReferer();
+        $url = (null===$referer) ?   '/' : $referer;
         header(sprintf('Location: %s', $url));
         exit();
     }

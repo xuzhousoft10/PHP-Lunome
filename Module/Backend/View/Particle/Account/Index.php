@@ -25,16 +25,17 @@ $statusLabels = array(
             <td><?php echo $account['nickname'];?></td>
             <td>
                 <?php if (!empty($account['oauth20_id'])) :?>
-                    <a href="#" class="btn btn-default btn-xs" >查看</a>
+                    <?php $oauthViewURL = sprintf('/index.php?module=backend&action=account/oauth/view&id=%s', $account['oauth20_id']);?>
+                    <a href="<?php echo $oauthViewURL; ?>" class="btn btn-default btn-xs" >查看</a>
                 <?php endif; ?>
             </td>
             <td>
                 <?php echo $statusLabels[$account['status']];?>
                 <?php if ( AccountModel::ST_NOT_USED == $account['status'] ) :?>
                 <?php elseif ( AccountModel::ST_IN_USE == $account['status'] ) : ?>
-                    <button type="button" class="btn btn-default btn-xs">冻结</button>
+                    <a href="/index.php?module=backend&action=account/freeze&id=<?php echo $account['id']; ?>" class="btn btn-primary btn-xs">冻结</a>
                 <?php elseif ( AccountModel::ST_FREEZE == $account['status'] ) :?>
-                    <button type="button" class="btn btn-default btn-xs">取消冻结</button>
+                    <a href="/index.php?module=backend&action=account/unfreeze&id=<?php echo $account['id']; ?>" class="btn btn-primary btn-xs">取消</a>
                 <?php endif; ?>
             </td>
             <td>
