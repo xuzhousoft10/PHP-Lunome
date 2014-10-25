@@ -25,7 +25,7 @@ class Index extends MediaIndex {
         
         /* @var $movieService MovieService */
         $movieService = X::system()->getServiceManager()->get(MovieService::getServiceName());
-        $medias = $movieService->findAll(null, $page-1, 10);
+        $medias = $movieService->findAll(null, ($page-1)*20, 10);
         
         /* Load index view. */
         $name   = 'MOVIE_INDEX';
