@@ -5,7 +5,7 @@ $total      = $vars['total'];
 $current    = $vars['current']*1;
 $size       = $vars['size'];
 $url        = $vars['url'];
-$pageCount  = (0 === $total%$size) ? $total/$size : $total/$size+1;
+$pageCount  = (0 === $total%$size) ? $total/$size : intval($total/$size)+1;
 $items      = Number::getRound($current, 20, 1, $pageCount);
 ?>
 <div>
