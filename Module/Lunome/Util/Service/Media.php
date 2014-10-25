@@ -35,6 +35,102 @@ abstract class Media extends \X\Core\Service\XService {
     }
     
     /**
+     * 
+     * @param string $condition
+     */
+    public function count($condition=null) {
+        $mediaModelName = $this->getMediaModelName();
+        return $mediaModelName::model()->count($condition);
+    }
+    
+    /**
+     * 
+     * @param unknown $media
+     * @return Ambigous <multitype:, multitype:NULL >
+     */
+    public function add( $media ) {
+        $mediaModelName = $this->getMediaModelName();
+        /* @var $mediaModel \X\Util\Model\Basic */
+        $mediaModel = new $mediaModelName();
+        foreach ( $media as $attr => $value ) {
+            $mediaModel->set($attr, $value);
+        }
+        $mediaModel->save();
+        return $mediaModel->toArray();
+    }
+    
+    /**
+     * 
+     * @param unknown $id
+     * @param unknown $media
+     * @return Ambigous <multitype:, multitype:NULL >
+     */
+    public function update( $id, $media ) {
+        $mediaModelName = $this->getMediaModelName();
+        /* @var $mediaModel \X\Util\Model\Basic */
+        $mediaModel = $mediaModelName::model()->findByPrimaryKey($id);
+        foreach ( $media as $attr => $value ) {
+            $mediaModel->set($attr, $value);
+        }
+        $mediaModel->save();
+        return $mediaModel->toArray();
+    }
+    
+    /**
+     * 
+     * @param unknown $media
+     * @param unknown $poster
+     */
+    public function addPoster( $media, $data ) {
+        $poster = new MediaPostersModel();
+        $poster->media_type = $this->getMediaModelName();
+        $poster->media_id = $media;
+        $poster->data = base64_encode($data);
+        $poster->save();
+        return $poster->toArray();
+    }
+    
+    /**
+     * 
+     * @param unknown $media
+     * @throws Exception
+     * @return string
+     */
+    public function hasPoster( $media ) {
+        $mediaModelName = $this->getMediaModelName();
+        $condition = array();
+        $condition['media_type'] = $mediaModelName;
+        $condition['media_id'] = $media;
+        return MediaPostersModel::model()->exists($condition);
+    }
+    
+    /**
+     * 
+     * @param unknown $media
+     * @return boolean
+     */
+    public function deletePoster( $media ) {
+        $mediaModelName = $this->getMediaModelName();
+        $condition = array();
+        $condition['media_type'] = $mediaModelName;
+        $condition['media_id'] = $media;
+        $poster = MediaPostersModel::model()->findByAttribute($condition);
+        $poster->delete();
+    }
+    
+    /**
+     * 
+     * @param unknown $id
+     * @return Ambigous <multitype:, multitype:NULL >
+     */
+    public function get( $id ) {
+        $mediaModelName = $this->getMediaModelName();
+        /* @var $mediaModel \X\Util\Model\Basic */
+        $mediaModel = $mediaModelName::model()->findByAttribute(array('id'=>$id));
+        return $mediaModel->toArray();
+    }
+    
+    /**
      * Get unmarked medias.
      * 
      * @param unknown $condition

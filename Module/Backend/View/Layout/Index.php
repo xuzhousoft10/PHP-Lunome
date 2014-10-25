@@ -14,7 +14,7 @@ $activeMenuItem = $vars['activeMenuItem'];
         </div>
     </div>
 </nav>
-<div class="container-fluid" style="padding-top: 70px">
+<div class="container-fluid" style="padding-top: 70px; padding-bottom: 70px;">
     <div class="row">
         <div class="col-sm-2">
             <div class="list-group">

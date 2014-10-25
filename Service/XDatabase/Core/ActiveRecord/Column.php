@@ -303,6 +303,10 @@ class Column extends TableColumn {
         return true;
     }
     
+    protected function validateDataTypeLongtext( $value ) {
+        return $this->validateDataTypeVarchar($value);
+    }
+    
     /**
      * Validate the data type for datetime current Column object.
      * 
