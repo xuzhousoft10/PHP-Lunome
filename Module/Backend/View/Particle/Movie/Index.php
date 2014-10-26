@@ -10,10 +10,12 @@ $medias = $vars['medias'];
             <tr>
                 <td><?php echo $media['name']; ?></td>
                 <td>
-                    <a href="/index.php?module=backend&action=movie/poster/index&id=<?php echo $media['id'];?>">查看</a>
+                    <a class="btn btn-default btn-xs" href="/index.php?module=backend&action=movie/poster/index&id=<?php echo $media['id'];?>">查看</a>
                 </td>
                 <td>
-                    <a href="/index.php?module=backend&action=movie/edit&id=<?php echo $media['id'];?>">编辑</a>
+                    <a class="btn btn-default btn-xs" href="/index.php?module=backend&action=movie/view&id=<?php echo $media['id'];?>">查看</a>
+                    &nbsp;&nbsp;
+                    <a class="btn btn-default btn-xs" href="/index.php?module=backend&action=movie/edit&id=<?php echo $media['id'];?>">编辑</a>
                 </td>
             </tr>
         <?php endforeach; ?>
