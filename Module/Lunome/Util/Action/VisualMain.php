@@ -7,6 +7,7 @@ namespace X\Module\Lunome\Util\Action;
 /**
  * 
  */
+use X\Core\X;
 use X\Module\Lunome\Service\User\Service as UserService;
 
 /**
@@ -28,6 +29,7 @@ abstract class VisualMain extends Visual {
         $isGuest = $this->getService(UserService::getServiceName())->getIsGuest();
         if ( $isGuest ) {
             $this->gotoURL('/index.php?module=lunome&action=user/login/index');
+            X::system()->stop();
         }
         
         parent::beforeRunAction();
