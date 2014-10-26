@@ -1,18 +1,17 @@
 <?php
 /**
- * The action file for tv/poster/download action.
+ * 
  */
 namespace X\Module\Backend\Action\Comic\Poster;
 
 /**
  * 
  */
-use X\Module\Backend\Util\Action\Media\Poster\Download as MediaDownload;
+use X\Module\Backend\Util\Action\Media\Poster\Download as PosterDownload;
 
 /**
- * The action class for tv/poster/download action.
- * @author Unknown
+ * 
  */
-class Download extends MediaDownload { 
+class Download extends PosterDownload { 
     
 }
