@@ -45,8 +45,8 @@ abstract class Visual extends \X\Util\Action\Visual {
         $this->menu[self::MENU_MOVIE_MANAGEMENT]    = array('name'=>'电影资源管理', 'link'=>'/index.php?module=backend&action=movie/index');
         $this->menu[self::MENU_TV_MANAGEMENT]       = array('name'=>'电视资源管理', 'link'=>'/index.php?module=backend&action=tv/index');
         $this->menu[self::MENU_COMIC_MANAGEMENT]    = array('name'=>'动漫资源管理', 'link'=>'/index.php?module=backend&action=comic/index');
-        $this->menu[self::MENU_BOOK_MANAGEMENT]     = array('name'=>'书籍资源管理', 'link'=>'/index.php?module=backend&action=tv/index');
-        $this->menu[self::MENU_GAME_MANAGEMENT]     = array('name'=>'游戏资源管理', 'link'=>'/index.php?module=backend&action=comic/index');
+        $this->menu[self::MENU_BOOK_MANAGEMENT]     = array('name'=>'书籍资源管理', 'link'=>'/index.php?module=backend&action=book/index');
+        $this->menu[self::MENU_GAME_MANAGEMENT]     = array('name'=>'游戏资源管理', 'link'=>'/index.php?module=backend&action=game/index');
     }
     
     /**
