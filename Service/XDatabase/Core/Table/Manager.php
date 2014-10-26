@@ -128,12 +128,10 @@ class Manager extends Basic {
     /**
      * Add new column to the operating table.
      * 
-     * @param string $name The name of column to add
-     * @param string $definition The definition of column
      * @return Management|boolean
      */
-    public function addColumn( $name, $definition ) {
-        return $this->doAlterAction('addColumn', array($name, $definition));
+    public function addColumn( $column ) {
+        return $this->doAlterAction('addColumn', array($column));
     }
     
     /**

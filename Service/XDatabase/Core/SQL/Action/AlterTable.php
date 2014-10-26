@@ -55,13 +55,12 @@ class AlterTable extends ActionAboutTable {
     /**
      * Set AlterTable action to add column.
      * 
-     * @param string $name The name of the column.
-     * @param string $definition The definition of the column.
+     * @param \X\Service\XDatabase\Core\Table\Column $column
      * @return AlterTable
      */
-    public function addColumn( $name, $definition ) {
+    public function addColumn( $column ) {
         $this->action['handler'] = 'addColumn';
-        $this->action['parms'] = array('name'=>$name, 'definition'=>$definition);
+        $this->action['parms'] = array('name'=>$column->getName(), 'definition'=>$column);
         return $this;
     }
     

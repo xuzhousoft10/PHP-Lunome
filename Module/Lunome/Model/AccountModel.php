@@ -16,6 +16,7 @@ use X\Util\Model\Basic;
  * @property string $status
  * @property string $enabled_at
  * @property string $photo
+ * @property string $is_admin
  * 
  * delimiter $$
 
@@ -45,6 +46,7 @@ class AccountModel extends Basic {
         $columns[] = Column::create('status')->setType(ColumnType::T_TINYINT)->setNullable(false);
         $columns[] = Column::create('enabled_at')->setType(ColumnType::T_DATETIME);
         $columns[] = Column::create('photo')->setType(ColumnType::T_VARCHAR)->setLength(256);
+        $columns[] = Column::create('is_admin')->setType(ColumnType::T_TINYINT)->setDefault(0)->setIsUnsigned(true);
         return $columns;
     }
 
@@ -55,6 +57,9 @@ class AccountModel extends Basic {
     protected function getTableName() {
         return 'accounts';
     }
+    
+    const IS_ADMIN_YES = 1;
+    const IS_ADMIN_NO  = 0;
     
     const ST_NOT_USED   = 1;
     const ST_IN_USE     = 2;

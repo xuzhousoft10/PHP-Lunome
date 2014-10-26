@@ -44,15 +44,30 @@ class Service extends \X\Core\Service\XService {
         return self::UI_GUEST === $_SESSION['LUNOME']['USER']['IDENTITY'];
     }
     
+    /**
+     * 获取当前用户信息
+     * 
+     * @return array
+     */
     public function getCurrentUser() {
         return $_SESSION['LUNOME']['USER'];
     }
     
+    /**
+     * 通过QQConnect登录, 注意， 该方法回直接跳转到登录页面， 你应该在调用完该方法后立即结束。
+     * 
+     * @return void
+     */
     public function loginByQQ() {
         $qqConnect = $this->getQQConnect();
         $qqConnect->login();
     }
     
+    /**
+     * QQ Connect 登录的回调处理方法。
+     * 
+     * @return void
+     */
     public function loginByQQCallBack() {
         $qqConnect = $this->getQQConnect();
         $qqConnect->setup();
@@ -74,6 +89,11 @@ class Service extends \X\Core\Service\XService {
         $this->loginAccount($account);
     }
     
+    /**
+     * 获取QQConnect 的 handler
+     * 
+     * @return \X\Library\QQ\Connect
+     */
     protected function getQQConnect() {
         $host = $_SERVER['HTTP_HOST'];
         $callBack = sprintf('http://%s/index.php?module=lunome&action=user/login/qqcallback', $host);
@@ -85,6 +105,12 @@ class Service extends \X\Core\Service\XService {
         return $qqConnect;
     }
     
+    /**
+     * 
+     * @param Oauth20Model $oauth
+     * @param QQConnect $qqConnect
+     * @return Ambigous <\X\Module\Lunome\Model\AccountModel, \X\Service\XDatabase\Core\ActiveRecord\ActiveRecord, NULL>
+     */
     protected function getAccountByOAuth( Oauth20Model $oauth, QQConnect $qqConnect ) {
         $account = AccountModel::model()->findByAttribute(array('oauth20_id'=>$oauth->id));
         $userInfo = $qqConnect->getUserInfo();
@@ -99,17 +125,26 @@ class Service extends \X\Core\Service\XService {
         return $account;
     }
     
+    /**
+     * 
+     * @return \X\Module\Lunome\Model\AccountModel
+     */
     protected function enableRandomAccount() {
         $condition = array('status'=>AccountModel::ST_NOT_USED);
         $accounts = AccountModel::model()->findAll($condition, 1, 0, array(new Rand()));
+        
+        /* 创建空帐号， 并且在这些空帐号里随机选择将要使用的帐号。 */
+        /* 如果是首次创建帐号， 那么， 第一个使用的帐号将作为管理员帐号。 */
         if ( 0 === count($accounts) ) {
+            $isFirstTime = false;
             $randomIndex = rand(0, 9);
             $randomAccount = null;
-            /* Prepare more accounts */
             $startAccount = AccountModel::model()->getMax('account');
             if ( null === $startAccount || 1000 > $startAccount ) {
                 $startAccount = 1000;
+                $isFirstTime = true;
             }
+            
             for( $i=0; $i<10; $i++ ) {
                 $tmpAccount = new AccountModel();
                 $tmpAccount->account = $startAccount + $i + 1;
@@ -123,6 +158,7 @@ class Service extends \X\Core\Service\XService {
                 }
             }
             $account = $randomAccount;
+            $account->is_admin = AccountModel::IS_ADMIN_YES;
         } else {
             $account = $accounts[0];
         }
@@ -134,6 +170,10 @@ class Service extends \X\Core\Service\XService {
         return $account;
     }
     
+    /**
+     * 
+     * @param AccountModel $account
+     */
     protected function loginAccount( AccountModel $account ) {
         $_SESSION['LUNOME']['USER']['ID']           = $account->id;
         $_SESSION['LUNOME']['USER']['ACCOUNT']      = $account->account;
@@ -141,6 +181,7 @@ class Service extends \X\Core\Service\XService {
         $_SESSION['LUNOME']['USER']['PHOTO']        = $account->photo;
         $_SESSION['LUNOME']['USER']['OAUTH20ID']    = $account->oauth20_id;
         $_SESSION['LUNOME']['USER']['IDENTITY']     = self::UI_NORMAL;
+        $_SESSION['LUNOME']['USER']['IS_ADMIN']     = $account->is_admin == AccountModel::IS_ADMIN_YES;
     }
     
     /**

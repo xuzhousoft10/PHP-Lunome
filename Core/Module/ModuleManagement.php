@@ -472,6 +472,10 @@ class ModuleManagement extends \X\Core\Basic {
         $namespace = sprintf('\\X\\Module\\%s\\Migration', $moduleName);
         /* Execute the up action */
         foreach ( $migrations as $index => $migration ) {
+            if ( '.' === $migration[0] ) {
+                continue;
+            }
+            
             $className = basename($migration, '.php');
             $classFullName = $namespace.'\\'.$className;
             $migrationObject = new $classFullName();
