@@ -1,17 +1,16 @@
 <?php
 /**
- * The action file for movie/index action.
+ * The action file for tv/edit action.
  */
-namespace X\Module\Backend\Action\Movie;
+namespace X\Module\Backend\Action\Tv;
 
 /**
  * 
  */
-use X\Core\X;
 use X\Module\Backend\Util\Action\Media\Edit as MediaEdit;
 
 /**
- * The action class for movie/index action.
+ * The action class for tv/edit action.
  * @author Unknown
  */
 class Edit extends MediaEdit { 
