@@ -37,5 +37,15 @@ $activeMenuItem = $vars['activeMenuItem'];
 <nav class="navbar navbar-default navbar-fixed-bottom navbar-inverse">
     <div class="container-fluid text-center" style="color: white">
         Lunome Management System
+        <div>
+            <script type="text/javascript">
+            var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+            document.write(unescape(
+                    "%3Cspan id='cnzz_stat_icon_1253474507'%3E%3C/span%3E%3Cscript src='" + 
+                    cnzz_protocol + 
+                    "s6.cnzz.com/z_stat.php%3Fid%3D1253474507%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"
+            ));
+            </script>
+        </div>
     </div>
 </nav>
