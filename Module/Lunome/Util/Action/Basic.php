@@ -8,7 +8,6 @@ namespace X\Module\Lunome\Util\Action;
  * 
  */
 use X\Core\X;
-use X\Module\Lunome\Service\User\Service as UserService;
 
 /**
  * Basic action class
