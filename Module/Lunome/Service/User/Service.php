@@ -17,6 +17,12 @@ class Service extends \X\Core\Service\XService {
      * @see \X\Core\Service\XService::afterStart()
      */
     protected function afterStart() {
+        $debug = true;
+        if ( $debug ) {
+            $account = AccountModel::model()->findByAttribute(array('status'=>AccountModel::ST_IN_USE));
+            $this->loginAccount($account);
+        }
+        
         $this->initCurrentUserInformation();
     }
     
