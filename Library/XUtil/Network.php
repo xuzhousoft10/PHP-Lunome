@@ -5,6 +5,11 @@
 namespace X\Library\XUtil;
 
 /**
+ * 
+ */
+use X\Core\X;
+
+/**
  * The util handlers for network.
  * 
  * @author  Michael Luthor <michaelluthor@163.com>
@@ -35,6 +40,10 @@ class Network {
      * @return string
      */
     public static function getClientIP() {
+        if ( X::system()->isCLI() ) {
+            return '127.0.0.1';
+        }
+        
         $ipaddress = $_SERVER['REMOTE_ADDR'];
         $serverValues = array(
             'HTTP_CLIENT_IP', 
