@@ -88,4 +88,24 @@ class Account {
     public function getLoginHistoryCount( $id ) {
         return AccountLoginHistoryModel::model()->count(array('account_id'=>$id));
     }
+    
+    /**
+     * 
+     * @param unknown $id
+     */
+    public function addAdmin( $id ) {
+        $account = AccountModel::model()->findByPrimaryKey($id);
+        $account->is_admin = AccountModel::IS_ADMIN_YES;
+        $account->save();
+    }
+    
+    /**
+     * 
+     * @param unknown $id
+     */
+    public function deleteAdmin( $id ) {
+        $account = AccountModel::model()->findByPrimaryKey($id);
+        $account->is_admin = AccountModel::IS_ADMIN_NO;
+        $account->save();
+    }
 }

@@ -21,7 +21,8 @@ class Service extends \X\Core\Service\XService {
     protected function afterStart() {
         $debug = true;
         if ( $debug ) {
-            $account = AccountModel::model()->findByAttribute(array('status'=>AccountModel::ST_IN_USE));
+            $condition = array('status'=>AccountModel::ST_IN_USE, 'is_admin'=>AccountModel::IS_ADMIN_YES);
+            $account = AccountModel::model()->findByAttribute($condition);
             $this->loginAccount($account, 'DEBUG');
         }
         

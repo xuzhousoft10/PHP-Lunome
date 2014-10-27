@@ -11,10 +11,9 @@ $statusLabels = array(
 ?>
 <div>
     <ul class="nav nav-tabs nav-justified">
-        <li class="active"><a href="/index.php?module=backend&action=account/index">所有帐号</a></li>
-        <li><a href="/index.php?module=backend&action=account/admin/index">管理员帐号</a></li>
+        <li><a href="/index.php?module=backend&action=account/index">所有帐号</a></li>
+        <li class="active"><a href="/index.php?module=backend&action=account/admin/index">管理员帐号</a></li>
     </ul>
-    
     <table class="table table-striped table-hover table-condensed">
         <thead>
             <tr>
@@ -24,7 +23,7 @@ $statusLabels = array(
                 <th>状态</th>
                 <th>启用期</th>
                 <th>登录历史</th>
-                <th>是否为管理员</th>
+                <th>操作</th>
             </tr>
         </thead>
         <tbody>
@@ -62,19 +61,12 @@ $statusLabels = array(
                     <?php endif; ?>
                 </td>
                 <td>
-                    <?php if ( AccountModel::ST_NOT_USED != $account['status']) :?>
-                        <?php if (AccountModel::IS_ADMIN_YES == $account['is_admin']): ?>
-                            是
-                            <?php if ( $currentUser['ID'] === $account['id'] ): ?>
-                                <a class="btn btn-default btn-xs disabled" href="#">取消</a>
-                            <?php else:?>
-                                <a class="btn btn-default btn-xs" href="/index.php?module=backend&action=account/admin/delete&id=<?php echo $account['id'];?>">取消</a>
-                            <?php endif;?>
-                        <?php else : ?>
-                            否
-                            <a class="btn btn-primary btn-xs" href="/index.php?module=backend&action=account/admin/add&id=<?php echo $account['id'];?>">设置</a>
-                        <?php endif; ?>
-                    <?php endif; ?>
+                    <?php if ( $currentUser['ID'] !== $account['id'] ): ?>
+                        <a class="btn btn-default btn-xs" href="/index.php?module=backend&action=account/admin/delete&id=<?php echo $account['id'];?>">取消管理员身份</a>
+                    <?php else : ?>
+                        <a class="btn btn-default btn-xs disabled" href="#">取消管理员身份</a>
+                    <?php endif;?>
+
                 </td>
             </tr>
         <?php endforeach; ?>
