@@ -8,6 +8,8 @@ use X\Library\QQ\Connect as QQConnect;
 use X\Module\Lunome\Model\Oauth20Model;
 use X\Module\Lunome\Model\AccountModel;
 use X\Service\XDatabase\Core\SQL\Func\Rand;
+use X\Module\Lunome\Model\AccountLoginHistoryModel;
+use X\Library\XUtil\Network;
 /**
  * The service class
  */
@@ -20,7 +22,7 @@ class Service extends \X\Core\Service\XService {
         $debug = true;
         if ( $debug ) {
             $account = AccountModel::model()->findByAttribute(array('status'=>AccountModel::ST_IN_USE));
-            $this->loginAccount($account);
+            $this->loginAccount($account, 'DEBUG');
         }
         
         $this->initCurrentUserInformation();
@@ -92,7 +94,7 @@ class Service extends \X\Core\Service\XService {
         $oauth->refresh_token   = $token['refresh_token'];
         $oauth->save();
         $account = $this->getAccountByOAuth($oauth, $qqConnect);
-        $this->loginAccount($account);
+        $this->loginAccount($account, 'QQ OAuth2.0');
     }
     
     /**
@@ -180,7 +182,7 @@ class Service extends \X\Core\Service\XService {
      * 
      * @param AccountModel $account
      */
-    protected function loginAccount( AccountModel $account ) {
+    protected function loginAccount( AccountModel $account, $loginedBy ) {
         $_SESSION['LUNOME']['USER']['ID']           = $account->id;
         $_SESSION['LUNOME']['USER']['ACCOUNT']      = $account->account;
         $_SESSION['LUNOME']['USER']['NICKNAME']     = $account->nickname;
@@ -188,6 +190,28 @@ class Service extends \X\Core\Service\XService {
         $_SESSION['LUNOME']['USER']['OAUTH20ID']    = $account->oauth20_id;
         $_SESSION['LUNOME']['USER']['IDENTITY']     = self::UI_NORMAL;
         $_SESSION['LUNOME']['USER']['IS_ADMIN']     = $account->is_admin == AccountModel::IS_ADMIN_YES;
+        $this->recordLoginHistory($account, $loginedBy);
+    }
+    
+    /**
+     * 
+     * @param AccountModel $account
+     * @param unknown $loginedBy
+     */
+    protected function recordLoginHistory( AccountModel $account, $loginedBy ) {
+        $ip = Network::getClientIP();
+        $ipInfo = Network::IpInfo($ip, 'china');
+        $loginHistory = new AccountLoginHistoryModel();
+        $loginHistory->account_id   = $account->id;
+        $loginHistory->time         = date('Y-m-d H:i:s', time());
+        $loginHistory->ip           = $ip;
+        $loginHistory->country      = $ipInfo['country'];
+        $loginHistory->province     = $ipInfo['province'];
+        $loginHistory->city         = $ipInfo['city'];
+        $loginHistory->isp          = $ipInfo['isp'];
+        $loginHistory->logined_by   = $loginedBy;
+        $loginHistory->save();
+        
     }
     
     /**

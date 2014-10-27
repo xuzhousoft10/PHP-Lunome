@@ -16,6 +16,7 @@ $statusLabels = array(
             <th>Open Id</th>
             <th>状态</th>
             <th>启用期</th>
+            <th>登录历史</th>
         </tr>
     </thead>
     <tbody>
@@ -42,6 +43,11 @@ $statusLabels = array(
                 <?php if ('0000-00-00 00:00:00' !== $account['enabled_at']): ?>
                     <?php echo $account['enabled_at'];?>
                 <?php endif;?>
+            </td>
+            <td>
+                <?php if ( AccountModel::ST_NOT_USED != $account['status'] ) :?>
+                    <a href="/index.php?module=backend&action=account/loginHistory&id=<?php echo $account['id']; ?>" class="btn btn-primary btn-xs">查看</a>
+                <?php endif; ?>
             </td>
         </tr>
     <?php endforeach; ?>
