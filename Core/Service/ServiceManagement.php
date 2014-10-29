@@ -70,7 +70,7 @@ class ServiceManagement extends \X\Core\Basic {
      * @return void
      */
     protected function loadConfiguration() {
-        $configPath = X::system()->getCoreConfigFilePath('services');
+        $configPath = X::system()->getPath('Config/services.php');
         $services = require $configPath;
         $this->configuration['services'] = $services;
     }
@@ -227,7 +227,7 @@ class ServiceManagement extends \X\Core\Basic {
      * @return void
      */
     private function saveConfigurations() {
-        $path = X::system()->getCoreConfigFilePath('services');
+        $path = X::system()->getPath('Config/services.php');
         XUtil::storeArrayToPHPFile($path, $this->configuration['services']);
     }
 }

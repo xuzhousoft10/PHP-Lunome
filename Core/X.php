@@ -1,35 +1,29 @@
 <?php
 /**
- * @author  Michael Luthor <michael.the.ranidae@gmail.com>
- * @version 0.0.0
- * @since   0.0.0
- * @license GLPL V3 <https://www.gnu.org/licenses/lgpl.html>
+ * 
  */
 namespace X\Core;
 
-use X\Core\Util\XUtil;
 /**
- * The X class use to handle the hold framword stuff.
  * 
- * @author  Michael Luthor <michaelluthor@163.com>
- * @version 0.0.0
- * @since   Version 0.0.0
+ */
+use X\Core\Util\XUtil;
+
+/**
+ * 
  */
 class X {
     /**
-     * This value contains the instant of X class, and this 
-     * would be the only instant of C class. It would set by
-     * start() method.
+     * 该变量保存该框架在运行时的一个实例。
      * 
      * @var X
      */
     protected static $system = null;
     
     /**
-     * Start the X framework
+     * 根据根目录启动该框架。
      * 
-     * @param string $basePath  The base path where the root 
-     *                          folder of this project is.
+     * @param string $basePath  该项目的根目录路径。
      * @return X
      */
     public static function start( $basePath ){
@@ -40,101 +34,8 @@ class X {
     }
     
     /**
-     * Initiate the X framework
+     * 结束处理并退出。
      *
-     * @param string $root The base path where the base is.
-     *
-     * @return void
-     */
-    protected function __construct( $root ) {
-        $this->root = $root;
-        chdir($this->root);
-        $this->loadConfiguration();
-        $this->initInterface();
-        
-        register_shutdown_function(array($this, 'shutdown'));
-        spl_autoload_register(array($this, 'autoloader'));
-        
-        $this->serviceManager = \X\Core\Service\ServiceManagement::getManager();
-        $this->moduleManager = \X\Core\Module\ModuleManagement::getManager();
-    }
-    
-    /**
-     * The base path of the framework, it shuold be the place
-     * where put your index.php file.
-     *
-     * @var string
-     */
-    protected $root = null;
-    
-    /**
-     * Get the base path of framework
-     *
-     * @return string
-     */
-    public function getRoot() {
-        return $this->root;
-    }
-    
-    /**
-     * Get the path of current module or subpath of it if $path is not empty.
-     * @param string $path The subpath of the module.
-     * @return string
-     */
-    public function getPath( $path='' ) {
-        $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
-        $path = empty($path) ? $this->getRoot() : $this->getRoot().DIRECTORY_SEPARATOR.$path;
-        return $path;
-    }
-    
-    /**
-     * This value holds the configurations for X.
-     * The value comes form main.php in config directory.
-     *
-     * @var array
-     */
-    protected $configuration = array();
-
-    /**
-     * Load configuration values into system from main.php
-     * configuration file.
-     *
-     * @return void
-     */
-    protected function loadConfiguration() {
-        $path = $this->getCoreConfigFilePath('main');
-        $this->configuration = require $path;
-    }
-    
-    /**
-     * Get the file path of core configuration file path.
-     * 
-     * @param string $name The name of configuration file.
-     * @return string
-     */
-    public function getCoreConfigFilePath( $name ) {
-        return implode(DIRECTORY_SEPARATOR, array($this->root, 'Config', $name.'.php'));
-    }
-    
-    public function setConfiguration( $name, $value ) {
-        $items = explode('.', $name);
-        $item = &$this->configuration;
-    
-        while ( 0 < count($items) ) {
-            $item = &$item[array_shift($items)];
-        }
-        $item = $value;
-    }
-    
-    public function saveConfiguration() {
-        $path = $this->getCoreConfigFilePath('main');
-        $data = $this->configuration;
-        XUtil::storeArrayToPHPFile($path, $data);
-    }
-    
-    /**
-     * Stop the application.
-     * 
      * @return void
      */
     public function stop() {
@@ -142,81 +43,8 @@ class X {
     }
     
     /**
-     * The shutdown hadler
+     * 获取已经启动的框架实例， 如果框架没有启动， 则会抛出异常。
      *
-     * @return void
-     */
-     public function shutdown() {
-         $this->serviceManager->stop();
-     }
-     
-     /**
-       * Autoload class by givn name.
-       * The class file path should be same as the path of namespace.
-       * All the namespaces of class should be start with X.
-       *
-       * @param string $class The required class name.
-       * @return void
-       */
-     public function autoloader( $class ) {
-         $path = explode('\\', $class);
-         $path[0] = $this->root;
-         $path[count($path)-1] .= '.php';
-         $path = implode(DIRECTORY_SEPARATOR, $path);
-         if ( is_file($path) ) {
-             require $path;
-         }
-     }
-     
-     /**
-      * This value contains the manager of service managements
-      *
-      * @var \X\Core\Service\ServiceManagement
-      */
-     protected $serviceManager = null;
-     
-     /**
-      * Get service manager.
-      *
-      * @return \X\Core\Service\ServiceManagement
-      */
-     public function getServiceManager() {
-         return $this->serviceManager;
-     }
-     
-     /**
-      * This value holds the manager of modules.
-      *
-      * @var \X\Core\Module\ModuleManagement
-      */
-     protected $moduleManager = null;
-        
-     
-     /**
-      * Get module manager
-      *
-      * @return \X\Core\Module\ModuleManagement
-      */
-     public function getModuleManager() {
-         return $this->moduleManager;
-     }
-     
-     /**
-      * Run this application
-      *
-      * @return void
-      */
-     public function run() {
-         $this->getServiceManager()->start();
-         $this->getModuleManager()->start();
-         $this->loadParameters();
-         $this->getModuleManager()->run();
-     }
-     
-    /**
-     * Get the instace of X class
-     * 
-     * @throws Exception Throw Exception if X has not been started.
      * @return \X\Core\X
      */
     public static function system() {
@@ -224,6 +52,280 @@ class X {
             throw new Exception('X has not been started.');
         }
         return self::$system;
+    }
+    
+    /**
+     * 该项目的根目录路径。
+     *
+     * @var string
+     */
+    protected $root = null;
+    
+    /**
+     * 根据提供的字符串返回适合当前操作系统的路径字符串。 如果提供的路径为空， 则返回该项目的
+     * 根目录路径。
+     * 路径字符串的目录分割符为'/'。
+     * 
+     * @param string $path 路径字符串
+     * @return string
+     */
+    public function getPath( $path='' ) {
+        $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
+        $path = empty($path) ? $this->root : $this->root.DIRECTORY_SEPARATOR.$path;
+        return $path;
+    }
+    
+    /**
+     * 该变量存储着全局的配置信息。 该配置文件存储在Config/mail.php中。
+     *
+     * @var array
+     */
+    protected $configuration = array( 'values'=>null, 'isDirty'=>false );
+    
+    /**
+     * 将配置文件加载到当前项目中， 如果已经加载， 则不会重新加载。
+     *
+     * @return void
+    */
+    protected function loadConfiguration() {
+        if ( null !== $this->configuration['values'] ) {
+            return;
+        }
+        
+        $path = $this->getPath('Config/main.php');
+        $this->configuration['values'] = require $path;
+    }
+    
+    /**
+     * 根据名称获取配置项目值。 名称可以使用"."进行级别分割。
+     * 如果项目不存在则会返回null。
+     * 
+     * @param string $name 配置项目名称
+     * @return mixed
+     */
+    public function getConfiguration( $name ) {
+        $this->loadConfiguration();
+        $items = explode('.', $name);
+        $item = $this->configuration['values'];
+        while ( 0 < count($items) ) {
+            $itemName = array_shift($items);
+            if ( !isset($item[$itemName]) ) {
+                $item = null;
+                break;
+            } else {
+                $item = $item[$itemName];
+            }
+        }
+        return $item;
+    }
+    
+    /**
+     * 获取当前的所有配置信息。
+     * 
+     * @return array
+     */
+    public function getConfigurations() {
+        return $this->configuration['values'];
+    }
+    
+    /**
+     * 根据名称设置配置项目的值，名称可以使用"."进行级别分割。
+     * 如果项目不存在则会新建该项目。
+     * 
+     * @param string $name 配置项目名称
+     * @param string $value 配置项目值
+     * @return void
+     */
+    public function setConfiguration( $name, $value ) {
+        $this->loadConfiguration();
+        $items = explode('.', $name);
+        $item = &$this->configuration['values'];
+    
+        while ( 0 < count($items) ) {
+            $item = &$item[array_shift($items)];
+        }
+        $item = $value;
+        $this->configuration['isDirty'] = true;
+    }
+    
+    /**
+     * 使用数组替换当前配置信息。 这将完全覆盖原先的配置信息。
+     * 
+     * @param array $config
+     */
+    public function setConfigurations( $config ) {
+        $this->loadConfiguration();
+        $this->configuration['values'] = $config;
+        $this->configuration['isDirty'] = true;
+    }
+    
+    /**
+     * 保存配置信息。如果没有更改则不会进行保存。
+     * 
+     * @return void
+     */
+    public function saveConfiguration() {
+        if ( !$this->configuration['isDirty'] ) {
+            return;
+        }
+        
+        $path = $this->getPath('Config/main.php');
+        $data = $this->configuration['values'];
+        XUtil::storeArrayToPHPFile($path, $data);
+    }
+    
+    /**
+     * 该值保存由终端或者HTTP请求传入的参数列表。
+     *
+     * @var array
+     */
+    protected $parameters = array();
+    
+    /**
+     * 加载参数列表到当前框架中。
+     *
+     * @return void
+    */
+    protected function loadParameters() {
+        if ( $this->isCLI() ) {
+            global $argv;
+            $parameters = array();
+            foreach ( $argv as $index => $parm ) {
+                if ( '--' !== substr($parm, 0, 2) ) {
+                    continue;
+                }
+        
+                list( $name, $value ) = explode('=', $parm);
+                $name = substr($name, 2);
+                $parameters[trim($name)] = trim($name);
+            }
+            $this->parameters = $parameters;
+        } else {
+            $this->parameters = array_merge($_GET, $_POST, $_REQUEST);
+        }
+    }
+    
+    /**
+     * 通过参数名称获取传输该框架的参数值。
+     * 
+     * @param string $name 参数名称
+     * @return mixed
+     */
+    public function getParameter( $name ) {
+        return isset($this->parameters[$name]) ? $this->parameters[$name] : null;
+    }
+    
+    /**
+     * 获取传入当前框架的所有参数。
+     *
+     * @return array
+     */
+    public function getParameters() {
+        return $this->parameters;
+    }
+    
+    /**
+     * 通过参数名称更新当前的参数列表。
+     * 
+     * @param string $name 参数名称
+     * @param mixed $value 新的参数值
+     */
+    public function setParameter( $name, $value ) {
+        $this->parameters[$name] = $value;
+    }
+    
+    /**
+     * 使用数组替换当前参数列表。
+     *
+     * @param array $parameters 新的参数列表。
+     */
+    public function setParameters( $parameters ) {
+        $this->parameters = $parameters;
+    }
+    
+    /**
+     * 该值保存一个service manager的实例。
+     *
+     * @var \X\Core\Service\ServiceManagement
+     */
+    protected $serviceManager = null;
+     
+    /**
+     * 获取当前框架种的service manager的实例。
+     *
+     * @return \X\Core\Service\ServiceManagement
+     */
+    public function getServiceManager() {
+        return $this->serviceManager;
+    }
+     
+    /**
+     * 该值保存着一个module manager的实例。
+     *
+     * @var \X\Core\Module\ModuleManagement
+     */
+    protected $moduleManager = null;
+    
+     
+    /**
+     * 返回当前框架中的实例。
+     *
+     * @return \X\Core\Module\ModuleManagement
+     */
+    public function getModuleManager() {
+        return $this->moduleManager;
+    }
+    
+    /**
+     * 构造函数， 初始化框架的环境。
+     *
+     * @param string $root 该项目的根目录路径。
+     *
+     * @return void
+     */
+    protected function __construct( $root ) {
+        $this->root = $root;
+        chdir($this->root);
+        $this->initInterface();
+        
+        register_shutdown_function(array($this, '_shutdown'));
+        spl_autoload_register(array($this, '_autoloader'));
+        
+        $this->serviceManager = \X\Core\Service\ServiceManagement::getManager();
+        $this->moduleManager = \X\Core\Module\ModuleManagement::getManager();
+        
+        $this->getServiceManager()->start();
+        $this->getModuleManager()->start();
+        $this->loadParameters();
+        $this->getModuleManager()->run();
+    }
+    
+    /**
+     * 该方法是当脚本结束或异常停止时所调用的方法， 完成该次请求的结尾工作。
+     * 该方法由PHP内核调用， 不建议在代码中直接调用该方法。
+     * 
+     * @return void
+     */
+    public function _shutdown() {
+        $this->serviceManager->stop();
+    }
+    
+    /**
+     * 该方法用于实现类的按需加载， 加载方式根据需要加载的类的名称以及其所在的命名空间
+     * 进行拼接处理， 所以类的存放位置应当与其命名空间相对应。
+     * 该方法由PHP内核调用， 不建议在代码中直接调用该方法。
+     *
+     * @param string $class 需要动态加载的类的完整名称
+     * @return void
+     */
+    public function _autoloader( $class ) {
+        $path = explode('\\', $class);
+        $path[0] = $this->root;
+        $path[count($path)-1] .= '.php';
+        $path = implode(DIRECTORY_SEPARATOR, $path);
+        if ( is_file($path) ) {
+            require $path;
+        }
     }
     
     /**
@@ -259,64 +361,6 @@ class X {
             return call_user_func_array($this->shortCutFunctions[$name], $parameters);
         }
         throw new Exception(sprintf('Can not find shoutcut method "%s".', $name));
-    }
-    
-    /**
-     * The parameters to X.
-     *
-     * @var array
-     */
-    protected $parameters = array();
-    
-    /**
-     * Setup default parameters
-     *
-     * @return void
-     */
-    protected function loadParameters() {
-        if ( $this->isCLI() ) {
-            $this->parameters = $this->initParametersInCLIMode();
-        } else {
-            $this->parameters = array_merge($_GET, $_POST, $_REQUEST);
-        }
-    }
-    
-    /**
-     * Initiate the parameters in cli mode.
-     * 
-     * @return array
-     */
-    protected function initParametersInCLIMode() {
-        global $argv;
-        $parameters = array();
-        foreach ( $argv as $index => $parm ) {
-            if ( '--' !== substr($parm, 0, 2) ) {
-                continue;
-            }
-            
-            list( $name, $value ) = explode('=', $parm);
-            $name = substr($name, 2);
-            $parameters[$name] = $value;
-        }
-        return $parameters;
-    }
-    
-    /**
-     * Get the parameters for the system.
-     * 
-     * @return multitype:
-     */
-    public function getParameters() {
-        return $this->parameters;
-    }
-    
-    /**
-     * Set the parameters to the system.
-     * 
-     * @param array $parameters The new parameters
-     */
-    public function setParameters( $parameters ) {
-        $this->parameters = $parameters;
     }
     
     /**

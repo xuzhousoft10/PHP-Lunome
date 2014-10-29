@@ -73,7 +73,7 @@ class ModuleManagement extends \X\Core\Basic {
      * @return void
      */
     protected function loadConfig() {
-        $path = X::system()->getCoreConfigFilePath('modules');
+        $path = X::system()->getPath('Config/modules.php');
         $this->configuration['modules'] = require $path;
     }
     
@@ -101,7 +101,7 @@ class ModuleManagement extends \X\Core\Basic {
      * @return string
      */
     protected function getModuleStorePath() {
-        $basePath = X::system()->getRoot();
+        $basePath = X::system()->getPath();
         $modulePath = $basePath.DIRECTORY_SEPARATOR.'Module';
         return $modulePath;
     }
@@ -369,7 +369,7 @@ class ModuleManagement extends \X\Core\Basic {
      * @return void
      */
     private function saveConfigurations() {
-        $path = X::system()->getCoreConfigFilePath('modules');
+        $path = X::system()->getPath('Config/modules.php');
         $content = array();
         $content[] = '<?php';
         $content[] = 'return';
