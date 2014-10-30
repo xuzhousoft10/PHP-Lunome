@@ -1,117 +1,99 @@
 <?php
 /**
- * This file defines the service management class.
+ * 
  */
 namespace X\Core\Service;
 
 /**
- * Use statements
+ * 
  */
 use X\Core\X;
-use X\Core\Util\XUtil;
+use X\Core\Util\Management;
+use X\Core\Util\Configuration;
+use X\Core\Exception;
 
 /**
- * The service management class.
  * 
- * @author  Michael Luthor <michaelluthor@163.com>
- * @since   Version 0.0.0
  */
-class ServiceManagement extends \X\Core\Basic {
+class ServiceManagement extends Management {
     /**
-     * This value holds the manager instance.
-     *
-     * @var ServiceManagement
-     */
-    protected static $manager = null;
-    
-    /**
-     * Get the service manager instance
-     * 
-     * @return \X\Core\Service\ServiceManagement
-     */
-    public static function getManager() {
-        if ( is_null(self::$manager) ) {
-            self::$manager = new ServiceManagement();
-        }
-        
-        return self::$manager;
-    }
-    
-    /**
-     * Start the management to load the service management config and 
-     * all the availabel service.
-     * 
-     * @return void
+     * 启动该管理器
      */
     public function start(){
-        $this->loadConfiguration();
-        $this->loadServices();
+        parent::start();
+        $this->configuration = new Configuration(X::system()->getPath('Config/services.php'));
+        $this->loadServicesByConfiguration();
     }
     
     /**
-     * This value holds the configuration of manager.
-     * -- services : Store the service informations. 
-     *  The values come from services.php configuration file.
-     * 
-     * @var array
+     * 结束该管理器
      */
-    protected $configuration = array(
-        /**
-         * 'services' => array(
-         *      'service_name'=> array(
-         *          'enable' =>true, 
-         *          'class'   =>'namespace\\class'))
-         */
-    );
-    
-    /**
-     * Load configuration into management.
-     *
-     * @return void
-     */
-    protected function loadConfiguration() {
-        $configPath = X::system()->getPath('Config/services.php');
-        $services = require $configPath;
-        $this->configuration['services'] = $services;
+    public function stop() {
+        foreach ( $this->services as $name => $service ) {
+            if( !$service['enable'] ) {  continue; }
+            $service['service']->stop();
+        }
+        
+        parent::stop();
     }
     
     /**
-     * This value holds all the service instances and running information.
-     *
+     * 该变量保存着当前管理器的配置信息。
+     * @var \X\Core\Util\Configuration
+     */
+    protected $configuration = null;
+    
+    /**
+     * 获取当前管理器的配置信息
+     * @return \X\Core\Util\Configuration
+     */
+    public function getConfiguration() {
+        return $this->configuration;
+    }
+    
+    /**
+     * 该变量保存所有配置项目中的服务信息。
      * @var array
      */
     protected $services = array(
-        /**
-         * 'name' => array(
-         *      'enable'    => true, 
-         *      'service'   => $service)
-         */
+    /**
+     * 'name' => array(
+     *      'enable'    => true, 
+     *      'isLoaded'  => true,
+     *      'service'   => $service)
+     */
     );
     
     /**
-     * Load all enabled services from configuration.
-     *
+     * 根据配置信息加载服务
      * @return void
      */
-    protected function loadServices() {
-        $services = $this->configuration['services'];
+    protected function loadServicesByConfiguration() {
+        $services = $this->configuration;
         foreach ( $services as $name => $configuration ) {
             if ( $configuration['enable'] ) {
-                $this->loadService($name, $configuration);
+                if ( isset($configuration['delay']) && false === $configuration['delay'] ) {
+                    $this->load($name, $configuration);
+                } else {
+                    $this->services[$name]['enable']    = true;
+                    $this->services[$name]['isLoaded']  = false;
+                    $this->services[$name]['service']   = null;
+                }
             } else {
-                $this->services[$name]['enable'] = false;
-                $this->services[$name]['service'] = null;
+                $this->services[$name]['enable']    = false;
+                $this->services[$name]['isLoaded']  = false;
+                $this->services[$name]['service']   = null;
             }
         }
     }
     
     /**
-     * Load service into management.
-     *
-     * @param string $name The name of service to load.
-     * @param array $configuration The configuration for the service.
+     * 将指定名称的服务根据其配置加载到当前管理器中， 并启动。
+     * @param string $name 要加在的服务的名称
+     * @param array $configuration 要加在的服务的基本配置
+     * @return void
      */
-    public function loadService($name, $configuration) {
+    public function load($name, $configuration) {
         $serviceClass = $configuration['class'];
         if ( !class_exists($configuration['class']) ) {
             throw new Exception(sprintf('Can not find service "%s"', $name));
@@ -124,37 +106,30 @@ class ServiceManagement extends \X\Core\Basic {
         
         $service->start();
         
-        $this->services[$name]['enable'] = true;
-        $this->services[$name]['service'] = $service;
+        $this->services[$name]['enable']    = true;
+        $this->services[$name]['isLoaded']  = true;
+        $this->services[$name]['service']   = $service;
     }
     
     /**
-     * Get service from service management.
-     *
-     * @param string $serviceName The name of service to get.
-     *
+     * 从当前管理器中获取指定名称的服务。
+     * @param string $name 服务名称
      * @return \X\Core\Service\XService
      */
-    public function get( $serviceName ) {
+    public function get( $name ) {
         if ( !isset($this->services[$serviceName]) ) {
-            throw new Exception(sprintf('Unknown service "%s".', $serviceName));
+            throw new Exception(sprintf('Unknown service "%s".', $name));
+        } else if ( false === $this->services[$name]['enable'] ) {
+            throw new Exception(sprintf('Service "%s" is disabled.', $name));
         }
-        return $this->services[$serviceName]['service'];
+        
+        if ( false === $this->services[$name]['isLoaded'] ) {
+            $this->load($name, $this->configuration[$name]);
+        }
+        return $this->services[$name]['service'];
     }
     
-    /**
-     * Stop the management and stop all the running services.
-     *
-     * @return void
-     */
-    public function stop() {
-        foreach ( $this->services as $name => $service ) {
-            if( !$service['enable'] ) {  continue; }
-            $service['service']->stop();
-        }
-    }
     
-    /************ Management ***********************************/
     /**
      * Create a new service by given name.
      * 
@@ -204,9 +179,9 @@ class ServiceManagement extends \X\Core\Basic {
         file_put_contents($path, $content);
         
         /* Update the configuration */
-        $this->configuration['services'][$name]['enable'] = false;
-        $this->configuration['services'][$name]['class'] = "$namespace\\Service";
-        $this->saveConfigurations();
+        $this->configuration[$name]['enable'] = false;
+        $this->configuration[$name]['class'] = "$namespace\\Service";
+        $this->configuration->save();
     }
     
     /**
@@ -220,14 +195,5 @@ class ServiceManagement extends \X\Core\Basic {
     
     public function getList() {
         return array_keys($this->services);
-    }
-    
-    /**
-     * Save the configuration file into fs.
-     * @return void
-     */
-    private function saveConfigurations() {
-        $path = X::system()->getPath('Config/services.php');
-        XUtil::storeArrayToPHPFile($path, $this->configuration['services']);
     }
 }

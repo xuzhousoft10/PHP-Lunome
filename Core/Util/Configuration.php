@@ -136,6 +136,7 @@ class Configuration extends Basic implements \ArrayAccess, \Iterator  {
      * @see \Iterator::current()
      */
     public function current() {
+        $this->load();
         return current($this->config);
     }
 
@@ -144,6 +145,7 @@ class Configuration extends Basic implements \ArrayAccess, \Iterator  {
      * @see Iterator::next()
      */
     public function next() {
+        $this->load();
         return next($this->config);
     }
 
@@ -152,6 +154,7 @@ class Configuration extends Basic implements \ArrayAccess, \Iterator  {
      * @see Iterator::key()
      */
     public function key() {
+        $this->load();
         return key($this->config);
     }
 
@@ -160,6 +163,7 @@ class Configuration extends Basic implements \ArrayAccess, \Iterator  {
      * @see Iterator::valid()
      */
     public function valid() {
+        $this->load();
         return $this->offsetExists(key($this->config));
     }
     
@@ -168,6 +172,7 @@ class Configuration extends Basic implements \ArrayAccess, \Iterator  {
      * @see Iterator::rewind()
      */
     public function rewind() {
+        $this->load();
         return reset($this->config);
     }
 
@@ -176,6 +181,7 @@ class Configuration extends Basic implements \ArrayAccess, \Iterator  {
      * @see ArrayAccess::offsetExists()
      */
     public function offsetExists($offset) {
+        $this->load();
         return isset($this->config[$offset]);
     }
     
@@ -184,6 +190,7 @@ class Configuration extends Basic implements \ArrayAccess, \Iterator  {
      * @see ArrayAccess::offsetGet()
      */
     public function offsetGet($offset) {
+        $this->load();
         return $this->config[$offset];
     }
     
@@ -192,6 +199,7 @@ class Configuration extends Basic implements \ArrayAccess, \Iterator  {
      * @see ArrayAccess::offsetSet()
      */
     public function offsetSet($offset, $value) {
+        $this->load();
         if (null === $offset ) {
             $this->config[] = $value;
         } else {
@@ -205,6 +213,7 @@ class Configuration extends Basic implements \ArrayAccess, \Iterator  {
      * @see ArrayAccess::offsetUnset()
      */
     public function offsetUnset($offset) {
+        $this->load();
         unset($this->config[$offset]);
         $this->isDirty = true;
     }
