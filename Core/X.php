@@ -293,7 +293,15 @@ class X {
         
         $this->serviceManager = \X\Core\Service\ServiceManagement::getManager();
         $this->moduleManager = \X\Core\Module\ModuleManagement::getManager();
-        
+    }
+    
+    /**
+     * 运行框架。一般在start之后调用。
+     * 如果需要进行其他配置， 则必须在run之前进行。
+     * 
+     * @return void
+     */
+    public function run() {
         $this->getServiceManager()->start();
         $this->getModuleManager()->start();
         $this->loadParameters();
@@ -329,19 +337,23 @@ class X {
     }
     
     /**
-     * This value holds all the shortcut function calls.
+     * 该变量保存着所有的成功注册的快捷函数
      *
      * @var array
      */
     protected $shortCutFunctions = array(
-            // 'name'   => $handler,
+        /* 'name'   => $handler, */
     );
 
     /**
-     * Register a new shotcut function into framework.
+     * 注册一个新的快捷函数到当前框架中去。 如果锁住册的名称已经存在，
+     * 则， 旧的快捷函数将会被覆盖。
+     * 当注册完成后， 便可以使用下面的方式进行调用：
+     * X::system()->shortcut($parm1, $parm2);
+     * 其中， shortcut是注册的快捷函数的名称。
      *
-     * @param name $name The shutcut function's name.
-     * @param callback $handler The handler of the shutcut functino.
+     * @param name $name 快捷方法的名称
+     * @param callback $handler 快捷方法的处理器
      *
      * @return void
      */
@@ -350,10 +362,10 @@ class X {
     }
     
     /**
-     * The magic call function to implment the shotcut call.
+     * PHP的魔法方法， 用于实现虚拟方法的调用， 这里主要用来实现快捷函数的调用。
      *
-     * @param string $name The name of shortcut function to call
-     * @param array $parameters The parameters to handler.
+     * @param string $name 调用的方法名称
+     * @param array $parameters 传递给被调用方法的参数列表
      * @return mixed
      */
     public function __call( $name, $parameters ) {
@@ -361,6 +373,83 @@ class X {
             return call_user_func_array($this->shortCutFunctions[$name], $parameters);
         }
         throw new Exception(sprintf('Can not find shoutcut method "%s".', $name));
+    }
+    
+    /**
+     * 返回当前框架的版本信息。
+     * 
+     * @return array
+     */
+    public function getVersion() {
+        return array(1,0,0);
+    }
+    
+    /**
+     * 该变量保存框架当前使用的日志记录器， 如果该值为null， 则使用php
+     * 内置的error_log函数进行记录日志。
+     * 
+     * @var InterfaceLogger
+     */
+    protected $logger = null;
+    
+    /**
+     * 该变量保存框架当前记录日志的界别，默认为LOG_LEVEL_INFO级别。
+     * 
+     * @var integer
+     */
+    protected $logLevel = null;
+    
+    /**
+     * 根据给定的消息和跟类进行记录日志。
+     * 
+     * @param string $message 所要日志的内容
+     * @param unknown $category 日志记录的种类
+     * @param unknown $level 日志记录的等级，默认为LOG_LEVEL_INFO
+     */
+    public function log( $message, $category, $level=null ) {
+        if ( null === $level ) {
+            $level = InterfaceLogger::LOG_LEVEL_INFO;
+        }
+        
+        if ( $this->logLevel > $level ) {
+            return;
+        }
+        
+        if ( null === $this->logger ) {
+            $message = sprintf('[%s] : %s',$category, $message);
+            error_log($message);
+        } else {
+            $this->getLogger()->log($message, $category);
+        }
+    }
+    
+    /**
+     * 替换框架当前的log记录器。
+     * @return void
+     */
+    public function setLogger( InterfaceLogger $logger ) {
+        $this->logger = $logger;
+    }
+    
+    /**
+     * 获取框架当前的log记录器。
+     * @return \X\Core\InterfaceLogger
+     */
+    public function getLogger() {
+        return $this->logger;
+    }
+    
+    /**
+     * 为框架设计记录日志的级别。低于该级别的日志信息将会被抛弃。
+     * @param integer $level
+     */
+    public function setLogLevel( $level ) {
+        $level *= 1;
+        if ( 0 === $level ) {
+            throw new Exception('0 is not a valid log level, it should be bigger that 0.');
+        }
+        
+        $this->logLevel = $level;
     }
     
     /**
