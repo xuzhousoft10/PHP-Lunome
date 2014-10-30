@@ -7,11 +7,6 @@ namespace X\Core;
 /**
  * 
  */
-use X\Core\Util\XUtil;
-
-/**
- * 
- */
 class X {
     /**
      * 该变量保存该框架在运行时的一个实例。
@@ -73,105 +68,6 @@ class X {
         $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
         $path = empty($path) ? $this->root : $this->root.DIRECTORY_SEPARATOR.$path;
         return $path;
-    }
-    
-    /**
-     * 该变量存储着全局的配置信息。 该配置文件存储在Config/mail.php中。
-     *
-     * @var array
-     */
-    protected $configuration = array( 'values'=>null, 'isDirty'=>false );
-    
-    /**
-     * 将配置文件加载到当前项目中， 如果已经加载， 则不会重新加载。
-     *
-     * @return void
-    */
-    protected function loadConfiguration() {
-        if ( null !== $this->configuration['values'] ) {
-            return;
-        }
-        
-        $path = $this->getPath('Config/main.php');
-        $this->configuration['values'] = require $path;
-    }
-    
-    /**
-     * 根据名称获取配置项目值。 名称可以使用"."进行级别分割。
-     * 如果项目不存在则会返回null。
-     * 
-     * @param string $name 配置项目名称
-     * @return mixed
-     */
-    public function getConfiguration( $name ) {
-        $this->loadConfiguration();
-        $items = explode('.', $name);
-        $item = $this->configuration['values'];
-        while ( 0 < count($items) ) {
-            $itemName = array_shift($items);
-            if ( !isset($item[$itemName]) ) {
-                $item = null;
-                break;
-            } else {
-                $item = $item[$itemName];
-            }
-        }
-        return $item;
-    }
-    
-    /**
-     * 获取当前的所有配置信息。
-     * 
-     * @return array
-     */
-    public function getConfigurations() {
-        return $this->configuration['values'];
-    }
-    
-    /**
-     * 根据名称设置配置项目的值，名称可以使用"."进行级别分割。
-     * 如果项目不存在则会新建该项目。
-     * 
-     * @param string $name 配置项目名称
-     * @param string $value 配置项目值
-     * @return void
-     */
-    public function setConfiguration( $name, $value ) {
-        $this->loadConfiguration();
-        $items = explode('.', $name);
-        $item = &$this->configuration['values'];
-    
-        while ( 0 < count($items) ) {
-            $item = &$item[array_shift($items)];
-        }
-        $item = $value;
-        $this->configuration['isDirty'] = true;
-    }
-    
-    /**
-     * 使用数组替换当前配置信息。 这将完全覆盖原先的配置信息。
-     * 
-     * @param array $config
-     */
-    public function setConfigurations( $config ) {
-        $this->loadConfiguration();
-        $this->configuration['values'] = $config;
-        $this->configuration['isDirty'] = true;
-    }
-    
-    /**
-     * 保存配置信息。如果没有更改则不会进行保存。
-     * 
-     * @return void
-     */
-    public function saveConfiguration() {
-        if ( !$this->configuration['isDirty'] ) {
-            return;
-        }
-        
-        $path = $this->getPath('Config/main.php');
-        $data = $this->configuration['values'];
-        XUtil::storeArrayToPHPFile($path, $data);
     }
     
     /**
@@ -277,6 +173,20 @@ class X {
     }
     
     /**
+     * 该变量保存着当前框架的配置信息。
+     * @var \X\Core\Util\Configuration
+     */
+    protected $configuration = null;
+    
+    /**
+     * 获取当前框架的配置信息。
+     * @return \X\Core\Util\Configuration
+     */
+    public function getConfiguration() {
+        return $this->configuration;
+    }
+    
+    /**
      * 构造函数， 初始化框架的环境。
      *
      * @param string $root 该项目的根目录路径。
@@ -291,6 +201,7 @@ class X {
         register_shutdown_function(array($this, '_shutdown'));
         spl_autoload_register(array($this, '_autoloader'));
         
+        $this->configuration = new \X\Core\Util\Configuration($this->getPath('Config/main.php'));
         $this->serviceManager = \X\Core\Service\ServiceManagement::getManager();
         $this->moduleManager = \X\Core\Module\ModuleManagement::getManager();
     }

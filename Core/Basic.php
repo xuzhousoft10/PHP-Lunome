@@ -16,6 +16,7 @@ class Basic extends \stdClass {
     public function __isset($name){
         $getter = sprintf('get%s', ucfirst($name));
         $isset = method_exists($this, $getter) ? (null !== $this->$getter()) : false;
+        $isset = $isset || ( method_exists($this, 'get') && null !== $this->get($name) );
         return $isset;
     }
     
@@ -26,10 +27,13 @@ class Basic extends \stdClass {
      */
     public function __get( $name ) {
         $getter = sprintf('get%s', ucfirst($name));
-        if ( !method_exists($this, $getter) ) {
-            throw new Exception(sprintf('Property "%s" can not be read.', $name));
+        if ( method_exists($this, $getter) ) {
+            return call_user_func(array($this, $getter));
+        } else if ( method_exists($this, 'get') ) {
+            return $this->get($name);
         }
-        return call_user_func(array($this, $getter));
+        
+        throw new Exception(sprintf('Property "%s" can not be read.', $name));
     }
     
     /**
@@ -40,10 +44,12 @@ class Basic extends \stdClass {
      */
     public function __set( $name, $value ) {
         $setter = sprintf('set%s', ucfirst($name));
-        if ( !method_exists($this, $setter) ) {
-            throw new Exception(sprintf('Property "%s" can not be written.', $name));
+        if ( method_exists($this, $setter) ) {
+            return call_user_func_array(array($this, $setter), array($value));
+        } else if ( method_exists($this, 'get') ) {
+            return $this->set($name, $value);
         }
-        call_user_func_array(array($this, $setter), array($value));
+        throw new Exception(sprintf('Property "%s" can not be written.', $name));
     }
     
     /**
