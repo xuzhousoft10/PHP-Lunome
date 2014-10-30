@@ -453,16 +453,13 @@ class X {
     }
     
     /**
-     * A lowercase string that describes the type of interface 
-     * (the Server API, SAPI) that PHP is using.
-     * 
+     * 当前框架运行处于的interface名称。
      * @var string
      */
     protected $interfaceType = null;
     
     /**
-     * Initiate the interface that PHP is using.
-     * 
+     * 初始化框架运行的interface环境。
      * @return void
      */
     protected function initInterface() {
@@ -470,14 +467,13 @@ class X {
     }
     
     /**
-     * 
+     * 当框架处于CLI模式时的名称
      * @var string
      */
     const PHP_INTERFACE_TYPE_CLI = 'cli';
     
     /**
-     * Check if using CLI interface.
-     * 
+     * 判断框架是否处于CLI运行模式
      * @return boolean
      */
     public function isCLI() {
