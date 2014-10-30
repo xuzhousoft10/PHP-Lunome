@@ -27,7 +27,7 @@ class X {
      * @return X
      */
     public static function start( $basePath ){
-        if ( is_null(self::$system) ) {
+        if ( null === self::$system ) {
             self::$system = new X($basePath);
         }
         return self::$system;
@@ -48,7 +48,7 @@ class X {
      * @return \X\Core\X
      */
     public static function system() {
-        if ( is_null(self::$system) ) {
+        if ( null === self::$system ) {
             throw new Exception('X has not been started.');
         }
         return self::$system;
