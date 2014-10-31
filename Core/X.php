@@ -93,7 +93,7 @@ class X {
         
                 list( $name, $value ) = explode('=', $parm);
                 $name = substr($name, 2);
-                $parameters[trim($name)] = trim($name);
+                $parameters[trim($name)] = trim($value);
             }
             $this->parameters = $parameters;
         } else {

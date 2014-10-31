@@ -11,6 +11,7 @@ use X\Core\X;
 use X\Core\Util\Management;
 use X\Core\Util\Configuration;
 use X\Core\Exception;
+use X\Core\Util\XUtil;
 
 /**
  * 
@@ -30,7 +31,7 @@ class ServiceManagement extends Management {
      */
     public function stop() {
         foreach ( $this->services as $name => $service ) {
-            if( !$service['enable'] ) {  continue; }
+            if( !$service['enable'] || !$service['isLoaded'] ) {  continue; }
             $service['service']->stop();
         }
         
@@ -117,7 +118,7 @@ class ServiceManagement extends Management {
      * @return \X\Core\Service\XService
      */
     public function get( $name ) {
-        if ( !isset($this->services[$serviceName]) ) {
+        if ( !isset($this->services[$name]) ) {
             throw new Exception(sprintf('Unknown service "%s".', $name));
         } else if ( false === $this->services[$name]['enable'] ) {
             throw new Exception(sprintf('Service "%s" is disabled.', $name));
@@ -131,16 +132,17 @@ class ServiceManagement extends Management {
     
     
     /**
-     * Create a new service by given name.
+     * 根据名称创建一个新的服务, 如果名称已经存在， 则会抛出一个异常。
      * 
-     * @param string $name The name service.
-     * @param string $module The module that the service belongs to, if null then it belongs to system.
+     * @param string $name 新服务的名称
+     * @param string $module 服务所属的module的名称， 如果为空，则该服务属于框架。
+     * @return void
      */
     public function create ( $name, $module=null ) {
         if ( $this->has($name) ) {
             throw new Exception(sprintf('Service "%s" already exists.', $name));
         }
-        if ( null === $module && !X::system()->getModuleManager()->has($module) ) {
+        if ( null !== $module && !X::system()->getModuleManager()->has($module) ) {
             throw new Exception(sprintf('Module "%s" does not exists.', $name));
         }
         
@@ -179,21 +181,101 @@ class ServiceManagement extends Management {
         file_put_contents($path, $content);
         
         /* Update the configuration */
-        $this->configuration[$name]['enable'] = false;
-        $this->configuration[$name]['class'] = "$namespace\\Service";
+        $config = array('enable'=>false, 'delay'=>true, 'class'=>"$namespace\\Service");
+        $this->configuration->set($name, $config);
         $this->configuration->save();
     }
     
     /**
-     * Check the service exists by given name.
-     * 
-     * @param string $name The name of service to check.
+     * 删除指定名称的服务。
+     * @param string $name 服务的名称
+     */
+    public function delete( $name ) {
+        if ( !isset($this->configuration[$name]) ) {
+            throw new Exception(sprintf('Service "%s" does not exists.', $name));
+        }
+        
+        /* Check is system service */
+        $class = explode('\\', $this->configuration[$name]['class']);
+        array_shift($class);
+        $isSystem = 'Service' === array_shift($class);
+        
+        /* Get the path that would be deleted */
+        $class = explode('\\', $this->configuration[$name]['class']);
+        array_shift($class);
+        array_pop($class);
+        $classPath = X::system()->getPath(implode('/', $class));
+        XUtil::deleteFile($classPath);
+        unset($this->configuration[$name]);
+        $this->configuration->save();
+    }
+    
+    /**
+     * 检查服务是否存在。
+     * @param string $name 要检查的服务的名称。
+     * @return boolean
      */
     public function has( $name ) {
         return array_key_exists($name, $this->services);
     }
     
+    /**
+     * 获取所有服务的名称列表。
+     * @return array
+     */
     public function getList() {
         return array_keys($this->services);
+    }
+    
+    /**
+     * 根据名称开启指定服务。
+     * @param string $name 要开启的服务名称。
+     * @return void
+     */
+    public function enable( $name ) {
+        if ( !isset($this->configuration[$name]) ) {
+            throw new Exception(sprintf('Service "%s" does not exists.', $name));
+        }
+        $this->configuration[$name]['enable'] = true;
+        $this->configuration->save();
+    }
+    
+    /**
+     * 根据名称关闭指定服务。
+     * @param string $name 要开启的服务名称。
+     * @return void
+     */
+    public function disable( $name ) {
+        if ( !isset($this->configuration[$name]) ) {
+            throw new Exception(sprintf('Service "%s" does not exists.', $name));
+        }
+        $this->configuration[$name]['enable'] = false;
+        $this->configuration->save();
+    }
+    
+    /**
+     * 根据名称为指定服务开启延迟启动。
+     * @param string $name 要开启延迟启动的服务名称。
+     * @return void
+     */
+    public function enableDelayStart( $name ) {
+        if ( !isset($this->configuration[$name]) ) {
+            throw new Exception(sprintf('Service "%s" does not exists.', $name));
+        }
+        $this->configuration[$name]['delay'] = true;
+        $this->configuration->save();
+    }
+    
+    /**
+     * 根据名称为指定服务关闭延迟启动。
+     * @param string $name 要关闭延迟启动的服务名称。
+     * @return void
+     */
+    public function disableDelayStart( $name ) {
+        if ( !isset($this->configuration[$name]) ) {
+            throw new Exception(sprintf('Service "%s" does not exists.', $name));
+        }
+        $this->configuration[$name]['delay'] = false;
+        $this->configuration->save();
     }
 }

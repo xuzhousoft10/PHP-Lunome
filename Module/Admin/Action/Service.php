@@ -31,13 +31,6 @@ class Service extends \X\Service\XAction\Core\Action {
         
         $method = new \ReflectionMethod(__CLASS__, $actionHandler);
         $numberOfParameters = $method->getNumberOfParameters();
-        if ( $numberOfParameters !== count($parameters) ) {
-            $message = '%d parameters required, %d were given.';
-            $message = sprintf($message, $numberOfParameters, count($parameters));
-            $console->printLine($message);
-            return;
-        }
-        
         call_user_func_array(array($this, $actionHandler), $parameters);
     }
     
@@ -51,6 +44,14 @@ class Service extends \X\Service\XAction\Core\Action {
     protected function actionCreate( Console $console, $name, $module=null) {
         try {
             X::system()->getServiceManager()->create($name, $module);
+        } catch ( Exception $e ) {
+            $console->printLine($e->getMessage());
+        }
+    }
+    
+    protected function actionDelete( Console $console, $name ) {
+        try {
+            X::system()->getServiceManager()->delete($name);
         } catch ( Exception $e ) {
             $console->printLine($e->getMessage());
         }
