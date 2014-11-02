@@ -7,7 +7,6 @@ namespace X\Core\Service;
 /**
  * 
  */
-use X\Core\Util\XUtil;
 use X\Core\Util\Configuration;
 
 /**
@@ -124,7 +123,7 @@ abstract class XService extends \X\Core\Basic {
      * 该变量保存着当前服务的配置信息。
      * @var \X\Core\Util\Configuration
      */
-    protected $configuration = null;
+    private $configuration = null;
     
     /**
      * 获取当前服务的配置信息。
