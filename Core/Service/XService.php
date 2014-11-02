@@ -26,21 +26,21 @@ abstract class XService extends \X\Core\Basic {
     }
     
     /**
+     * The static way to get service name.
+     *
+     * @return string
+     */
+    public static function getServiceName() {
+        return self::getServiceNameFromClassName(get_called_class());
+    }
+    
+    /**
      * Get service name by a non-static way.
      * 
      * @return string
      */
     public function getName() {
         return self::getServiceNameFromClassName(get_class($this));
-    }
-    
-    /**
-     * The static way to get service name.
-     * 
-     * @return string
-     */
-    public static function getServiceName() {
-        return self::getServiceNameFromClassName(get_called_class());
     }
     
     /**
