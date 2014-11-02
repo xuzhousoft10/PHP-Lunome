@@ -1,29 +1,28 @@
 <?php
 /**
- * Namespace defination
+ * 
  */
 namespace X\Core\Service;
 
-use X\Core\Util\XUtil;
 /**
- * The Service basic service class.
  * 
- * @author  Michael Luthor <michaelluthor@163.com>
- * @since   Version 0.0.0
- * @version 0.0.0
+ */
+use X\Core\Util\XUtil;
+use X\Core\Util\Configuration;
+
+/**
+ *
  */
 abstract class XService extends \X\Core\Basic {
     /**
-     * This value holds the service instace.
-     *
-     * @var XService
+     * 该变量保存着所有已经启动的服务的实例。
+     * @var \X\Core\Service\XService[]
      */
     private static $services = array();
     
     /**
-     * Get service instance
-     *
-     * @return XService
+     * 获取该服务的实例
+     * @return \X\Core\Service\XService
      */
     static public function getService() {
         $className = get_called_class();
@@ -35,9 +34,8 @@ abstract class XService extends \X\Core\Basic {
     }
     
     /**
-     * Get the service name from given name.
-     * 
-     * @param string $className
+     * 从服务的类名中获取服务名称。
+     * @param string $className 要获取服务名称的类名
      * @return string
      */
     private static function getServiceNameFromClassName( $className ) {
@@ -47,8 +45,7 @@ abstract class XService extends \X\Core\Basic {
     }
     
     /**
-     * The static way to get service name.
-     *
+     * 静态方法获取服务名称
      * @return string
      */
     public static function getServiceName() {
@@ -56,8 +53,7 @@ abstract class XService extends \X\Core\Basic {
     }
     
     /**
-     * Get service name by a non-static way.
-     * 
+     * 非静态方法获取服务名称
      * @return string
      */
     public function getName() {
@@ -65,95 +61,55 @@ abstract class XService extends \X\Core\Basic {
     }
     
     /**
-     * Do not allow user instance this class at somewhere else.
-     * 
+     * 将构造函数保护起来以禁止从其他地方实例化服务。
      * @return void
      */
     protected function __construct() {}
     
     /**
-     * This value contains all configuration values.
-     * 
-     * @var array
-     */
-    protected $configuration = array();
-    
-    /**
-     * Load configurations from config directory, before loaded
-     * the config, it would clean the old configurations. 
-     * If the configuration file does not exists, then nothing would 
-     * be loaded. 
-     * The configuration should be name as 'main.php', unless you 
-     * overite the method getConfigFileName().
-     * 
+     * 启动服务，该方法由管理器启动， 不建议在其他地方调用该方法。
      * @return void
      */
-    protected function loadConfiguration() {
-        $this->configuration = array();
-        $configurationPath = $this->getConfigFilePath();
-        if ( !file_exists($configurationPath) ) {
-            return;
-        } else {
-            $this->configuration = require $configurationPath;
-        }
-    }
-    
-    public function setConfiguration( $name, $value ) {
-        $items = explode('.', $name);
-        $item = &$this->configuration;
-        
-        while ( 0 < count($items) ) {
-            $item = &$item[array_shift($items)];
-        }
-        $item = $value;
+    public function start(){
+        $this->beforeStart();
+        $this->afterStart();
     }
     
     /**
-     * Update the configuration file of this service.
-     * If the configuration file does not exists, then the 
-     * new configuration would be created, or the old one 
-     * would be overrited.
-     * If the configuration is empty, then the configuration 
-     * file would be deleted.
-     * Also, this method would crate the configuration folder
-     * automatically.
-     * 
+     * 该方法将在服务启动前执行， 当你在新建一个服务时， 可以重写该方法以便在服务启动前处理。
      * @return void
      */
-    public function saveConfiguration() {
-        $configurationPath = $this->getConfigFilePath();
-        
-        if ( file_exists($configurationPath)) {
-            unlink($configurationPath);
-        }
-        
-        if ( empty($this->configuration) ) {
-            return;
-        }
-        
-        $configurationDirectory = dirname($configurationPath);
-        if ( !file_exists($configurationDirectory) ) {
-            mkdir($configurationDirectory);
-        }
-        
-        XUtil::storeArrayToPHPFile($configurationPath, $this->configuration);
-    }
+    protected function beforeStart(){}
     
     /**
-     * Get the path of config file.
-     * 
-     * @return string
+     * 该方法将在服务启动后执行， 当你在新建一个服务时， 可以重写该方法以便在服务启动后处理。
+     * @return void
      */
-    protected function getConfigFilePath() {
-        $servicePath = $this->getServicePath();
-        $configFileName = $this->getConfigFileName();
-        $configurationPath = sprintf('%s/Config/%s', $servicePath, $configFileName);
-        return $configurationPath;
+    protected function afterStart(){}
+    
+    /**
+     * 结束服务，该方法由管理器结束， 不建议在其他地方调用该方法。
+     *  @return void
+     */
+    public function stop(){
+        $this->beforeStop();
+        $this->afterStop();
     }
     
     /**
-     * Get the path where the service stored.
-     * 
+     * 该方法将在服务结束前执行， 当你在新建一个服务时， 可以重写该方法以便在服务结束前处理。
+     * @return void
+     */
+    protected function beforeStop(){}
+    
+    /**
+     * 该方法将在服务结束后执行， 当你在新建一个服务时， 可以重写该方法以便在服务结束后处理。
+     * @return void
+     */
+    protected function afterStop(){}
+    
+    /**
+     * 获取当前服务下的文件或目录的绝对路径。
      * @return string
      */
     public function getServicePath( $path='' ) {
@@ -165,94 +121,20 @@ abstract class XService extends \X\Core\Basic {
     }
     
     /**
-     * Get the file name of configuration file name.
-     * 
-     * @return string
+     * 该变量保存着当前服务的配置信息。
+     * @var \X\Core\Util\Configuration
      */
-    protected function getConfigFileName() {
-        return 'Main.php';
-    }
+    protected $configuration = null;
     
     /**
-     * Start the service.
-     * This method would be called by service management class.
-     * 
-     * @return void
+     * 获取当前服务的配置信息。
+     * @return \X\Core\Util\Configuration
      */
-    public function start(){
-        $this->beforeStart();
-        $this->loadConfiguration();
-        $this->afterStart();
-    }
-    
-    /**
-     * The method that would be executed before the service started.
-     * 
-     * @return void
-     */
-    protected function beforeStart(){}
-    
-    /**
-     * The method that would be executed after the service started.
-     * 
-     * @return void
-     */
-    protected function afterStart(){}
-    
-    /**
-     * Stop this service.
-     * This method would be called when the script exit.
-     * 
-     *  @return void
-     */
-    public function stop(){
-        $this->beforeStop();
-        $this->afterStop();
-    }
-    
-    /**
-     * The method that would be executed before the service stopped.
-     *
-     * @return void
-     */
-    protected function beforeStop(){}
-    
-    /**
-     * The method that would be executed after the service stopped.
-     *
-     * @return void
-     */
-    protected function afterStop(){}
-    
-    /**
-     * 
-     * @var unknown
-     */
-    protected $settingController = null;
-    
-    /**
-     * Load setting controller for current service.
-     * If the custom controller can not be found, then, the default
-     * controller would be used as controller for current service.
-     * 
-     * @return void
-     */
-    public function getSettingController() {
-        if ( !is_null($this->settingController) ) {
-            return $this->settingController;
+    public function getConfiguration() {
+        if ( null === $this->configuration ) {
+            $servicePath = $this->getServicePath('Config/Main.php');
+            $this->configuration = new Configuration($servicePath);
         }
-        
-        $controller = get_class($this);
-        $controller = explode('\\', $controller);
-        array_pop($controller);
-        $controller = implode('\\', $controller).'\\Controller\\SettingController';
-        
-        if ( class_exists($controller) ) {
-            $this->settingController = new $controller($this);
-        } else {
-            $this->settingController = new SettingController($this);
-        }
-        
-        return $this->settingController;
+        return $this->configuration;
     }
 }

@@ -8,7 +8,6 @@ namespace X\Core\Util;
  * 
  */
 use X\Core\Basic;
-use X\Core\Exception;
 
 /**
  * 
@@ -21,7 +20,7 @@ class Configuration extends Basic implements \ArrayAccess, \Iterator  {
     public function __construct( $path ) {
         $this->path = $path;
         if ( !is_file($this->path) ) {
-            throw new Exception(sprintf('Configuration file "%s" does not exists.', $path));
+            $this->config = array();
         }
     }
     

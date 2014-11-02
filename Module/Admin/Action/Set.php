@@ -23,18 +23,25 @@ class Set extends \X\Service\XAction\Core\Action {
                 $console->printLine('Command has not been supported.');
                 return;
             }
+            $seperatorPos = strpos($parameters, '=');
+            $name = trim(substr($parameters, 0, $seperatorPos));
+            $value = trim(substr($parameters, $seperatorPos+1));
+            $using->getConfiguration()->set($name, $value);
             break;
         case 'module' :
             $console->printLine('Unable to execute set command on modules.');
+            $seperatorPos = strpos($parameters, '=');
+            $name = trim(substr($parameters, 0, $seperatorPos));
+            $value = trim(substr($parameters, $seperatorPos+1));
+            $using->setConfiguration($name, $value);
             return;
         default :
             $using = X::system();
+            $seperatorPos = strpos($parameters, '=');
+            $name = trim(substr($parameters, 0, $seperatorPos));
+            $value = trim(substr($parameters, $seperatorPos+1));
+            $using->setConfiguration($name, $value);
             break;
         }
-        
-        $seperatorPos = strpos($parameters, '=');
-        $name = trim(substr($parameters, 0, $seperatorPos));
-        $value = trim(substr($parameters, $seperatorPos+1));
-        $using->setConfiguration($name, $value);
     }
 }
