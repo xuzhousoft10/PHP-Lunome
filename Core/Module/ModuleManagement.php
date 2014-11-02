@@ -1,39 +1,29 @@
 <?php
 /**
- * This file defines the module management class.
+ * 
  */
 namespace X\Core\Module;
 
 /**
- * Use statements
+ * 
  */
 use X\Core\X;
 use X\Core\Util\XUtil;
+use X\Core\Util\Configuration;
 
 /**
- * The module management class.
- * This class use to manage all the modules. 
- * You can install, import or other stuff to manage the module 
- * by this class. Do not management the modules by manually, 
- * unless you know what you are doing.
- * 
- * @author  Michael Luthor <michaelluthor@163.com>
- * @version 0.0.0
- * @since   Version 0.0.0
  * 
  */
 class ModuleManagement extends \X\Core\Basic {
     /**
-     * This value contains the manager of ModuleManagement
-     * 
+     * 该变量用来保存该管理器的实例。
      * @var ModuleManagement
      */
     protected static $manager = null;
     
     /**
-     * Get the manager of management.
-     * 
-     * @return ModuleManagement
+     * 获取模块管理器
+     * @return \X\Core\Module\ModuleManagement
      */
     public static function getManager() {
         if ( is_null(self::$manager) ) {
@@ -43,97 +33,65 @@ class ModuleManagement extends \X\Core\Basic {
     }
     
     /**
-     * Start module management to load all the availabel modules
-     * and configuration for module management.
-     * If the module is not a available module, then it would pass
-     * to load it.
-     *
+     * 启动管理器
      * @return void
      */
     public function start() {
-        $this->loadConfig();
-        $this->loadModules();
+        $this->getConfiguration();
+        $this->loadModulesFromModuleDir();
     }
     
     /**
-     * This value contains the configuration of management.
-     *
-     * @var array
+     * 该变量保存着当前管理器的额配置信息。
+     * @var \X\Core\Util\Configuration
      */
-    protected $configuration = array(
-        /* Module config informations */
-        'modules' => array(),
-        /* The module name of default module. */
-        'defaultModule' => null,
-    );
+    protected $configuration = null;
     
     /**
-     * Load management configurations
-     *
-     * @return void
+     * 获取当前的配置信息
+     * @return \X\Core\Util\Configuration
      */
-    protected function loadConfig() {
-        $path = X::system()->getPath('Config/modules.php');
-        $this->configuration['modules'] = require $path;
+    public function getConfiguration() {
+        if ( null === $this->configuration ) {
+            $path = X::system()->getPath('Config/modules.php');
+            $this->configuration = new Configuration($path);
+        }
+        return $this->configuration;
     }
     
+    
     /**
-     * This value contains the loaded modules.
-     * 
+     * 该变量保存着所有已加载的模块。
      * @var \X\Core\Module\XModule[]
      */
     protected $modules = array();
-
+    
     /**
-     * Load all available modules.
-     *
+     * 该变量保存当前框架的默认模块的名称。
+     * @var string
+     */
+    protected $defaultModuleName = null;
+    
+    /**
+     * 加载所有可用的模块， 如果名称以"."开头， 则忽略该模块。
      * @return void
      */
-    protected function loadModules() {
-        $modulePath = $this->getModuleStorePath();
+    protected function loadModulesFromModuleDir() {
+        $modulePath = X::system()->getPath('Module');
         $moduleNames = scandir($modulePath, SCANDIR_SORT_NONE);
-        array_map(array($this, 'doInitLoadModule'), $moduleNames);
+        foreach ( $moduleNames as $moduleName ) {
+            if ( '.' == $moduleName[0] ) { continue; }
+            $this->loadModule($moduleName);
+        }
     }
     
     /**
-     * Get the path where the modules stored at.
-     *
-     * @return string
-     */
-    protected function getModuleStorePath() {
-        $basePath = X::system()->getPath();
-        $modulePath = $basePath.DIRECTORY_SEPARATOR.'Module';
-        return $modulePath;
-    }
-
-    /**
-     * Check the module, if it's not available module then ignore it, but
-     * save the module information to management.
-     *
-     * @param string $name The name of module to load.
-     *
+     * 根据模块名称将模块加载到框架中。
+     * @param string $name 模块的名称。
      * @return boolean
      */
-    protected function doInitLoadModule( $name ) {
-        if ( '.' == $name[0] ) {
-            return false;
-        }
-
-        return $this->loadModule($name);
-    }
-    
-    /**
-     * Load sigle module by name into management.
-     *
-     * @param string $name The name of module to load.
-     *
-     * @throws X\Core\Module\Exception When the module class can not be found.
-     * @throws X\Core\Module\Exception When the module class is not extens from XModule
-     *
-     * @return boolean Whether the module has been loaded or not.
-     */
     protected function loadModule($name) {
-        if ( !isset($this->configuration['modules'][$name]) || !$this->configuration['modules'][$name]['enable'] ) {
+        if ( !isset($this->configuration[$name]) || !$this->configuration[$name]['enable'] ) {
             $this->modules[$name]['available'] = false;
             $this->modules[$name]['is_loaded'] = false;
             $this->modules[$name]['module'] = null;
@@ -141,7 +99,7 @@ class ModuleManagement extends \X\Core\Basic {
         }
         
         if ( $this->isDefault($name) ) {
-            $this->configuration['defaultModule'] = $name;
+            $this->defaultModuleName = $name;
         }
         
         $moduleClass = sprintf('X\\Module\\%s\\Module', $name);
@@ -160,15 +118,12 @@ class ModuleManagement extends \X\Core\Basic {
     }
     
     /**
-     * Execute the module by get module name from system parameters.
-     * If there is not availabel module name, then the default module
-     * would be executed.
-     *
+     * 根据传入框架的参数执行制定的模块， 如果没有指定， 则会执行默认的模块。
      * @return void
      */
     public function run() {
         $parameters = X::system()->getParameters();
-        $moduleName = isset($parameters['module']) ? $parameters['module'] : $this->configuration['defaultModule'];
+        $moduleName = isset($parameters['module']) ? $parameters['module'] : $this->defaultModuleName;
         if ( is_null($moduleName) ) {
             throw new Exception('Can not find any module to execute.');
         }
@@ -191,10 +146,25 @@ class ModuleManagement extends \X\Core\Basic {
     }
     
     /**
-     * Get module by name form management.
-     *
-     * @param string $name The name of module in management.
-     *
+     * 获取框架中所有有效模块的名称。
+     * @return array
+     */
+    public function getList() {
+        return array_keys($this->modules);
+    }
+    
+    /**
+     * 检查指定名称的模块是否存在。
+     * @param string $moduleName
+     * @return boolean
+     */
+    public function has( $moduleName ) {
+        return isset($this->modules[$moduleName]);
+    }
+    
+    /**
+     * 从管理器中根据模块名称获取模块。 如果模块没有被加载， 则会加载该模块。
+     * @param string $name 要获取的模块名称。
      * @return \X\Core\Module\XModule
      */
     public function get( $name ) {
@@ -208,30 +178,18 @@ class ModuleManagement extends \X\Core\Basic {
         return $this->modules[$name]['module'];
     }
     
-    /************  Management  *************************************************/
     /**
-     * List all modules in the system.
-     * 
-     * @return array
-     */
-    public function getList() {
-        return array_keys($this->modules);
-    }
-    
-    /**
-     * Check wether the module is enabled. return true is the module is enabled.
-     * 
-     * @param string $name The name of module to check.
+     * 检查模块是否被启用。
+     * @param string $name 检查模块的名字
      * @return boolean
      */
     public function isEnable( $name ) {
-        return isset($this->configuration['modules'][$name]) && $this->configuration['modules'][$name]['enable'];
+        return isset($this->configuration[$name]) && $this->configuration[$name]['enable'];
     }
     
     /**
-     * Enable the module by given name.
-     * 
-     * @param string $name The name of module to enable.
+     * 根据名称启用指定模块
+     * @param string $name 要启用的模块的名称。
      * @return void
      */
     public function enable( $name ) {
@@ -239,14 +197,13 @@ class ModuleManagement extends \X\Core\Basic {
             throw new Exception(sprintf('Module "%s" does not exists.', $name));
         }
         
-        $this->configuration['modules'][$name]['enable'] = true;
-        $this->saveConfigurations();
+        $this->configuration[$name]['enable'] = true;
+        $this->getConfiguration()->save();
     }
     
     /**
-     * Disable the module by given name.
-     * 
-     * @param string $name The name of module to disable.
+     * 根据名称停用用指定模块
+     * @param string $name 要停用的模块的名称。
      * @return void
      */
     public function disable( $name ) {
@@ -254,25 +211,13 @@ class ModuleManagement extends \X\Core\Basic {
             throw new Exception(sprintf('Module "%s" does not exists.', $name));
         }
         
-        $this->configuration['modules'][$name]['enable'] = false;
-        $this->saveConfigurations();
+        $this->configuration[$name]['enable'] = false;
+        $this->getConfiguration()->save();
     }
     
     /**
-     * Check if the module exists by given name.
-     * 
-     * @param string $moduleName
-     * @return boolean
-     */
-    public function has( $moduleName ) {
-        return isset($this->modules[$moduleName]);
-    }
-    
-    /**
-     * Create a new module by given name.
-     * 
-     * @param string $name The name of new module.
-     * @throws Exception
+     * 根据名称创建新的模块。
+     * @param string $name 新模块的名称。
      */
     public function create( $name ) {
         $moduleName = ucfirst($name);
@@ -309,16 +254,14 @@ class ModuleManagement extends \X\Core\Basic {
         file_put_contents($moduleFilePath, $moduleFile);
         
         /* Update module management configurations. */
-        $this->configuration['modules'][$moduleName] = array('enable'=>false);
-        $this->saveConfigurations();
+        $this->configuration[$moduleName] = array('enable'=>false);
+        $this->getConfiguration()->save();
         $this->loadModule($moduleName);
     }
     
     /**
-     * Set the module as default module by given name.
-     * if $name is null, then all the modules would not be default module.
-     * 
-     * @param string $name
+     * 将指定名称的模块设置为默认模块。
+     * @param string $name 要设置为默认模块的名称。
      * @throws Exception
      */
     public function setDefault( $name = null ) {
@@ -326,82 +269,45 @@ class ModuleManagement extends \X\Core\Basic {
             throw new Exception(sprintf('Can not find module "%s".', $name));
         }
         
-        foreach ( $this->configuration['modules'] as $moduleName => $moduleConfig ) {
-            $this->configuration['modules'][$moduleName]['default'] = false;
+        foreach ( $this->configuration as $moduleName => $moduleConfig ) {
+            $this->configuration[$moduleName]['default'] = false;
         }
-        $this->configuration['defaultModule'] = null;
+        $this->defaultModuleName = null;
         
         if ( !is_null($name) ) {
-            $this->configuration['modules'][$name]['default'] = true;
-            $this->configuration['defaultModule'] = $name;
+            $this->configuration[$name]['default'] = true;
+            $this->defaultModuleName = $name;
         }
-        
-        $this->saveConfigurations();
+        $this->getConfiguration()->save();
     }
     
     /**
-     * Check if a module is default module.
-     * 
+     * 检查指定模块是否为默认模块。
      * @param string $name
      * @return boolean
      */
     public function isDefault( $name ) {
-        return isset($this->configuration['modules'][$name]['default']) &&  $this->configuration['modules'][$name]['default'];
+        return isset($this->configuration[$name]['default']) &&  $this->configuration[$name]['default'];
     }
     
     /**
-     * Delete the module by given name.
-     * 
-     * @param unknown $name
+     * 根据名称删除指定模块。
+     * @param string $name
      */
     public function delete( $name ) {
         $name = ucfirst($name);
         $path = X::system()->getPath("Module/$name");
-        $this->deleteFolder($path);
+        XUtil::deleteFile($path);
         
-        unset($this->configuration['modules'][$name]);
-        $this->saveConfigurations();
+        unset($this->configuration[$name]);
+        $this->getConfiguration()->save();
         unset($this->modules[$name]);
     }
     
     /**
-     * Save the configuration file into fs.
-     * @return void
-     */
-    private function saveConfigurations() {
-        $path = X::system()->getPath('Config/modules.php');
-        $content = array();
-        $content[] = '<?php';
-        $content[] = 'return';
-        $content[] = var_export($this->configuration['modules'], true);
-        $content[] = ';';
-        $content = implode("\n", $content);
-        file_put_contents($path, $content);
-    }
-    
-    /**
-     * Delete path and his subfiles.
-     * @param unknown $path
-     * @return boolean
-     */
-    private function deleteFolder( $path ) {
-        if ( !file_exists($path) ) {
-            return false;
-        }
-
-        $files = array_diff(scandir($path), array('.','..'));
-        foreach ($files as $file) {
-            $filePath = $path.DIRECTORY_SEPARATOR.$file;
-            (is_dir($filePath) && !is_link($path)) ? $this->deleteFolder($filePath) : unlink($filePath);
-        }
-        return rmdir($path);
-    }
-    
-    /**
-     * Create a module migration by given name.
-     * 
-     * @param unknown $name
-     * @return string The path of new migration
+     * 为指定模块创建迁移脚本。
+     * @param string $module 模块名称
+     * @param string $name 迁移脚本名称
      */
     public function migrateCreate( $module, $name ) {
         $moduleName = ucfirst($module);
@@ -451,9 +357,8 @@ class ModuleManagement extends \X\Core\Basic {
     }
     
     /**
-     * Execute the up action for migration.
-     * 
-     * @param unknown $name
+     * 根据名称为指定模块执行迁移脚本。
+     * @param string $name
      */
     public function  migrateUp( $name ) {
         $moduleName = ucfirst($name);
@@ -486,10 +391,9 @@ class ModuleManagement extends \X\Core\Basic {
     }
     
     /**
-     * Degrade the module by given name.
-     * 
-     * @param unknown $name
-     * @param unknown $stepCount
+     * 回滚指定模块的迁移。
+     * @param string $name
+     * @param integer $stepCount
      * @throws Exception
      */
     public function migrateDown( $name, $stepCount ) {
@@ -516,190 +420,4 @@ class ModuleManagement extends \X\Core\Basic {
             XUtil::storeArrayToPHPFile($historyPath, $history);
         }
     }
-//     /**
-//      * Shutdown the management.
-//      * With this method, you can get clean manager afer you call getManager().
-//      * 
-//      * @return void
-//      */
-//     public function shutdown() {
-//         self::$manager = null;
-//     }
-    
-//     /**
-//      * Get the module name list in management.
-//      * 
-//      * @return string[]
-//      */
-//     public function getModules() {
-//         return array_keys($this->modules);
-//     }
-    
-    
-//     /**
-//      * Install the module by name
-//      * 
-//      * @param string $name The name of module to install.
-//      * @param string $message The value to store the error message.
-//      * 
-//      * @return boolean 
-//      */
-//     public function installModule( $name, &$message = null ){
-//         $module = $this->getModule($name);
-//         if ( is_null($module) ) {
-//             $message=sprintf('"%s" is not a available module.', $name);
-//             return false; 
-//         }
-        
-//         if ( !$module->install($message) ) {
-//             return false;
-//         }
-        
-//         $ini = Ini::read($this->getModuleConfigFilePath(), true);
-//         $ini->addItem('enable', 'yes', $name);
-//         if ( !$ini->save() ) {
-//             $message = sprintf('"%s" can not be installed', $name);
-//             return false;
-//         }
-        
-//         return true;
-//     }
-    
-//     /**
-//      * Uninstall module by name.
-//      * This would disable the module but not delete it.
-//      * 
-//      * @param string $name The name of module to uninstall.
-//      * 
-//      * @return boolean
-//      */
-//     public function uninstallModule( $name, &$message=null ) {
-//         $module = $this->getModule($name);
-//         if ( is_null($module) ) {
-//             $message = sprintf('"%s" is not an available module.', $name);
-//             return false;
-//         }
-        
-//         if ( !$module->uninstall( $message ) ) {
-//             return false;
-//         }
-//         $ini = Ini::read($this->getModuleConfigFilePath(), true);
-//         $ini->addItem('enable', 'no', $name);
-//         $ini->save();
-//         return true;
-//     }
-    
-//     /**
-//      * Update module by given name.
-//      * This method would execute the update process for a module.
-//      * 
-//      * @param string $name The name of module to update.
-//      * @param string $message The value to store the error message, If there is not error
-//      *                          then it would not be changed.
-//      * @param array $list The value to store the items of update progress.
-//      * 
-//      * @return boolean
-//      */
-//     public function upgradeModule( $name, &$message=null, &$list=array() ) {
-//         $module = $this->getModule($name);
-//         if ( is_null($module) ) {
-//             $message = sprintf('"%s" is not an available module.', $name);
-//             return false;
-//         }
-        
-//         if ( !$module->upgrade( $message, $list ) ) {
-//             return false;
-//         }
-        
-//         return true;
-//     }
-    
-//     /**
-//      * Delete a module by given name.
-//      * 
-//      * @param string $name The name of module to delete.
-//      * 
-//      * @return boolean
-//      */
-//     public function deleteModule( $name ) {
-//         $path = $this->getModulePath($name);
-//         return $this->deleteFolder($path);
-//     }
-    
-//     /**
-//      * Import a new module into system from zip file.
-//      * 
-//      * @param string $name The name of the target module.
-//      * @param string $file The path of zip file.
-//      * 
-//      * @return boolean
-//      */
-//     public function importModule( $name, $file ) {
-//         $zip = new \ZipArchive();
-//         $isImported = false;
-//         if ( true === $zip->open($file) ) {
-//             $modulePath = $this->getModulePath($name, false);
-//             mkdir($modulePath);
-//             $zip->extractTo($modulePath);
-//             $isImported = true;
-//         }
-        
-//         $zip->close();
-//         return $isImported;
-//     }
-    
-//     /**
-//      * Set default module by given name.
-//      * 
-//      * @param string $name The name of module to set as default module.
-//      * 
-//      * @return boolean
-//      */
-//     public function setDefaultModule( $name ) {
-//         $ini = Ini::read($this->getModuleConfigFilePath(), true);
-//         $data = $ini->getData();
-//         foreach ( $data as $moduleName => &$config ) {
-//             $config['default'] = ( $moduleName == $name ) ? 'yes' : 'no';
-//         }
-//         $ini->setData($data);
-//         return $ini->save();
-//     }
-    
-//     /**
-//      * Check whether the module is default module.
-//      * 
-//      * @param string $name The name of the moduel to check.
-//      * 
-//      * @return boolean
-//      */
-//     public function isDefault( $name ) {
-//         $isDefault = isset($this->configuration['modules'][$name]['default']);
-//         $isDefault = $isDefault && $this->configuration['modules'][$name]['default'];
-//         return $isDefault;
-//     }
-    
-//     /**
-//      * Do not allow user to get instance by "new".
-//      * 
-//      * @return void
-//      */
-//     protected function __construct() {}
-
-    
-//     /**
-//      * Get module configuration file path
-//      * 
-//      * @return string
-//      */
-//     protected function getModuleConfigFilePath() {
-//         $basePath = X::system()->getBasePath();
-//         $configPath = str_replace('/', DIRECTORY_SEPARATOR, sprintf('%s/config/modules.ini', $basePath));
-//         return $configPath;
-//     }
-    
-
-    
-
-    
-
 }
