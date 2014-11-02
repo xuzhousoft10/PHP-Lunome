@@ -19,13 +19,6 @@ use X\Service\XAction\Core\Exception;
  */
 class Service extends \X\Core\Service\XService {
     /**
-     * This value holds the service instace.
-     *
-     * @var XService
-     */
-    protected static $service = null;
-    
-    /**
      * This value contains all the group definistions.
      * 
      * @var array

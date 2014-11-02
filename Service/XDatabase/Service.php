@@ -19,13 +19,6 @@ use X\Service\XDatabase\Core\Database;
  */
 class Service extends \X\Core\Service\XService {
     /**
-     * This value holds the service instace.
-     *
-     * @var XService
-     */
-    protected static $service = null;
-    
-    /**
      * (non-PHPdoc)
      * @see \X\Core\Service\XService::afterStart()
      */

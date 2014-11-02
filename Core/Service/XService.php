@@ -14,6 +14,27 @@ use X\Core\Util\XUtil;
  */
 abstract class XService extends \X\Core\Basic {
     /**
+     * This value holds the service instace.
+     *
+     * @var XService
+     */
+    private static $services = array();
+    
+    /**
+     * Get service instance
+     *
+     * @return XService
+     */
+    static public function getService() {
+        $className = get_called_class();
+        if ( !isset(self::$services[$className]) ) {
+            self::$services[$className] = new $className();
+        }
+    
+        return self::$services[$className];
+    }
+    
+    /**
      * Get the service name from given name.
      * 
      * @param string $className
@@ -41,27 +62,6 @@ abstract class XService extends \X\Core\Basic {
      */
     public function getName() {
         return self::getServiceNameFromClassName(get_class($this));
-    }
-    
-    /**
-     * This value holds the service instace.
-     * 
-     * @var XService
-     */
-    protected static $service;
-    
-    /**
-     * Get service instance
-     * 
-     * @return XService
-     */
-    static public function getService() {
-        $className = get_called_class();
-        if ( is_null(static::$service) ) {
-            static::$service = new $className();
-        }
-        
-        return static::$service;
     }
     
     /**

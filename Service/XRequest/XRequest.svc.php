@@ -21,13 +21,6 @@ use X\Library\XUtil\Network;
  */
 class XRequestService extends \X\Core\Service\XService {
     /**
-     * This value holds the service instace.
-     *
-     * @var XService
-     */
-    protected static $service = null;
-    
-    /**
      * The current request intance.
      * 
      * @var \X\Service\XRequest\Core\Request

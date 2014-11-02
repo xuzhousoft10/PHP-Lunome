@@ -14,13 +14,6 @@ use X\Module\Lunome\Util\Service\Media;
  */
 class Service extends Media {
     /**
-     * This value holds the service instace.
-     *
-     * @var XService
-     */
-    protected static $service;
-    
-    /**
      * (non-PHPdoc)
      * @see \X\Module\Lunome\Util\Service\Markable::getMediaModelName()
      */

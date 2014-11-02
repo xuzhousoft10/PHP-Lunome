@@ -20,13 +20,6 @@ use X\Service\XI18n\Core\Exception;
  */
 class XI18nService extends \X\Core\Service\XService {
     /**
-     * This value holds the service instace.
-     *
-     * @var XService
-     */
-    protected static $service = null;
-    
-    /**
      * This value contains all the options on the run time of this service.
      * 
      * @var array
