@@ -390,4 +390,16 @@ class X {
     public function isCLI() {
         return self::PHP_INTERFACE_TYPE_CLI == $this->interfaceType;
     }
+    
+    /**
+     * 该变量用来记录当前是否处于测试状态。
+     * @var boolean
+     */
+    public $isTesting = false;
+    
+    /**
+     * 该变量用来记录当前是否处于调试状态。
+     * @var boolean
+     */
+    public $isDebugging = false;
 }
