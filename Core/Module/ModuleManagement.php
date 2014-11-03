@@ -10,26 +10,19 @@ namespace X\Core\Module;
 use X\Core\X;
 use X\Core\Util\XUtil;
 use X\Core\Util\Configuration;
+use X\Core\Util\Management;
 
 /**
  * 
  */
-class ModuleManagement extends \X\Core\Basic {
+class ModuleManagement extends Management {
     /**
-     * 该变量用来保存该管理器的实例。
-     * @var ModuleManagement
+     * (non-PHPdoc)
+     * @see \X\Core\Util\Management::init()
      */
-    protected static $manager = null;
-    
-    /**
-     * 获取模块管理器
-     * @return \X\Core\Module\ModuleManagement
-     */
-    public static function getManager() {
-        if ( is_null(self::$manager) ) {
-            self::$manager = new ModuleManagement();
-        }
-        return self::$manager;
+    protected function init() {
+        $path = X::system()->getPath('Config/modules.php');
+        $this->configuration = new Configuration($path);
     }
     
     /**
@@ -52,10 +45,6 @@ class ModuleManagement extends \X\Core\Basic {
      * @return \X\Core\Util\Configuration
      */
     public function getConfiguration() {
-        if ( null === $this->configuration ) {
-            $path = X::system()->getPath('Config/modules.php');
-            $this->configuration = new Configuration($path);
-        }
         return $this->configuration;
     }
     

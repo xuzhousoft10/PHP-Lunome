@@ -9,13 +9,6 @@ namespace X\Core;
  */
 interface InterfaceLogger {
     /**
-     * 设置该日志记录器所记录消息的最低等级。
-     * 
-     * @param integer $level
-     */
-    public function setLogLevel( $level );
-    
-    /**
      * 根据给定的消息和跟类进行记录日志。
      * 
      * @param string $message 所要日志的内容

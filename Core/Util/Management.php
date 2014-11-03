@@ -37,7 +37,14 @@ abstract class Management extends Basic {
     /**
      * 将构造函数不公开， 以防止框架内存在第二个管理实例。
      */
-    protected function __construct() {}
+    protected function __construct() {
+        $this->init();
+    }
+    
+    /**
+     * 初始化该管理器
+     */
+    protected function init() {}
     
     /**
      * 启动该管理器

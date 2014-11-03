@@ -45,11 +45,7 @@ class X {
      * @param string $exit 是否结束执行脚本。
      */
     public function stop( $exit=true ) {
-        if ( $exit ) {
-            exit();
-        } else {
-            $this->_shutdown();
-        }
+        $exit ? exit() : $this->_shutdown();
     }
     
     /**
@@ -119,7 +115,7 @@ class X {
     }
     
     /**
-     * 通过参数名称获取传输该框架的参数值。
+     * 通过参数名称获取传输该框架的参数值。 如果参数不存在， 则null会作为返回值返回。
      * 
      * @param string $name 参数名称
      * @return mixed
@@ -172,6 +168,9 @@ class X {
      * @return \X\Core\Service\ServiceManagement
      */
     public function getServiceManager() {
+        if ( null === $this->serviceManager ) {
+            $this->serviceManager = \X\Core\Service\ServiceManagement::getManager();
+        }
         return $this->serviceManager;
     }
      
@@ -189,6 +188,9 @@ class X {
      * @return \X\Core\Module\ModuleManagement
      */
     public function getModuleManager() {
+        if ( null === $this->moduleManager ) {
+            $this->moduleManager = \X\Core\Module\ModuleManagement::getManager();
+        }
         return $this->moduleManager;
     }
     
@@ -224,9 +226,6 @@ class X {
         spl_autoload_register(array($this, '_autoloader'));
         
         $this->configuration = new \X\Core\Util\Configuration($this->getPath('Config/main.php'));
-        $this->serviceManager = \X\Core\Service\ServiceManagement::getManager();
-        $this->moduleManager = \X\Core\Module\ModuleManagement::getManager();
-        
         $this->loadParameters();
     }
     
@@ -249,12 +248,12 @@ class X {
      * @return void
      */
     public function _shutdown() {
-        /* 如果框架已经停止， 则不再执行该方法。 */
+        /* 如果框架已经停止， 则不再执行该方法。 当手动结束框架但未退出时， 这种情况就会发生。 */
         if ( null === self::$system ) {
             return;
         }
         
-        $this->serviceManager->stop();
+        $this->getServiceManager()->stop();
         self::$system = null;
         spl_autoload_unregister(array($this, '_autoloader'));
     }

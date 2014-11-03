@@ -8,6 +8,7 @@ namespace X\Core\Test;
  * 
  */
 use X\Core\X;
+use X\Core\InterfaceLogger;
 
 /**
  * 
@@ -110,168 +111,210 @@ class X_Test extends \PHPUnit_Framework_TestCase {
      * Tests X->getParameter()
      */
     public function testGetParameter() {
-        // TODO Auto-generated X_Test->testSetParameter()
-        $this->markTestIncomplete ( "setParameter test not implemented" );
+        /* 构造模拟的参数列表。 */
+        global $argv;
+        $argv = array(
+            '--test=test', /* 正常 test=test */
+            '--debug',     /* 正常 debug=true */
+            '-ignore1=ignored1', /* 忽略 */
+        );
+        
+        $basePath = X::system()->getPath();
+        X::system()->stop(false);
+        X::start($basePath);
+        $this->assertSame('test', X::system()->getParameter('test'));
+        $this->assertSame(true, X::system()->getParameter('debug'));
+        $this->assertNull(X::system()->getParameter('non-exists'));
     }
     
     /**
      * Tests X->setParameter()
      */
     public function testSetParameter() {
-        // TODO Auto-generated X_Test->testSetParameter()
-        $this->markTestIncomplete ( "setParameter test not implemented" );
-        
-        $this->X->setParameter(/* parameters */);
+        $this->assertNull(X::system()->getParameter('non-exists'));
+        X::system()->setParameter('non-exists', 'new value');
+        $this->assertSame('new value', X::system()->getParameter('non-exists'));
+        X::system()->setParameter('non-exists', 'another new value');
+        $this->assertSame('another new value', X::system()->getParameter('non-exists'));
+        X::system()->setParameter('non-exists', null);
     }
     
     /**
      * Tests X->setParameters()
      */
     public function testSetParameters() {
-        // TODO Auto-generated X_Test->testSetParameters()
-        $this->markTestIncomplete ( "setParameters test not implemented" );
-        
-        $this->X->setParameters(/* parameters */);
+        X::system()->setParameters(array('testSetParameters-p1'=>'p1', 'testSetParameters-p2'=>'p2'));
+        $this->assertSame('p1', X::system()->getParameter('testSetParameters-p1'));
+        $this->assertSame('p2', X::system()->getParameter('testSetParameters-p2'));
+        $this->assertNull(X::system()->getParameter('non-exists'));
     }
     
     /**
      * Tests X->getServiceManager()
      */
     public function testGetServiceManager() {
-        // TODO Auto-generated X_Test->testGetServiceManager()
-        $this->markTestIncomplete ( "getServiceManager test not implemented" );
-        
-        $this->X->getServiceManager(/* parameters */);
+        $this->assertInstanceOf('\\X\\Core\\Service\\ServiceManagement', X::system()->getServiceManager());
     }
     
     /**
      * Tests X->getModuleManager()
      */
     public function testGetModuleManager() {
-        // TODO Auto-generated X_Test->testGetModuleManager()
-        $this->markTestIncomplete ( "getModuleManager test not implemented" );
-        
-        $this->X->getModuleManager(/* parameters */);
+        $this->assertInstanceOf('\\X\\Core\\Module\\ModuleManagement', X::system()->getModuleManager());
     }
     
     /**
      * Tests X->getConfiguration()
      */
     public function testGetConfiguration() {
-        // TODO Auto-generated X_Test->testGetConfiguration()
-        $this->markTestIncomplete ( "getConfiguration test not implemented" );
-        
-        $this->X->getConfiguration(/* parameters */);
+        $this->assertInstanceOf('\\X\\Core\\Util\\Configuration', X::system()->getConfiguration());
     }
     
     /**
      * Tests X->run()
+     * @expectedException \X\Core\Module\Exception 
      */
     public function testRun() {
-        // TODO Auto-generated X_Test->testRun()
-        $this->markTestIncomplete ( "run test not implemented" );
-        
-        $this->X->run(/* parameters */);
-    }
-    
-    /**
-     * Tests X->_shutdown()
-     */
-    public function test_shutdown() {
-        // TODO Auto-generated X_Test->test_shutdown()
-        $this->markTestIncomplete ( "_shutdown test not implemented" );
-        
-        $this->X->_shutdown(/* parameters */);
-    }
-    
-    /**
-     * Tests X->_autoloader()
-     */
-    public function test_autoloader() {
-        // TODO Auto-generated X_Test->test_autoloader()
-        $this->markTestIncomplete ( "_autoloader test not implemented" );
-        
-        $this->X->_autoloader(/* parameters */);
+        /* 关掉所有模块，这样， 如果正常启动， 则会抛出异常说没有找到模块。 */
+        X::system()->getServiceManager()->getConfiguration()->setAll(array());
+        X::system()->getModuleManager()->getConfiguration()->setAll(array());
+        global $argv;
+        $argv = array();
+        $basePath = X::system()->getPath();
+        X::system()->stop(false);
+        X::start($basePath);
+        X::system()->run();
     }
     
     /**
      * Tests X->registerShortcutFunction()
      */
     public function testRegisterShortcutFunction() {
-        // TODO Auto-generated X_Test->testRegisterShortcutFunction()
-        $this->markTestIncomplete ( "registerShortcutFunction test not implemented" );
+        X::system()->registerShortcutFunction('shortcut', function() {return 1;});
+        $this->assertSame(1, X::system()->shortcut());
         
-        $this->X->registerShortcutFunction(/* parameters */);
+        /* 如果名称已经存在， 则旧的快捷方式将会被覆盖。 */
+        X::system()->registerShortcutFunction('shortcut', function() {return 2;});
+        $this->assertSame(2, X::system()->shortcut());
     }
     
     /**
      * Tests X->__call()
+     * @expectedException X\Core\Exception
      */
     public function test__call() {
-        // TODO Auto-generated X_Test->test__call()
-        $this->markTestIncomplete ( "__call test not implemented" );
-        
-        $this->X->__call(/* parameters */);
+        X::system()->non_exists_shortcut();
     }
     
     /**
      * Tests X->getVersion()
      */
     public function testGetVersion() {
-        // TODO Auto-generated X_Test->testGetVersion()
-        $this->markTestIncomplete ( "getVersion test not implemented" );
-        
-        $this->X->getVersion(/* parameters */);
+        $this->assertTrue(is_array(X::system()->getVersion()));
     }
     
     /**
      * Tests X->log()
      */
     public function testLog() {
-        // TODO Auto-generated X_Test->testLog()
-        $this->markTestIncomplete ( "log test not implemented" );
+        $logger = new PHPUnitTestLogger();
+        X::system()->setLogger($logger);
         
-        $this->X->log(/* parameters */);
+        X::system()->setLogLevel(InterfaceLogger::LOG_LEVEL_VERBOSE);
+        X::system()->log('LOG_LEVEL_VERBOSE',   'phpunit-test-case', InterfaceLogger::LOG_LEVEL_VERBOSE);
+        X::system()->log('LOG_LEVEL_DEBUG',     'phpunit-test-case', InterfaceLogger::LOG_LEVEL_DEBUG);
+        X::system()->log('LOG_LEVEL_INFO',      'phpunit-test-case', InterfaceLogger::LOG_LEVEL_INFO);
+        X::system()->log('LOG_LEVEL_NOTICE',    'phpunit-test-case', InterfaceLogger::LOG_LEVEL_NOTICE);
+        X::system()->log('LOG_LEVEL_WARNING',   'phpunit-test-case', InterfaceLogger::LOG_LEVEL_WARNING);
+        X::system()->log('LOG_LEVEL_ERROR',     'phpunit-test-case', InterfaceLogger::LOG_LEVEL_ERROR);
+        $this->assertContains('LOG_LEVEL_VERBOSE',  $logger->messages['phpunit-test-case']);
+        $this->assertContains('LOG_LEVEL_DEBUG',    $logger->messages['phpunit-test-case']);
+        $this->assertContains('LOG_LEVEL_INFO',     $logger->messages['phpunit-test-case']);
+        $this->assertContains('LOG_LEVEL_NOTICE',   $logger->messages['phpunit-test-case']);
+        $this->assertContains('LOG_LEVEL_WARNING',  $logger->messages['phpunit-test-case']);
+        $this->assertContains('LOG_LEVEL_ERROR',    $logger->messages['phpunit-test-case']);
+        
+        $logger->messages = array();
+        X::system()->setLogLevel(InterfaceLogger::LOG_LEVEL_DEBUG);
+        X::system()->log('LOG_LEVEL_VERBOSE',   'phpunit-test-case', InterfaceLogger::LOG_LEVEL_VERBOSE);
+        X::system()->log('LOG_LEVEL_DEBUG',     'phpunit-test-case', InterfaceLogger::LOG_LEVEL_DEBUG);
+        X::system()->log('LOG_LEVEL_INFO',      'phpunit-test-case');
+        X::system()->log('LOG_LEVEL_NOTICE',    'phpunit-test-case', InterfaceLogger::LOG_LEVEL_NOTICE);
+        X::system()->log('LOG_LEVEL_WARNING',   'phpunit-test-case', InterfaceLogger::LOG_LEVEL_WARNING);
+        X::system()->log('LOG_LEVEL_ERROR',     'phpunit-test-case', InterfaceLogger::LOG_LEVEL_ERROR);
+        $this->assertNotContains('LOG_LEVEL_VERBOSE',  $logger->messages['phpunit-test-case']);
+        $this->assertContains('LOG_LEVEL_DEBUG',    $logger->messages['phpunit-test-case']);
+        $this->assertContains('LOG_LEVEL_INFO',     $logger->messages['phpunit-test-case']);
+        $this->assertContains('LOG_LEVEL_NOTICE',   $logger->messages['phpunit-test-case']);
+        $this->assertContains('LOG_LEVEL_WARNING',  $logger->messages['phpunit-test-case']);
+        $this->assertContains('LOG_LEVEL_ERROR',    $logger->messages['phpunit-test-case']);
     }
     
     /**
      * Tests X->setLogger()
      */
     public function testSetLogger() {
-        // TODO Auto-generated X_Test->testSetLogger()
-        $this->markTestIncomplete ( "setLogger test not implemented" );
+        global $argv;
+        $argv = array();
+        $basePath = X::system()->getPath();
+        X::system()->stop(false);
+        X::start($basePath);
         
-        $this->X->setLogger(/* parameters */);
+        $this->assertNull(X::system()->getLogger());
+        X::system()->log('DEFAULT-LOGGER', 'phpunit-test-case');
+        
+        $logger = new PHPUnitTestLogger();
+        X::system()->setLogger($logger);
+        $this->assertInstanceOf('\\X\\Core\\InterfaceLogger', X::system()->getLogger());
     }
     
     /**
      * Tests X->getLogger()
      */
     public function testGetLogger() {
-        // TODO Auto-generated X_Test->testGetLogger()
-        $this->markTestIncomplete ( "getLogger test not implemented" );
-        
-        $this->X->getLogger(/* parameters */);
+        $logger = new PHPUnitTestLogger();
+        X::system()->setLogger($logger);
+        $this->assertInstanceOf('\\X\\Core\\InterfaceLogger', X::system()->getLogger());
     }
     
     /**
      * Tests X->setLogLevel()
+     * @expectedException X\Core\Exception
      */
     public function testSetLogLevel() {
-        // TODO Auto-generated X_Test->testSetLogLevel()
-        $this->markTestIncomplete ( "setLogLevel test not implemented" );
+        $logger = new PHPUnitTestLogger();
+        X::system()->setLogger($logger);
+        $logger->messages = array();
+        X::system()->setLogLevel(InterfaceLogger::LOG_LEVEL_INFO);
+        X::system()->log('LOG_LEVEL_VERBOSE',   'phpunit-test-case', InterfaceLogger::LOG_LEVEL_VERBOSE);
+        X::system()->log('LOG_LEVEL_DEBUG',     'phpunit-test-case', InterfaceLogger::LOG_LEVEL_DEBUG);
+        X::system()->log('LOG_LEVEL_INFO',      'phpunit-test-case', InterfaceLogger::LOG_LEVEL_INFO);
+        X::system()->log('LOG_LEVEL_NOTICE',    'phpunit-test-case', InterfaceLogger::LOG_LEVEL_NOTICE);
+        X::system()->log('LOG_LEVEL_WARNING',   'phpunit-test-case', InterfaceLogger::LOG_LEVEL_WARNING);
+        X::system()->log('LOG_LEVEL_ERROR',     'phpunit-test-case', InterfaceLogger::LOG_LEVEL_ERROR);
+        $this->assertNotContains('LOG_LEVEL_VERBOSE',  $logger->messages['phpunit-test-case']);
+        $this->assertNotContains('LOG_LEVEL_DEBUG',    $logger->messages['phpunit-test-case']);
+        $this->assertContains('LOG_LEVEL_INFO',     $logger->messages['phpunit-test-case']);
+        $this->assertContains('LOG_LEVEL_NOTICE',   $logger->messages['phpunit-test-case']);
+        $this->assertContains('LOG_LEVEL_WARNING',  $logger->messages['phpunit-test-case']);
+        $this->assertContains('LOG_LEVEL_ERROR',    $logger->messages['phpunit-test-case']);
         
-        $this->X->setLogLevel(/* parameters */);
+        X::system()->setLogLevel('non-interger-level');
     }
     
     /**
      * Tests X->isCLI()
      */
     public function testIsCLI() {
-        // TODO Auto-generated X_Test->testIsCLI()
-        $this->markTestIncomplete ( "isCLI test not implemented" );
-        
-        $this->X->isCLI(/* parameters */);
+        $this->assertTrue(X::system()->isCLI());
+    }
+}
+
+class PHPUnitTestLogger implements InterfaceLogger {
+    public $messages = array();
+    
+    public function log($message, $category) {
+        $this->messages[$category][] = $message;
     }
 }
 

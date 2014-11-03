@@ -18,11 +18,18 @@ use X\Core\Util\XUtil;
  */
 class ServiceManagement extends Management {
     /**
+     * (non-PHPdoc)
+     * @see \X\Core\Util\Management::init()
+     */
+    protected function init() {
+        $this->configuration = new Configuration(X::system()->getPath('Config/services.php'));
+    }
+    
+    /**
      * 启动该管理器
      */
     public function start(){
         parent::start();
-        $this->configuration = new Configuration(X::system()->getPath('Config/services.php'));
         $this->loadServicesByConfiguration();
     }
     
