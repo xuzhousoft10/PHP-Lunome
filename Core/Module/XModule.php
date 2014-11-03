@@ -1,27 +1,21 @@
 <?php
 /**
- * Namespace Defination
+ * 
  */
 namespace X\Core\Module;
 
 /**
- * The module base class, which all the modules should extens
- * from it.
  * 
- * @author  Michael Luthor <michaelluthor@163.com>
- * @since   Version 0.0.0
  */
 abstract class XModule extends \X\Core\Basic {
     /**
-     * The name of the module.
-     * 
+     * 该变量保存当前模块的名称。
      * @var string
      */
     protected $name = null;
     
     /**
-     * Get the name of module.
-     * 
+     * 获取当前模块的名称。
      * @return string
      */
     public function getName() {
@@ -29,9 +23,8 @@ abstract class XModule extends \X\Core\Basic {
     }
     
     /**
-     * Initiate the module.
-     * 
-     * @param string $name The name of the module.
+     * 构造当前模块。
+     * @param string $name 模块名称
      */
     public function __construct( $name ) {
         $this->init();
@@ -39,22 +32,19 @@ abstract class XModule extends \X\Core\Basic {
     }
     
     /**
-     * 
+     * 初始化当前模块， 当你自定义一个新的模块时，你可以重写该方法
+     * 以初始化新定义的模块。
      */
     protected function init() {}
     
     /**
-     * Execute the module.
-     * 
-     * @param array $parameters
-     * 
-     * @return void
+     * 运行该模块， 当你自定义一个新模块时， 你比需实现该方法。
+     * @param string $parameters
      */
     abstract public function run($parameters=array());
     
     /**
-     * Get the path of current module or subpath of it if $path is not empty.
-     * @param string $path The subpath of the module.
+     * 快捷当时获取当前模块下的文件或者目录的路径。
      * @return string
      */
     public function getModulePath( $path='' ) {
