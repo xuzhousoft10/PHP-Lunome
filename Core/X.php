@@ -106,10 +106,11 @@ class X {
                 if ( '--' !== substr($parm, 0, 2) ) {
                     continue;
                 }
-        
-                list( $name, $value ) = explode('=', $parm);
+                $parm = explode('=', $parm);
+                $name = $parm[0];
+                $value = isset($parm[1]) ? trim($parm[1]) : true;
                 $name = substr($name, 2);
-                $parameters[trim($name)] = trim($value);
+                $parameters[trim($name)] = $value;
             }
             $this->parameters = $parameters;
         } else {
@@ -225,6 +226,8 @@ class X {
         $this->configuration = new \X\Core\Util\Configuration($this->getPath('Config/main.php'));
         $this->serviceManager = \X\Core\Service\ServiceManagement::getManager();
         $this->moduleManager = \X\Core\Module\ModuleManagement::getManager();
+        
+        $this->loadParameters();
     }
     
     /**
@@ -236,7 +239,6 @@ class X {
     public function run() {
         $this->getServiceManager()->start();
         $this->getModuleManager()->start();
-        $this->loadParameters();
         $this->getModuleManager()->run();
     }
     

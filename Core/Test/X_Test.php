@@ -83,11 +83,9 @@ class X_Test extends \PHPUnit_Framework_TestCase {
     }
     
     /**
-     * Tests X->getParameter()
+     * Tests X->getParameters()
      */
-    public function testGetParameter() {
-        // TODO Auto-generated X_Test->testGetParameters()
-        $this->markTestIncomplete ( "getParameters test not implemented" );
+    public function testGetParameters() {
         /* 由于直接调用所以这里不会有参数。 */
         $expected = array();
         $actual = X::system()->getParameters();
@@ -96,20 +94,24 @@ class X_Test extends \PHPUnit_Framework_TestCase {
         $basePath = X::system()->getPath();
         /* 构造模拟的参数列表。 */
         global $argv;
-        $argv = array('--test=test');
+        $argv = array(
+            '--test=test', /* 正常 test=test */
+            '--debug',     /* 正常 debug=true */
+            '-ignore1=ignored1', /* 忽略 */
+        );
         X::system()->stop(false);
         X::start($basePath);
-        var_dump(X::system()->getParameters());
+        $expected = array('test'=>'test', 'debug'=>true);
+        $actual = X::system()->getParameters();
+        $this->assertSame($expected, $actual);
     }
     
     /**
-     * Tests X->getParameters()
+     * Tests X->getParameter()
      */
-    public function testGetParameters() {
-        // TODO Auto-generated X_Test->testGetParameters()
-        $this->markTestIncomplete ( "getParameters test not implemented" );
-        
-        $this->X->getParameters(/* parameters */);
+    public function testGetParameter() {
+        // TODO Auto-generated X_Test->testSetParameter()
+        $this->markTestIncomplete ( "setParameter test not implemented" );
     }
     
     /**
