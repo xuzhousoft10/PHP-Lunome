@@ -7,6 +7,11 @@ namespace X\Core;
 /**
  * 
  */
+require dirname(__FILE__).DIRECTORY_SEPARATOR.'Exception.php';
+
+/**
+ * 
+ */
 class X {
     /**
      * 该变量保存该框架在运行时的一个实例。
@@ -16,6 +21,12 @@ class X {
     protected static $system = null;
     
     /**
+     * 该变量用来标记当前框架是否为第一次启动。
+     * @var boolean
+     */
+    protected static $isFirstStart = null;
+    
+    /**
      * 根据根目录启动该框架。
      * 
      * @param string $basePath  该项目的根目录路径。
@@ -23,18 +34,22 @@ class X {
      */
     public static function start( $basePath ){
         if ( null === self::$system ) {
+            self::$isFirstStart = ( null === self::$isFirstStart ) ? true : false;
             self::$system = new X($basePath);
         }
         return self::$system;
     }
     
     /**
-     * 结束处理并退出。
-     *
-     * @return void
+     * 结束框架的运行。
+     * @param string $exit 是否结束执行脚本。
      */
-    public function stop() {
-        exit();
+    public function stop( $exit=true ) {
+        if ( $exit ) {
+            exit();
+        } else {
+            $this->_shutdown();
+        }
     }
     
     /**
@@ -58,11 +73,12 @@ class X {
     
     /**
      * 根据提供的字符串返回适合当前操作系统的路径字符串。 如果提供的路径为空， 则返回该项目的
-     * 根目录路径。
-     * 路径字符串的目录分割符为'/'。
+     * 根目录路径。路径字符串的目录分割符为'/'。
+     * 注意，该方法用于生成路径而没有限制生成后的路径必须在框架根目录下，换句话说就是，该方法
+     * 生成的路径可以是任何地方。甚至是"/etc/passwd"等敏感路径。
      * 
-     * @param string $path 路径字符串
-     * @return string
+     * @param string $path 路径字符串。
+     * @return string 适合当前操作系统的路径字符串。
      */
     public function getPath( $path='' ) {
         $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
@@ -113,7 +129,10 @@ class X {
     
     /**
      * 获取传入当前框架的所有参数。
-     *
+     * 当框架处于Web服务器模式时， 参数的来源是所有的GET，POST，和REQUEST传过来的参数。
+     * 当框架处于Cli模式运行时， 参数的来源是命令行中以"--"开头的参数。并且其余参数将会忽略。
+     * 
+     * 
      * @return array
      */
     public function getParameters() {
@@ -198,7 +217,9 @@ class X {
         chdir($this->root);
         $this->initInterface();
         
-        register_shutdown_function(array($this, '_shutdown'));
+        if ( self::$isFirstStart ) {
+            register_shutdown_function(array($this, '_shutdown'));
+        }
         spl_autoload_register(array($this, '_autoloader'));
         
         $this->configuration = new \X\Core\Util\Configuration($this->getPath('Config/main.php'));
@@ -226,7 +247,14 @@ class X {
      * @return void
      */
     public function _shutdown() {
+        /* 如果框架已经停止， 则不再执行该方法。 */
+        if ( null === self::$system ) {
+            return;
+        }
+        
         $this->serviceManager->stop();
+        self::$system = null;
+        spl_autoload_unregister(array($this, '_autoloader'));
     }
     
     /**
