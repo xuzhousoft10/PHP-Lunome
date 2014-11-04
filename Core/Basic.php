@@ -7,7 +7,7 @@ namespace X\Core;
 /**
  * 
  */
-class Basic extends \stdClass {
+abstract class Basic extends \stdClass {
     /**
      * 检测属性是否设置，并且不是 NULL。
      * @param string $name 被检查的属性名称
