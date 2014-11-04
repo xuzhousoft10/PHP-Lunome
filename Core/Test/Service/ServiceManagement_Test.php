@@ -179,72 +179,80 @@ class ServiceManagement_Test extends \PHPUnit_Framework_TestCase {
     
     /**
      * Tests ServiceManagement->delete()
+     * @expectedException \X\Core\Service\Exception
      */
     public function testDelete() {
-        // TODO Auto-generated ServiceManagement_Test->testDelete()
-        $this->markTestIncomplete ( "delete test not implemented" );
+        $this->ServiceManagement->create('PHPUnitTestServiceNew');
+        $this->assertTrue($this->ServiceManagement->getConfiguration()->has('PHPUnitTestServiceNew'));
+        $this->ServiceManagement->delete('PHPUnitTestServiceNew');
+        $this->assertFalse($this->ServiceManagement->getConfiguration()->has('PHPUnitTestServiceNew'));
         
-        $this->ServiceManagement->delete(/* parameters */);
+        $this->ServiceManagement->delete('non-exists');
     }
     
     /**
      * Tests ServiceManagement->has()
      */
     public function testHas() {
-        // TODO Auto-generated ServiceManagement_Test->testHas()
-        $this->markTestIncomplete ( "has test not implemented" );
-        
-        $this->ServiceManagement->has(/* parameters */);
+        $this->assertTrue($this->ServiceManagement->has('PHPUnitTestService'));
+        $this->assertTrue($this->ServiceManagement->has('PHPUnitTestServiceNotDelay'));
+        $this->assertTrue($this->ServiceManagement->has('PHPUnitTestServiceNotEnabled'));
     }
     
     /**
      * Tests ServiceManagement->getList()
      */
     public function testGetList() {
-        // TODO Auto-generated ServiceManagement_Test->testGetList()
-        $this->markTestIncomplete ( "getList test not implemented" );
-        
-        $this->ServiceManagement->getList(/* parameters */);
+        $services = $this->ServiceManagement->getList();
+        $this->assertContains('PHPUnitTestService', $services);
+        $this->assertContains('PHPUnitTestServiceNotDelay', $services);
+        $this->assertContains('PHPUnitTestServiceNotEnabled', $services);
     }
     
     /**
      * Tests ServiceManagement->enable()
+     * @expectedException \X\Core\Service\Exception
      */
     public function testEnable() {
-        // TODO Auto-generated ServiceManagement_Test->testEnable()
-        $this->markTestIncomplete ( "enable test not implemented" );
+        /* 新建一个系统的服务。 */
+        $this->ServiceManagement->create('PHPUnitTestServiceNew');
+        $this->assertTrue($this->ServiceManagement->getConfiguration()->has('PHPUnitTestServiceNew'));
+        $this->ServiceManagement->enable('PHPUnitTestServiceNew');
+        $this->ServiceManagement->load('PHPUnitTestServiceNew');
+        $this->assertTrue($this->ServiceManagement->has('PHPUnitTestServiceNew'));
+        $this->ServiceManagement->delete('PHPUnitTestServiceNew');
         
-        $this->ServiceManagement->enable(/* parameters */);
+        $this->ServiceManagement->enable('non-exists');
     }
     
     /**
      * Tests ServiceManagement->disable()
+     * @expectedException \X\Core\Service\Exception
      */
     public function testDisable() {
-        // TODO Auto-generated ServiceManagement_Test->testDisable()
-        $this->markTestIncomplete ( "disable test not implemented" );
-        
-        $this->ServiceManagement->disable(/* parameters */);
+        $this->ServiceManagement->disable('PHPUnitTestServiceNotDelay');
+        $this->assertFalse($this->ServiceManagement->has('PHPUnitTestServiceNotDelay'));
+        $this->ServiceManagement->disable('non-exists');
     }
     
     /**
      * Tests ServiceManagement->enableDelayStart()
+     * @expectedException \X\Core\Service\Exception
      */
     public function testEnableDelayStart() {
-        // TODO Auto-generated ServiceManagement_Test->testEnableDelayStart()
-        $this->markTestIncomplete ( "enableDelayStart test not implemented" );
-        
-        $this->ServiceManagement->enableDelayStart(/* parameters */);
+        $this->ServiceManagement->enableDelayStart('PHPUnitTestServiceNotDelay');
+        $this->assertTrue($this->ServiceManagement->getConfiguration()->get('PHPUnitTestServiceNotDelay.delay'));
+        $this->ServiceManagement->enableDelayStart('non-exists');
     }
     
     /**
      * Tests ServiceManagement->disableDelayStart()
+     * @expectedException \X\Core\Service\Exception
      */
     public function testDisableDelayStart() {
-        // TODO Auto-generated ServiceManagement_Test->testDisableDelayStart()
-        $this->markTestIncomplete ( "disableDelayStart test not implemented" );
-        
-        $this->ServiceManagement->disableDelayStart(/* parameters */);
+        $this->ServiceManagement->disableDelayStart('PHPUnitTestService');
+        $this->assertFalse($this->ServiceManagement->getConfiguration()->get('PHPUnitTestService.delay'));
+        $this->ServiceManagement->disableDelayStart('non-exists');
     }
 }
 

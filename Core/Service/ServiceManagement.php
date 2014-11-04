@@ -222,7 +222,8 @@ class ServiceManagement extends Management {
     }
     
     /**
-     * 检查服务是否存在。
+     * 检查服务是否存在。注意， 不论服务是否加载或启用，只要服务存在于配置文件中， 并且没有错误，
+     * 则会被认为服务存在。
      * @param string $name 要检查的服务的名称。
      * @return boolean
      */
@@ -259,11 +260,15 @@ class ServiceManagement extends Management {
      * @return void
      */
     public function disable( $name ) {
-        if ( !isset($this->configuration[$name]) ) {
+        if ( !$this->getConfiguration()->has($name) ) {
             throw new Exception(sprintf('Service "%s" does not exists.', $name));
         }
-        $this->configuration[$name]['enable'] = false;
-        $this->configuration->save();
+        if ( null !== $this->services[$name] ) {
+            $this->services[$name]['service']->stop();
+        }
+        unset($this->services[$name]);
+        $this->getConfiguration()->merge($name, array('enable'=>false));
+        $this->getConfiguration()->save();
     }
     
     /**
@@ -272,11 +277,11 @@ class ServiceManagement extends Management {
      * @return void
      */
     public function enableDelayStart( $name ) {
-        if ( !isset($this->configuration[$name]) ) {
+        if ( !$this->getConfiguration()->has($name) ) {
             throw new Exception(sprintf('Service "%s" does not exists.', $name));
         }
-        $this->configuration[$name]['delay'] = true;
-        $this->configuration->save();
+        $this->getConfiguration()->merge($name, array('delay'=>true));
+        $this->getConfiguration()->save();
     }
     
     /**
@@ -288,7 +293,7 @@ class ServiceManagement extends Management {
         if ( !isset($this->configuration[$name]) ) {
             throw new Exception(sprintf('Service "%s" does not exists.', $name));
         }
-        $this->configuration[$name]['delay'] = false;
-        $this->configuration->save();
+        $this->getConfiguration()->merge($name, array('delay'=>false));
+        $this->getConfiguration()->save();
     }
 }
