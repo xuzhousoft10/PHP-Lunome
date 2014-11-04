@@ -111,11 +111,10 @@ abstract class XService extends \X\Core\Basic {
      * 获取当前服务下的文件或目录的绝对路径。
      * @return string
      */
-    public function getServicePath( $path='' ) {
+    public function getPath( $path=null ) {
         $service = new \ReflectionClass(get_class($this));
         $servicePath = dirname($service->getFileName());
-        $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
-        $path = $servicePath.DIRECTORY_SEPARATOR.$path;
+        $path = (null===$path) ? $servicePath : $servicePath.DIRECTORY_SEPARATOR.str_replace('/', DIRECTORY_SEPARATOR, $path);
         return $path;
     }
     
@@ -131,7 +130,7 @@ abstract class XService extends \X\Core\Basic {
      */
     public function getConfiguration() {
         if ( null === $this->configuration ) {
-            $servicePath = $this->getServicePath('Config/Main.php');
+            $servicePath = $this->getPath('Config/Main.php');
             $this->configuration = new Configuration($servicePath);
         }
         return $this->configuration;

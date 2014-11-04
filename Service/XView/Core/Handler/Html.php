@@ -1020,7 +1020,7 @@ class Html extends \X\Service\XView\Core\View {
     public function loadLayout( $name ) {
         if ( !is_file($name) ) {
             $viewService = X::system()->getServiceManager()->get(XViewService::getServiceName());
-            $name = $viewService->getServicePath('Core/HandlerData/Html/Layout/'.$name.'.php');
+            $name = $viewService->getPath('Core/HandlerData/Html/Layout/'.$name.'.php');
         }
         
         if ( !is_file($name) ) {
