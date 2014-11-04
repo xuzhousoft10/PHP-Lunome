@@ -4,7 +4,11 @@
  */
 namespace X\Core\Test\Util;
 
+/**
+ * 
+ */
 use X\Core\Util\XUtil;
+
 /**
  * XUtil test case.
  */
