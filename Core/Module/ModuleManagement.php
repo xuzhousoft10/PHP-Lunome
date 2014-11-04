@@ -30,7 +30,6 @@ class ModuleManagement extends Management {
      * @return void
      */
     public function start() {
-        $this->getConfiguration();
         $this->loadModulesFromModuleDir();
     }
     
@@ -67,7 +66,7 @@ class ModuleManagement extends Management {
      */
     protected function loadModulesFromModuleDir() {
         $modulePath = X::system()->getPath('Module');
-        $moduleNames = scandir($modulePath, SCANDIR_SORT_NONE);
+        $moduleNames = scandir($modulePath);
         foreach ( $moduleNames as $moduleName ) {
             if ( '.' == $moduleName[0] ) { continue; }
             $this->loadModule($moduleName);

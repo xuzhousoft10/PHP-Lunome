@@ -176,13 +176,13 @@ class X_Test extends \PHPUnit_Framework_TestCase {
      */
     public function testRun() {
         /* 关掉所有模块，这样， 如果正常启动， 则会抛出异常说没有找到模块。 */
-        X::system()->getServiceManager()->getConfiguration()->setAll(array());
-        X::system()->getModuleManager()->getConfiguration()->setAll(array());
         global $argv;
         $argv = array();
         $basePath = X::system()->getPath();
         X::system()->stop(false);
         X::start($basePath);
+        X::system()->getServiceManager()->getConfiguration()->setAll(array());
+        X::system()->getModuleManager()->getConfiguration()->setAll(array());
         X::system()->run();
     }
     
