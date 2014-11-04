@@ -8,6 +8,7 @@ namespace X\Core\Util;
  * 
  */
 use X\Core\Basic;
+use X\Core\Exception;
 
 /**
  * 
@@ -29,10 +30,14 @@ class XUtil extends Basic {
     }
     
     /**
-     * 根据路径删除指定的文件， 文件可以是普通文件或者目录。
+     * 根据路径删除指定的文件， 文件可以是普通文件或者目录。 如果指定路径不存在，则直接返回。
      * @param string $path 要删除文件的路径。
      */
     public static function deleteFile( $path ) {
+        if ( !is_file($path) && !is_dir($path) ) {
+            throw new Exception(sprintf('(%s): no such file or directory.', $path));
+        }
+        
         if ( !is_dir($path) ) {
             unlink($path);
         } else {
