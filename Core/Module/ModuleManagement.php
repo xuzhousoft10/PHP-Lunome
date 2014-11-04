@@ -182,12 +182,13 @@ class ModuleManagement extends Management {
      * @return void
      */
     public function enable( $name ) {
-        if ( !$this->has($name) ) {
+        if ( !$this->getConfiguration()->has($name) ) {
             throw new Exception(sprintf('Module "%s" does not exists.', $name));
         }
         
-        $this->configuration[$name]['enable'] = true;
+        $this->getConfiguration()->merge($name, array('enable'=>true));
         $this->getConfiguration()->save();
+        $this->loadModule($name);
     }
     
     /**
@@ -245,7 +246,6 @@ class ModuleManagement extends Management {
         /* Update module management configurations. */
         $this->configuration[$moduleName] = array('enable'=>false);
         $this->getConfiguration()->save();
-        $this->loadModule($moduleName);
     }
     
     /**

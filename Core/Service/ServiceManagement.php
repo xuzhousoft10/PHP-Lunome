@@ -10,7 +10,6 @@ namespace X\Core\Service;
 use X\Core\X;
 use X\Core\Util\Management;
 use X\Core\Util\Configuration;
-use X\Core\Exception;
 use X\Core\Util\XUtil;
 
 /**
@@ -34,14 +33,15 @@ class ServiceManagement extends Management {
     }
     
     /**
-     * 结束该管理器
+     * 结束该管理器, 该方法将结束并且卸载所有服务。
      */
     public function stop() {
         foreach ( $this->services as $name => $service ) {
-            if( !$service['enable'] || !$service['isLoaded'] ) {  continue; }
-            $service['service']->stop();
+            if( null !== $service['service'] ) { 
+                $service['service']->stop();
+            }
         }
-        
+        $this->services = array();
         parent::stop();
     }
     
@@ -101,14 +101,17 @@ class ServiceManagement extends Management {
      * @param array $configuration 要加在的服务的基本配置
      * @return void
      */
-    public function load($name, $configuration) {
+    public function load($name, $configuration=null) {
+        if ( null === $configuration ) {
+            $configuration = $this->getConfiguration()->get($name);
+        }
         $serviceClass = $configuration['class'];
         if ( !class_exists($configuration['class']) ) {
             throw new Exception(sprintf('Can not find service "%s"', $name));
         }
         
         if ( !( is_subclass_of($serviceClass, '\\X\\Core\\Service\\XService') ) ) {
-            throw new Exception(sprintf('"%s" is not a available service.'));
+            throw new Exception(sprintf('"%s" is not a available service.', $name));
         }
         $service = $serviceClass::getService();
         
@@ -214,7 +217,8 @@ class ServiceManagement extends Management {
         $classPath = X::system()->getPath(implode('/', $class));
         XUtil::deleteFile($classPath);
         unset($this->configuration[$name]);
-        $this->configuration->save();
+        unset($this->services[$name]);
+        $this->getConfiguration()->save();
     }
     
     /**
@@ -240,11 +244,13 @@ class ServiceManagement extends Management {
      * @return void
      */
     public function enable( $name ) {
-        if ( !isset($this->configuration[$name]) ) {
+        if ( !$this->getConfiguration()->has($name) ) {
             throw new Exception(sprintf('Service "%s" does not exists.', $name));
         }
-        $this->configuration[$name]['enable'] = true;
-        $this->configuration->save();
+        $conf = $this->getConfiguration()->get($name);
+        $conf['enable'] = true;
+        $this->getConfiguration()->set($name, $conf);
+        $this->getConfiguration()->save();
     }
     
     /**

@@ -1,6 +1,5 @@
 <?php
-return
-array (
+return array (
   'Admin' => 
   array (
     'enable' => true,
@@ -15,5 +14,4 @@ array (
   array (
     'enable' => true,
   ),
-)
-;
+);

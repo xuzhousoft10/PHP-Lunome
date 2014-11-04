@@ -74,6 +74,15 @@ class Configuration extends Basic implements \ArrayAccess, \Iterator  {
     }
     
     /**
+     * 将新的配置信息合并到当前配置中
+     * @param string $name
+     * @param array $value
+     */
+    public function merge( $name, array $value ) {
+        $this->config[$name] = array_merge($this->config[$name], $value);
+    }
+    
+    /**
      * 根据名称获取配置项目值。 名称可以使用"."进行级别分割。
      * 如果项目不存在则会返回null。
      *
@@ -94,6 +103,25 @@ class Configuration extends Basic implements \ArrayAccess, \Iterator  {
             }
         }
         return $item;
+    }
+    
+    /**
+     * 检查一个配置项目是否存在。
+     * @return boolean
+     */
+    public function has($name) {
+        $this->load();
+        $items = explode('.', $name);
+        $item = $this->config;
+        while ( 0 < count($items) ) {
+            $itemName = array_shift($items);
+            if ( !isset($item[$itemName]) ) {
+                return false;
+            } else {
+                $item = $item[$itemName];
+            }
+        }
+        return true;
     }
     
     /**

@@ -1,6 +1,6 @@
 <?php
 return array (
-  'XSession' =>
+  'XSession' => 
   array (
     'enable' => true,
     'class' => 'X\\Service\\XSession\\Service',
