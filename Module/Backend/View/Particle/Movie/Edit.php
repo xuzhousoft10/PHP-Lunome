@@ -2,7 +2,7 @@
 $vars = get_defined_vars();
 $media = $vars['media'];
 $actionUrl = '/index.php?module=backend&action=movie/edit';
-if ( null !== $media['id'] ) {
+if ( isset($media['id']) && null !== $media['id'] ) {
     $actionUrl .= ('&id='.$media['id']);
 }
 ?>
@@ -10,7 +10,7 @@ if ( null !== $media['id'] ) {
     <form action="<?php echo $actionUrl;?>" method="post">
         <div class="form-group">
             <label>标题</label>
-            <input type="text" class="form-control" name="media[name]" value="<?php echo $media['name'];?>">
+            <input type="text" class="form-control" name="media[name]" value="<?php echo isset($media['name']) ? $media['name'] : '';?>">
         </div>
         
         <button name="save" value="save" type="submit" class="btn btn-default">保存</button>
