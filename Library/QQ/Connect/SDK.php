@@ -54,7 +54,6 @@ class SDK {
             'response_type' => 'code',
             'client_id'     => self::$appid,
             'redirect_uri'  => urlencode(self::$callback),
-            'state'         => $_SESSION['QQConnect']['randomKey'],
             'scope'         => self::$scope,
         ));
         return $request->toString();
@@ -126,214 +125,214 @@ class SDK {
         return $this->basicParams["openid"];
     }
     
-    /**
-     * 请求结果的格式， 默认为JSON
-     * @var string
-     */
-    private static $format = 'JSON';
+//     /**
+//      * 请求结果的格式， 默认为JSON
+//      * @var string
+//      */
+//     private static $format = 'JSON';
     
-    /**
-     * 请求中必须的或者基本参数。
-     * 
-     * @var array
-     */
-    private $basicParams = array();
+//     /**
+//      * 请求中必须的或者基本参数。
+//      * 
+//      * @var array
+//      */
+//     private $basicParams = array();
     
-    /**
-     * 获取网站登录用户信息，目前可获取用户在QQ空间的昵称、头像信息及黄钻信息。
-     * @return mixed
-     */
-    public function getUserInfo() {
-        $params = $this->basicParams;
-        $response = $this->get("https://graph.qq.com/user/get_user_info", $params);
-        $result = json_decode($response, true);
-        return $result;
-    }
+//     /**
+//      * 获取网站登录用户信息，目前可获取用户在QQ空间的昵称、头像信息及黄钻信息。
+//      * @return mixed
+//      */
+//     public function getUserInfo() {
+//         $params = $this->basicParams;
+//         $response = $this->get("https://graph.qq.com/user/get_user_info", $params);
+//         $result = json_decode($response, true);
+//         return $result;
+//     }
     
-    private $APIMap = array();
-    public function __construct($access_token = "", $openid = ""){
-        $this->basicParams = array(
-            "oauth_consumer_key"    => self::$appid,
-            "access_token"          => $access_token,
-            "openid"                => $openid,
-            'format'                => self::$format,
-        );
+//     private $APIMap = array();
+//     public function __construct($access_token = "", $openid = ""){
+//         $this->basicParams = array(
+//             "oauth_consumer_key"    => self::$appid,
+//             "access_token"          => $access_token,
+//             "openid"                => $openid,
+//             'format'                => self::$format,
+//         );
     
-        $this->APIMap = array(
-            /*                       qzone                    */
-            "addBlog"=>array("https://graph.qq.com/blog/add_one_blog",array("title","format"=>"json","content"=>null),"POST"),
-            "addOneBlog"=>array("https://graph.qq.com/blog/add_one_blog",array("title","content","format"=>"json"),"GET"),
-            "addAlbum"=>array("https://graph.qq.com/photo/add_album",array("albumname","#albumdesc","#priv","format"=>"json"),"POST"),
-            "uploadPic"=>array("https://graph.qq.com/photo/upload_pic",array("picture","#photodesc","#title","#albumid","#mobile","#x","#y","#needfeed","#successnum","#picnum","format"=>"json"),"POST"),
-            "listAlbum"=>array("https://graph.qq.com/photo/list_album",array("format"=>"json"),"GET"),
-            "addShare"=>array("https://graph.qq.com/share/add_share",array("title","url","#comment","#summary","#images","format"=>"json","#type","#playurl","#nswb","site","fromurl"),"POST"),
-            "checkPageFans" => array("https://graph.qq.com/user/check_page_fans",array("page_id"=>"314416946","format"=>"json")),
-            /*                    wblog                             */
-            "addT"=>array("https://graph.qq.com/t/add_t",array("format"=>"json","content","#clientip","#longitude","#compatibleflag"),"POST"),
-            "addPicT"=>array("https://graph.qq.com/t/add_pic_t",array("content","pic","format"=>"json","#clientip","#longitude","#latitude","#syncflag","#compatiblefalg"),"POST"),
-            "delT"=>array("https://graph.qq.com/t/del_t",array("id", "format" => "json"),"POST"),
-            "getRepostList"=>array("https://graph.qq.com/t/get_repost_list",array("flag","rootid","pageflag","pagetime","reqnum","twitterid","format"=>"json")),
-            "getInfo"=>array("https://graph.qq.com/user/get_info",array("format" => "json")),
-            "getOtherInfo"=>array("https://graph.qq.com/user/get_other_info",array("format"=>"json","#name","fopenid")),
-            "getFansList" => array("https://graph.qq.com/relation/get_fanslist",array("format"=>"json","reqnum","startindex","#mode","#install","#sex")),
-            "getIdolList" => array("https://graph.qq.com/relation/get_idollist",array("format"=>"json","reqnum","startindex","#mode","#install")),
-            "addIdol"=>array("https://graph.qq.com/relation/add_idol",array("format"=>"json","#name-1","#fopenids-1"),"POST"),
-            "delIdol"=>array("https://graph.qq.com/relation/del_idol",array("format"=>"json","#name-1","#fopenid-1"),"POST"),
-            /*                           pay                          */
-            "getTenpayAddr"=>array("https://graph.qq.com/cft_info/get_tenpay_addr",array("ver"=>1,"limit"=>5,"offset"=>0,"format"=>"json"))
-        );
-    }
+//         $this->APIMap = array(
+//             /*                       qzone                    */
+//             "addBlog"=>array("https://graph.qq.com/blog/add_one_blog",array("title","format"=>"json","content"=>null),"POST"),
+//             "addOneBlog"=>array("https://graph.qq.com/blog/add_one_blog",array("title","content","format"=>"json"),"GET"),
+//             "addAlbum"=>array("https://graph.qq.com/photo/add_album",array("albumname","#albumdesc","#priv","format"=>"json"),"POST"),
+//             "uploadPic"=>array("https://graph.qq.com/photo/upload_pic",array("picture","#photodesc","#title","#albumid","#mobile","#x","#y","#needfeed","#successnum","#picnum","format"=>"json"),"POST"),
+//             "listAlbum"=>array("https://graph.qq.com/photo/list_album",array("format"=>"json"),"GET"),
+//             "addShare"=>array("https://graph.qq.com/share/add_share",array("title","url","#comment","#summary","#images","format"=>"json","#type","#playurl","#nswb","site","fromurl"),"POST"),
+//             "checkPageFans" => array("https://graph.qq.com/user/check_page_fans",array("page_id"=>"314416946","format"=>"json")),
+//             /*                    wblog                             */
+//             "addT"=>array("https://graph.qq.com/t/add_t",array("format"=>"json","content","#clientip","#longitude","#compatibleflag"),"POST"),
+//             "addPicT"=>array("https://graph.qq.com/t/add_pic_t",array("content","pic","format"=>"json","#clientip","#longitude","#latitude","#syncflag","#compatiblefalg"),"POST"),
+//             "delT"=>array("https://graph.qq.com/t/del_t",array("id", "format" => "json"),"POST"),
+//             "getRepostList"=>array("https://graph.qq.com/t/get_repost_list",array("flag","rootid","pageflag","pagetime","reqnum","twitterid","format"=>"json")),
+//             "getInfo"=>array("https://graph.qq.com/user/get_info",array("format" => "json")),
+//             "getOtherInfo"=>array("https://graph.qq.com/user/get_other_info",array("format"=>"json","#name","fopenid")),
+//             "getFansList" => array("https://graph.qq.com/relation/get_fanslist",array("format"=>"json","reqnum","startindex","#mode","#install","#sex")),
+//             "getIdolList" => array("https://graph.qq.com/relation/get_idollist",array("format"=>"json","reqnum","startindex","#mode","#install")),
+//             "addIdol"=>array("https://graph.qq.com/relation/add_idol",array("format"=>"json","#name-1","#fopenids-1"),"POST"),
+//             "delIdol"=>array("https://graph.qq.com/relation/del_idol",array("format"=>"json","#name-1","#fopenid-1"),"POST"),
+//             /*                           pay                          */
+//             "getTenpayAddr"=>array("https://graph.qq.com/cft_info/get_tenpay_addr",array("ver"=>1,"limit"=>5,"offset"=>0,"format"=>"json"))
+//         );
+//     }
     
-    public function __call($name,$arg){
-        if(empty($this->APIMap[$name])){
-            throw new \Exception("api调用名称错误","不存在的API: $name");
-        }
+//     public function __call($name,$arg){
+//         if(empty($this->APIMap[$name])){
+//             throw new \Exception("api调用名称错误","不存在的API: $name");
+//         }
          
-        $baseUrl = $this->APIMap[$name][0];
-        $argsList = $this->APIMap[$name][1];
-        $method = isset($this->APIMap[$name][2]) ? $this->APIMap[$name][2] : "GET";
+//         $baseUrl = $this->APIMap[$name][0];
+//         $argsList = $this->APIMap[$name][1];
+//         $method = isset($this->APIMap[$name][2]) ? $this->APIMap[$name][2] : "GET";
         
-        if(empty($arg)){
-            $arg[0] = null;
-        }
+//         if(empty($arg)){
+//             $arg[0] = null;
+//         }
         
-        if($name != "get_tenpay_addr"){
-            $response = json_decode($this->_applyAPI($arg[0], $argsList, $baseUrl, $method));
-            $responseArr = $this->objToArr($response);
-        }else{
-            $responseArr = $this->simpleJsonParser($this->_applyAPI($arg[0], $argsList, $baseUrl, $method));
-        }
+//         if($name != "get_tenpay_addr"){
+//             $response = json_decode($this->_applyAPI($arg[0], $argsList, $baseUrl, $method));
+//             $responseArr = $this->objToArr($response);
+//         }else{
+//             $responseArr = $this->simpleJsonParser($this->_applyAPI($arg[0], $argsList, $baseUrl, $method));
+//         }
     
     
-        //检查返回ret判断api是否成功调用
-        if($responseArr['ret'] == 0){
-            return $responseArr;
-        }else{
-            throw new \Exception($response->msg);
-        }
-    }
+//         //检查返回ret判断api是否成功调用
+//         if($responseArr['ret'] == 0){
+//             return $responseArr;
+//         }else{
+//             throw new \Exception($response->msg);
+//         }
+//     }
     
-    private function combineURL($baseURL, $keysArr){
-        $combined = $baseURL."?";
-        $valueArr = array();
+//     private function combineURL($baseURL, $keysArr){
+//         $combined = $baseURL."?";
+//         $valueArr = array();
         
-        foreach($keysArr as $key => $val){
-            $valueArr[] = "$key=$val";
-        }
+//         foreach($keysArr as $key => $val){
+//             $valueArr[] = "$key=$val";
+//         }
         
-        $keyStr = implode("&",$valueArr);
-        $combined .= ($keyStr);
+//         $keyStr = implode("&",$valueArr);
+//         $combined .= ($keyStr);
         
-        return $combined;
-    }
+//         return $combined;
+//     }
     
-    private function post($url, $keysArr, $flag = 0){
-        $ch = curl_init();
-        if(! $flag) curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_POST, TRUE);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $keysArr);
-        curl_setopt($ch, CURLOPT_URL, $url);
-        $ret = curl_exec($ch);
+//     private function post($url, $keysArr, $flag = 0){
+//         $ch = curl_init();
+//         if(! $flag) curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+//         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+//         curl_setopt($ch, CURLOPT_POST, TRUE);
+//         curl_setopt($ch, CURLOPT_POSTFIELDS, $keysArr);
+//         curl_setopt($ch, CURLOPT_URL, $url);
+//         $ret = curl_exec($ch);
     
-        curl_close($ch);
-        return $ret;
-    }
+//         curl_close($ch);
+//         return $ret;
+//     }
     
-    private function _applyAPI($arr, $argsList, $baseUrl, $method){
-        $pre = "#";
-        $keysArr = $this->basicParams;
+//     private function _applyAPI($arr, $argsList, $baseUrl, $method){
+//         $pre = "#";
+//         $keysArr = $this->basicParams;
     
-        $optionArgList = array();//一些多项选填参数必选一的情形
-        foreach($argsList as $key => $val){
-            $tmpKey = $key;
-            $tmpVal = $val;
+//         $optionArgList = array();//一些多项选填参数必选一的情形
+//         foreach($argsList as $key => $val){
+//             $tmpKey = $key;
+//             $tmpVal = $val;
             
-            if(!is_string($key)){
-                $tmpKey = $val;
-                if(strpos($val,$pre) === 0){
-                    $tmpVal = $pre;
-                    $tmpKey = substr($tmpKey,1);
-                    if(preg_match("/-(\\d$)/", $tmpKey, $res)){
-                        $tmpKey = str_replace($res[0], "", $tmpKey);
-                        $optionArgList[$res[1]][] = $tmpKey;
-                    }
-                }else{
-                    $tmpVal = null;
-                }
-            }
+//             if(!is_string($key)){
+//                 $tmpKey = $val;
+//                 if(strpos($val,$pre) === 0){
+//                     $tmpVal = $pre;
+//                     $tmpKey = substr($tmpKey,1);
+//                     if(preg_match("/-(\\d$)/", $tmpKey, $res)){
+//                         $tmpKey = str_replace($res[0], "", $tmpKey);
+//                         $optionArgList[$res[1]][] = $tmpKey;
+//                     }
+//                 }else{
+//                     $tmpVal = null;
+//                 }
+//             }
     
-            //-----如果没有设置相应的参数
-            if(!isset($arr[$tmpKey]) || $arr[$tmpKey] === ""){
-                if($tmpVal == $pre){//则使用默认的值
-                    continue;
-                }else if($tmpVal){
-                    $arr[$tmpKey] = $tmpVal;
-                }else{
-                    $v = $_FILES[$tmpKey];
-                    if($v){
-                        $filename = dirname($v['tmp_name'])."/".$v['name'];
-                        move_uploaded_file($v['tmp_name'], $filename);
-                        $arr[$tmpKey] = "@$filename";
-                    }else{
-                        throw new \Exception("api调用参数错误","未传入参数$tmpKey");
-                    }
-                }
-            }
+//             //-----如果没有设置相应的参数
+//             if(!isset($arr[$tmpKey]) || $arr[$tmpKey] === ""){
+//                 if($tmpVal == $pre){//则使用默认的值
+//                     continue;
+//                 }else if($tmpVal){
+//                     $arr[$tmpKey] = $tmpVal;
+//                 }else{
+//                     $v = $_FILES[$tmpKey];
+//                     if($v){
+//                         $filename = dirname($v['tmp_name'])."/".$v['name'];
+//                         move_uploaded_file($v['tmp_name'], $filename);
+//                         $arr[$tmpKey] = "@$filename";
+//                     }else{
+//                         throw new \Exception("api调用参数错误","未传入参数$tmpKey");
+//                     }
+//                 }
+//             }
             
-            $keysArr[$tmpKey] = $arr[$tmpKey];
-        }
+//             $keysArr[$tmpKey] = $arr[$tmpKey];
+//         }
         
-        //检查选填参数必填一的情形
-        foreach($optionArgList as $val){
-            $n = 0;
-            foreach($val as $v){
-                if(in_array($v, array_keys($keysArr))){
-                    $n ++;
-                }
-            }
+//         //检查选填参数必填一的情形
+//         foreach($optionArgList as $val){
+//             $n = 0;
+//             foreach($val as $v){
+//                 if(in_array($v, array_keys($keysArr))){
+//                     $n ++;
+//                 }
+//             }
     
-            if(! $n){
-                $str = implode(",",$val);
-                throw new \Exception("api调用参数错误",$str."必填一个");
-            }
-        }
+//             if(! $n){
+//                 $str = implode(",",$val);
+//                 throw new \Exception("api调用参数错误",$str."必填一个");
+//             }
+//         }
     
-        if($method == "POST"){
-            if($baseUrl == "https://graph.qq.com/blog/add_one_blog") {
-                $response = $this->urlUtils->post($baseUrl, $keysArr, 1);
-            }
-            else {
-                $response = $this->urlUtils->post($baseUrl, $keysArr, 0);
-            }
-        }else if($method == "GET"){
-            $response = $this->urlUtils->get($baseUrl, $keysArr);
-        }
+//         if($method == "POST"){
+//             if($baseUrl == "https://graph.qq.com/blog/add_one_blog") {
+//                 $response = $this->urlUtils->post($baseUrl, $keysArr, 1);
+//             }
+//             else {
+//                 $response = $this->urlUtils->post($baseUrl, $keysArr, 0);
+//             }
+//         }else if($method == "GET"){
+//             $response = $this->urlUtils->get($baseUrl, $keysArr);
+//         }
         
-        return $response;
-    }
+//         return $response;
+//     }
     
-    private function objToArr($obj){
-        if(!is_object($obj) && !is_array($obj)) {
-            return $obj;
-        }
-        $arr = array();
-        foreach($obj as $k => $v){
-            $arr[$k] = $this->objToArr($v);
-        }
-        return $arr;
-    }
+//     private function objToArr($obj){
+//         if(!is_object($obj) && !is_array($obj)) {
+//             return $obj;
+//         }
+//         $arr = array();
+//         foreach($obj as $k => $v){
+//             $arr[$k] = $this->objToArr($v);
+//         }
+//         return $arr;
+//     }
     
-    private function simpleJsonParser($json){
-        $json = str_replace("{","",str_replace("}","", $json));
-        $jsonValue = explode(",", $json);
-        $arr = array();
-        foreach($jsonValue as $v){
-            $jValue = explode(":", $v);
-            $arr[str_replace('"',"", $jValue[0])] = (str_replace('"', "", $jValue[1]));
-        }
-        return $arr;
-    }
+//     private function simpleJsonParser($json){
+//         $json = str_replace("{","",str_replace("}","", $json));
+//         $jsonValue = explode(",", $json);
+//         $arr = array();
+//         foreach($jsonValue as $v){
+//             $jValue = explode(":", $v);
+//             $arr[str_replace('"',"", $jValue[0])] = (str_replace('"', "", $jValue[1]));
+//         }
+//         return $arr;
+//     }
     
     /**
      * 当前API的版本信息。
