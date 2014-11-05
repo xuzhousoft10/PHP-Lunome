@@ -119,7 +119,9 @@ class Service extends \X\Core\Service\XService {
      */
     protected function getAccountByOAuth( Oauth20Model $oauth, QQConnectSDK $qqConnect ) {
         $account = AccountModel::model()->findByAttribute(array('oauth20_id'=>$oauth->id));
-        $userInfo = $qqConnect->getUserInfo();
+        $userInfo = $qqConnect->QZone()->getInfo();
+        var_dump($userInfo);
+        exit();
         if ( null === $account ) {
             $account = $this->enableRandomAccount();
         }

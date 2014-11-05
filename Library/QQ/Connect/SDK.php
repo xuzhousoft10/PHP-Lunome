@@ -76,7 +76,6 @@ class SDK {
         ));
         $this->token = $request->get(Request::FORMAT_URL_PARAM);
         $this->token['expires_in'] = date('Y-m-d H:i:s',strtotime("{$this->token['expires_in']} second"));
-        $this->basicParams["access_token"] = $this->token["access_token"];
         
         /* 获取Open ID */
         $request = $this->getRequest(self::URL_OPENID, array('access_token' => $this->token["access_token"]));
@@ -85,7 +84,6 @@ class SDK {
         $rpos = strrpos($response, ')');
         $response = substr($response, $lpos + 1, $rpos - $lpos -1);
         $user = json_decode($response);
-        $this->basicParams['openid'] = $user->openid;
     }
     
     /**
@@ -123,6 +121,23 @@ class SDK {
      */
     public function getOpenId(){
         return $this->basicParams["openid"];
+    }
+    
+    /**
+     * 该变量保存着QZone的实例。
+     * @var \X\Library\QQ\Connect\QZone 
+     */
+    private $qzone = null;
+    
+    /**
+     * 获取Qzone实例。
+     * @return \X\Library\QQ\Connect\QZone
+     */
+    public function QZone() {
+        if ( null === $this->qzone ) {
+            $this->qzone = new QZone($this);
+        }
+        return $this->qzone;
     }
     
 //     /**
