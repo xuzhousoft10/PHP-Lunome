@@ -56,7 +56,7 @@ class SDK {
         $request = new Request(self::URL_AUTH_CODE, array(
             'response_type' => 'code',
             'client_id'     => self::$appid,
-            'redirect_uri'  => self::$callback,
+            'redirect_uri'  => urlencode(self::$callback),
             'state'         => $_SESSION['QQConnect']['randomKey'],
             'scope'         => self::$scope,
         ));
