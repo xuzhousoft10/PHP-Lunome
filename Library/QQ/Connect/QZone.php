@@ -39,6 +39,5 @@ class QZone {
     public function addAlbum() {}
     public function uploadPicture() {}
     public function listAlbum() {}
-    public function addShare() {}
     public function checkPageFans() {}
 }
