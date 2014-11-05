@@ -47,11 +47,10 @@ abstract class XModule extends \X\Core\Basic {
      * 快捷当时获取当前模块下的文件或者目录的路径。
      * @return string
      */
-    public function getModulePath( $path='' ) {
-        $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
-        $moduleReflection = new \ReflectionClass($this);
-        $basePath = dirname($moduleReflection->getFileName());
-        $path = empty($path) ? $path : $basePath.DIRECTORY_SEPARATOR.$path;
+    public function getPath( $path=null ) {
+        $module = new \ReflectionClass(get_class($this));
+        $modulePath = dirname($module->getFileName());
+        $path = (null===$path) ? $modulePath : $modulePath.DIRECTORY_SEPARATOR.str_replace('/', DIRECTORY_SEPARATOR, $path);
         return $path;
     }
 }

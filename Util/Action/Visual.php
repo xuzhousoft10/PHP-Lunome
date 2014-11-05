@@ -65,7 +65,7 @@ abstract class Visual extends Basic {
      */
     public function getParticleViewPath( $view ) {
         $view = sprintf('View/Particle/%s.php', $view);
-        $view = $this->getModule()->getModulePath($view);
+        $view = $this->getModule()->getPath($view);
         return $view;
     }
     
@@ -76,7 +76,7 @@ abstract class Visual extends Basic {
      */
     public function getLayoutViewPath( $layout ) {
         $view = sprintf('View/Layout/%s.php', $layout);
-        $view = $this->getModule()->getModulePath($view);
+        $view = $this->getModule()->getPath($view);
         return $view;
     }
     
