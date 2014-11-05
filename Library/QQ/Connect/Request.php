@@ -93,7 +93,7 @@ class Request {
      */
     private function formatResponse( $response, $format='' ) {
         $handler = sprintf('formatResponse%s', $format);
-        if ( method_exists($this, $handler) ) {
+        if ( ''!==$format && method_exists($this, $handler) ) {
             return $this->$handler($response);
         } else {
             return $response;
