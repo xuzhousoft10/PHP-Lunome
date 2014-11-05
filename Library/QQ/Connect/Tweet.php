@@ -37,11 +37,26 @@ class Tweet extends ProductionBasic {
         if ( null !== $longitude )  $params['longitude'] = $longitude;
         if ( null !== $latitude )   $params['latitude'] = $latitude;
         if ( null !== $compatibleflag ) $params['compatibleflag'] = $compatibleflag;
+        $result = $this->httpPostJSON($url, $params);
+        if ( 0 === $result['errcode']*1 ) {
+            return $result['data']['id'];
+        } else {
+            throw new Exception($result['msg']);
+        }
+    }
+    
+    /**
+     * 根据微博ID删除指定微博。
+     * @param string $id 微博消息的ID，用来唯一标识一条微博消息。
+     * @return array
+     */
+    public function delete( $id ) {
+        $url = 'https://graph.qq.com/t/del_t';
+        $params = array('id'=>$id);
         return $this->httpPostJSON($url, $params);
     }
     
     public function addWithPicture() {}
-    public function delete() {}
     public function getRepostList() {}
     public function getUserInfo() {}
     public function getFansList() {}
