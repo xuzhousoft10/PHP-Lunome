@@ -3,4 +3,5 @@
 .lnm-media-list-container {width: 900px; margin-left:auto; margin-right:auto}
 .lnm-media-list-item-container {text-align: center;line-height: 3em;width:200px;margin: 0px 10px;}
 .lnm-media-list-item {background-size: 200px 300px; height: 300px; width:200px;}
-.lnm-media-list-item-mark-container {position: relative;top: 270px; display:none}
+.lnm-media-list-item-empty-area {height:270px;}
+.lnm-media-list-item-mark-container {position: relative;display:none}

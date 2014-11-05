@@ -21,6 +21,11 @@ $(document).ready(function() {
         $(this).children().hide();
     });
     
+    /* 针对Media列表页面，如果鼠标点击非标记按钮则进入详细界面。 */
+    $('.lnm-media-list-item-empty-area').click(function() {
+        window.location = $(this).attr('data-detail-url');
+    });
+    
     /* 仅当media处于可视区域时加载背景图片。 */
     $('.lnm-media-list-item').waypoint(function(direction) {
         if ( 'up' == direction ){
