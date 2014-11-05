@@ -69,7 +69,7 @@ class Request {
         
         $handler = sprintf('formatResponse%s', $format);
         if ( method_exists($this, $handler) ) {
-            return $this->$hander($response);
+            return $this->$handler($response);
         } else {
             return $response;
         }
