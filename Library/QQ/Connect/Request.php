@@ -91,7 +91,7 @@ class Request {
      * @param string $format
      * @return mixed
      */
-    private function formatResponse( $response, $format ) {
+    private function formatResponse( $response, $format='' ) {
         $handler = sprintf('formatResponse%s', $format);
         if ( method_exists($this, $handler) ) {
             return $this->$handler($response);
