@@ -36,7 +36,6 @@ class QZone {
         return $userInfo;
     }
     
-    public function addTopic() {}
     public function addOneBlog() {}
     public function addAlbum() {}
     public function uploadPicture() {}
