@@ -49,9 +49,6 @@ class SDK {
      * 该方法用于在没有授权时获取授权界面的URL。
      */
     public function getLoginUrl(){
-        /* 生成唯一随机串防CSRF攻击 */
-        $_SESSION['QQConnect']['randomKey'] = md5(uniqid(rand(), TRUE));
-        
         /* 跳转到授权页面的参数 */
         $request = new Request(self::URL_AUTH_CODE, array(
             'response_type' => 'code',
@@ -70,37 +67,26 @@ class SDK {
      * @throws Exception 当CSRF随机串与会话中存储的不一致的时候。
      */
     public function setup(){
-        /* 检查用于防止CSRF的随机串。 */
-        $randomKey = $_SESSION['QQConnect']['randomKey'];
-        if($_GET['state'] != $randomKey){
-            throw new \Exception('Random key does not same as stored.');
-        }
-        unset($_SESSION['QQConnect']['randomKey']);
-        unset($_SESSION['QQConnect']);
-    
         /* 获取access token */
-        $keysArr = array(
+        $request = new Request(self::URL_ACCESS_TOKEN, array(
             'grant_type'    => 'authorization_code',
             'client_id'     => self::$appid,
-            'redirect_uri'  => self::$callback,
+            'redirect_uri'  => urlencode(self::$callback),
             'client_secret' => self::$appkey,
             'code'          => $_GET['code']
-        );
-        $response = $this->get(self::GET_ACCESS_TOKEN_URL, $keysArr);
-        $params = array();
-        parse_str($response, $params);
-        $this->token = $params;
-        $this->token['expires_in'] = date('Y-m-d H:i:s',strtotime("{$params['expires_in']} second"));
-        $this->basicParams["access_token"] = $params["access_token"];
+        ));
+        $this->token = $request->get(Request::FORMAT_URL_PARAM);
+        $this->token['expires_in'] = date('Y-m-d H:i:s',strtotime("{$this->token['expires_in']} second"));
+        $this->basicParams["access_token"] = $this->token["access_token"];
     
         /* 获取Open ID */
-        $keysArr = array('access_token' => $params["access_token"]);
-        $response = $this->get(self::GET_OPENID_URL, $keysArr);
+        $request = new Request(self::URL_OPENID, array('access_token' => $this->token["access_token"]));
+        $response = $request->get();
         $lpos = strpos($response, '(');
         $rpos = strrpos($response, ')');
         $response = substr($response, $lpos + 1, $rpos - $lpos -1);
         $user = json_decode($response);
-        $this->basicParams["openid"] = $user->openid;
+        $this->basicParams['openid'] = $user->openid;
     }
     
     /**
@@ -230,22 +216,6 @@ class SDK {
         return $combined;
     }
     
-    private function get($url, $keysArr){
-        $combined = $this->combineURL($url, $keysArr);
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_URL, $combined);
-        $response =  curl_exec($ch);
-        curl_close($ch);
-        
-        if(empty($response)){
-            $this->error->showError("50001");
-        }
-        
-        return $response;
-    }
-    
     private function post($url, $keysArr, $flag = 0){
         $ch = curl_init();
         if(! $flag) curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
@@ -355,8 +325,18 @@ class SDK {
     }
     
     const VERSION = "2.0";
-    const GET_ACCESS_TOKEN_URL = "https://graph.qq.com/oauth2.0/token";
-    const GET_OPENID_URL = "https://graph.qq.com/oauth2.0/me";
+    
+    /**
+     * 用来获取Open ID的链接
+     * @var string
+     */
+    const URL_OPENID = "https://graph.qq.com/oauth2.0/me";
+    
+    /**
+     * 用来获取访问码的链接。
+     * @var string
+     */
+    const URL_ACCESS_TOKEN = "https://graph.qq.com/oauth2.0/token";
     
     /**
      * 用来获取授权码的链接。
