@@ -53,7 +53,10 @@ class Tweet extends ProductionBasic {
     public function delete( $id ) {
         $url = 'https://graph.qq.com/t/del_t';
         $params = array('id'=>$id);
-        return $this->httpPostJSON($url, $params);
+        $result = $this->httpPostJSON($url, $params);
+        if ( 0 !== $result['errcode']*1 ) {
+            throw new Exception($result['msg']);
+        }
     }
     
     public function addWithPicture() {}
