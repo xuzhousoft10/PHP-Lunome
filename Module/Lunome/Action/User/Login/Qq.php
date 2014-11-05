@@ -21,7 +21,8 @@ class Qq extends Basic {
      * @return void
      */ 
     public function runAction( ) {
-        $this->getService(Service::getServiceName())->loginByQQ();
+        $url = $this->getService(Service::getServiceName())->loginByQQ();
+        header("Location:$url");
         X::system()->stop();
     }
 }

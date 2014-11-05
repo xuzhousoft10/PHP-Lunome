@@ -2,12 +2,12 @@
 /**
  * 
  */
-namespace X\Library\QQ;
+namespace X\Library\QQ\Connect;
 
 /**
  * 
  */
-class Connect {
+class SDK {
     /**
      * 应用的唯一标识。在OAuth2.0认证过程中，appid的值即为oauth_consumer_key的值。
      * @var string
@@ -46,23 +46,21 @@ class Connect {
     private $token = array();
     
     /**
-     * 该方法用于在没有授权时跳转到QQ登录界面进行授权。
+     * 该方法用于在没有授权时获取授权界面的URL。
      */
-    public function login(){
+    public function getLoginUrl(){
         /* 生成唯一随机串防CSRF攻击 */
         $_SESSION['QQConnect']['randomKey'] = md5(uniqid(rand(), TRUE));
-    
-        /* 跳转到授权页面 */
-        $keysArr = array(
+        
+        /* 跳转到授权页面的参数 */
+        $request = new Request(self::URL_AUTH_CODE, array(
             'response_type' => 'code',
             'client_id'     => self::$appid,
             'redirect_uri'  => self::$callback,
             'state'         => $_SESSION['QQConnect']['randomKey'],
             'scope'         => self::$scope,
-        );
-    
-        $login_url = $this->combineURL(self::GET_AUTH_CODE_URL, $keysArr);
-        header("Location:$login_url");
+        ));
+        return $request->toString();
     }
     
     /**
@@ -357,7 +355,12 @@ class Connect {
     }
     
     const VERSION = "2.0";
-    const GET_AUTH_CODE_URL = "https://graph.qq.com/oauth2.0/authorize";
     const GET_ACCESS_TOKEN_URL = "https://graph.qq.com/oauth2.0/token";
     const GET_OPENID_URL = "https://graph.qq.com/oauth2.0/me";
+    
+    /**
+     * 用来获取授权码的链接。
+     * @var string
+     */
+    const URL_AUTH_CODE = "https://graph.qq.com/oauth2.0/authorize";
 }

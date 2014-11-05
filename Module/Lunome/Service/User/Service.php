@@ -4,12 +4,16 @@
  */
 namespace X\Module\Lunome\Service\User;
 
-use X\Library\QQ\Connect as QQConnect;
+/**
+ * 
+ */
 use X\Module\Lunome\Model\Oauth20Model;
 use X\Module\Lunome\Model\AccountModel;
 use X\Service\XDatabase\Core\SQL\Func\Rand;
 use X\Module\Lunome\Model\AccountLoginHistoryModel;
 use X\Library\XUtil\Network;
+use X\Library\QQ\Connect\SDK as QQConnectSDK;
+
 /**
  * The service class
  */
@@ -19,13 +23,6 @@ class Service extends \X\Core\Service\XService {
      * @see \X\Core\Service\XService::afterStart()
      */
     protected function afterStart() {
-        $debug = true;
-        if ( $debug ) {
-            $condition = array('status'=>AccountModel::ST_IN_USE, 'is_admin'=>AccountModel::IS_ADMIN_YES);
-            $account = AccountModel::model()->findByAttribute($condition);
-            $this->loginAccount($account, 'DEBUG');
-        }
-        
         $this->initCurrentUserInformation();
     }
     
@@ -63,13 +60,13 @@ class Service extends \X\Core\Service\XService {
     }
     
     /**
-     * 通过QQConnect登录, 注意， 该方法回直接跳转到登录页面， 你应该在调用完该方法后立即结束。
+     * 通过QQConnectSDK登录, 注意， 该方法回直接跳转到登录页面， 你应该在调用完该方法后立即结束。
      * 
      * @return void
      */
     public function loginByQQ() {
         $qqConnect = $this->getQQConnect();
-        $qqConnect->login();
+        return $qqConnect->getLoginUrl();
     }
     
     /**
@@ -101,26 +98,26 @@ class Service extends \X\Core\Service\XService {
     /**
      * 获取QQConnect 的 handler
      * 
-     * @return \X\Library\QQ\Connect
+     * @return \X\Library\QQ\QQConnectSDK
      */
     protected function getQQConnect() {
         $host = $_SERVER['HTTP_HOST'];
         $callBack = sprintf('http://%s/index.php?module=lunome&action=user/login/qqcallback', $host);
-        QQConnect::$appid = '101161224';
-        QQConnect::$appkey = 'f03143e996578b9222180fc85d594473';
-        QQConnect::$callback = urlencode($callBack);
+        QQConnectSDK::$appid = '101161224';
+        QQConnectSDK::$appkey = 'f03143e996578b9222180fc85d594473';
+        QQConnectSDK::$callback = $callBack;
         
-        $qqConnect = new QQConnect();
+        $qqConnect = new QQConnectSDK();
         return $qqConnect;
     }
     
     /**
      * 
      * @param Oauth20Model $oauth
-     * @param QQConnect $qqConnect
+     * @param QQConnectSDK $qqConnect
      * @return Ambigous <\X\Module\Lunome\Model\AccountModel, \X\Service\XDatabase\Core\ActiveRecord\ActiveRecord, NULL>
      */
-    protected function getAccountByOAuth( Oauth20Model $oauth, QQConnect $qqConnect ) {
+    protected function getAccountByOAuth( Oauth20Model $oauth, QQConnectSDK $qqConnect ) {
         $account = AccountModel::model()->findByAttribute(array('oauth20_id'=>$oauth->id));
         $userInfo = $qqConnect->getUserInfo();
         if ( null === $account ) {
