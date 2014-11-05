@@ -78,7 +78,7 @@ class Tweet extends ProductionBasic {
      * @return array
      */
     public function addWithPicture( $content, $pic, $clientIp=null, $longitude=null, $latitude=null, $compatibleflag=null) {
-        $url = 'https://graph.qq.com/t/add_t';
+        $url = 'https://graph.qq.com/t/add_pic_t';
         $params = array();
         $params['content'] = $content;
         $params['pic'] = '@'.$pic;
