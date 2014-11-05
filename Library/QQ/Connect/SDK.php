@@ -68,7 +68,7 @@ class SDK {
      */
     public function setup(){
         /* 获取access token */
-        $request = new Request(self::URL_ACCESS_TOKEN, array(
+        $request = $this->getRequest(self::URL_ACCESS_TOKEN, array(
             'grant_type'    => 'authorization_code',
             'client_id'     => self::$appid,
             'redirect_uri'  => urlencode(self::$callback),
@@ -78,7 +78,9 @@ class SDK {
         $this->token = $request->get(Request::FORMAT_URL_PARAM);
         $this->token['expires_in'] = date('Y-m-d H:i:s',strtotime("{$this->token['expires_in']} second"));
         $this->basicParams["access_token"] = $this->token["access_token"];
-    
+        var_dump($this->token);
+        exit();
+        
         /* 获取Open ID */
         $request = new Request(self::URL_OPENID, array('access_token' => $this->token["access_token"]));
         $response = $request->get();
