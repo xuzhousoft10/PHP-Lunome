@@ -50,7 +50,7 @@ class SDK {
      */
     public function getLoginUrl(){
         /* 跳转到授权页面的参数 */
-        $request = new Request(self::URL_AUTH_CODE, array(
+        $request = $this->getRequest(self::URL_AUTH_CODE, array(
             'response_type' => 'code',
             'client_id'     => self::$appid,
             'redirect_uri'  => urlencode(self::$callback),
@@ -87,6 +87,17 @@ class SDK {
         $response = substr($response, $lpos + 1, $rpos - $lpos -1);
         $user = json_decode($response);
         $this->basicParams['openid'] = $user->openid;
+    }
+    
+    /**
+     * 获取一个Request实例
+     * @param string $url
+     * @param array $parameters
+     * @return \X\Library\QQ\Connect\Request
+     */
+    private function getRequest($url, array $parameters=array()) {
+        $request = new Request($url, $parameters);
+        return $request;
     }
     
     /**
@@ -324,6 +335,10 @@ class SDK {
         return $arr;
     }
     
+    /**
+     * 当前API的版本信息。
+     * @var string
+     */
     const VERSION = "2.0";
     
     /**
