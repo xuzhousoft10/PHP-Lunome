@@ -147,6 +147,23 @@ class SDK {
         return $this->qzone;
     }
     
+    /**
+     * 保存当前SDK中的微博实例
+     * @var \X\Library\QQ\Connect\Tweet
+     */
+    private $tweet = null;
+    
+    /**
+     * 获取微博实例。
+     * @return \X\Library\QQ\Connect\Tweet
+     */
+    public function Tweet() {
+        if ( null === $this->tweet ) {
+            $this->tweet = new Tweet($this);
+        }
+        return $this->tweet;
+    }
+    
 //     /**
 //      * 请求结果的格式， 默认为JSON
 //      * @var string
