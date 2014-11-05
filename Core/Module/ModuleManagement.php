@@ -26,11 +26,22 @@ class ModuleManagement extends Management {
     }
     
     /**
-     * 启动管理器
-     * @return void
+     * (non-PHPdoc)
+     * @see \X\Core\Util\Management::start()
      */
     public function start() {
+        parent::start();
         $this->loadModulesFromModuleDir();
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \X\Core\Util\Management::stop()
+     */
+    public function stop() {
+        $this->modules = array();
+        $this->defaultModuleName = null;
+        parent::stop();
     }
     
     /**
@@ -81,7 +92,6 @@ class ModuleManagement extends Management {
     protected function loadModule($name) {
         if ( !isset($this->configuration[$name]) || !$this->configuration[$name]['enable'] ) {
             $this->modules[$name]['available'] = false;
-            $this->modules[$name]['is_loaded'] = false;
             $this->modules[$name]['module'] = null;
             return false;
         }
@@ -100,7 +110,6 @@ class ModuleManagement extends Management {
         }
         
         $this->modules[$name]['available'] = true;
-        $this->modules[$name]['is_loaded'] = true;
         $this->modules[$name]['module'] = $module;
         return true;
     }
@@ -123,9 +132,6 @@ class ModuleManagement extends Management {
         if ( !$this->modules[$moduleName]['available'] ) {
             throw new Exception(sprintf('Module "%s" is not avilable.', $moduleName));
         }
-        if ( !$this->modules[$moduleName]['is_loaded'] ) {
-            throw new Exception(sprintf('Module "%s" is not loaded.', $moduleName));
-        }
         
         unset($parameters['module']);
         /* @var $module \X\Core\Module\XModule */
@@ -134,7 +140,7 @@ class ModuleManagement extends Management {
     }
     
     /**
-     * 获取框架中所有有效模块的名称。
+     * 获取框架中所有模块目录下的模块的名称。 不论其是否已经加载或启用。
      * @return array
      */
     public function getList() {
@@ -142,7 +148,7 @@ class ModuleManagement extends Management {
     }
     
     /**
-     * 检查指定名称的模块是否存在。
+     * 检查指定名称的模块是否存在。 不论其是否已经加载或启用。
      * @param string $moduleName
      * @return boolean
      */
@@ -158,10 +164,6 @@ class ModuleManagement extends Management {
     public function get( $name ) {
         if ( !isset($this->modules[$name]) ) {
             throw new Exception(sprintf('Can not find module "%s".', $name));
-        }
-
-        if ( !$this->modules[$name]['is_loaded'] ) {
-            $this->loadModule($name);
         }
         return $this->modules[$name]['module'];
     }
@@ -185,9 +187,10 @@ class ModuleManagement extends Management {
             throw new Exception(sprintf('Module "%s" does not exists.', $name));
         }
         
+        $this->modules[$name]['available'] = true;
         $this->getConfiguration()->merge($name, array('enable'=>true));
-        $this->getConfiguration()->save();
         $this->loadModule($name);
+        $this->getConfiguration()->save();
     }
     
     /**
@@ -200,7 +203,8 @@ class ModuleManagement extends Management {
             throw new Exception(sprintf('Module "%s" does not exists.', $name));
         }
         
-        $this->configuration[$name]['enable'] = false;
+        $this->getConfiguration()->merge($name, array('enable'=>false));
+        unset($this->modules[$name]);
         $this->getConfiguration()->save();
     }
     
@@ -244,6 +248,7 @@ class ModuleManagement extends Management {
         
         /* Update module management configurations. */
         $this->configuration[$moduleName] = array('enable'=>false);
+        $this->loadModule($moduleName);
         $this->getConfiguration()->save();
     }
     
@@ -253,17 +258,17 @@ class ModuleManagement extends Management {
      * @throws Exception
      */
     public function setDefault( $name = null ) {
-        if ( !is_null(null) &&  !$this->has($name) ) {
+        if ( (null !== $name) &&  !$this->has($name) ) {
             throw new Exception(sprintf('Can not find module "%s".', $name));
         }
         
         foreach ( $this->configuration as $moduleName => $moduleConfig ) {
-            $this->configuration[$moduleName]['default'] = false;
+            $this->getConfiguration()->merge($moduleName, array('default'=>false));
         }
         $this->defaultModuleName = null;
         
         if ( !is_null($name) ) {
-            $this->configuration[$name]['default'] = true;
+            $this->getConfiguration()->merge($name, array('default'=>true));
             $this->defaultModuleName = $name;
         }
         $this->getConfiguration()->save();
@@ -398,7 +403,7 @@ class ModuleManagement extends Management {
         /* Execute the up action */
         while ( 0 < $stepCount ) {
             $migration = array_pop($history);
-            if ( is_null($migration) ) {
+            if ( null === $migration ) {
                 break;
             }
             $className = basename($migration, '.php');
@@ -406,6 +411,7 @@ class ModuleManagement extends Management {
             $migrationObject = new $classFullName();
             $migrationObject->down();
             XUtil::storeArrayToPHPFile($historyPath, $history);
+            $stepCount --;
         }
     }
 }

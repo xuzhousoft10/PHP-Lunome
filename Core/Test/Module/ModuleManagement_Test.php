@@ -8,6 +8,7 @@ namespace X\Core\Test\Module;
  * 
  */
 use X\Core\X;
+use X\Core\Util\XUtil;
 
 /**
  * ModuleManagement test case.
@@ -30,6 +31,8 @@ class ModuleManagement_Test extends \PHPUnit_Framework_TestCase {
         parent::setUp ();
         $this->ModuleManagement = X::system()->getModuleManager();
         $this->oldConfig = $this->ModuleManagement->getConfiguration()->getAll();
+        $this->ModuleManagement->stop();
+        $this->ModuleManagement->getConfiguration()->setAll(array());
         $this->ModuleManagement->create('PHPUnitTestModule');
         $this->ModuleManagement->enable('PHPUnitTestModule');
         $this->ModuleManagement->start();
@@ -58,150 +61,253 @@ class ModuleManagement_Test extends \PHPUnit_Framework_TestCase {
      * Tests ModuleManagement->getConfiguration()
      */
     public function testGetConfiguration() {
-        // TODO Auto-generated ModuleManagement_Test->testGetConfiguration()
-        $this->markTestIncomplete ( "getConfiguration test not implemented" );
-        
-        $this->ModuleManagement->getConfiguration(/* parameters */);
+        $this->assertInstanceOf('\\X\\Core\\Util\\Configuration', $this->ModuleManagement->getConfiguration());
     }
     
     /**
      * Tests ModuleManagement->run()
      */
     public function testRun() {
-        // TODO Auto-generated ModuleManagement_Test->testRun()
-        $this->markTestIncomplete ( "run test not implemented" );
+        /* 通过指定默认模块进行运行 */
+        $this->ModuleManagement->stop();
+        $this->ModuleManagement->getConfiguration()->merge('PHPUnitTestModule', array('default'=>true));
+        $this->ModuleManagement->start();
+        ob_start();
+        $this->ModuleManagement->run();
+        $content = ob_get_contents();
+        ob_end_clean();
+        $this->assertSame('The module "PHPUnitTestModule" has been created.', $content);
         
-        $this->ModuleManagement->run(/* parameters */);
+        /* 通过设置框架参数进行运行 */
+        $this->ModuleManagement->stop();
+        $this->ModuleManagement->getConfiguration()->setAll(array());
+        $this->ModuleManagement->start();
+        /* 当指定不存在的模块时， 会抛出异常， 指明模块不存在 */
+        X::system()->setParameter('module', 'non-exists');
+        try {
+            $this->ModuleManagement->run();
+            $this->assertTrue(false);
+        } catch ( \X\Core\Module\Exception $e ) {
+            $this->assertTrue(true);
+        }
+        
+        /* 尝试启动一个没有启用的模块。 */
+        $this->ModuleManagement->stop();
+        $this->ModuleManagement->getConfiguration()->setAll(array('PHPUnitTestModule'=>array('enable'=>false)));
+        $this->ModuleManagement->start();
+        /* 当指定不存在的模块时， 会抛出异常， 指明模块不存在 */
+        X::system()->setParameter('module', 'PHPUnitTestModule');
+        try {
+            $this->ModuleManagement->run();
+            $this->assertTrue(false);
+        } catch ( \X\Core\Module\Exception $e ) {
+            $this->assertTrue(true);
+        }
+        
+        
+        
+        /* 如果不知道运行那一个模块， 则抛出异常。 */
+        $this->ModuleManagement->stop();
+        $this->ModuleManagement->getConfiguration()->setAll(array());
+        $this->ModuleManagement->start();
+        try {
+            $this->ModuleManagement->run();
+            $this->assertTrue(false);
+        } catch ( \X\Core\Module\Exception $e ) {
+            $this->assertTrue(true);
+        }
     }
     
     /**
      * Tests ModuleManagement->getList()
      */
     public function testGetList() {
-        // TODO Auto-generated ModuleManagement_Test->testGetList()
-        $this->markTestIncomplete ( "getList test not implemented" );
-        
-        $this->ModuleManagement->getList(/* parameters */);
+        $modules = $this->ModuleManagement->getList();
+        $this->assertContains('PHPUnitTestModule', $modules);
     }
     
     /**
      * Tests ModuleManagement->has()
      */
     public function testHas() {
-        // TODO Auto-generated ModuleManagement_Test->testHas()
-        $this->markTestIncomplete ( "has test not implemented" );
-        
-        $this->ModuleManagement->has(/* parameters */);
+        $this->assertTrue($this->ModuleManagement->has('PHPUnitTestModule'));
+        $this->assertFalse($this->ModuleManagement->has('non-exists'));
     }
     
     /**
      * Tests ModuleManagement->get()
      */
     public function testGet() {
-        // TODO Auto-generated ModuleManagement_Test->testGet()
-        $this->markTestIncomplete ( "get test not implemented" );
+        $this->assertInstanceOf('\\X\\Module\\PHPUnitTestModule\\Module', $this->ModuleManagement->get('PHPUnitTestModule'));
         
-        $this->ModuleManagement->get(/* parameters */);
+        try {
+            $this->ModuleManagement->get('non-exists');
+            $this->assertTrue(false);
+        } catch ( \X\Core\Module\Exception $e ) {
+            $this->assertTrue(true);
+        }
     }
     
     /**
      * Tests ModuleManagement->isEnable()
      */
     public function testIsEnable() {
-        // TODO Auto-generated ModuleManagement_Test->testIsEnable()
-        $this->markTestIncomplete ( "isEnable test not implemented" );
-        
-        $this->ModuleManagement->isEnable(/* parameters */);
+        $this->assertFalse($this->ModuleManagement->isEnable('non-exists'));
+        $this->assertTrue($this->ModuleManagement->isEnable('PHPUnitTestModule'));
     }
     
     /**
      * Tests ModuleManagement->enable()
      */
     public function testEnable() {
-        // TODO Auto-generated ModuleManagement_Test->testEnable()
-        $this->markTestIncomplete ( "enable test not implemented" );
+        try {
+            $this->ModuleManagement->enable('non-exists');
+            $this->assertTrue(false);
+        } catch ( \X\Core\Module\Exception $e ) {
+            $this->assertTrue(true);
+        }
         
-        $this->ModuleManagement->enable(/* parameters */);
+        /* 如果模块的类不存在， 则无法启用 */
+        $this->ModuleManagement->getConfiguration()->set('ClassNonExistsModule', array('enable'=>false));
+        try {
+            $this->ModuleManagement->enable('ClassNonExistsModule');
+            $this->assertTrue(false);
+        } catch ( \X\Core\Module\Exception $e ) {
+            $this->assertTrue(true);
+        }
+        
+        /* 如果模块的类不是一个合法的模块类， 则无法启用 */
+        mkdir(X::system()->getPath('Module/ClassNotAvailable'));
+        $content = "<?php\nnamespace X\\Module\\ClassNotAvailable;\nclass Module {}";
+        file_put_contents(X::system()->getPath('Module/ClassNotAvailable/Module.php'), $content);
+        $this->ModuleManagement->getConfiguration()->set('ClassNotAvailable', array('enable'=>false));
+        try {
+            $this->ModuleManagement->enable('ClassNotAvailable');
+            $this->assertTrue(false);
+        } catch ( \X\Core\Module\Exception $e ) {
+            $this->assertTrue(true);
+        }
+        XUtil::deleteFile(X::system()->getPath('Module/ClassNotAvailable'));
     }
     
     /**
      * Tests ModuleManagement->disable()
+     * @expectedException X\Core\Module\Exception
      */
     public function testDisable() {
-        // TODO Auto-generated ModuleManagement_Test->testDisable()
-        $this->markTestIncomplete ( "disable test not implemented" );
+        $this->ModuleManagement->disable('PHPUnitTestModule');
+        $this->assertFalse($this->ModuleManagement->has('PHPUnitTestModule'));
         
-        $this->ModuleManagement->disable(/* parameters */);
+        $this->ModuleManagement->disable('non-exists');
     }
     
     /**
      * Tests ModuleManagement->create()
+     * @expectedException X\Core\Module\Exception
      */
     public function testCreate() {
-        // TODO Auto-generated ModuleManagement_Test->testCreate()
-        $this->markTestIncomplete ( "create test not implemented" );
+        $this->ModuleManagement->create('PHPUnitTestCreateModule');
+        $this->assertTrue($this->ModuleManagement->has('PHPUnitTestCreateModule'));
+        $this->ModuleManagement->delete('PHPUnitTestCreateModule');
         
-        $this->ModuleManagement->create(/* parameters */);
+        $this->ModuleManagement->create('PHPUnitTestModule');
     }
     
     /**
      * Tests ModuleManagement->setDefault()
+     * @expectedException X\Core\Module\Exception
      */
     public function testSetDefault() {
-        // TODO Auto-generated ModuleManagement_Test->testSetDefault()
-        $this->markTestIncomplete ( "setDefault test not implemented" );
+        $this->ModuleManagement->setDefault('PHPUnitTestModule');
+        $this->assertTrue($this->ModuleManagement->isDefault('PHPUnitTestModule'));
         
-        $this->ModuleManagement->setDefault(/* parameters */);
+        $this->ModuleManagement->setDefault(null);
+        $this->assertFalse($this->ModuleManagement->isDefault('PHPUnitTestModule'));
+        
+        $this->ModuleManagement->setDefault('non-exists');
     }
     
     /**
      * Tests ModuleManagement->isDefault()
+     * @expectedException X\Core\Module\Exception
      */
     public function testIsDefault() {
-        // TODO Auto-generated ModuleManagement_Test->testIsDefault()
-        $this->markTestIncomplete ( "isDefault test not implemented" );
+        $this->ModuleManagement->setDefault('PHPUnitTestModule');
+        $this->assertTrue($this->ModuleManagement->isDefault('PHPUnitTestModule'));
         
-        $this->ModuleManagement->isDefault(/* parameters */);
+        $this->ModuleManagement->setDefault(null);
+        $this->assertFalse($this->ModuleManagement->isDefault('PHPUnitTestModule'));
+        
+        $this->ModuleManagement->setDefault('non-exists');
     }
     
     /**
      * Tests ModuleManagement->delete()
      */
     public function testDelete() {
-        // TODO Auto-generated ModuleManagement_Test->testDelete()
-        $this->markTestIncomplete ( "delete test not implemented" );
-        
-        $this->ModuleManagement->delete(/* parameters */);
+        $this->ModuleManagement->create('PHPUnitTestCreateModule');
+        $this->assertTrue($this->ModuleManagement->has('PHPUnitTestCreateModule'));
+        $this->ModuleManagement->delete('PHPUnitTestCreateModule');
+        $this->assertFalse($this->ModuleManagement->has('PHPUnitTestCreateModule'));
     }
     
     /**
      * Tests ModuleManagement->migrateCreate()
+     * @expectedException X\Core\Module\Exception
      */
     public function testMigrateCreate() {
-        // TODO Auto-generated ModuleManagement_Test->testMigrateCreate()
-        $this->markTestIncomplete ( "migrateCreate test not implemented" );
+        $this->ModuleManagement->migrateCreate('PHPUnitTestModule', 'First_Migration');
+        $this->ModuleManagement->migrateUp('PHPUnitTestModule');
+        $path = X::system()->getPath('Module/PHPUnitTestModule/Migration/History.php');
+        $this->assertTrue(is_file($path));
         
-        $this->ModuleManagement->migrateCreate(/* parameters */);
+        $this->ModuleManagement->migrateCreate('PHPUnitTestModule', 'Second_Migration');
+        $this->ModuleManagement->migrateUp('PHPUnitTestModule');
+        $path = X::system()->getPath('Module/PHPUnitTestModule/Migration');
+        $this->assertSame(5, count(scandir($path)));
+        
+        $this->ModuleManagement->migrateCreate('non-exists', 'xxxx');
     }
     
     /**
      * Tests ModuleManagement->migrateUp()
+     * @expectedException X\Core\Module\Exception
      */
     public function testMigrateUp() {
-        // TODO Auto-generated ModuleManagement_Test->testMigrateUp()
-        $this->markTestIncomplete ( "migrateUp test not implemented" );
+        $this->ModuleManagement->migrateCreate('PHPUnitTestModule', 'First_Migration');
+        $this->ModuleManagement->migrateUp('PHPUnitTestModule');
+        $path = X::system()->getPath('Module/PHPUnitTestModule/Migration/History.php');
+        $this->assertTrue(is_file($path));
         
-        $this->ModuleManagement->migrateUp(/* parameters */);
+        file_put_contents(X::system()->getPath('Module/PHPUnitTestModule/Migration/.not-exists.php'), '');
+        
+        $this->ModuleManagement->migrateCreate('PHPUnitTestModule', 'Second_Migration');
+        $this->ModuleManagement->migrateUp('PHPUnitTestModule');
+        $path = X::system()->getPath('Module/PHPUnitTestModule/Migration/History.php');
+        $this->assertSame(2, count(require $path));
+        
+        $this->ModuleManagement->migrateUp('non-exists');
     }
     
     /**
      * Tests ModuleManagement->migrateDown()
+     * @expectedException X\Core\Module\Exception
      */
     public function testMigrateDown() {
-        // TODO Auto-generated ModuleManagement_Test->testMigrateDown()
-        $this->markTestIncomplete ( "migrateDown test not implemented" );
+        $this->ModuleManagement->migrateCreate('PHPUnitTestModule', 'First_Migration');
+        $this->ModuleManagement->migrateCreate('PHPUnitTestModule', 'Second_Migration');
+        $this->ModuleManagement->migrateUp('PHPUnitTestModule');
+        $path = X::system()->getPath('Module/PHPUnitTestModule/Migration/History.php');
+        $this->assertSame(2, count(require $path));
         
-        $this->ModuleManagement->migrateDown(/* parameters */);
+        $this->ModuleManagement->migrateDown('PHPUnitTestModule', 100);
+        $this->assertSame(0, count(require $path));
+        
+        $this->ModuleManagement->migrateUp('PHPUnitTestModule');
+        $this->ModuleManagement->migrateDown('PHPUnitTestModule', 1);
+        $this->assertSame(1, count(require $path));
+        
+        $this->ModuleManagement->migrateDown('non-exists', 100);
     }
 }
 
