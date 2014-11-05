@@ -87,8 +87,6 @@ class SDK {
         $response = substr($response, $lpos + 1, $rpos - $lpos -1);
         $user = json_decode($response);
         $this->basicParams['openid'] = $user->openid;
-        var_dump($user);
-        exit();
     }
     
     /**
