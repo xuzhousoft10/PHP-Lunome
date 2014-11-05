@@ -60,6 +60,12 @@ class SDK {
     }
     
     /**
+     * 当前用户的Open ID
+     * @var string
+     */
+    private $openId = null;
+    
+    /**
      * 当登录成功后， 你必须在回调页面调用该方法来获取access token 和open ID。
      * 该方法仅能在回调页面执行。
      *
@@ -78,12 +84,13 @@ class SDK {
         $this->token['expires_in'] = date('Y-m-d H:i:s',strtotime("{$this->token['expires_in']} second"));
         
         /* 获取Open ID */
-        $request = $this->getRequest(self::URL_OPENID, array('access_token' => $this->token["access_token"]));
+        $request = $this->getRequest(self::URL_OPENID, array('access_token' => $this->token['access_token']));
         $response = $request->get();
         $lpos = strpos($response, '(');
         $rpos = strrpos($response, ')');
         $response = substr($response, $lpos + 1, $rpos - $lpos -1);
         $user = json_decode($response);
+        $this->openId = $user->openid;
     }
     
     /**
@@ -102,7 +109,7 @@ class SDK {
      * @return string
      */
     public function getAccessToken(){
-        return $this->basicParams["access_token"];
+        return $this->token['access_token'];
     }
     
     /**
@@ -120,7 +127,7 @@ class SDK {
      * @return string
      */
     public function getOpenId(){
-        return $this->basicParams["openid"];
+        return $this->openId;
     }
     
     /**
