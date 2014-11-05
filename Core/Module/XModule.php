@@ -7,7 +7,12 @@ namespace X\Core\Module;
 /**
  * 
  */
-abstract class XModule extends \X\Core\Basic {
+use X\Core\Basic;
+
+/**
+ * 
+ */
+abstract class XModule extends Basic {
     /**
      * 该变量保存当前模块的名称。
      * @var string
