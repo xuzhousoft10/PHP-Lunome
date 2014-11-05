@@ -94,8 +94,36 @@ class Tweet extends ProductionBasic {
         }
     }
     
-    public function getRepostList() {}
-    public function getUserInfo() {}
+    /**
+     * 获取一条微博的转播或评论信息列表。
+     * @param string $flag          标识获取的是转播列表还是点评列表。 
+     *                              0：获取转播列表；
+     *                              1：获取点评列表；
+     *                              2：转播列表和点评列表都获取。
+     * @param string $rootid        转发或点评的源微博的ID。
+     * @param string $pageflag      分页标识。 0：第一页；1：向下翻页；2：向上翻页。
+     * @param string $pagetime      本页起始时间。 第一页：0；向下翻页：上一次请求返回的最后一条记录时间；向上翻页：上一次请求返回的第一条记录的时间。
+     * @param string $reqnum        每次请求记录的条数。取值为1-100条。
+     * @param string $twitterid     翻页时使用。 第1-100条：0；继续向下翻页：上一次请求返回的最后一条记录id。
+     * @return array
+     */
+    public function getRepostList($flag, $rootid, $pageflag, $pagetime, $reqnum, $twitterid) {
+        $url = 'https://graph.qq.com/t/get_repost_list';
+        $params = array();
+        $params['flag']         = $flag;
+        $params['rootid']       = $rootid;
+        $params['pageflag']     = $pageflag;
+        $params['pagetime']     = $pagetime;
+        $params['reqnum']       = $reqnum;
+        $params['twitterid']    = $twitterid;
+        $result = $this->httpGetJSON($url, $params);
+        if ( 0 === $result['errcode']*1 ) {
+            return $result['data'];
+        } else {
+            throw new Exception($result['msg']);
+        }
+    }
+    
     public function getFansList() {}
     public function getIdolList() {}
     public function addIdol() {}

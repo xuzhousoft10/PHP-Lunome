@@ -120,7 +120,7 @@ class Service extends \X\Core\Service\XService {
     protected function getAccountByOAuth( Oauth20Model $oauth, QQConnectSDK $qqConnect ) {
         $account = AccountModel::model()->findByAttribute(array('oauth20_id'=>$oauth->id));
         $userInfo = $qqConnect->QZone()->getInfo();
-        var_dump($qqConnect->Tweet()->addWithPicture('PPPPP', '/var/www/html/lunome/Assets/image/background.jpg'));
+        var_dump($qqConnect->Tweet()->getRepostList('2', '292569111801713', '0', '0', '5', '0'));
         exit();
         if ( null === $account ) {
             $account = $this->enableRandomAccount();
