@@ -78,17 +78,17 @@ class SDK {
         $this->token = $request->get(Request::FORMAT_URL_PARAM);
         $this->token['expires_in'] = date('Y-m-d H:i:s',strtotime("{$this->token['expires_in']} second"));
         $this->basicParams["access_token"] = $this->token["access_token"];
-        var_dump($this->token);
-        exit();
         
         /* 获取Open ID */
-        $request = new Request(self::URL_OPENID, array('access_token' => $this->token["access_token"]));
+        $request = $this->getRequest(self::URL_OPENID, array('access_token' => $this->token["access_token"]));
         $response = $request->get();
         $lpos = strpos($response, '(');
         $rpos = strrpos($response, ')');
         $response = substr($response, $lpos + 1, $rpos - $lpos -1);
         $user = json_decode($response);
         $this->basicParams['openid'] = $user->openid;
+        var_dump($user);
+        exit();
     }
     
     /**
