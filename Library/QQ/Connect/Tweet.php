@@ -81,7 +81,7 @@ class Tweet extends ProductionBasic {
         $url = 'https://graph.qq.com/t/add_t';
         $params = array();
         $params['content'] = $content;
-        $params['pic'] = file_get_contents($pic);
+        $params['pic'] = '@'.$pic;
         if ( null !== $clientIp )   $params['clientip'] = $clientIp;
         if ( null !== $longitude )  $params['longitude'] = $longitude;
         if ( null !== $latitude )   $params['latitude'] = $latitude;
