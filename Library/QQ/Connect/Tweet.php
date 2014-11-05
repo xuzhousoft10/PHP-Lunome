@@ -59,7 +59,41 @@ class Tweet extends ProductionBasic {
         }
     }
     
-    public function addWithPicture() {}
+    /**
+     * 上传一张图片，并发布一条消息到腾讯微博平台上。
+     * @param string $content           表示要发表的微博内容。必须为UTF-8编码，最长为140个汉字，也就是420字节。
+     *                                  如果微博内容中有URL，后台会自动将该URL转换为短URL，每个URL折算成11个字节。
+     *                                  若在此处@好友，需正确填写好友的微博账号，而非昵称。
+     * @param string $pic               图片路径
+     * @param string $clientIp          用户ip。必须正确填写用户侧真实ip，不能为内网ip及以127或255开头的ip，以分析用户所在地。
+     * @param string $longitude         用户所在地理位置的经度。为实数，最多支持10位有效数字。有效范围：-180.0到+180.0，+表示东经，默认为0.0。
+     * @param string $latitude          用户所在地理位置的纬度。为实数，最多支持10位有效数字。有效范围：-90.0到+90.0，+表示北纬，默认为0.0。
+     * @param string $compatibleflag    容错标志，支持按位操作，默认为0。
+     *                                  0x2：图片数据大小错误则报错；
+     *                                  0x4：检查图片格式不支持则报错；
+     *                                  0x8：上传图片失败则报错；
+     *                                  0x20：微博内容长度超过140字则报错；
+     *                                  0：以上错误均做容错处理，即发表普通微博；
+     *                                  0x2|0x4|0x8|0x20：同旧模式，以上各种情况均报错，不做兼容处理。
+     * @return array
+     */
+    public function addWithPicture( $content, $pic, $clientIp=null, $longitude=null, $latitude=null, $compatibleflag=null) {
+        $url = 'https://graph.qq.com/t/add_t';
+        $params = array();
+        $params['content'] = $content;
+        $params['pic'] = file_get_contents($pic);
+        if ( null !== $clientIp )   $params['clientip'] = $clientIp;
+        if ( null !== $longitude )  $params['longitude'] = $longitude;
+        if ( null !== $latitude )   $params['latitude'] = $latitude;
+        if ( null !== $compatibleflag ) $params['compatibleflag'] = $compatibleflag;
+        $result = $this->httpPostJSON($url, $params);
+        if ( 0 === $result['errcode']*1 ) {
+            return $result['data']['id'];
+        } else {
+            throw new Exception($result['msg']);
+        }
+    }
+    
     public function getRepostList() {}
     public function getUserInfo() {}
     public function getFansList() {}
