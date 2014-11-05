@@ -66,7 +66,32 @@ class Request {
         curl_setopt($ch, CURLOPT_URL, $combined);
         $response =  curl_exec($ch);
         curl_close($ch);
-        
+        return $this->formatResponse($response, $format);
+    }
+    
+    /**
+     * 执行POST请求并返回请求结果。并解析结果。
+     * @param string $format
+     * @return mixed
+     */
+    public function post( $format='' ) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $this->parameters);
+        curl_setopt($ch, CURLOPT_URL, $this->url);
+        $response = curl_exec($ch);
+        curl_close($ch);
+        return $this->formatResponse($response, $format);
+    }
+    
+    /**
+     * 格式化请求结果
+     * @param string $response
+     * @param string $format
+     * @return mixed
+     */
+    private function formatResponse( $response, $format ) {
         $handler = sprintf('formatResponse%s', $format);
         if ( method_exists($this, $handler) ) {
             return $this->$handler($response);
