@@ -1,6 +1,12 @@
 <?php
+/**
+ * 
+ */
 namespace X\Library\QQ;
 
+/**
+ * 
+ */
 class Connect {
     /**
      * 应用的唯一标识。在OAuth2.0认证过程中，appid的值即为oauth_consumer_key的值。
