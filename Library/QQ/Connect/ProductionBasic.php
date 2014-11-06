@@ -55,4 +55,26 @@ class ProductionBasic {
         $request = new Request($url, $parameters);
         return $request->post(Request::FOTMAT_JSON);
     }
+    
+    /**
+     * 通过指定API名称进行调用。
+     * @param string $api       API名称
+     * @param array $params     传递给API的参数
+     * @param string $isGet     是否使用GET方式
+     * @throws Exception        当请求出错时抛出异常
+     * @return array
+     */
+    private function doRequest( $api, $params=array(), $isGet=true  ) {
+        $url = sprintf('https://graph.qq.com/%s', $api);
+        if ( $isGet ) {
+            $result = $this->httpGetJSON($url, $params);
+        } else {
+            $result = $this->httpPostJSON($url, $params);
+        }
+        if ( 0 === $result['errcode']*1 ) {
+            return $result['data'];
+        } else {
+            throw new Exception($result['msg'], $result['errcode']*1);
+        }
+    }
 }

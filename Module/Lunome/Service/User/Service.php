@@ -118,10 +118,24 @@ class Service extends \X\Core\Service\XService {
      * @return Ambigous <\X\Module\Lunome\Model\AccountModel, \X\Service\XDatabase\Core\ActiveRecord\ActiveRecord, NULL>
      */
     protected function getAccountByOAuth( Oauth20Model $oauth, QQConnectSDK $qqConnect ) {
+        echo "新增微博 <br/>";
+        var_dump($qqConnect->Tweet()->add('test Add'));
+        echo "addWithPicture <br/>";
+        var_dump($qqConnect->Tweet()->addWithPicture('test2', '/var/www/html/lunome/Assets/image/background.jpg'));
+        echo "delete <br/>";
+        var_dump($qqConnect->Tweet()->delete('393698081584801'));
+        echo "getFansList <br/>";
+        var_dump($qqConnect->Tweet()->getFansList());
+        echo "getIdolList <br/>";
+        var_dump($qqConnect->Tweet()->getIdolList());
+        echo "getRepostList <br/>";
+        var_dump($qqConnect->Tweet()->getRepostList('333085102292711'));
+        echo "getUserInfoByName <br/>";
+        var_dump($qqConnect->Tweet()->getUserInfoByName('ginhappy'));
+        exit();
+        
         $account = AccountModel::model()->findByAttribute(array('oauth20_id'=>$oauth->id));
         $userInfo = $qqConnect->QZone()->getInfo();
-        var_dump($qqConnect->Tweet()->addIdolByName('t-qq-com'));
-        exit();
         if ( null === $account ) {
             $account = $this->enableRandomAccount();
         }

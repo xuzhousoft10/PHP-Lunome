@@ -13,8 +13,7 @@ class Tweet extends ProductionBasic {
      * @return array
      */
     public function getInfo() {
-        $url = 'https://graph.qq.com/user/get_info';
-        return $this->httpGetJSON($url);
+        return $this->doRequest('user/get_info');
     }
     
     /**
@@ -30,19 +29,13 @@ class Tweet extends ProductionBasic {
      * @return array
      */
     public function add($content, $clientIp=null, $longitude=null, $latitude=null, $compatibleflag=null) {
-        $url = 'https://graph.qq.com/t/add_t';
         $params = array();
         $params['content'] = $content;
         if ( null !== $clientIp )   $params['clientip'] = $clientIp;
         if ( null !== $longitude )  $params['longitude'] = $longitude;
         if ( null !== $latitude )   $params['latitude'] = $latitude;
         if ( null !== $compatibleflag ) $params['compatibleflag'] = $compatibleflag;
-        $result = $this->httpPostJSON($url, $params);
-        if ( 0 === $result['errcode']*1 ) {
-            return $result['data']['id'];
-        } else {
-            throw new Exception($result['msg']);
-        }
+        return $this->doRequest('t/add_t', $params, false);
     }
     
     /**
@@ -51,12 +44,7 @@ class Tweet extends ProductionBasic {
      * @return array
      */
     public function delete( $id ) {
-        $url = 'https://graph.qq.com/t/del_t';
-        $params = array('id'=>$id);
-        $result = $this->httpPostJSON($url, $params);
-        if ( 0 !== $result['errcode']*1 ) {
-            throw new Exception($result['msg']);
-        }
+        $this->doRequest('t/del_t', array('id'=>$id), false);
     }
     
     /**
@@ -78,7 +66,6 @@ class Tweet extends ProductionBasic {
      * @return array
      */
     public function addWithPicture( $content, $pic, $clientIp=null, $longitude=null, $latitude=null, $compatibleflag=null) {
-        $url = 'https://graph.qq.com/t/add_pic_t';
         $params = array();
         $params['content'] = $content;
         $params['pic'] = '@'.$pic;
@@ -86,29 +73,23 @@ class Tweet extends ProductionBasic {
         if ( null !== $longitude )  $params['longitude'] = $longitude;
         if ( null !== $latitude )   $params['latitude'] = $latitude;
         if ( null !== $compatibleflag ) $params['compatibleflag'] = $compatibleflag;
-        $result = $this->httpPostJSON($url, $params);
-        if ( 0 === $result['errcode']*1 ) {
-            return $result['data']['id'];
-        } else {
-            throw new Exception($result['msg']);
-        }
+        $this->doRequest('t/add_pic_t', $params, false);
     }
     
     /**
      * 获取一条微博的转播或评论信息列表。
+     * @param string $rootid        转发或点评的源微博的ID。
      * @param string $flag          标识获取的是转播列表还是点评列表。 
      *                              0：获取转播列表；
      *                              1：获取点评列表；
      *                              2：转播列表和点评列表都获取。
-     * @param string $rootid        转发或点评的源微博的ID。
      * @param string $pageflag      分页标识。 0：第一页；1：向下翻页；2：向上翻页。
      * @param string $pagetime      本页起始时间。 第一页：0；向下翻页：上一次请求返回的最后一条记录时间；向上翻页：上一次请求返回的第一条记录的时间。
      * @param string $reqnum        每次请求记录的条数。取值为1-100条。
      * @param string $twitterid     翻页时使用。 第1-100条：0；继续向下翻页：上一次请求返回的最后一条记录id。
      * @return array
      */
-    public function getRepostList($flag, $rootid, $pageflag, $pagetime, $reqnum, $twitterid) {
-        $url = 'https://graph.qq.com/t/get_repost_list';
+    public function getRepostList($rootid, $flag=2, $pageflag=0, $pagetime=0, $reqnum=100, $twitterid=0) {
         $params = array();
         $params['flag']         = $flag;
         $params['rootid']       = $rootid;
@@ -116,12 +97,7 @@ class Tweet extends ProductionBasic {
         $params['pagetime']     = $pagetime;
         $params['reqnum']       = $reqnum;
         $params['twitterid']    = $twitterid;
-        $result = $this->httpGetJSON($url, $params);
-        if ( 0 === $result['errcode']*1 ) {
-            return $result['data'];
-        } else {
-            throw new Exception($result['msg']);
-        }
+        return $this->doRequest('t/get_repost_list', $params);
     }
     
     /**
@@ -130,14 +106,7 @@ class Tweet extends ProductionBasic {
      * @return array
      */
     public function getUserInfoByName( $name ) {
-        $url = 'https://graph.qq.com/user/get_other_info';
-        $params = array('name'=>$name);
-        $result = $this->httpGetJSON($url, $params);
-        if ( 0 === $result['errcode']*1 ) {
-            return $result['data'];
-        } else {
-            throw new Exception($result['msg']);
-        }
+        return $this->doRequest('user/get_other_info', array('name'=>$name));
     }
     
     /**
@@ -146,14 +115,7 @@ class Tweet extends ProductionBasic {
      * @return array
      */
     public function getUserInfoByOpenId( $openId ) {
-        $url = 'https://graph.qq.com/user/get_other_info';
-        $params = array('fopenid'=>$openId);
-        $result = $this->httpGetJSON($url, $params);
-        if ( 0 === $result['errcode']*1 ) {
-            return $result['data'];
-        } else {
-            throw new Exception($result['msg']);
-        }
+        return $this->doRequest('user/get_other_info', array('fopenid'=>$openId));
     }
     
     /**
@@ -173,19 +135,13 @@ class Tweet extends ProductionBasic {
      *                              0：不进行性别过滤，获取所有听众信息。
      */
     public function getFansList($reqnum=30, $startindex=0, $mode=0, $install=0, $sex=0) {
-        $url = 'https://graph.qq.com/relation/get_fanslist';
         $params = array();
         $params['reqnum']       = $reqnum;
         $params['startindex']   = $startindex;
         $params['mode']         = $mode;
         $params['install']      = $install;
         $params['sex']          = $sex;
-        $result = $this->httpGetJSON($url, $params);
-        if ( 0 === $result['errcode']*1 ) {
-            return $result['data'];
-        } else {
-            throw new Exception($result['msg']);
-        }
+        return $this->doRequest('relation/get_fanslist', $params);
     }
     
     /**
@@ -201,59 +157,46 @@ class Tweet extends ProductionBasic {
      *                              2：获取未安装应用的好友信息。
      */
     public function getIdolList($reqnum=30, $startindex=0, $mode=0, $install=0) {
-        $url = 'https://graph.qq.com/relation/get_idollist';
         $params = array();
         $params['reqnum']       = $reqnum;
         $params['startindex']   = $startindex;
         $params['mode']         = $mode;
         $params['install']      = $install;
-        $result = $this->httpGetJSON($url, $params);
-        if ( 0 === $result['errcode']*1 ) {
-            return $result['data'];
-        } else {
-            throw new Exception($result['msg']);
-        }
+        return $this->doRequest('relation/get_idollist', $params);
     }
     
     /**
      * 通过名称收听腾讯微博上的用户。
-     * @param string $name 要收听的用户的账户名列表。多个账户名之间用“,”隔开，例如：abc,bcde,cde。最多30个。 
+     * @param array $name 要收听的用户的账户名列表。最多30个。
      */
     public function addIdolByName( $name ) {
-        return $this->doRequest('relation/add_idol', array('name'=>$name), false);
+        $params = array('name'=>implode(',', $name));
+        $this->doRequest('relation/add_idol', $params, false);
     }
     
     /**
      * 通过OpenId收听腾讯微博上的用户。
-     * @param string $openIds   要收听的用户的openid列表。多个openid之间用“_”隔开，
-     *                          例如：B624064BA065E01CB73F835017FE96FA_B624064BA065E01CB73F835017FE96FB。
-     *                          最多30个。
+     * @param string $openIds   要收听的用户的openid列表。最多30个。
      */
     public function addIdolByOpenId( $openIds ) {
-        return $this->doRequest('relation/add_idol', array('fopenids'=>$openIds), false);
+        $params = array('name'=>implode('_', $openIds));
+        $this->doRequest('relation/add_idol', array('fopenids'=>$openIds), false);
     }
     
-    public function deleteIdol() {}
+    /**
+     * 通过名称取消收听腾讯微博上的用户。
+     * @param string $name
+     * @return void
+     */
+    public function deleteIdolByName( $name ) {
+        $this->doRequest('relation/del_idol', array('name'=>$name), false);
+    }
     
     /**
-     * 通过指定API名称进行调用。
-     * @param string $api       API名称
-     * @param array $params     传递给API的参数
-     * @param string $isGet     是否使用GET方式
-     * @throws Exception        当请求出错时抛出异常
-     * @return array
+     * 通过OpendID取消收听腾讯微博上的用户。
+     * @param string $openId 要取消收听的用户的openid。
      */
-    private function doRequest( $api, $params=array(), $isGet=true  ) {
-        $url = sprintf('https://graph.qq.com/%s', $api);
-        if ( $isGet ) {
-            $result = $this->httpGetJSON($url, $params);
-        } else {
-            $result = $this->httpPostJSON($url, $params);
-        }
-        if ( 0 === $result['errcode']*1 ) {
-            return $result['data'];
-        } else {
-            throw new Exception($result['msg'], $result['errcode']*1);
-        }
+    public function deleteIdolByOpenId( $openId ) {
+        $this->doRequest('relation/del_idol', array('fopenid'=>$openId), false);
     }
 }
