@@ -187,7 +187,34 @@ class Tweet extends ProductionBasic {
             throw new Exception($result['msg']);
         }
     }
-    public function getIdolList() {}
+    
+    /**
+     * 获取登录用户收听的人的列表。
+     * @param number $reqnum        请求获取的好友个数。取值范围为1-30。
+     * @param number $startindex    请求获取好友列表的起始位置。 第一页：0；继续向下翻页：reqnum*（page-1）。
+     * @param number $mode          获取好友信息的模式，默认值为0。 
+     *                              0：旧模式，新添加的好友信息排在前面，最多只能拉取1000个好友的信息。
+     *                              1：新模式，可以拉取所有好友的信息，暂时不支持排序。
+     * @param number $install       判断获取的是安装应用的好友，还是未安装应用的好友。 
+     *                              0：不考虑该参数；
+     *                              1：获取已安装应用的好友信息；
+     *                              2：获取未安装应用的好友信息。
+     */
+    public function getIdolList($reqnum=30, $startindex=0, $mode=0, $install=0) {
+        $url = 'https://graph.qq.com/relation/get_idollist';
+        $params = array();
+        $params['reqnum']       = $reqnum;
+        $params['startindex']   = $startindex;
+        $params['mode']         = $mode;
+        $params['install']      = $install;
+        $result = $this->httpGetJSON($url, $params);
+        if ( 0 === $result['errcode']*1 ) {
+            return $result['data'];
+        } else {
+            throw new Exception($result['msg']);
+        }
+    }
+    
     public function addIdol() {}
     public function deleteIdol() {}
 }
