@@ -165,6 +165,23 @@ class SDK {
     }
     
     /**
+     * 保存当前SDK中的财付通实例
+     * @var \X\Library\QQ\Connect\Tenpay
+     */
+    private $tenpay = null;
+    
+    /**
+     * 获取财付通实例
+     * @return \X\Library\QQ\Connect\Tenpay
+     */
+    public function Tenpay() {
+        if ( null === $this->tenpay ) {
+            $this->tenpay = new Tenpay($this);
+        }
+        return $this->tenpay;
+    }
+    
+    /**
      * 当前API的版本信息。
      * @var string
      */
