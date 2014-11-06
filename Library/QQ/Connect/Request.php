@@ -120,9 +120,15 @@ class Request {
         return $params;
     } 
     
+    /**
+     * 将请求结果标记为JSON格式数据。
+     * @var string
+     */
     const FOTMAT_JSON       = 'JSON';
-    const FORMAT_URL_PARAM  = 'URLParam';
     
-    const METHOD_GET    = 1;
-    const METHOD_POST   = 2;
+    /**
+     * 将请求结果标记为URL参数格式。
+     * @var string
+     */
+    const FORMAT_URL_PARAM  = 'URLParam';
 }

@@ -16,10 +16,4 @@ class QZone extends ProductionBasic {
         $url = 'https://graph.qq.com/user/get_user_info';
         return $this->httpGetJSON($url);
     }
-    
-    /* 下列方法由于暂时没有申请成功所以无法测试。 */
-//     public function addAlbum() {}
-//     public function uploadPicture() {}
-//     public function listAlbum() {}
-//     public function checkPageFans() {}
 }
