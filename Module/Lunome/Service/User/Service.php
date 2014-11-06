@@ -123,7 +123,7 @@ class Service extends \X\Core\Service\XService {
         echo "addWithPicture <br/>";
         var_dump($qqConnect->Tweet()->addWithPicture('test2', '/var/www/html/lunome/Assets/image/background.jpg'));
         echo "delete <br/>";
-        var_dump($qqConnect->Tweet()->delete('393698081584801'));
+        var_dump($qqConnect->Tweet()->delete('439513039482850'));
         echo "getFansList <br/>";
         var_dump($qqConnect->Tweet()->getFansList());
         echo "getIdolList <br/>";
@@ -132,6 +132,8 @@ class Service extends \X\Core\Service\XService {
         var_dump($qqConnect->Tweet()->getRepostList('333085102292711'));
         echo "getUserInfoByName <br/>";
         var_dump($qqConnect->Tweet()->getUserInfoByName('ginhappy'));
+        echo "getInfo <br/>";
+        var_dump($qqConnect->QZone()->getInfo());
         exit();
         
         $account = AccountModel::model()->findByAttribute(array('oauth20_id'=>$oauth->id));
