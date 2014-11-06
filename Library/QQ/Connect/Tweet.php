@@ -126,7 +126,7 @@ class Tweet extends ProductionBasic {
     
     /**
      * 通过名称获取腾讯微博其他用户详细信息。
-     * @param string $name
+     * @param string $name 其他用户的账户名。
      * @return array
      */
     public function getUserInfoByName( $name ) {
@@ -142,7 +142,7 @@ class Tweet extends ProductionBasic {
     
     /**
      * 通过OpenId获取腾讯微博其他用户详细信息。
-     * @param string $openId
+     * @param string $openId 其他用户的openid。
      * @return array
      */
     public function getUserInfoByOpenId( $openId ) {
@@ -156,7 +156,37 @@ class Tweet extends ProductionBasic {
         }
     }
     
-    public function getFansList() {}
+    /**
+     * 获取登录用户的听众列表。
+     * @param number $reqnum        请求获取的听众个数。取值范围为1-30。
+     * @param number $startindex    请求获取听众列表的起始位置。 第一页：0；继续向下翻页：reqnum*（page-1）。
+     * @param number $mode          获取听众信息的模式，默认值为0。 
+     *                              0：旧模式，新添加的听众信息排在前面，最多只能拉取1000个听众的信息。
+     *                              1：新模式，可以拉取所有听众的信息，暂时不支持排序。
+     * @param number $install       判断获取的是安装应用的听众，还是未安装应用的听众。 
+     *                              0：不考虑该参数；
+     *                              1：获取已安装应用的听众信息；
+     *                              2：获取未安装应用的听众信息。
+     * @param number $sex           按性别过滤标识，默认为0。此参数当mode=0时使用，支持排序。 
+     *                              1：获取的是男性听众信息；
+     *                              2：获取的是女性听众信息；
+     *                              0：不进行性别过滤，获取所有听众信息。
+     */
+    public function getFansList($reqnum=30, $startindex=0, $mode=0, $install=0, $sex=0) {
+        $url = 'https://graph.qq.com/relation/get_fanslist';
+        $params = array();
+        $params['reqnum']       = $reqnum;
+        $params['startindex']   = $startindex;
+        $params['mode']         = $mode;
+        $params['install']      = $install;
+        $params['sex']          = $sex;
+        $result = $this->httpGetJSON($url, $params);
+        if ( 0 === $result['errcode']*1 ) {
+            return $result['data'];
+        } else {
+            throw new Exception($result['msg']);
+        }
+    }
     public function getIdolList() {}
     public function addIdol() {}
     public function deleteIdol() {}
