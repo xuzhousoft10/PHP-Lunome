@@ -253,7 +253,7 @@ class Tweet extends ProductionBasic {
         if ( 0 === $result['errcode']*1 ) {
             return $result['data'];
         } else {
-            throw new Exception($result['msg']);
+            throw new Exception($result['msg'], $result['errcode']*1);
         }
     }
 }
