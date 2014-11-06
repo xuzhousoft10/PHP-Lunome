@@ -66,15 +66,26 @@ class ProductionBasic {
      */
     protected function doRequest( $api, $params=array(), $isGet=true  ) {
         $url = sprintf('https://graph.qq.com/%s', $api);
+        $params = array_filter($params);
         if ( $isGet ) {
             $result = $this->httpGetJSON($url, $params);
         } else {
             $result = $this->httpPostJSON($url, $params);
         }
-        if ( 0 === $result['errcode']*1 ) {
-            return $result['data'];
+        return $this->checkResponse($result);
+    }
+    
+    /**
+     * 检查请求结果是否出错。并将没有错误的结果返回。
+     * @param array $response
+     * @throws Exception
+     * @return array
+     */
+    protected function checkResponse( $response ) {
+        if ( 0 === $response['ret']*1 ) {
+            return $response;
         } else {
-            throw new Exception($result['msg'], $result['errcode']*1);
+            throw new Exception($response['msg'], $response['ret']*1);
         }
     }
 }

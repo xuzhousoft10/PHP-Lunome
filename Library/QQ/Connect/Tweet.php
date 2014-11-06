@@ -199,4 +199,18 @@ class Tweet extends ProductionBasic {
     public function deleteIdolByOpenId( $openId ) {
         $this->doRequest('relation/del_idol', array('fopenid'=>$openId), false);
     }
+    
+    /**
+     * 检查请求结果是否出错。并将没有错误的结果返回。
+     * @param array $response
+     * @throws Exception
+     * @return array
+     */
+    protected function checkResponse( $response ) {
+        if ( 0 === $response['errcode']*1 ) {
+            return $response['data'];
+        } else {
+            throw new Exception($response['msg'], $response['errcode']*1);
+        }
+    }
 }
