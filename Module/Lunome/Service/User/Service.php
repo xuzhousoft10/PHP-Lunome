@@ -118,18 +118,6 @@ class Service extends \X\Core\Service\XService {
      * @return Ambigous <\X\Module\Lunome\Model\AccountModel, \X\Service\XDatabase\Core\ActiveRecord\ActiveRecord, NULL>
      */
     protected function getAccountByOAuth( Oauth20Model $oauth, QQConnectSDK $qqConnect ) {
-        echo "getFansList <br/>";
-        var_dump($qqConnect->Tweet()->getFansList());
-        echo "getIdolList <br/>";
-        var_dump($qqConnect->Tweet()->getIdolList());
-        echo "getRepostList <br/>";
-        var_dump($qqConnect->Tweet()->getRepostList('333085102292711'));
-        echo "getUserInfoByName <br/>";
-        var_dump($qqConnect->Tweet()->getUserInfoByName('ginhappy'));
-        echo "getInfo <br/>";
-        var_dump($qqConnect->QZone()->getInfo());
-        exit();
-        
         $account = AccountModel::model()->findByAttribute(array('oauth20_id'=>$oauth->id));
         $userInfo = $qqConnect->QZone()->getInfo();
         if ( null === $account ) {
