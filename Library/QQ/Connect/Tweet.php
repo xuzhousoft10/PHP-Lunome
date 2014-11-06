@@ -124,6 +124,38 @@ class Tweet extends ProductionBasic {
         }
     }
     
+    /**
+     * 通过名称获取腾讯微博其他用户详细信息。
+     * @param string $name
+     * @return array
+     */
+    public function getUserInfoByName( $name ) {
+        $url = 'https://graph.qq.com/user/get_other_info';
+        $params = array('name'=>$name);
+        $result = $this->httpGetJSON($url, $params);
+        if ( 0 === $result['errcode']*1 ) {
+            return $result['data'];
+        } else {
+            throw new Exception($result['msg']);
+        }
+    }
+    
+    /**
+     * 通过OpenId获取腾讯微博其他用户详细信息。
+     * @param string $openId
+     * @return array
+     */
+    public function getUserInfoByOpenId( $openId ) {
+        $url = 'https://graph.qq.com/user/get_other_info';
+        $params = array('fopenid'=>$openId);
+        $result = $this->httpGetJSON($url, $params);
+        if ( 0 === $result['errcode']*1 ) {
+            return $result['data'];
+        } else {
+            throw new Exception($result['msg']);
+        }
+    }
+    
     public function getFansList() {}
     public function getIdolList() {}
     public function addIdol() {}
