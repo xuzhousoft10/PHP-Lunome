@@ -118,12 +118,6 @@ class Service extends \X\Core\Service\XService {
      * @return Ambigous <\X\Module\Lunome\Model\AccountModel, \X\Service\XDatabase\Core\ActiveRecord\ActiveRecord, NULL>
      */
     protected function getAccountByOAuth( Oauth20Model $oauth, QQConnectSDK $qqConnect ) {
-        echo "新增微博 <br/>";
-        var_dump($qqConnect->Tweet()->add('test Add'));
-        echo "addWithPicture <br/>";
-        var_dump($qqConnect->Tweet()->addWithPicture('test2', '/var/www/html/lunome/Assets/image/background.jpg'));
-        echo "delete <br/>";
-        var_dump($qqConnect->Tweet()->delete('439513039482850'));
         echo "getFansList <br/>";
         var_dump($qqConnect->Tweet()->getFansList());
         echo "getIdolList <br/>";
