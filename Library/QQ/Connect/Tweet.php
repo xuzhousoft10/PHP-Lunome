@@ -215,6 +215,45 @@ class Tweet extends ProductionBasic {
         }
     }
     
-    public function addIdol() {}
+    /**
+     * 通过名称收听腾讯微博上的用户。
+     * @param string $name 要收听的用户的账户名列表。多个账户名之间用“,”隔开，例如：abc,bcde,cde。最多30个。 
+     */
+    public function addIdolByName( $name ) {
+        return $this->doRequest('relation/add_idol', array('name'=>$name), false);
+    }
+    
+    /**
+     * 通过OpenId收听腾讯微博上的用户。
+     * @param string $openIds   要收听的用户的openid列表。多个openid之间用“_”隔开，
+     *                          例如：B624064BA065E01CB73F835017FE96FA_B624064BA065E01CB73F835017FE96FB。
+     *                          最多30个。
+     */
+    public function addIdolByOpenId( $openIds ) {
+        return $this->doRequest('relation/add_idol', array('fopenids'=>$openIds), false);
+    }
+    
     public function deleteIdol() {}
+    
+    /**
+     * 通过指定API名称进行调用。
+     * @param string $api       API名称
+     * @param array $params     传递给API的参数
+     * @param string $isGet     是否使用GET方式
+     * @throws Exception        当请求出错时抛出异常
+     * @return array
+     */
+    private function doRequest( $api, $params=array(), $isGet=true  ) {
+        $url = sprintf('https://graph.qq.com/%s', $api);
+        if ( $isGet ) {
+            $result = $this->httpGetJSON($url, $params);
+        } else {
+            $result = $this->httpPostJSON($url, $params);
+        }
+        if ( 0 === $result['errcode']*1 ) {
+            return $result['data'];
+        } else {
+            throw new Exception($result['msg']);
+        }
+    }
 }
