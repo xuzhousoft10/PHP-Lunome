@@ -4,6 +4,7 @@ return array (
   array (
     'enable' => true,
     'class' => 'X\\Service\\XSession\\Service',
+    'delay' => false,
   ),
   'XDatabase' => 
   array (
