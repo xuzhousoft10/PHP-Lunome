@@ -64,7 +64,7 @@ class ProductionBasic {
      * @throws Exception        当请求出错时抛出异常
      * @return array
      */
-    private function doRequest( $api, $params=array(), $isGet=true  ) {
+    protected function doRequest( $api, $params=array(), $isGet=true  ) {
         $url = sprintf('https://graph.qq.com/%s', $api);
         if ( $isGet ) {
             $result = $this->httpGetJSON($url, $params);
