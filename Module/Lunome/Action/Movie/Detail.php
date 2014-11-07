@@ -8,6 +8,7 @@ namespace X\Module\Lunome\Action\Movie;
  * Use statements
  */
 use X\Module\Lunome\Util\Action\Visual;
+use X\Module\Lunome\Service\Movie\Service;
 
 /**
  * The action class for movie/ignore action.
@@ -23,10 +24,14 @@ class Detail extends Visual {
         
         /* Load detail view */
         $media = $this->getMovieService()->get($id);
+        $markCount = array();
+        $markCount[Service::MARK_WATCHED]   = $this->getMovieService()->countMarked(Service::MARK_WATCHED, $id, null);
+        $markCount[Service::MARK_INTERESTED]= $this->getMovieService()->countMarked(Service::MARK_INTERESTED, $id, null);
+        $markCount[Service::MARK_IGNORED]   = $this->getMovieService()->countMarked(Service::MARK_IGNORED, $id, null); 
         $name   = 'MEDIA_DETAIL';
         $path   = $this->getParticleViewPath('Util/Media/Detail');
         $option = array();
-        $data   = array('media'=>$media);
+        $data   = array('media'=>$media, 'markCount'=>$markCount);
         $this->getView()->loadParticle($name, $path, $option, $data);
         
         /* Load posters view */

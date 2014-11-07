@@ -29,7 +29,7 @@ abstract class Edit extends Visual {
         if ( false !== $save ) {
             $media = $_POST['media'];
             $media = (null === $id) ? $mediaService->add($media) : $mediaService->update($id, $media);
-            $this->gotoURL('/index.php?module=backend&action='.$mediaType.'/index');
+            $this->gotoURL('/index.php?module=backend&action='.$mediaType.'/view&id='.$media['id']);
         }
         
         $name   = 'MEDIA_EDIT';

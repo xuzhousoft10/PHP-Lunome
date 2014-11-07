@@ -265,7 +265,7 @@ class Column extends TableColumn {
             return true;
         }
         
-        if ( !is_int($value) ) {
+        if ( sprintf('%d', $value*1) !== $value ) {
             $this->addError(sprintf('The value of "%s" is not a validated integer.', $this->name));
             return false;
         }

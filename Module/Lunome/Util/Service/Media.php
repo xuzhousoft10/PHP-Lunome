@@ -181,13 +181,22 @@ abstract class Media extends \X\Core\Service\XService {
      * @param unknown $mark
      * @return number
      */
-    public function countMarked( $mark ) {
+    public function countMarked( $mark, $id=null, $user=0 ) {
         $mediaModelName = $this->getMediaModelName();
         
         $condition = array();
-        $condition['media_type'] = $mediaModelName;
         $condition['mark'] = $mark;
-        $condition['account_id'] = $this->getCurrentUserId();
+        $condition['media_type'] = $mediaModelName;
+        if ( null !== $id ) {
+            $condition['media_id'] = $id;
+        }
+        if ( 0 === $user ) {
+            $condition['account_id'] = $this->getCurrentUserId();
+        } else if (null === $user) {
+            // all users
+        } else {
+            $condition['account_id'] = $user;
+        }
         $count = MediaUserMarksModel::model()->count($condition);
         return $count;
     }

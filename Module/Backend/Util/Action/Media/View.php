@@ -19,9 +19,10 @@ abstract class View extends Visual {
      */
     public function runAction( $id ) {
         $media = $this->getMediaService()->get($id);
+        $mediaType = $this->getMediaType();
         
         $name   = 'MEDIA_VIEW';
-        $path   = $this->getParticleViewPath('Util/Media/View');
+        $path   = $this->getParticleViewPath(ucfirst($mediaType).'/View');
         $option = array();
         $data   = array('media'=>$media, 'type'=>$this->getMediaType());
         $this->getView()->loadParticle($name, $path, $option, $data);
