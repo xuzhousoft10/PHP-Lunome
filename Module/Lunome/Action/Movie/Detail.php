@@ -28,10 +28,11 @@ class Detail extends Visual {
         $markCount[Service::MARK_WATCHED]   = $this->getMovieService()->countMarked(Service::MARK_WATCHED, $id, null);
         $markCount[Service::MARK_INTERESTED]= $this->getMovieService()->countMarked(Service::MARK_INTERESTED, $id, null);
         $markCount[Service::MARK_IGNORED]   = $this->getMovieService()->countMarked(Service::MARK_IGNORED, $id, null); 
+        $myMark = $this->getMovieService()->getMark($id);
         $name   = 'MEDIA_DETAIL';
-        $path   = $this->getParticleViewPath('Util/Media/Detail');
+        $path   = $this->getParticleViewPath('Movie/Detail');
         $option = array();
-        $data   = array('media'=>$media, 'markCount'=>$markCount);
+        $data   = array('media'=>$media, 'markCount'=>$markCount, 'myMark'=>$myMark);
         $this->getView()->loadParticle($name, $path, $option, $data);
         
         /* Load posters view */
@@ -57,5 +58,7 @@ class Detail extends Visual {
         $option = array();
         $data   = array();
         $this->getView()->loadParticle($name, $path, $option, $data);
+        
+        $this->getView()->title = $media['name'];
     }
 }

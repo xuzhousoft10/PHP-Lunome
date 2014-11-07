@@ -239,6 +239,10 @@ abstract class Media extends \X\Core\Service\XService {
         $deleteCondition['account_id'] = $this->getCurrentUserId();
         MediaUserMarksModel::model()->deleteAllByAttributes($deleteCondition);
         
+        if ( 0 === $mark*1 ) {
+            return;
+        }
+        
         $markModel = new MediaUserMarksModel();
         $markModel->media_id = $id;
         $markModel->media_type = $mediaModelName;
@@ -260,6 +264,21 @@ abstract class Media extends \X\Core\Service\XService {
         $deleteCondition['media_id'] = $id;
         $deleteCondition['account_id'] = $this->getCurrentUserId();
         MediaUserMarksModel::model()->deleteAllByAttributes($deleteCondition);
+    }
+    
+    /**
+     * 获取指定Media的标记, 如果标记找不到， 则会返回0.
+     * @param string $id    要查询的Media的ID
+     * @param string $user  要查询的用户ID， 如果不填或者为null， 则为当前用户
+     * @return integer
+     */
+    public function getMark( $id, $user=null ) {
+        $condition = array();
+        $condition['media_type']    = $this->getMediaModelName();
+        $condition['media_id']      = $id;
+        $condition['account_id']    = ( null === $user ) ? $this->getCurrentUserId() : $user;
+        $mark = MediaUserMarksModel::model()->findByAttribute($condition);
+        return ( null === $mark ) ? 0 : $mark->mark*1;
     }
     
     /**
