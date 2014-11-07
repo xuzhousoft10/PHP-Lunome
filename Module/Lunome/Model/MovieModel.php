@@ -51,6 +51,6 @@ class MovieModel extends Basic {
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::getTableName()
      */
     protected function getTableName() {
-        return 'movies';
+        return 'media_movies';
     }
 }

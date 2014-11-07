@@ -29,6 +29,6 @@ class GameModel extends Basic {
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::getTableName()
      */
     protected function getTableName() {
-        return 'games';
+        return 'media_games';
     }
 }

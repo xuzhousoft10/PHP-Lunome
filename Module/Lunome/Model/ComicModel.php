@@ -29,6 +29,6 @@ class ComicModel extends Basic {
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::getTableName()
      */
     protected function getTableName() {
-        return 'comics';
+        return 'media_comics';
     }
 }

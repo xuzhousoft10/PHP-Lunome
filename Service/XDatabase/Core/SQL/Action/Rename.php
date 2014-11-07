@@ -2,7 +2,7 @@
 /**
  * rename.php
  */
-namespace X\Service\XDB\SQL\Action;
+namespace X\Service\XDatabase\Core\SQL\Action;
 
 /**
  * Rename

@@ -29,6 +29,6 @@ class BookModel extends Basic {
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::getTableName()
      */
     protected function getTableName() {
-        return 'books';
+        return 'media_books';
     }
 }

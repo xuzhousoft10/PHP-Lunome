@@ -29,6 +29,6 @@ class TvModel extends Basic {
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::getTableName()
      */
     protected function getTableName() {
-        return 'tvs';
+        return 'media_tvs';
     }
 }
