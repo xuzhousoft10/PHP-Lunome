@@ -7,6 +7,11 @@ $myMark = $vars['myMark'];
 $markUrlFormat = '/?module=lunome&action=%s/mark&mark=%s&id=%s';
 ?>
 <div class="row margin-top-5">
+    <ol class="breadcrumb">
+        <li><a href="/?module=lunome&action=movie/index">电影</a></li>
+        <li class="active"><?php echo $media['name'];?></li>
+    </ol>
+    
     <div class="col-md-2 padding-0">
         <img src="/?module=lunome&action=movie/poster&id=<?php echo $media['id']?>" width="200" height="300">
     </div>
