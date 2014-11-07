@@ -49,10 +49,10 @@ $markUrlFormat = '/?module=lunome&action=%s/mark&mark=%s&id=%s';
                 <td colspan="4">主演： <?php echo $media['actor'];?></td>
             </tr>
             <tr>
-                <td>全网</td>
                 <td>想看: <?php echo $markCount[Service::MARK_INTERESTED];?></td>
                 <td>已看: <?php echo $markCount[Service::MARK_WATCHED];?></td>
                 <td>不喜欢: <?php echo $markCount[Service::MARK_IGNORED];?></td>
+                <td></td>
             </tr>
             <tr>
                 <td colspan="4">&nbsp;</td>

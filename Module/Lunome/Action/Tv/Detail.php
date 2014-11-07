@@ -25,10 +25,12 @@ class Detail extends Visual {
         /* Load detail view */
         $media = $this->getTvService()->get($id);
         $markCount = array();
+        $markCount[Service::MARK_WATCHING]  = $this->getTvService()->countMarked(Service::MARK_WATCHING, $id, null);
         $markCount[Service::MARK_WATCHED]   = $this->getTvService()->countMarked(Service::MARK_WATCHED, $id, null);
         $markCount[Service::MARK_INTERESTED]= $this->getTvService()->countMarked(Service::MARK_INTERESTED, $id, null);
         $markCount[Service::MARK_IGNORED]   = $this->getTvService()->countMarked(Service::MARK_IGNORED, $id, null); 
         $myMark = $this->getTvService()->getMark($id);
+        
         $name   = 'MEDIA_DETAIL';
         $path   = $this->getParticleViewPath('Tv/Detail');
         $option = array();
