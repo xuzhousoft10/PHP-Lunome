@@ -34,15 +34,15 @@ $markUrlFormat = '/?module=lunome&action=comic/mark&mark=%s&id=%s';
         <br>
         <table class="table table-bordered">
             <tr>
-                <td>作者:高桥留美子</td>
-                <td>地区:日本</td>
+                <td>作者:高桥留美子 author</td>
+                <td>地区:日本 region</td>
                 <td>状态:未完结</td>
             </tr>
             <tr>
-                <td>连载杂志:週刊少年サンデー(週刊少年Sunday)</td>
-                <td>出版社:小學館</td>
-                <td>连载期间:1996年11月27日－2008年6月18日</td>
-                <td>出版期间:1996年－2008年</td>
+                <td>连载杂志:週刊少年サンデー(週刊少年Sunday) Magazine</td>
+                <td>出版社:小學館 Published by</td>
+                <td>published_at :1996年11月27日－2008年6月18日Original run</td>
+                <td>finished_at:1996年－2008年</td>
             </tr>
             <tr>
                 <td>集数:757集</td>
