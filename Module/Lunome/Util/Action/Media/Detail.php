@@ -51,11 +51,21 @@ abstract class Detail extends Visual {
             $markCount[$markValue]  = $service->countMarked($markValue, $id, null);
         }
         $myMark = $service->getMark($id);
+        $names  = $this->getMarkNames();
+        $styles = $this->getMarkStyles();
         
         $name   = 'MEDIA_DETAIL';
-        $path   = $this->getParticleViewPath(ucfirst($mediaType).'/Detail');
+        $path   = $this->getParticleViewPath('Util/Media/Detail');
         $option = array();
-        $data   = array('media'=>$media, 'markCount'=>$markCount, 'myMark'=>$myMark);
+        $data   = array(
+            'media'     => $media, 
+            'markCount' => $markCount, 
+            'myMark'    => $myMark,
+            'markStyles'=> $styles,
+            'markNames' => $names,
+            'mediaType' => $mediaType,
+            'mediaName' => $this->getMediaName(),
+        );
         $this->getView()->loadParticle($name, $path, $option, $data);
     }
     
@@ -83,4 +93,12 @@ abstract class Detail extends Visual {
         }
         return $marks;
     }
+    
+    /**
+     * 
+     * @param unknown $mark
+     */
+    abstract protected function getMarkNames();
+    abstract protected function getMarkStyles();
+    abstract protected function getMediaName();
 }
