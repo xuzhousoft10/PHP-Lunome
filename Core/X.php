@@ -329,68 +329,24 @@ class X {
      * 该变量保存框架当前使用的日志记录器， 如果该值为null， 则使用php
      * 内置的error_log函数进行记录日志。
      * 
-     * @var InterfaceLogger
+     * @var mixed
      */
     protected $logger = null;
-    
-    /**
-     * 该变量保存框架当前记录日志的界别，默认为LOG_LEVEL_INFO级别。
-     * 
-     * @var integer
-     */
-    protected $logLevel = null;
-    
-    /**
-     * 根据给定的消息和跟类进行记录日志。
-     * 
-     * @param string $message 所要日志的内容
-     * @param unknown $category 日志记录的种类
-     * @param unknown $level 日志记录的等级，默认为LOG_LEVEL_INFO
-     */
-    public function log( $message, $category, $level=null ) {
-        if ( null === $level ) {
-            $level = InterfaceLogger::LOG_LEVEL_INFO;
-        }
-        
-        if ( $this->logLevel > $level ) {
-            return;
-        }
-        
-        if ( null === $this->logger ) {
-            $message = sprintf('[%s] : %s',$category, $message);
-            error_log($message);
-        } else {
-            $this->getLogger()->log($message, $category);
-        }
-    }
     
     /**
      * 替换框架当前的log记录器。
      * @return void
      */
-    public function setLogger( InterfaceLogger $logger ) {
+    public function setLogger( $logger ) {
         $this->logger = $logger;
     }
     
     /**
      * 获取框架当前的log记录器。
-     * @return \X\Core\InterfaceLogger
+     * @return mixed
      */
     public function getLogger() {
         return $this->logger;
-    }
-    
-    /**
-     * 为框架设计记录日志的级别。低于该级别的日志信息将会被抛弃。
-     * @param integer $level
-     */
-    public function setLogLevel( $level ) {
-        $level *= 1;
-        if ( 0 === $level ) {
-            throw new Exception('0 is not a valid log level, it should be bigger that 0.');
-        }
-        
-        $this->logLevel = $level;
     }
     
     /**
