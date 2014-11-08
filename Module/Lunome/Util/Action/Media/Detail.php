@@ -67,6 +67,8 @@ abstract class Detail extends Visual {
             'mediaName' => $this->getMediaName(),
         );
         $this->getView()->loadParticle($name, $path, $option, $data);
+        
+        $this->getView()->title = $media['name'];
     }
     
     /**
