@@ -149,7 +149,7 @@ class LoggerConfigurationAdapterINI implements LoggerConfigurationAdapter {
 		
 		// The remaining values are appender references 
 		$appenders = array();
-		while($appender = array_shift($parts)) {
+		while(null !== ($appender = array_shift($parts))) {
 			$appender = trim($appender);
 			if (!empty($appender)) {
 				$appenders[] = trim($appender);

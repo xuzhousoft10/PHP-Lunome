@@ -1,0 +1,3 @@
+The files under this folder would not be executed, 
+all of them are use to fix the notice error of IDE
+for undefinded class or functions.
