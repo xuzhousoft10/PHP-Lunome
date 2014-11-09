@@ -51,4 +51,10 @@ return array (
     'enable' => true,
     'class' => 'X\\Module\\Lunome\\Service\\User\\Service',
   ),
+  'XLog' => 
+  array (
+    'enable' => false,
+    'delay' => true,
+    'class' => 'X\\Service\\XLog\\Service',
+  ),
 );
