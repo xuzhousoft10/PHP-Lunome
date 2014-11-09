@@ -8,7 +8,6 @@ namespace X\Core\Test;
  * 
  */
 use X\Core\X;
-use X\Core\InterfaceLogger;
 
 /**
  * 
@@ -214,43 +213,6 @@ class X_Test extends \PHPUnit_Framework_TestCase {
     }
     
     /**
-     * Tests X->log()
-     */
-    public function testLog() {
-        $logger = new PHPUnitTestLogger();
-        X::system()->setLogger($logger);
-        
-        X::system()->setLogLevel(InterfaceLogger::LOG_LEVEL_VERBOSE);
-        X::system()->log('LOG_LEVEL_VERBOSE',   'phpunit-test-case', InterfaceLogger::LOG_LEVEL_VERBOSE);
-        X::system()->log('LOG_LEVEL_DEBUG',     'phpunit-test-case', InterfaceLogger::LOG_LEVEL_DEBUG);
-        X::system()->log('LOG_LEVEL_INFO',      'phpunit-test-case', InterfaceLogger::LOG_LEVEL_INFO);
-        X::system()->log('LOG_LEVEL_NOTICE',    'phpunit-test-case', InterfaceLogger::LOG_LEVEL_NOTICE);
-        X::system()->log('LOG_LEVEL_WARNING',   'phpunit-test-case', InterfaceLogger::LOG_LEVEL_WARNING);
-        X::system()->log('LOG_LEVEL_ERROR',     'phpunit-test-case', InterfaceLogger::LOG_LEVEL_ERROR);
-        $this->assertContains('LOG_LEVEL_VERBOSE',  $logger->messages['phpunit-test-case']);
-        $this->assertContains('LOG_LEVEL_DEBUG',    $logger->messages['phpunit-test-case']);
-        $this->assertContains('LOG_LEVEL_INFO',     $logger->messages['phpunit-test-case']);
-        $this->assertContains('LOG_LEVEL_NOTICE',   $logger->messages['phpunit-test-case']);
-        $this->assertContains('LOG_LEVEL_WARNING',  $logger->messages['phpunit-test-case']);
-        $this->assertContains('LOG_LEVEL_ERROR',    $logger->messages['phpunit-test-case']);
-        
-        $logger->messages = array();
-        X::system()->setLogLevel(InterfaceLogger::LOG_LEVEL_DEBUG);
-        X::system()->log('LOG_LEVEL_VERBOSE',   'phpunit-test-case', InterfaceLogger::LOG_LEVEL_VERBOSE);
-        X::system()->log('LOG_LEVEL_DEBUG',     'phpunit-test-case', InterfaceLogger::LOG_LEVEL_DEBUG);
-        X::system()->log('LOG_LEVEL_INFO',      'phpunit-test-case');
-        X::system()->log('LOG_LEVEL_NOTICE',    'phpunit-test-case', InterfaceLogger::LOG_LEVEL_NOTICE);
-        X::system()->log('LOG_LEVEL_WARNING',   'phpunit-test-case', InterfaceLogger::LOG_LEVEL_WARNING);
-        X::system()->log('LOG_LEVEL_ERROR',     'phpunit-test-case', InterfaceLogger::LOG_LEVEL_ERROR);
-        $this->assertNotContains('LOG_LEVEL_VERBOSE',  $logger->messages['phpunit-test-case']);
-        $this->assertContains('LOG_LEVEL_DEBUG',    $logger->messages['phpunit-test-case']);
-        $this->assertContains('LOG_LEVEL_INFO',     $logger->messages['phpunit-test-case']);
-        $this->assertContains('LOG_LEVEL_NOTICE',   $logger->messages['phpunit-test-case']);
-        $this->assertContains('LOG_LEVEL_WARNING',  $logger->messages['phpunit-test-case']);
-        $this->assertContains('LOG_LEVEL_ERROR',    $logger->messages['phpunit-test-case']);
-    }
-    
-    /**
      * Tests X->setLogger()
      */
     public function testSetLogger() {
@@ -278,31 +240,6 @@ class X_Test extends \PHPUnit_Framework_TestCase {
     }
     
     /**
-     * Tests X->setLogLevel()
-     * @expectedException X\Core\Exception
-     */
-    public function testSetLogLevel() {
-        $logger = new PHPUnitTestLogger();
-        X::system()->setLogger($logger);
-        $logger->messages = array();
-        X::system()->setLogLevel(InterfaceLogger::LOG_LEVEL_INFO);
-        X::system()->log('LOG_LEVEL_VERBOSE',   'phpunit-test-case', InterfaceLogger::LOG_LEVEL_VERBOSE);
-        X::system()->log('LOG_LEVEL_DEBUG',     'phpunit-test-case', InterfaceLogger::LOG_LEVEL_DEBUG);
-        X::system()->log('LOG_LEVEL_INFO',      'phpunit-test-case', InterfaceLogger::LOG_LEVEL_INFO);
-        X::system()->log('LOG_LEVEL_NOTICE',    'phpunit-test-case', InterfaceLogger::LOG_LEVEL_NOTICE);
-        X::system()->log('LOG_LEVEL_WARNING',   'phpunit-test-case', InterfaceLogger::LOG_LEVEL_WARNING);
-        X::system()->log('LOG_LEVEL_ERROR',     'phpunit-test-case', InterfaceLogger::LOG_LEVEL_ERROR);
-        $this->assertNotContains('LOG_LEVEL_VERBOSE',  $logger->messages['phpunit-test-case']);
-        $this->assertNotContains('LOG_LEVEL_DEBUG',    $logger->messages['phpunit-test-case']);
-        $this->assertContains('LOG_LEVEL_INFO',     $logger->messages['phpunit-test-case']);
-        $this->assertContains('LOG_LEVEL_NOTICE',   $logger->messages['phpunit-test-case']);
-        $this->assertContains('LOG_LEVEL_WARNING',  $logger->messages['phpunit-test-case']);
-        $this->assertContains('LOG_LEVEL_ERROR',    $logger->messages['phpunit-test-case']);
-        
-        X::system()->setLogLevel('non-interger-level');
-    }
-    
-    /**
      * Tests X->isCLI()
      */
     public function testIsCLI() {
@@ -310,7 +247,7 @@ class X_Test extends \PHPUnit_Framework_TestCase {
     }
 }
 
-class PHPUnitTestLogger implements InterfaceLogger {
+class PHPUnitTestLogger {
     public $messages = array();
     
     public function log($message, $category) {
