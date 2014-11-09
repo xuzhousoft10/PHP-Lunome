@@ -114,12 +114,11 @@ class ServiceManagement extends Management {
             throw new Exception(sprintf('"%s" is not a available service.', $name));
         }
         $service = $serviceClass::getService();
-        
-        $service->start();
-        
         $this->services[$name]['enable']    = true;
         $this->services[$name]['isLoaded']  = true;
         $this->services[$name]['service']   = $service;
+        
+        $service->start();
     }
     
     /**

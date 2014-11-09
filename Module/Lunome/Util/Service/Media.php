@@ -56,6 +56,7 @@ abstract class Media extends \X\Core\Service\XService {
             $mediaModel->set($attr, $value);
         }
         $mediaModel->save();
+        $this->logAction($this->getActionName('add'), $mediaModel->id);
         return $mediaModel->toArray();
     }
     
@@ -73,6 +74,7 @@ abstract class Media extends \X\Core\Service\XService {
             $mediaModel->set($attr, $value);
         }
         $mediaModel->save();
+        $this->logAction($this->getActionName('update'), $mediaModel->id);
         return $mediaModel->toArray();
     }
     
@@ -87,6 +89,7 @@ abstract class Media extends \X\Core\Service\XService {
         $poster->media_id = $media;
         $poster->data = base64_encode($data);
         $poster->save();
+        $this->logAction($this->getActionName('poster_add'), $media, self::RESULT_CODE_SUCCESS, null, $poster->id);
         return $poster->toArray();
     }
     
@@ -116,6 +119,7 @@ abstract class Media extends \X\Core\Service\XService {
         $condition['media_id'] = $media;
         $poster = MediaPostersModel::model()->findByAttribute($condition);
         $poster->delete();
+        $this->logAction($this->getActionName('poster_delete'), $media, self::RESULT_CODE_SUCCESS, null, $poster->id);
     }
     
     /**
@@ -249,6 +253,7 @@ abstract class Media extends \X\Core\Service\XService {
         $markModel->account_id = $this->getCurrentUserId();
         $markModel->mark = $mark;
         $markModel->save();
+        $this->logAction($this->getActionName('mark'), $id, self::RESULT_CODE_SUCCESS, null, $mark);
     }
     
     /**
@@ -264,6 +269,7 @@ abstract class Media extends \X\Core\Service\XService {
         $deleteCondition['media_id'] = $id;
         $deleteCondition['account_id'] = $this->getCurrentUserId();
         MediaUserMarksModel::model()->deleteAllByAttributes($deleteCondition);
+        $this->logAction($this->getActionName('unmark'), $id, self::RESULT_CODE_SUCCESS, null, $mark);
     }
     
     /**
@@ -324,8 +330,7 @@ abstract class Media extends \X\Core\Service\XService {
      * @return string
      */
     protected function getCurrentUserId() {
-        $userService = X::system()->getServiceManager()->get(UserService::getServiceName());
-        $currentUser = $userService->getCurrentUser();
+        $currentUser = $this->getUserService()->getCurrentUser();
         return $currentUser['ID'];
     }
     
@@ -333,4 +338,34 @@ abstract class Media extends \X\Core\Service\XService {
      * Get the name of media model.
      */
     abstract protected function getMediaModelName();
+    
+    /**
+     * @return \X\Module\Lunome\Service\User\Service
+     */
+    protected function getUserService() {
+        return X::system()->getServiceManager()->get(UserService::getServiceName());
+    }
+    
+    /**
+     * @param string $action
+     * @param string $mediaId
+     * @param string $code
+     * @param string $message
+     * @param string $comment
+     */
+    protected function logAction($action, $mediaId, $code=self::RESULT_CODE_SUCCESS, $message=null, $comment=null) {
+        $this->getUserService()->getAccount()->logAction($action, $mediaId, $code, $message, $comment);
+    }
+    
+    /**
+     * @param unknown $action
+     * @return string
+     */
+    protected function getActionName( $action ) {
+        $name = sprintf('%s_%s', $this->getMediaModelName(), $action);
+        return strtoupper($name);
+    }
+    
+    /*  */
+    const RESULT_CODE_SUCCESS = 0;
 }

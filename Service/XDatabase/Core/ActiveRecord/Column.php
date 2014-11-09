@@ -261,7 +261,7 @@ class Column extends TableColumn {
      * @return boolean
      */
     protected function validateDataTypeInt( $value ) {
-        if ( null === $value ) {
+        if ( empty($value) ) {
             return true;
         }
         
@@ -273,7 +273,7 @@ class Column extends TableColumn {
     }
     
     protected function validateDataTypeTinyint($value) {
-        if ( null === $value ) {
+        if ( empty($value) ) {
             return true;
         }
         
@@ -314,7 +314,23 @@ class Column extends TableColumn {
      * @return boolean
      */
     protected function validateDataTypeDatetime( $value ) {
+        if ( empty($value) ) { return true; }
         if ( false === \DateTime::createFromFormat('Y-m-d H:i:s', $value) ) {
+            $this->addError(sprintf('The value of "%s" is not a validated date and time.', $this->name));
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Validate the data type for datetime current Column object.
+     *
+     * @param mixed $value
+     * @return boolean
+     */
+    protected function validateDataTypeDate( $value ) {
+        if ( empty($value) ) { return true; }
+        if ( false === \DateTime::createFromFormat('Y-m-d', $value) ) {
             $this->addError(sprintf('The value of "%s" is not a validated date and time.', $this->name));
             return false;
         }

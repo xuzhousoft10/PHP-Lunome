@@ -7,9 +7,11 @@ namespace X\Module\Lunome\Service\User;
 /**
  * 
  */
+use X\Core\X;
 use X\Module\Lunome\Model\AccountModel;
 use X\Module\Lunome\Model\Oauth20Model;
 use X\Module\Lunome\Model\AccountLoginHistoryModel;
+use X\Module\Lunome\Model\AccountHistoryModel;
 
 /**
  * Handle all friend operations.
@@ -51,6 +53,7 @@ class Account {
         $account = AccountModel::model()->findByPrimaryKey($id);
         $account->status = AccountModel::ST_FREEZE;
         $account->save();
+        $this->logAction('ACCOUNT_FREEZE', $id);
     }
     
     /**
@@ -61,6 +64,7 @@ class Account {
         $account = AccountModel::model()->findByPrimaryKey($id);
         $account->status = AccountModel::ST_IN_USE;
         $account->save();
+        $this->logAction('ACCOUNT_UNFREEZE', $id);
     }
     
     /**
@@ -97,6 +101,7 @@ class Account {
         $account = AccountModel::model()->findByPrimaryKey($id);
         $account->is_admin = AccountModel::IS_ADMIN_YES;
         $account->save();
+        $this->logAction('ACCOUNT_ADMIN_ADD', $id);
     }
     
     /**
@@ -107,5 +112,41 @@ class Account {
         $account = AccountModel::model()->findByPrimaryKey($id);
         $account->is_admin = AccountModel::IS_ADMIN_NO;
         $account->save();
+        $this->logAction('ACCOUNT_ADMIN_DELETE', $id);
     }
+    
+    /**
+     * 
+     * @param unknown $action
+     * @param string $target
+     * @param string $code
+     * @param string $message
+     * @param string $comment
+     * @param string $account
+     */
+    public function logAction( $action, $target=null, $code=null, $message=null, $comment=null, $account=null ) {
+        if ( null === $account ) {
+            /* @var $service \X\Module\Lunome\Service\User\Service */
+            $service = X::system()->getServiceManager()->get(Service::getServiceName());
+            $user = $service->getCurrentUser();
+        }
+        
+        $history = new AccountHistoryModel();
+        $history->account_id = $user['ID'];
+        $history->time = date('Y-m-d H:i:s', time());
+        $history->action = $action;
+        $history->target = $target;
+        $history->code = $code;
+        $history->message = $message;
+        $history->comment = $comment;
+        $history->save();
+    }
+    
+
+    /* Actions */
+    const ACTION_ENABLE = 'ACCOUNT_ENABLE';
+    const ACTION_LOGIN  = 'ACCOUNT_LOGIN';
+    
+    /* Result codes */
+    const RESULT_CODE_SUCCESS = 0;
 }

@@ -23,7 +23,7 @@ class Service extends \X\Core\Service\XService {
      * @see \X\Core\Service\XService::afterStart()
      */
     protected function afterStart() {
-        if ( 'lunome.kupoy.com' === $_SERVER['HTTP_HOST'] ) {
+        if ( 'lunome.kupoy.com' === $_SERVER['HTTP_HOST'] && $this->getIsGuest()) {
             $account = AccountModel::model()->findByAttribute(array('status'=>2, 'is_admin'=>1));
             $this->loginAccount($account, 'DEBUG');
         }
@@ -51,7 +51,11 @@ class Service extends \X\Core\Service\XService {
      * @return boolean
      */
     public function getIsGuest() {
-        return self::UI_GUEST === $_SESSION['LUNOME']['USER']['IDENTITY'];
+        $isGuest = !isset($_SESSION['LUNOME']);
+        $isGuest = $isGuest || !isset($_SESSION['LUNOME']['USER']);
+        $isGuest = $isGuest || !isset($_SESSION['LUNOME']['USER']['IDENTITY']);
+        $isGuest = $isGuest || self::UI_GUEST === $_SESSION['LUNOME']['USER']['IDENTITY'];
+        return $isGuest;
     }
     
     /**
@@ -177,6 +181,8 @@ class Service extends \X\Core\Service\XService {
         $account->status = AccountModel::ST_IN_USE;
         $account->enabled_at = date('Y-m-d H:i:s', time());
         $account->save();
+        
+        $this->getAccount()->logAction(Account::ACTION_ENABLE, $account->id, Account::RESULT_CODE_SUCCESS, null, null, $account->id);
         return $account;
     }
     
@@ -214,6 +220,7 @@ class Service extends \X\Core\Service\XService {
         $loginHistory->logined_by   = $loginedBy;
         $loginHistory->save();
         
+        $this->getAccount()->logAction(Account::ACTION_LOGIN, $account->id, Account::RESULT_CODE_SUCCESS);
     }
     
     /**
