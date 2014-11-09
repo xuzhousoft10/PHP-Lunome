@@ -5,3 +5,6 @@
 .lnm-media-list-item {background-size: 200px 300px; height: 300px; width:200px;}
 .lnm-media-list-item-empty-area {height:270px;}
 .lnm-media-list-item-mark-container {position: relative;display:none}
+.media-index-tool-bar {background-color:#000;color:#fff;line-height:50px;text-align:center;width: 50px;overflow: hidden;position: fixed;top: 200px;right: auto}
+.media-index-tool-bar-item {}
+.media-index-tool-bar-item > a {color: #DDDDDD;text-decoration: none;}

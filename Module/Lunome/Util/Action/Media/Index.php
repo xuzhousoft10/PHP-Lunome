@@ -59,6 +59,14 @@ abstract class Index extends VisualMain {
         );
         $this->getView()->loadParticle($name, $path, $option, $data);
         
+        $name   = 'MEDIA_TOO_BAR';
+        $path   = $this->getParticleViewPath('Util/Media/ToolBar');
+        $option = array();
+        $data   = array(
+            'mediaType'     => strtolower($this->getMediaType()),
+        );
+        $this->getView()->loadParticle($name, $path, $option, $data);
+        
         parent::afterRunAction();
     }
     

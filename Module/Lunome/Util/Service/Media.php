@@ -288,6 +288,16 @@ abstract class Media extends \X\Core\Service\XService {
     }
     
     /**
+     * @param unknown $type
+     * @param unknown $limit
+     * @return array
+     */
+    public function getTopList( $type, $limit ) {
+        $modelName = $this->getMediaModelName();
+        \X\Module\Lunome\Model\MovieModel::model()->findAll();
+    }
+    
+    /**
      * Get the condition of unmarked.
      *
      * @return \X\Service\XDatabase\Core\SQL\Condition\Builder
