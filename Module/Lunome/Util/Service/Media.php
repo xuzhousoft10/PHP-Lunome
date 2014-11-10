@@ -14,6 +14,9 @@ use X\Module\Lunome\Model\MediaUserMarksModel;
 use X\Service\XDatabase\Core\SQL\Expression as SQLExpression;
 use X\Service\XDatabase\Core\SQL\Condition\Builder as ConditionBuilder;
 use X\Module\Lunome\Service\User\Service as UserService;
+use X\Service\XDatabase\Core\SQL\Builder as SQLBuilder;
+use X\Service\XDatabase\Core\SQL\Func\Count;
+use X\Service\XDatabase\Service as DatabaseService;
 
 /**
  * 
@@ -294,7 +297,28 @@ abstract class Media extends \X\Core\Service\XService {
      */
     public function getTopList( $type, $limit ) {
         $modelName = $this->getMediaModelName();
-        \X\Module\Lunome\Model\MovieModel::model()->findAll();
+        $modelTableName = $modelName::model()->getTableFullName();
+        $markTableName = MediaUserMarksModel::model()->getTableFullName();
+        
+        $query = SQLBuilder::build()->select()
+            ->addExpression('medias.id', 'id')
+            ->addExpression('medias.name', 'name')
+            ->addExpression(new Count('marks.id'), 'mark_count')
+            ->addTable($modelTableName, 'medias')
+            ->addTable($markTableName, 'marks')
+            ->where(array('marks.mark'=>$type))
+            ->groupBy('marks.media_id')
+            ->orderBy('mark_count', 'DESC')
+            ->toString();
+        $result = $this->getDb()->query($query);
+        return $result;
+    }
+    
+    /**
+     * @return \X\Service\XDatabase\Core\Database
+     */
+    protected function getDb() {
+        return X::system()->getServiceManager()->get(DatabaseService::getServiceName())->getDb();
     }
     
     /**

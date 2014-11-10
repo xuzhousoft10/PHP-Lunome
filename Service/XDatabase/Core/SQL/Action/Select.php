@@ -89,7 +89,18 @@ class Select extends ActionWithCondition {
      * </pre>
      * @var array
      */
-    protected $selectExpr = array('*');
+    protected $expressions = array();
+    
+    /**
+     * 增加表达式到选择的项目中。
+     * @param mixed $expression 表达式
+     * @param string $name 项目别名
+     * @return \X\Service\XDatabase\Core\SQL\Action\Select
+     */
+    public function addExpression( $expression, $name=null ) {
+        $this->expressions[] = array('expr'=>$expression, 'name'=>$name);
+        return $this;
+    }
     
     /**
      * Set selected columns which would appears in result.
@@ -102,10 +113,13 @@ class Select extends ActionWithCondition {
      */
     public function columns( $columns ) {
         if ( 1 == func_num_args() && is_array($columns) ) {
-            $this->selectExpr = $columns;
-        }
-        else {
-            $this->selectExpr = func_get_args();
+            foreach ( $columns as $alias => $expression ) {
+                $this->addExpression($expression, $alias);
+            }
+        } else {
+            foreach ( func_get_args() as $expression ) {
+                $this->addExpression($expression);
+            }
         }
         return $this;
     }
@@ -131,24 +145,28 @@ class Select extends ActionWithCondition {
      *
      * @return Select
      */
-    protected function getSelectExprString() {
-        $exprs = array();
-        foreach ( $this->selectExpr as $alias => $expr ) {
-            if ( $expr instanceof XFunction ) {
-                $expression = $expr->toString();
+    protected function getExpressionString() {
+        $expressions = array();
+        foreach ( $this->expressions as $expression ) {
+            if ( $expression['expr'] instanceof XFunction ) {
+                $tempExpr = $expression['expr']->toString();
+            } else if ( '*' === $expression['expr'] ) {
+                $tempExpr = '*';
+            } else {
+                $column = explode('.', $expression['expr']);
+                $column = $this->quoteColumnNames($column);
+                $column = implode('.', $column);
+                $tempExpr = sprintf('%s', $column);
             }
-            else if ( '*' === $expr ) {
-                $expression = sprintf('%s', $expr);
+            if ( null !== $expression['name'] ) {
+                $tempExpr = sprintf('%s AS `%s`', $tempExpr, $expression['name']);
             }
-            else {
-                $expression = sprintf('`%s`', $expr);
-            }
-            if ( !is_numeric($alias) ) {
-                $expression = sprintf('%s AS `%s`', $expression, $alias);
-            }
-            $exprs[] = $expression;
+            $expressions[] = $tempExpr;
         }
-        $this->sqlCommand[] = implode(',', $exprs);
+        if ( 0 === count($expressions) ) {
+            $expressions = array('*');
+        }
+        $this->sqlCommand[] = implode(',', $expressions);
         return $this;
     }
     
@@ -162,6 +180,21 @@ class Select extends ActionWithCondition {
      * @var array
      */
     protected $tableReferences = array();
+    
+    /**
+     * 
+     * @param unknown $name
+     * @param unknown $alias
+     * @return \X\Service\XDatabase\Core\SQL\Action\Select
+     */
+    public function addTable( $name, $alias=null ) {
+        if ( null === $alias ) {
+            $this->from($name);
+        } else {
+            $this->from(array($alias=>$name));
+        }
+        return $this;
+    }
     
     /**
      * Set from references.
@@ -252,7 +285,7 @@ class Select extends ActionWithCondition {
     
         $groups = array();
         foreach ( $this->groups as $group ) {
-            $groupItem = sprintf('`%s`', $group['name']);
+            $groupItem = sprintf('`%s`', str_replace('.', '`.`', $group['name']));
             if ( !is_null($group['order']) ) {
                 $groupItem = sprintf('%s %s', $groupItem, $group['order']);
             }
@@ -420,11 +453,11 @@ class Select extends ActionWithCondition {
         return array(
             'getActionNameString',
             'getFilterString',
-            'getSelectExprString',
+            'getExpressionString',
             'getFromString',
             'getConditionString',
-            'getOrderString',
             'getGroupString',
+            'getOrderString',
             'getHavingString',
             'getLimitString',
             'getOffsetString',

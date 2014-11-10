@@ -33,6 +33,22 @@ class Count extends XFunction {
      * @see \X\Database\SQL\Func\Func::toString() Func::toString()
      */
     public function toString() {
-        return sprintf('COUNT(%s)', $this->column);
+        return sprintf('COUNT(%s)', $this->quoteColumn($this->column));
+    }
+    
+    /**
+     * @return string
+     */
+    protected function quoteColumn() {
+        if ( '*' === $this->column ) {
+            return '*';
+        } else {
+            $column = explode('.', $this->column);
+            foreach ( $column as $index => $name ) {
+                $column[$index] = sprintf('`%s`', $name);
+            }
+            $column = implode('.', $column);
+            return $column;
+        }
     }
 }

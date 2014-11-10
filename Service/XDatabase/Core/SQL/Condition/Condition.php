@@ -86,7 +86,7 @@ class Condition extends Basic {
      * @return string
      */
     protected function defaultStringBuilder() {
-        $column = sprintf('`%s`', $this->column);
+        $column = sprintf('`%s`', str_replace('.', '`.`', $this->column));
         $value  = $this->quoteValue($this->value);
         $condition = sprintf('%s %s %s', $column, self::$operators[$this->operator], $value);
         return $condition;
