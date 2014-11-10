@@ -2,7 +2,7 @@
 /**
  * The action file for movie/ignore action.
  */
-namespace X\Module\Lunome\Action\Movie;
+namespace X\Module\Lunome\Action\Comic;
 
 /**
  * 

@@ -2,10 +2,16 @@
 $vars = get_defined_vars();
 $list = $vars['list'];
 $length = $vars['length'];
+$type = $vars['type'];
+$name = $vars['name'];
 ?>
 <div>
     <ol class="breadcrumb">
-        <li><a href="/?module=lunome&action=movie/index">电影</a></li>
+        <li>
+            <a href="/?module=lunome&action=<?php echo strtolower($type);?>/index">
+                <?php echo $name;?>
+            </a>
+        </li>
         <li class="active">排行榜</li>
     </ol>
 </div>

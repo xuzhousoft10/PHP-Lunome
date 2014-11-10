@@ -15,6 +15,28 @@ use X\Module\Lunome\Util\Service\Media;
 class Service extends Media {
     /**
      * (non-PHPdoc)
+     * @see \X\Module\Lunome\Util\Service\Media::getMediaName()
+     */
+    public function getMediaName() {
+        return '漫画';
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \X\Module\Lunome\Util\Service\Media::getMarkNames()
+     */
+    public function getMarkNames() {
+        return array(
+            self::MARK_UNMARKED     => '取消标记',
+            self::MARK_INTERESTED   => '想看',
+            self::MARK_WATCHING     => '在看',
+            self::MARK_WATCHED      => '已看',
+            self::MARK_IGNORED      => '不喜欢',
+        );
+    }
+    
+    /**
+     * (non-PHPdoc)
      * @see \X\Module\Lunome\Util\Service\Markable::getMediaModelName()
      */
     protected function getMediaModelName() {

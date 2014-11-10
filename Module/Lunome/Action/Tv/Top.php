@@ -2,7 +2,7 @@
 /**
  * The action file for movie/ignore action.
  */
-namespace X\Module\Lunome\Action\Movie;
+namespace X\Module\Lunome\Action\Tv;
 
 /**
  * 
@@ -18,6 +18,5 @@ use X\Module\Lunome\Util\Action\Media\Top as MediaTop;
  * @author Unknown
  * @method \X\Module\Lunome\Service\Movie getMovieService()
  */
-class Top extends MediaTop {
-
+class Top extends MediaTop { 
 }

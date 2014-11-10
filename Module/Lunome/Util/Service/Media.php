@@ -24,6 +24,16 @@ use X\Service\XDatabase\Service as DatabaseService;
 abstract class Media extends \X\Core\Service\XService {
     /**
      * 
+     */
+    abstract public function getMediaName();
+    
+    /**
+     * 
+     */
+    abstract public function getMarkNames();
+    
+    /**
+     * 
      * @param unknown $condition
      * @param unknown $position
      * @param unknown $limit
