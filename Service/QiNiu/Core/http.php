@@ -21,6 +21,62 @@ class Qiniu_Error
 	}
 }
 
+
+function Qiniu_Client_do($req) // => ($resp, $error)
+{
+    $ch = curl_init();
+    $url = $req->URL;
+    $options = array(
+        CURLOPT_USERAGENT => $req->UA,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYHOST => false,
+        CURLOPT_HEADER => true,
+        CURLOPT_NOBODY => false,
+        CURLOPT_CUSTOMREQUEST  => 'POST',
+        CURLOPT_URL => $url['path']
+    );
+    $httpHeader = $req->Header;
+    if (!empty($httpHeader))
+    {
+        $header = array();
+        foreach($httpHeader as $key => $parsedUrlValue) {
+            $header[] = "$key: $parsedUrlValue";
+        }
+        $options[CURLOPT_HTTPHEADER] = $header;
+    }
+    $body = $req->Body;
+    if (!empty($body)) {
+        $options[CURLOPT_POSTFIELDS] = $body;
+    } else {
+        $options[CURLOPT_POSTFIELDS] = "";
+    }
+    curl_setopt_array($ch, $options);
+    $result = curl_exec($ch);
+    $ret = curl_errno($ch);
+    if ($ret !== 0) {
+        $err = new \Qiniu_Error(0, curl_error($ch));
+        curl_close($ch);
+        return array(null, $err);
+    }
+    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+    curl_close($ch);
+
+    $responseArray = explode("\r\n\r\n", $result);
+    $responseArraySize = sizeof($responseArray);
+    $respHeader = $responseArray[$responseArraySize-2];
+    $respBody = $responseArray[$responseArraySize-1];
+
+    list($reqid, $xLog) = getReqInfo($respHeader);
+
+    $resp = new \Qiniu_Response($code, $respBody);
+    $resp->Header['Content-Type'] = $contentType;
+    $resp->Header["X-Reqid"] = $reqid;
+    return array($resp, null);
+}
+
+
 // --------------------------------------------------------------------------------
 // class Qiniu_Request
 
@@ -143,7 +199,7 @@ class Qiniu_MacHttpClient
 		$incbody = Qiniu_Client_incBody($req);
 		$token = $this->Mac->SignRequest($req, $incbody);
 		$req->Header['Authorization'] = "QBox $token";
-		return QiniuOSS::Qiniu_Client_do($req);
+		return Qiniu_Client_do($req);
 	}
 }
 

@@ -2,6 +2,25 @@
 namespace X\Service\QiNiu\Core;
 class QiniuOSS {
     /**
+     * @var string
+     */
+    private $accessToken = '';
+    
+    /**
+     * @var string
+     */
+    private $secretKey = '';
+    
+    /**
+     * @param unknown $acceccToken
+     * @param unknown $secretKey
+     */
+    public function __construct($acceccToken, $secretKey) {
+        $this->accessToken = $acceccToken;
+        $this->secretKey = $secretKey;
+    }
+    
+    /**
      * 当前正在使用的bucket的名字
      * @var string
      */
@@ -16,6 +35,28 @@ class QiniuOSS {
      */
     public function putFile( $localFile, $targetPath=null, $targetName=null, $config=array() ) {
         /* 获取上传凭证 */
+        $token = $this->getUploadToken($config);
+        
+        /* 整理文件名等信息 */
+        $targetName = (null === $targetName) ? basename($localFile) : $targetName;
+        $targetPath = (null === $targetPath) ? $targetName : $targetPath.'/'.$targetName;
+        
+        /* 进行文件上传 */
+        $client = new HttpClient(self::UPLOAD_HOST);
+        $client->addParameter('token', $token);
+        $client->addParameter('file', curl_file_create($localFile));
+        $client->addParameter('key', $targetPath);
+        $client->postFile();
+        $result = $client->readJSON();
+        return $result;
+    }
+    
+    /**
+     * @param unknown $config
+     * @see http://developer.qiniu.com/docs/v6/api/reference/security/upload-token.html
+     * @return string
+     */
+    private function getUploadToken( $config ) {
         $parameters = array();
         $parameters['scope'] = $this->bucket;
         foreach ( $config as $name => $value ) {
@@ -25,94 +66,61 @@ class QiniuOSS {
             $parameters['deadline'] = 3600;
         }
         $parameters['deadline'] += time();
-        $parameters = json_encode($parameters);
-        $token = Qiniu_SignWithData(null, $parameters);
-        
-        /* 整理文件名等信息 */
-        $targetName = (null === $targetName) ? basename($localFile) : $targetName;
-        $targetPath = (null === $targetPath) ? $targetName : $this->convertPathToQiniuPath($targetPath.'/'.$targetName);
-        
-        /* 进行文件上传 */
-        $client = new HttpClient(self::UPLOAD_HOST);
-        $client->addParameter('token', $token);
-        $client->addParameter('file', curl_file_create($localFile));
-        $client->addParameter('key', $targetPath);
-        $client->postFile();
-        $result = $client->readJSON();
-        
-        
-        
-        
-        $u = array('path' => self::UPLOAD_HOST);
-        $req = new \Qiniu_Request($u, $parameters);
-        list($resp, $err) = $this->Qiniu_Client_do($req);
-        if ($err !== null) {
-            return array(null, $err);
-        }
-        return Qiniu_Client_ret($resp);
-        
-        exit();
+        $sign = json_encode($parameters);
+        $encodedSign = $this->urlSafeBase64Encode($sign);
+        $sign = hash_hmac('sha1', $encodedSign, $this->secretKey, true);
+        $sign = $this->urlSafeBase64Encode($sign);
+        $sign = $this->accessToken.':'.$sign.':'.$encodedSign;
+        return $sign;
     }
     
-    public static function Qiniu_Client_do($req) // => ($resp, $error)
-    {
-    	$ch = curl_init();
-    	$url = $req->URL;
-    	$options = array(
-    		CURLOPT_USERAGENT => $req->UA,
-    		CURLOPT_RETURNTRANSFER => true,
-    		CURLOPT_SSL_VERIFYPEER => false,
-    		CURLOPT_SSL_VERIFYHOST => false,
-    		CURLOPT_HEADER => true,
-    		CURLOPT_NOBODY => false,
-    		CURLOPT_CUSTOMREQUEST  => 'POST',
-    		CURLOPT_URL => $url['path']
-    	);
-    	$httpHeader = $req->Header;
-    	if (!empty($httpHeader))
-    	{
-    		$header = array();
-    		foreach($httpHeader as $key => $parsedUrlValue) {
-    			$header[] = "$key: $parsedUrlValue";
-    		}
-    		$options[CURLOPT_HTTPHEADER] = $header;
-    	}
-    	$body = $req->Body;
-    	if (!empty($body)) {
-    		$options[CURLOPT_POSTFIELDS] = $body;
-    	} else {
-    		$options[CURLOPT_POSTFIELDS] = "";
-    	}
-    	curl_setopt_array($ch, $options);
-    	$result = curl_exec($ch);
-    	$ret = curl_errno($ch);
-    	if ($ret !== 0) {
-    		$err = new \Qiniu_Error(0, curl_error($ch));
-    		curl_close($ch);
-    		return array(null, $err);
-    	}
-    	$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    	$contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
-    	curl_close($ch);
+    /**
+     * @param unknown $str
+     * @return mixed
+     */
+    private function urlSafeBase64Encode($string) {
+        return str_replace(array('+', '/'), array('-', '_'), base64_encode($string));
+    }
     
-    	$responseArray = explode("\r\n\r\n", $result);
-    	$responseArraySize = sizeof($responseArray);
-    	$respHeader = $responseArray[$responseArraySize-2];
-    	$respBody = $responseArray[$responseArraySize-1];
+    /**
+     * @param unknown $path
+     */
+    public function getURL( $path ) {
+        $domain = $this->getDomain();
+        $path = str_replace('%2F', '/', rawurlencode($path));
+        $url = "http://$domain/$path";
+        if ( !$this->isPublic ) {
+            $deadline = time()+3600;
+            $url .= "?e=$deadline";
+            $toekn = hash_hmac('sha1', $url, $this->secretKey, true);
+            $toekn = $this->accessToken.':'.$this->urlSafeBase64Encode($toekn);
+            $url = "$url&token=$toekn";
+        }
+        return $url;
+    }
     
-    	list($reqid, $xLog) = getReqInfo($respHeader);
+    public $isPublic = false;
     
-    	$resp = new \Qiniu_Response($code, $respBody);
-    	$resp->Header['Content-Type'] = $contentType;
-    	$resp->Header["X-Reqid"] = $reqid;
-    	return array($resp, null);
+    /**
+     * @var string
+     */
+    private $domain = null;
+    
+    /**
+     * @param unknown $domain
+     */
+    public function setDomain( $domain ) {
+        $this->domain = $domain;
     }
     
     /**
      * @return string
      */
-    private function convertPathToQiniuPath( $path ) {
-        return str_replace('/', '_', $path);
+    public function getDomain() {
+        if ( null === $this->domain ) {
+            $this->domain = $this->bucket.'.qiniudn.com';
+        }
+        return $this->domain;
     }
     
     /**

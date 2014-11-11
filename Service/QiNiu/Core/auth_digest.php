@@ -65,15 +65,6 @@ class Qiniu_Mac {
 	}
 }
 
-function Qiniu_SetKeys($accessKey, $secretKey)
-{
-	global $QINIU_ACCESS_KEY;
-	global $QINIU_SECRET_KEY;
-
-	$QINIU_ACCESS_KEY = $accessKey;
-	$QINIU_SECRET_KEY = $secretKey;
-}
-
 function Qiniu_RequireMac($mac) // => $mac
 {
 	if (isset($mac)) {

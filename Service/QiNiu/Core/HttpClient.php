@@ -42,6 +42,11 @@ class HttpClient {
     private $responseType = null;
     
     /**
+     * @var string
+     */
+    private $responseHeader = null;
+    
+    /**
      * 
      */
     public function postFile() {
@@ -64,7 +69,7 @@ class HttpClient {
             curl_setopt($ch, CURLOPT_HTTPHEADER, $httpHeaders);
         }
         
-        $this->responseContent = curl_exec($ch);
+        $responseContent = curl_exec($ch);
         if ( 0 !== curl_errno($ch) ) {
             throw new Exception(curl_error($ch));
         }
@@ -73,17 +78,9 @@ class HttpClient {
         $this->responseType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
         curl_close($ch);
         
-        $responseArray = explode("\r\n\r\n", $this->response);
-        $responseArraySize = sizeof($responseArray);
-        $respHeader = $responseArray[$responseArraySize-2];
-        $respBody = $responseArray[$responseArraySize-1];
-        
-        list($reqid, $xLog) = getReqInfo($respHeader);
-        
-        $resp = new \Qiniu_Response($code, $respBody);
-        $resp->Header['Content-Type'] = $contentType;
-        $resp->Header["X-Reqid"] = $reqid;
-        return array($resp, null);
+        $responseContent = explode("\r\n\r\n", $responseContent);
+        $this->responseContent = array_pop($responseContent);
+        $this->responseHeader = array_pop($responseContent);
     }
     
     /**
@@ -134,6 +131,6 @@ class HttpClient {
      * 
      */
     public function readJSON() {
-        
+        return json_decode($this->responseContent, true);
     }
 }

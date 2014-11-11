@@ -30,12 +30,6 @@ class Qiniu_RS_GetPolicy
 	}
 }
 
-function Qiniu_RS_MakeBaseUrl($domain, $key) // => $baseUrl
-{
-	$keyEsc = str_replace("%2F", "/", rawurlencode($key));
-	return "http://$domain/$keyEsc";
-}
-
 // ----------------------------------------------------------
 // class Qiniu_RS_EntryPath
 
