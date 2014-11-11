@@ -44,7 +44,7 @@ class HttpClient {
     /**
      * 
      */
-    public function post() {
+    public function postFile() {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -54,7 +54,7 @@ class HttpClient {
         curl_setopt($ch, CURLOPT_NOBODY, false);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($ch, CURLOPT_USERAGENT, $this->getUserAgent());
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $this->getBody());
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $this->parameters);
         
         $httpHeaders = $this->getHeaders();
         foreach ( $httpHeaders as $key => $value ) {

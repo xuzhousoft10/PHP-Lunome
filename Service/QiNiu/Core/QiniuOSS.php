@@ -37,7 +37,7 @@ class QiniuOSS {
         $client->addParameter('token', $token);
         $client->addParameter('file', curl_file_create($localFile));
         $client->addParameter('key', $targetPath);
-        $client->post();
+        $client->postFile();
         $result = $client->readJSON();
         
         
