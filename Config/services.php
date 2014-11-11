@@ -57,4 +57,10 @@ return array (
     'delay' => true,
     'class' => 'X\\Service\\XLog\\Service',
   ),
+  'QiNiu' => 
+  array (
+    'enable' => true,
+    'delay' => false,
+    'class' => 'X\\Service\\QiNiu\\Service',
+  ),
 );
