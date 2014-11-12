@@ -28,7 +28,6 @@ class Service extends \X\Core\Service\XService {
         $this->OSS = new QiniuOSS($accessToken, $secretKey);
         $this->OSS->bucket = $this->getConfiguration()->get('DefaultBucket');
         $this->OSS->isPublic = $this->getConfiguration()->get('IsBucket');
-        $this->putString('testishfaisjfhasdf', '1.txt');
     }
     
     /**
@@ -63,5 +62,50 @@ class Service extends \X\Core\Service\XService {
      */
     public function getContent( $path ) {
         return file_get_contents($this->getURL($path));
+    }
+    
+    /**
+     * @param string $path
+     */
+    public function getList( $path=null ) {
+        return $this->OSS->getList($path);
+    }
+    
+    /**
+     * @param unknown $path
+     */
+    public function stat( $path ) {
+        return $this->OSS->stat($path);
+    }
+    
+    /**
+     * @param unknown $source
+     * @param unknown $destination
+     */
+    public function copy( $source, $destination ) {
+        $this->OSS->copy($source, $destination);
+    }
+    
+    /**
+     * @param unknown $source
+     * @param unknown $destination
+     */
+    public function move( $source, $destination ) {
+        $this->OSS->move($source, $destination);
+    }
+    
+    /**
+     * @param unknown $path
+     */
+    public function delete($path) {
+        $this->OSS->delete($path);
+    }
+    
+    /**
+     * @param unknown $path
+     * @param unknown $mime
+     */
+    public function changeMimeType( $path, $mime ) {
+        $this->OSS->changeMimeType($path, $mime);
     }
 }

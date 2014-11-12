@@ -118,9 +118,10 @@ class HttpClient {
             return $this->parameters;
         }
         
-        $data = array();
         $mimeBoundary = md5(microtime());
+        $this->headers['Content-Type'] = 'multipart/form-data; boundary='.$mimeBoundary;
         
+        $data = array();
         foreach ( $this->parameters as $name => $val) {
             array_push($data, '--' . $mimeBoundary);
             array_push($data, "Content-Disposition: form-data; name=\"$name\"");
@@ -131,7 +132,7 @@ class HttpClient {
         foreach ($this->fileContents as $fieldName => $file) {
             array_push($data, '--' . $mimeBoundary);
             $mimeType = 'application/octet-stream';
-            $fileName = Qiniu_escapeQuotes($file['name']);
+            $fileName = $this->escapeQuotes($file['name']);
             array_push($data, "Content-Disposition: form-data; name=\"{$fieldName}\"; filename=\"{$file['name']}\"");
             array_push($data, "Content-Type: $mimeType");
             array_push($data, '');
@@ -141,9 +142,8 @@ class HttpClient {
         array_push($data, '--' . $mimeBoundary . '--');
         array_push($data, '');
         
-        $body = implode("\r\n", $data);
-        $contentType = 'multipart/form-data; boundary=' . $mimeBoundary;
-        return array($contentType, $body);
+        $data = implode("\r\n", $data);
+        return $data;
     }
     
     /**
@@ -172,6 +172,14 @@ class HttpClient {
     private $headers = array();
     
     /**
+     * @param unknown $name
+     * @param unknown $value
+     */
+    public function addHeader( $name, $value ) {
+        $this->headers[$name] = $value;
+    }
+    
+    /**
      * @return array
      */
     public function getHeaders() {
@@ -195,5 +203,22 @@ class HttpClient {
      */
     public function readJSON() {
         return json_decode($this->responseContent, true);
+    }
+    
+    /**
+     * @return string
+     */
+    public function readText() {
+        return $this->responseContent;
+    }
+    
+    /**
+     * @param unknown $str
+     * @return mixed
+     */
+    private function escapeQuotes($str) {
+        $find = array("\\", "\"");
+        $replace = array("\\\\", "\\\"");
+        return str_replace($find, $replace, $str);
     }
 }

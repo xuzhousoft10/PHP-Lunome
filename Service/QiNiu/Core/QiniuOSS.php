@@ -27,6 +27,123 @@ class QiniuOSS {
     public $bucket = null;
     
     /**
+     * @return array
+     */
+    public function getList( $path=null, $offset=null, $length=null ) {
+        $parameters = array();
+        $parameters['bucket'] = $this->bucket;
+        $parameters['marker'] = $offset;
+        $parameters['limit'] = $length;
+        $parameters['prefix'] = $path;
+        $parameters['delimiter'] = '/';
+        $parameters = array_filter($parameters);
+        $url = self::MANAGEMENT_HOST.'/list?'.http_build_query($parameters);
+        $token = $this->getManagementToken($url);
+        
+        $client = new HttpClient( $url );
+        $client->addHeader('Authorization', 'QBox '.$token);
+        $client->post();
+        $result = $client->readJSON();
+        return isset($result['items']) ? $result['items'] : array();
+    }
+    
+    /**
+     * @param unknown $path
+     */
+    public function stat( $path ) {
+        $action = self::RESOURCE_MANAGEMENT_STAT;
+        $path = $this->getEncodedEntryURI($path);
+        return $this->doResourceManagement($action, $path);
+    }
+    
+    /**
+     * @param unknown $source
+     * @param unknown $destination
+     * @return Ambigous <\X\Service\QiNiu\Core\mixed, mixed>
+     */
+    public function copy( $source, $destination ) {
+        $action = self::RESOURCE_MANAGEMENT_COPY;
+        $source = $this->getEncodedEntryURI($source);
+        $destination = $this->getEncodedEntryURI($destination);
+        $this->doResourceManagement($action, $source, $destination);
+    }
+    
+    /**
+     * @param unknown $source
+     * @param unknown $destination
+     */
+    public function move( $source, $destination ) {
+        $action = self::RESOURCE_MANAGEMENT_MOVE;
+        $source = $this->getEncodedEntryURI($source);
+        $destination = $this->getEncodedEntryURI($destination);
+        $this->doResourceManagement($action, $source, $destination);
+    }
+    
+    /**
+     * @param unknown $path
+     */
+    public function delete( $path ) {
+        $action = self::RESOURCE_MANAGEMENT_DELETE;
+        $path = $this->getEncodedEntryURI($path);
+        $this->doResourceManagement($action, $path);
+    }
+    
+    /**
+     * @param unknown $path
+     * @param unknown $mime
+     */
+    public function changeMimeType( $path, $mime ) {
+        $action = self::RESOURCE_MANAGEMENT_CHGM;
+        $path = $this->getEncodedEntryURI($path);
+        $mime = $this->getEncodedEntryURI($mime);
+        $this->doResourceManagement($action, $path, $mime);
+    }
+    
+    /**
+     * @param unknown $action
+     * @return mixed
+     */
+    private function doResourceManagement( $action ) {
+        $parameters = func_get_args();
+        $query = call_user_func_array('sprintf', $parameters);
+        $url = self::RESOURCE_HOST.$query;
+        $token = $this->getManagementToken($url);
+        
+        $client = new HttpClient($url);
+        $client->addHeader('Authorization', 'QBox '.$token);
+        $client->post();
+        $result = $client->readJSON();
+        return $result;
+    }
+    
+    /**
+     * @param unknown $key
+     * @return string
+     */
+    private function getEncodedEntryURI( $key ) {
+        $entry = $this->bucket.':'.$key;
+        $entry = $this->urlSafeBase64Encode($entry);
+        return $entry;
+    }
+    
+    /**
+     * @param unknown $url
+     * @param string $content
+     * @return string
+     */
+    private function getManagementToken( $url, $content='' ) {
+        $url = parse_url($url);
+        $sign  = isset($url['path']) ? $url['path'] : '';
+        $sign .= isset($url['query']) ? '?'.$url['query'] : '';
+        $sign .= "\n";
+        $sign .= empty($content) ? '' : $content;
+        $sign = hash_hmac('sha1', $sign, $this->secretKey, true);
+        $sign = $this->urlSafeBase64Encode($sign);
+        $token = $this->accessToken.':'.$sign;
+        return $token;
+    }
+    
+    /**
      * 上传文件到七牛OSS
      * @param string $file 本地文件路径。
      * @param string $path 目标文件路径， 默认为跟目录。注意， 不是目标文件名
@@ -56,75 +173,13 @@ class QiniuOSS {
      * @param unknown $path
      */
     public function putString( $content, $path ) {
-        require_once dirname(__FILE__).DIRECTORY_SEPARATOR.'rs.php';
-        require_once dirname(__FILE__).DIRECTORY_SEPARATOR.'http.php';
-        require_once dirname(__FILE__).DIRECTORY_SEPARATOR.'io.php';
-        
-        
-        $upToken=$this->getUploadToken();
-        $key = $path; 
-        $body = $content; 
-        $putExtra = null;
-        global $QINIU_UP_HOST;
-        
-        if ($putExtra === null) {
-            $putExtra = new \Qiniu_PutExtra();
-        }
-        
-        $fields = array('token' => $upToken);
-        if ($key === null) {
-            $fname = '?';
-        } else {
-            $fname = $key;
-            $fields['key'] = $key;
-        }
-        if ($putExtra->CheckCrc) {
-            $fields['crc32'] = $putExtra->Crc32;
-        }
-        if ($putExtra->Params) {
-            foreach ($putExtra->Params as $k=>$v) {
-                $fields[$k] = $v;
-            }
-        }
-        
-        $files = array(array('file', $fname, $body, $putExtra->MimeType));
-        
-        $client = new Qiniu_HttpClient();
-        list($contentType, $body) = $this->Qiniu_Build_MultipartForm($fields, $files);
-        $result = Qiniu_Client_CallWithForm($client, $QINIU_UP_HOST, $body, $contentType);
-        
-        
-    }
-    
-    function Qiniu_Build_MultipartForm($fields, $files) // => ($contentType, $body)
-    {
-        $data = array();
-        $mimeBoundary = md5(microtime());
-    
-        foreach ($fields as $name => $val) {
-            array_push($data, '--' . $mimeBoundary);
-            array_push($data, "Content-Disposition: form-data; name=\"$name\"");
-            array_push($data, '');
-            array_push($data, $val);
-        }
-    
-        foreach ($files as $file) {
-            array_push($data, '--' . $mimeBoundary);
-            list($name, $fileName, $fileBody, $mimeType) = $file;
-            $mimeType = empty($mimeType) ? 'application/octet-stream' : $mimeType;
-            $fileName = Qiniu_escapeQuotes($fileName);
-            array_push($data, "Content-Disposition: form-data; name=\"$name\"; filename=\"$fileName\"");
-            array_push($data, "Content-Type: $mimeType");
-            array_push($data, '');
-            array_push($data, $fileBody);
-        }
-    
-        array_push($data, '--' . $mimeBoundary . '--');
-        array_push($data, '');
-    
-        $body = implode("\r\n", $data);
-        $contentType = 'multipart/form-data; boundary=' . $mimeBoundary;
-        return array($contentType, $body);
+        $client = new HttpClient(self::UPLOAD_HOST);
+        $client->addParameter('token', $this->getUploadToken());
+        $client->addParameter('key', $path);
+        $client->addFileString('file', $path, $content);
+        $client->post();
+        $result = $client->readJSON();
+        return $result;
     }
     
     /**
@@ -207,13 +262,40 @@ class QiniuOSS {
     /**
      * @var string
      */
+    const MANAGEMENT_HOST = 'http://rsf.qbox.me';
+    
+    /**
+     * @var unknown
+     */
+    const RESOURCE_HOST = 'http://rs.qbox.me';
+    
+    /**
+     * @var string
+     */
     const SDK_VERSION = '6.1.9';
-}
-
-class Qiniu_HttpClient
-{
-    public function RoundTrip($req) // => ($resp, $error)
-    {
-        return Qiniu_Client_do($req);
-    }
+    
+    /**
+     * @var string
+     */
+    const RESOURCE_MANAGEMENT_STAT      = '/stat/%s';
+    
+    /**
+     * @var string
+     */
+    const RESOURCE_MANAGEMENT_COPY      = '/copy/%s/%s';
+    
+    /**
+     * @var string
+     */
+    const RESOURCE_MANAGEMENT_MOVE      = '/move/%s/%s';
+    
+    /**
+     * @var string
+     */
+    const RESOURCE_MANAGEMENT_DELETE    = '/delete/%s';
+    
+    /**
+     * @var string
+     */
+    const RESOURCE_MANAGEMENT_CHGM      = '/chgm/%s/mime/%s';
 }

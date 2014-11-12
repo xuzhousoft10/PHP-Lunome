@@ -60,7 +60,7 @@ return array (
   'QiNiu' => 
   array (
     'enable' => true,
-    'delay' => false,
+    'delay' => true,
     'class' => 'X\\Service\\QiNiu\\Service',
   ),
 );
