@@ -44,11 +44,87 @@ class QiniuOSS {
         /* 进行文件上传 */
         $client = new HttpClient(self::UPLOAD_HOST);
         $client->addParameter('token', $token);
-        $client->addParameter('file', curl_file_create($localFile));
+        $client->addFile('file', $localFile);
         $client->addParameter('key', $targetPath);
-        $client->postFile();
+        $client->post();
         $result = $client->readJSON();
         return $result;
+    }
+    
+    /**
+     * @param unknown $content
+     * @param unknown $path
+     */
+    public function putString( $content, $path ) {
+        require_once dirname(__FILE__).DIRECTORY_SEPARATOR.'rs.php';
+        require_once dirname(__FILE__).DIRECTORY_SEPARATOR.'http.php';
+        require_once dirname(__FILE__).DIRECTORY_SEPARATOR.'io.php';
+        
+        
+        $upToken=$this->getUploadToken();
+        $key = $path; 
+        $body = $content; 
+        $putExtra = null;
+        global $QINIU_UP_HOST;
+        
+        if ($putExtra === null) {
+            $putExtra = new \Qiniu_PutExtra();
+        }
+        
+        $fields = array('token' => $upToken);
+        if ($key === null) {
+            $fname = '?';
+        } else {
+            $fname = $key;
+            $fields['key'] = $key;
+        }
+        if ($putExtra->CheckCrc) {
+            $fields['crc32'] = $putExtra->Crc32;
+        }
+        if ($putExtra->Params) {
+            foreach ($putExtra->Params as $k=>$v) {
+                $fields[$k] = $v;
+            }
+        }
+        
+        $files = array(array('file', $fname, $body, $putExtra->MimeType));
+        
+        $client = new Qiniu_HttpClient();
+        list($contentType, $body) = $this->Qiniu_Build_MultipartForm($fields, $files);
+        $result = Qiniu_Client_CallWithForm($client, $QINIU_UP_HOST, $body, $contentType);
+        
+        
+    }
+    
+    function Qiniu_Build_MultipartForm($fields, $files) // => ($contentType, $body)
+    {
+        $data = array();
+        $mimeBoundary = md5(microtime());
+    
+        foreach ($fields as $name => $val) {
+            array_push($data, '--' . $mimeBoundary);
+            array_push($data, "Content-Disposition: form-data; name=\"$name\"");
+            array_push($data, '');
+            array_push($data, $val);
+        }
+    
+        foreach ($files as $file) {
+            array_push($data, '--' . $mimeBoundary);
+            list($name, $fileName, $fileBody, $mimeType) = $file;
+            $mimeType = empty($mimeType) ? 'application/octet-stream' : $mimeType;
+            $fileName = Qiniu_escapeQuotes($fileName);
+            array_push($data, "Content-Disposition: form-data; name=\"$name\"; filename=\"$fileName\"");
+            array_push($data, "Content-Type: $mimeType");
+            array_push($data, '');
+            array_push($data, $fileBody);
+        }
+    
+        array_push($data, '--' . $mimeBoundary . '--');
+        array_push($data, '');
+    
+        $body = implode("\r\n", $data);
+        $contentType = 'multipart/form-data; boundary=' . $mimeBoundary;
+        return array($contentType, $body);
     }
     
     /**
@@ -56,7 +132,7 @@ class QiniuOSS {
      * @see http://developer.qiniu.com/docs/v6/api/reference/security/upload-token.html
      * @return string
      */
-    private function getUploadToken( $config ) {
+    private function getUploadToken( $config=array() ) {
         $parameters = array();
         $parameters['scope'] = $this->bucket;
         foreach ( $config as $name => $value ) {
@@ -132,4 +208,12 @@ class QiniuOSS {
      * @var string
      */
     const SDK_VERSION = '6.1.9';
+}
+
+class Qiniu_HttpClient
+{
+    public function RoundTrip($req) // => ($resp, $error)
+    {
+        return Qiniu_Client_do($req);
+    }
 }

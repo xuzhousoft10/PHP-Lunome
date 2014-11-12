@@ -1,7 +1,6 @@
 <?php
 
-require_once("utils.php");
-require_once("conf.php");
+require_once(dirname(__FILE__).DIRECTORY_SEPARATOR."conf.php");
 
 // ----------------------------------------------------------
 

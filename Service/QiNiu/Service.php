@@ -28,6 +28,7 @@ class Service extends \X\Core\Service\XService {
         $this->OSS = new QiniuOSS($accessToken, $secretKey);
         $this->OSS->bucket = $this->getConfiguration()->get('DefaultBucket');
         $this->OSS->isPublic = $this->getConfiguration()->get('IsBucket');
+        $this->putString('testishfaisjfhasdf', '1.txt');
     }
     
     /**
@@ -38,6 +39,14 @@ class Service extends \X\Core\Service\XService {
      */
     public function putFile( $file, $path=null, $name=null ) {
         $this->OSS->putFile($file, $path, $name);
+    }
+    
+    /**
+     * @param unknown $content
+     * @param unknown $path
+     */
+    public function putString( $content, $path ) {
+        $this->OSS->putString($content, $path);
     }
     
     /**
