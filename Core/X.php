@@ -326,30 +326,6 @@ class X {
     }
     
     /**
-     * 该变量保存框架当前使用的日志记录器， 如果该值为null， 则使用php
-     * 内置的error_log函数进行记录日志。
-     * 
-     * @var mixed
-     */
-    protected $logger = null;
-    
-    /**
-     * 替换框架当前的log记录器。
-     * @return void
-     */
-    public function setLogger( $logger ) {
-        $this->logger = $logger;
-    }
-    
-    /**
-     * 获取框架当前的log记录器。
-     * @return mixed
-     */
-    public function getLogger() {
-        return $this->logger;
-    }
-    
-    /**
      * 当前框架运行处于的interface名称。
      * @var string
      */
