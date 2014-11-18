@@ -8,7 +8,6 @@ namespace X\Module\Lunome\Util\Service;
  * 
  */
 use X\Core\X;
-use X\Module\Lunome\Util\Exception;
 use X\Module\Lunome\Model\MediaUserMarksModel;
 use X\Service\XDatabase\Core\SQL\Expression as SQLExpression;
 use X\Service\XDatabase\Core\SQL\Condition\Builder as ConditionBuilder;
@@ -16,6 +15,7 @@ use X\Module\Lunome\Service\User\Service as UserService;
 use X\Service\XDatabase\Core\SQL\Builder as SQLBuilder;
 use X\Service\XDatabase\Core\SQL\Func\Count;
 use X\Service\XDatabase\Service as DatabaseService;
+use X\Module\Lunome\Service\Configuration\Service as ConfigService;
 
 /**
  * 
@@ -261,8 +261,10 @@ abstract class Media extends \X\Core\Service\XService {
      */
     public function getMediaDefaultCoverURL() {
         $type = $this->getMediaType();
-        $path = '/Assets/image/'.$type.'_cover.png';
-        return $path;
+        $key = 'default_'.$type.'_cover_image';
+        /* @var $configService ConfigService */
+        $configService = X::system()->getServiceManager()->get(ConfigService::getServiceName());
+        return $configService->get($key);
     }
     
     /**
