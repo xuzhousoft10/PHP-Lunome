@@ -37,9 +37,10 @@ $mediaTypeName = $vars['mediaTypeName'];
             <?php foreach ( $medias as $index => $media ) : ?>
                 <div class="pull-left lnm-media-list-item-container">
                     <div class="lnm-media-list-item" data-poster="<?php echo $media['cover'];?>" data-media-type="<?php echo $mediaType;?>" >
-                        <div    class="lnm-media-list-item-empty-area"
+                        <div    class="lnm-media-list-item-intro-area"
                                 data-detail-url="<?php printf('/?module=lunome&action=%s/detail&id=%s', $mediaType, $media['id']); ?>"
                         >
+                            <?php echo $media['introduction']; ?>
                         </div>
                         <div class="btn-group btn-group-justified lnm-media-list-item-mark-container">
                             <?php foreach ( $markActions as $markCode => $markAction ) : ?>

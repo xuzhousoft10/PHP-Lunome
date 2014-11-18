@@ -22,7 +22,7 @@ $(document).ready(function() {
     });
     
     /* 针对Media列表页面，如果鼠标点击非标记按钮则进入详细界面。 */
-    $('.lnm-media-list-item-empty-area').click(function() {
+    $('.lnm-media-list-item-intro-area').click(function() {
         window.location = $(this).attr('data-detail-url');
     });
     
