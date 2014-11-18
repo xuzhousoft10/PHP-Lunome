@@ -85,6 +85,15 @@ abstract class Index extends VisualMain {
             $medias = $this->getMediaService()->getMarked($this->currentMark, $length, $position);
         }
         
+        /* 填充封面图片信息。 */
+        foreach ( $medias as $index => $media ) {
+            if ( 0 === $media['has_cover']*1 ) {
+                $medias[$index]['cover'] = $this->getMediaService()->getMediaDefaultCoverURL();
+            } else {
+                $medias[$index]['cover'] = $this->getMediaService()->getMediaCoverURL($media['id']);
+            }
+        }
+        
         return $medias;
     }
     

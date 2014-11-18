@@ -33,9 +33,8 @@ $(document).ready(function() {
         }
         var isLoaded = $(this).attr('data-poster-loaded');
         if ( 'undefined' == typeof(isLoaded) ) {
-             var posterId = $(this).attr('data-poster');
-             var media = $(this).attr('data-media-type');
-             $(this).css('background-image', 'url("/?module=lunome&action='+media+'/poster&id='+posterId+'")');
+             var poster = $(this).attr('data-poster');
+             $(this).css('background-image', 'url("'+poster+'")');
              $(this).attr('data-poster-loaded', true);
         }
     }, { offset: '100%' });

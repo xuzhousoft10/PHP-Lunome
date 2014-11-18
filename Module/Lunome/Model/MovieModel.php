@@ -22,6 +22,7 @@ use X\Service\XDatabase\Core\ActiveRecord\Column;
  * @property string $executive
  * @property string $actor
  * @property string $introduction
+ * @property string $has_cover
  **/
 class MovieModel extends Basic {
     /**
@@ -43,6 +44,7 @@ class MovieModel extends Basic {
         $columns[] = Column::create('executive')->setType(ColumnType::T_VARCHAR)->setLength(128);
         $columns[] = Column::create('actor')->setType(ColumnType::T_VARCHAR)->setLength(256);
         $columns[] = Column::create('introduction')->setType(ColumnType::T_VARCHAR)->setLength(1024);
+        $columns[] = Column::create('has_cover')->setType(ColumnType::T_TINYINT)->setDefault(0);
         return $columns;
     }
 

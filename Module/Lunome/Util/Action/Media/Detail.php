@@ -46,6 +46,11 @@ abstract class Detail extends Visual {
         
         /* Load detail view */
         $media = $service->get($id);
+        if ( 0 === $media['has_cover']*1 ) {
+            $media['cover'] = $service->getMediaDefaultCoverURL();
+        } else {
+            $media['cover'] = $service->getMediaCoverURL($media['id']);
+        }
         $markCount = array();
         foreach ( $this->getMediaMarks() as $markValue ) {
             $markCount[$markValue]  = $service->countMarked($markValue, $id, null);

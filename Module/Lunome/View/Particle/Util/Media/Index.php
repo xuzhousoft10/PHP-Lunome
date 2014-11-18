@@ -36,7 +36,7 @@ $mediaTypeName = $vars['mediaTypeName'];
         <div class="clearfix lnm-media-list-container">
             <?php foreach ( $medias as $index => $media ) : ?>
                 <div class="pull-left lnm-media-list-item-container">
-                    <div class="lnm-media-list-item" data-poster="<?php echo $media['id'];?>" data-media-type="<?php echo $mediaType;?>" >
+                    <div class="lnm-media-list-item" data-poster="<?php echo $media['cover'];?>" data-media-type="<?php echo $mediaType;?>" >
                         <div    class="lnm-media-list-item-empty-area"
                                 data-detail-url="<?php printf('/?module=lunome&action=%s/detail&id=%s', $mediaType, $media['id']); ?>"
                         >

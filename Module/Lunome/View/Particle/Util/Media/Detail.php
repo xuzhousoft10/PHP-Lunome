@@ -16,7 +16,7 @@ $markUrlFormat = sprintf('/?module=lunome&action=%s/mark&mark=%%s&id=%%s', strto
     </ol>
     
     <div class="col-md-2 padding-0">
-        <img src="/?module=lunome&action=<?php echo strtolower($mediaType);?>/poster&id=<?php echo $media['id']?>" width="200" height="300">
+        <img src="<?php echo $media['cover'];?>" width="200" height="300">
     </div>
     <div class="col-md-10">
         <h4>

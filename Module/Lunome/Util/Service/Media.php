@@ -9,7 +9,6 @@ namespace X\Module\Lunome\Util\Service;
  */
 use X\Core\X;
 use X\Module\Lunome\Util\Exception;
-use X\Module\Lunome\Model\MediaPostersModel;
 use X\Module\Lunome\Model\MediaUserMarksModel;
 use X\Service\XDatabase\Core\SQL\Expression as SQLExpression;
 use X\Service\XDatabase\Core\SQL\Condition\Builder as ConditionBuilder;
@@ -89,50 +88,6 @@ abstract class Media extends \X\Core\Service\XService {
         $mediaModel->save();
         $this->logAction($this->getActionName('update'), $mediaModel->id);
         return $mediaModel->toArray();
-    }
-    
-    /**
-     * 
-     * @param unknown $media
-     * @param unknown $poster
-     */
-    public function addPoster( $media, $data ) {
-        $poster = new MediaPostersModel();
-        $poster->media_type = $this->getMediaModelName();
-        $poster->media_id = $media;
-        $poster->data = base64_encode($data);
-        $poster->save();
-        $this->logAction($this->getActionName('poster_add'), $media, self::RESULT_CODE_SUCCESS, null, $poster->id);
-        return $poster->toArray();
-    }
-    
-    /**
-     * 
-     * @param unknown $media
-     * @throws Exception
-     * @return string
-     */
-    public function hasPoster( $media ) {
-        $mediaModelName = $this->getMediaModelName();
-        $condition = array();
-        $condition['media_type'] = $mediaModelName;
-        $condition['media_id'] = $media;
-        return MediaPostersModel::model()->exists($condition);
-    }
-    
-    /**
-     * 
-     * @param unknown $media
-     * @return boolean
-     */
-    public function deletePoster( $media ) {
-        $mediaModelName = $this->getMediaModelName();
-        $condition = array();
-        $condition['media_type'] = $mediaModelName;
-        $condition['media_id'] = $media;
-        $poster = MediaPostersModel::model()->findByAttribute($condition);
-        $poster->delete();
-        $this->logAction($this->getActionName('poster_delete'), $media, self::RESULT_CODE_SUCCESS, null, $poster->id);
     }
     
     /**
@@ -221,30 +176,6 @@ abstract class Media extends \X\Core\Service\XService {
     /**
      * 
      * @param unknown $movieId
-     * @throws Exception
-     * @return string
-     */
-    public function getPoster( $id ) {
-        $mediaModelName = $this->getMediaModelName();
-        $condition = array();
-        $condition['media_type'] = $mediaModelName;
-        $condition['media_id'] = $id;
-        $poster = MediaPostersModel::model()->findByAttribute($condition);
-        if ( null === $poster ) {
-            throw new Exception("Can not find poster $id");
-        }
-    
-        $content = base64_decode($poster->data);
-        if ( false === $content ) {
-            throw new Exception("Bad poster : $id");
-        }
-    
-        return $content;
-    }
-    
-    /**
-     * 
-     * @param unknown $movieId
      * @param unknown $mark
      */
     public function mark( $id, $mark ) {
@@ -325,6 +256,27 @@ abstract class Media extends \X\Core\Service\XService {
     }
     
     /**
+     * 返回Media默认的封面图片。
+     * @return string
+     */
+    public function getMediaDefaultCoverURL() {
+        $type = $this->getMediaType();
+        $path = '/Assets/image/'.$type.'_cover.png';
+        return $path;
+    }
+    
+    /**
+     * 根据ID返回相应Media的封面图片URL
+     * @param unknown $id
+     * @return string
+     */
+    public function getMediaCoverURL( $id ) {
+        $type = $this->getMediaType();
+        $path = 'http://lunome.qiniudn.com/covers/'.$type.'s/'.$id.'.png';
+        return $path;
+    }
+    
+    /**
      * @return \X\Service\XDatabase\Core\Database
      */
     protected function getDb() {
@@ -382,6 +334,15 @@ abstract class Media extends \X\Core\Service\XService {
      * Get the name of media model.
      */
     abstract protected function getMediaModelName();
+    
+    /**
+     * @return string
+     */
+    protected function getMediaType() {
+        $class = explode('\\', get_class($this));
+        array_pop($class);
+        return strtolower(array_pop($class));
+    }
     
     /**
      * @return \X\Module\Lunome\Service\User\Service
