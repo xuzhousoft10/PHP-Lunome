@@ -27,10 +27,10 @@ class Service extends Media {
      */
     public function getMarkNames() {
         return array(
-            self::MARK_UNMARKED     => '取消标记',
+            self::MARK_UNMARKED     => '未标记',
             self::MARK_INTERESTED   => '想看',
             self::MARK_WATCHED      => '已看',
-            self::MARK_IGNORED      => '不喜欢',
+            self::MARK_IGNORED      => '忽略',
         );
     }
     

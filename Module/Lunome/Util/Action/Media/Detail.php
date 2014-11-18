@@ -42,6 +42,7 @@ abstract class Detail extends Visual {
     public function runAction( $id ) {
         $this->id = $id;
         $mediaType = $this->getMediaType();
+        /* @var $service \X\Module\Lunome\Util\Service\Media */
         $service = $this->getService($mediaType);
         
         /* Load detail view */
@@ -56,7 +57,7 @@ abstract class Detail extends Visual {
             $markCount[$markValue]  = $service->countMarked($markValue, $id, null);
         }
         $myMark = $service->getMark($id);
-        $names  = $this->getMarkNames();
+        $names  = $service->getMarkNames();
         $styles = $this->getMarkStyles();
         
         $name   = 'MEDIA_DETAIL';
@@ -69,7 +70,7 @@ abstract class Detail extends Visual {
             'markStyles'=> $styles,
             'markNames' => $names,
             'mediaType' => $mediaType,
-            'mediaName' => $this->getMediaName(),
+            'mediaName' => $service->getMediaName(),
         );
         $this->getView()->loadParticle($name, $path, $option, $data);
         
@@ -105,7 +106,5 @@ abstract class Detail extends Visual {
      * 
      * @param unknown $mark
      */
-    abstract protected function getMarkNames();
     abstract protected function getMarkStyles();
-    abstract protected function getMediaName();
 }

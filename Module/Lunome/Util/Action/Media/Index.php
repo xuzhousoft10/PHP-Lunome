@@ -37,9 +37,6 @@ abstract class Index extends VisualMain {
         
         $medias     = $this->getMediaData();
         $markInfo   = $this->getMarkInformation();
-        foreach ( $markInfo as $name => $info ) {
-            $markInfo[$name]['isActive'] = $this->currentMark === $name;
-        }
         $total      = $markInfo[$this->currentMark]['count'];
         $pager      = $this->getPagerData($total);
         $markActions= $this->getMarkActions();
@@ -55,7 +52,7 @@ abstract class Index extends VisualMain {
             'activeMark'    => $this->currentMark, 
             'markActions'   => $markActions,
             'mediaType'     => strtolower($this->getMediaType()),
-            'mediaTypeName' => $this->getMediaTypeName(),
+            'mediaTypeName' => $this->getMediaService()->getMediaName(),
         );
         $this->getView()->loadParticle($name, $path, $option, $data);
         
@@ -157,15 +154,20 @@ abstract class Index extends VisualMain {
     /**
      * @return array
      */
-    abstract protected function getMarkInformation();
+    protected function getMarkInformation() {
+        $markInfo = array();
+        $service = $this->getMediaService();
+        $marks = $service->getMarkNames();
+        foreach ( $marks as $key => $name ) {
+            $markInfo[$key]['name']     = $name;
+            $markInfo[$key]['count']    = (0 === $key) ? $service->countUnmarked() : $service->countMarked($key);
+            $markInfo[$key]['isActive'] = $this->currentMark === $name;
+        }
+        return $markInfo;
+    }
     
     /**
      * 
      */
     abstract protected function getMarkActions();
-    
-    /**
-     * 
-     */
-    abstract protected function getMediaTypeName();
 }

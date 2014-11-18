@@ -18,19 +18,6 @@ use X\Module\Lunome\Util\Action\Media\Index as MediaIndex;
 class Index extends MediaIndex { 
     /**
      * (non-PHPdoc)
-     * @see \X\Module\Lunome\Util\Action\VisualMainMediaList::getMarkInformation()
-     */
-    protected function getMarkInformation() {
-        $markInfo = array();
-        $markInfo[MovieService::MARK_UNMARKED]      = array('name'=>'所有', 'count'=>$this->getMovieService()->countUnmarked());
-        $markInfo[MovieService::MARK_INTERESTED]    = array('name'=>'想看', 'count'=>$this->getMovieService()->countMarked(MovieService::MARK_INTERESTED));
-        $markInfo[MovieService::MARK_WATCHED]       = array('name'=>'已看', 'count'=>$this->getMovieService()->countMarked(MovieService::MARK_WATCHED));
-        $markInfo[MovieService::MARK_IGNORED]       = array('name'=>'不喜欢', 'count'=>$this->getMovieService()->countMarked(MovieService::MARK_IGNORED));
-        return $markInfo;
-    }
-    
-    /**
-     * (non-PHPdoc)
      * @see \X\Module\Lunome\Util\Action\Media\Index::getMarkActions()
      */
     protected function getMarkActions() {
@@ -57,13 +44,5 @@ class Index extends MediaIndex {
         default:break;
         }
         return $actions;
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \X\Module\Lunome\Util\Action\Media\Index::getMediaTypeName()
-     */
-    protected function getMediaTypeName() {
-        return '电影';
     }
 }

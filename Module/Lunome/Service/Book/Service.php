@@ -31,7 +31,7 @@ class Service extends Media {
             self::MARK_INTERESTED   => '想读',
             self::MARK_READING      => '在读',
             self::MARK_READ         => '已读',
-            self::MARK_IGNORED      => '不喜欢',
+            self::MARK_IGNORED      => '忽略',
         );
     }
     
