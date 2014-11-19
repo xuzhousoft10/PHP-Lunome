@@ -181,9 +181,14 @@ class ServiceManagement extends Management {
             }
             $path = X::system()->getPath("Module/$module/Service/$name");
         }
-        if ( !is_dir($path) ) {
-            mkdir($path);
-        }
+        if ( !is_dir($path) ) {mkdir($path);}
+        /* Generate configuration folder and file. */
+        $configPath = $path.DIRECTORY_SEPARATOR.'Config';
+        if ( !is_dir($configPath) ) { mkdir($configPath); }
+        $configPath .= DIRECTORY_SEPARATOR.'Main.php';
+        $configContent = "<?php \nreturn array();";
+        file_put_contents($configPath, $configContent);
+        
         $path = $path.DIRECTORY_SEPARATOR.'Service.php';
         
         /* Save the service */
