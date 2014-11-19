@@ -24,22 +24,20 @@ class Index extends MediaIndex {
         $actions = array();
         switch ( $this->currentMark ) {
         case MovieService::MARK_UNMARKED:
-            $actions[MovieService::MARK_INTERESTED]    = array('name'=>'想看',     'style'=>'success');
-            $actions[MovieService::MARK_WATCHED]       = array('name'=>'已看',     'style'=>'info');
-            $actions[MovieService::MARK_IGNORED]       = array('name'=>'不喜欢',    'style'=>'default');
+            $actions[MovieService::MARK_INTERESTED]    = array('style'=>'success');
+            $actions[MovieService::MARK_WATCHED]       = array('style'=>'info');
+            $actions[MovieService::MARK_IGNORED]       = array('style'=>'default');
             break;
         case MovieService::MARK_INTERESTED:
-            $actions[MovieService::MARK_UNMARKED]      = array('name'=>'不想看了',  'style'=>'warning');
-            $actions[MovieService::MARK_WATCHED]       = array('name'=>'已看',     'style'=>'info');
-            $actions[MovieService::MARK_IGNORED]       = array('name'=>'不喜欢',    'style'=>'default');
+            $actions[MovieService::MARK_WATCHED]       = array('style'=>'info');
+            $actions[MovieService::MARK_IGNORED]       = array('style'=>'default');
             break;
         case MovieService::MARK_WATCHED:
-            $actions[MovieService::MARK_INTERESTED]    = array('name'=>'还想看',     'style'=>'success');
-            $actions[MovieService::MARK_IGNORED]       = array('name'=>'不喜欢',    'style'=>'default');
+            $actions[MovieService::MARK_IGNORED]       = array('style'=>'default');
             break;
         case MovieService::MARK_IGNORED:
-            $actions[MovieService::MARK_INTERESTED]    = array('name'=>'想看',     'style'=>'success');
-            $actions[MovieService::MARK_WATCHED]       = array('name'=>'已看',     'style'=>'info');
+            $actions[MovieService::MARK_INTERESTED]    = array('style'=>'success');
+            $actions[MovieService::MARK_WATCHED]       = array('style'=>'info');
             break;
         default:break;
         }

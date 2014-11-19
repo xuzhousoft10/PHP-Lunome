@@ -40,6 +40,10 @@ abstract class Index extends VisualMain {
         $total      = $markInfo[$this->currentMark]['count'];
         $pager      = $this->getPagerData($total);
         $markActions= $this->getMarkActions();
+        $markNames  = $this->getMediaService()->getMarkNames();
+        foreach ( $markActions as $markKey => $markAction ) {
+            $markActions[$markKey]['name'] = $markNames[$markKey];
+        }
         
         /* Load index view */
         $name   = 'MEDIA_INDEX';

@@ -22,7 +22,7 @@ $markCount = $vars['markCount'];
 <tr>
     <td>想看: <?php echo $markCount[Service::MARK_INTERESTED];?></td>
     <td>已看: <?php echo $markCount[Service::MARK_WATCHED];?></td>
-    <td>不喜欢: <?php echo $markCount[Service::MARK_IGNORED];?></td>
+    <td>忽略: <?php echo $markCount[Service::MARK_IGNORED];?></td>
     <td></td>
 </tr>
 <tr>
