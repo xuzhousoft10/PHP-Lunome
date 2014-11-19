@@ -16,7 +16,9 @@ $markUrlFormat = sprintf('/?module=lunome&action=%s/mark&mark=%%s&id=%%s', strto
     </ol>
     
     <div class="col-md-2 padding-0">
-        <img src="<?php echo $media['cover'];?>" width="200" height="300">
+        <a href="http://www.baidu.com/s?wd=<?php echo urlencode($media['name']); ?>" target="_black">
+            <img src="<?php echo $media['cover'];?>" width="200" height="300">
+        </a>
     </div>
     <div class="col-md-10">
         <h4>
@@ -32,15 +34,20 @@ $markUrlFormat = sprintf('/?module=lunome&action=%s/mark&mark=%%s&id=%%s', strto
         <table class="table table-bordered">
             <?php require dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.$mediaType.DIRECTORY_SEPARATOR.'Detail.php';?>
         </table>
-        <div class="btn-group">
-            <?php foreach ( $markNames as $markKey => $markName ) : ?>
-                <?php if ( 0 === $markKey || $myMark === $markKey ) :?>
-                    <?php continue; ?>
-                <?php endif; ?>
-                <a  class="btn btn-<?php echo $markStyles[$markKey];?>" 
-                    href="<?php printf($markUrlFormat, $markKey, $media['id']); ?>"
-                ><?php echo $markName;?></a>
-            <?php endforeach; ?>
+        <div>
+            <div class="btn-group pull-left">
+                <?php foreach ( $markNames as $markKey => $markName ) : ?>
+                    <?php if ( 0 === $markKey || $myMark === $markKey ) :?>
+                        <?php continue; ?>
+                    <?php endif; ?>
+                    <a  class="btn btn-<?php echo $markStyles[$markKey];?>" 
+                        href="<?php printf($markUrlFormat, $markKey, $media['id']); ?>"
+                    ><?php echo $markName;?></a>
+                <?php endforeach; ?>
+            </div>
+            <div class="pull-right">
+                
+            </div>
         </div>
     </div>
 </div>
