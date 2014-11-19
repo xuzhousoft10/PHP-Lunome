@@ -21,7 +21,7 @@ class Service extends \X\Core\Service\XService {
         $configurations = $this->getConfiguration();
         if ( !isset($configurations[$name]) ) {
             $attributes = array('name'=>$name);
-            $configuration = ConfigurationModel::model()->findByAttribute($attributes);
+            $configuration = ConfigurationModel::model()->find($attributes);
             if ( null === $configuration ) {
                 throw new Exception('Configuration item "'.$name.'" does not exists.');
             }

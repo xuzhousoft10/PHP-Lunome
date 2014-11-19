@@ -98,7 +98,7 @@ abstract class Media extends \X\Core\Service\XService {
     public function get( $id ) {
         $mediaModelName = $this->getMediaModelName();
         /* @var $mediaModel \X\Util\Model\Basic */
-        $mediaModel = $mediaModelName::model()->findByAttribute(array('id'=>$id));
+        $mediaModel = $mediaModelName::model()->find(array('id'=>$id));
         return $mediaModel->toArray();
     }
     
@@ -227,7 +227,7 @@ abstract class Media extends \X\Core\Service\XService {
         $condition['media_type']    = $this->getMediaModelName();
         $condition['media_id']      = $id;
         $condition['account_id']    = ( null === $user ) ? $this->getCurrentUserId() : $user;
-        $mark = MediaUserMarksModel::model()->findByAttribute($condition);
+        $mark = MediaUserMarksModel::model()->find($condition);
         return ( null === $mark ) ? 0 : $mark->mark*1;
     }
     

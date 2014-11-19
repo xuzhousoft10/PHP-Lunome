@@ -165,7 +165,7 @@ abstract class Index extends VisualMain {
         foreach ( $marks as $key => $name ) {
             $markInfo[$key]['name']     = $name;
             $markInfo[$key]['count']    = (0 === $key) ? $service->countUnmarked() : $service->countMarked($key);
-            $markInfo[$key]['isActive'] = $this->currentMark === $name;
+            $markInfo[$key]['isActive'] = $this->currentMark === $key;
         }
         return $markInfo;
     }

@@ -24,7 +24,7 @@ class Service extends \X\Core\Service\XService {
      */
     protected function afterStart() {
         if ( 'lunome.kupoy.com' === $_SERVER['HTTP_HOST'] && $this->getIsGuest()) {
-            $account = AccountModel::model()->findByAttribute(array('status'=>2, 'is_admin'=>1));
+            $account = AccountModel::model()->find(array('status'=>2, 'is_admin'=>1));
             $this->loginAccount($account, 'DEBUG');
         }
         $this->initCurrentUserInformation();
@@ -89,7 +89,7 @@ class Service extends \X\Core\Service\XService {
         
         $openId = $qqConnect->getOpenId();
         $condition = array('server'=>Oauth20Model::SERVER_QQ, 'openid'=>$openId);
-        $oauth = Oauth20Model::model()->findByAttribute($condition);
+        $oauth = Oauth20Model::model()->find($condition);
         if ( null === $oauth ) {
             $oauth = new Oauth20Model();
             $oauth->server = Oauth20Model::SERVER_QQ;
@@ -126,7 +126,7 @@ class Service extends \X\Core\Service\XService {
      * @return Ambigous <\X\Module\Lunome\Model\AccountModel, \X\Service\XDatabase\Core\ActiveRecord\ActiveRecord, NULL>
      */
     protected function getAccountByOAuth( Oauth20Model $oauth, QQConnectSDK $qqConnect ) {
-        $account = AccountModel::model()->findByAttribute(array('oauth20_id'=>$oauth->id));
+        $account = AccountModel::model()->find(array('oauth20_id'=>$oauth->id));
         $userInfo = $qqConnect->QZone()->getInfo();
         if ( null === $account ) {
             $account = $this->enableRandomAccount();

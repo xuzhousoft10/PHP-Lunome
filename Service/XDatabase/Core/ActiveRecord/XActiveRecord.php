@@ -27,11 +27,97 @@ use X\Service\XDatabase\Core\SQL\Func\Max;
  * @version 0.0.0
  */
 abstract class XActiveRecord extends Basic implements \Iterator {
+    /**
+     * Find records by given criteria and return the matched records.
+     * @param Criteria $criteria
+     * @return \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord[]
+     */
+    private function doFind(Criteria $criteria) {
+        $condition = $criteria->condition;
+        if ( null !== $criteria->condition && !($criteria->condition instanceof ConditionBuilder ) ) {
+            $condition = ConditionBuilder::build($criteria->condition);
+        }
+        
+        $sql = SQLBuilder::build()->select()
+            ->from($this->getTableFullName())
+            ->where($condition)
+            ->limit($criteria->limit)
+            ->offset($criteria->position)
+            ->orders($criteria->getOrders())
+            ->toString();
+        $result = $this->doQuery($sql);
+        
+        $class = get_class($this);
+        foreach ( $result as $index => $attributes ) {
+            $result[$index] = $class::create($attributes, false);
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * Convert condition to criteria and return the converted criteria.
+     * @param mixed $condition The condition to covert
+     * @return \X\Service\XDatabase\Core\ActiveRecord\Criteria
+     */
+    private function convertConditionToCriteria( $condition ) {
+        $criteria = $condition;
+        if ( !($condition instanceof Criteria) ) {
+            $criteria = new Criteria();
+            $criteria->condition = $condition;
+        }
+        return $criteria;
+    }
+    
+    /**
+     * Find active records by give condition, the condition could be 
+     * anything that able to convert an condition object, it may be an
+     * array, a string or a condition object.
+     * @see \X\Service\XDatabase\Core\SQL\Condition\Builder
+     * @param mixed $condition The condition to find the record.
+     * @return \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord[]
+     */
+    public function findAll($condition=null) {
+        return $this->doFind($this->convertConditionToCriteria($condition));
+    }
+    
+    /**
+     * Find an active record by give condition, the condition could be 
+     * anything that able to convert an condition object, it may be an
+     * array, a string or a condition object. If the active record can 
+     * not be found, null will be returned.
+     * @see \X\Service\XDatabase\Core\SQL\Condition\Builder
+     * @param mixed $condition The condition to find the record.
+     * @return \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord
+     */
+    public function find($condition=null) {
+        $criteria = $this->convertConditionToCriteria($condition);
+        $criteria->limit = 1;
+        $result = $this->doFind($criteria);
+        return isset($result[0]) ?  $result[0] : null;
+    }
+    
+    /**
+     * Find an active record by given primary key. 
+     * If the given key does not exists, null would be returned.
+     * If there is no primary key defineded, an exception would be throwed.
+     * @param string $primaryKey The value of primary key.
+     * @return \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord
+     * @example $this->findByPrimaryKey('00000000-0000-0000-0000-000000000000');
+     */
+    public function findByPrimaryKey( $primaryKey ) {
+        $name = $this->getPrimaryKeyName();
+        if ( null === $name ) {
+            $message = 'Can not find primary key in "'.get_class($this).'"';
+            throw new Exception($message);
+        }
+        return $this->find(array($name=>$primaryKey));
+    }
+    
     /*********************** Init the active record *************************/
     public function __construct() {
         $this->initAttributesByDeacribe();
         $this->relationships();
-        $this->scopes();
         $this->beforeInit();
         $this->init();
         $this->afterInit();
@@ -569,288 +655,6 @@ abstract class XActiveRecord extends Basic implements \Iterator {
     }
     
     /******************** DMS Stuff **************************/
-    
-    /**
-     * The name of default scope
-     * 
-     * @see ActiveRecord::addDefaultScope() Add default scope
-     * @see ActiveRecord::withScope() ActiveRecord::withScope()
-     * @var string
-     */
-    const SCOPE_DEFAULT_NAME = 'default';
-    
-    /**
-     * This value contains all the definded scopes.
-     * Here is an example of this value:
-     * <pre>
-     *  array(
-     *      'scopeName1' => $condition,
-     *      ...
-     *  )
-     * </pre>
-     * @var array
-     */
-    protected $scopes = array();
-    
-    /**
-     * Add scope to active record, The condition parm could be an
-     * or a string, also, it could be the instace of class 
-     * 'X\Database\SQL\Condition\Builder'
-     * 
-     * @see \X\Database\SQL\Condition\Builder What's Condition builder
-     * @see ActiveRecord::withScope() How to use scope 
-     * @see ActiveRecord::withoutScope() How to ignore scope 
-     * @param string $name The name of the scope
-     * @param mixed $condition The condition of the scope
-     * @return void
-     */
-    protected function addScope( $name, $condition ) {
-        $this->scopes[$name] = $condition;
-    }
-    
-    /**
-     * Add scope to active record as default scope, The condition 
-     * parm could be an or a string, also, it could be the instace 
-     * of class 'X\Database\SQL\Condition\Builder'
-     * 
-     * @see \X\Database\SQL\Condition\Builder What's Condition builder
-     * @see ActiveRecord::withScope() How to use scope 
-     * @see ActiveRecord::withoutScope() How to ignore scope 
-     * @param mixed $condition
-     * @return null
-     */
-    protected function addDefaultScope( $condition ) {
-        $this->addScope(self::SCOPE_DEFAULT_NAME, $condition);
-    }
-    
-    /**
-     * Initiate the scope for this active record.
-     * This method is called but __contract() method.
-     * So, you can define the scope for this object by this method.
-     * 
-     * @return void
-     */
-    protected function scopes() {}
-    
-    /**
-     * The name of using scope. If this value is null, then we would 
-     * not use scope on find() method. The way to set this value to 
-     * null is withScope(null), but there is another way to do it 
-     * better, withoutScope().
-     * The value changed by withScope() method.
-     * 
-     * @see ActiveRecord::withScope() How to use scope
-     * @see ActiveRecord::withoutScope() How to ignore scope
-     * @var string
-     */
-    protected $usingScope = self::SCOPE_DEFAULT_NAME;
-    
-    /**
-     * Pointed out which scope to use on find. As default, the default 
-     * scope would be used, also, you can call it with null to ignore
-     * all scope.
-     * 
-     * @param string $name The name of scope to use.
-     * @return ActiveRecord
-     */
-    public function withScope( $name = self::SCOPE_DEFAULT_NAME ) {
-        $this->usingScope = $name;
-        return $this;
-    }
-    
-    /**
-     * Ignore all scopes on find, Notice, this method just effect the
-     * find action once, after find, the scope would be setted to 
-     * default scope.
-     * 
-     * @return ActiveRecord
-     */
-    public function withoutScope() {
-        $this->usingScope = null;
-        return $this;
-    }
-    
-    /**
-     * Merge the scope into given condition.
-     * 
-     * @param \X\Database\SQL\Condition\Builder $condition
-     * @return \X\Database\SQL\Condition\Builder The condition with scope merged.
-     */
-    protected function mergeConditionWithScope( $condition ) {
-        if ( is_null($this->usingScope) || !isset($this->scopes[$this->usingScope])) {
-            return $condition;
-        }
-    
-        if ( is_null($condition) ) {
-            $condition = $this->scopes[$this->usingScope];
-        }
-        else {
-            $condition->andAlso()->groupStart()->addCondition($this->scopes[$this->usingScope])->groupEnd();
-        }
-        return $condition;
-    }
-    
-    /**
-     * Find records by given condition, and return active record
-     * array as result.
-     * 
-     * @see \X\Database\SQL\Condition\Builder What's Condition builder
-     * @param mixed $condition The condition to find
-     * @param integer $limit The limitation of result
-     * @param boolean $triggerEvent Whether trigger event
-     * @return ActiveRecord[] The records that matched condition.
-     */
-    protected function doFind($condition=null, $limit=0, $position=0, $orders=null, $triggerEvent=true) {
-        if ( $triggerEvent ) {
-            $this->beforeFind();
-        }
-        
-        if ( !is_null($condition) && !($condition instanceof ConditionBuilder ) ) {
-            $condition = ConditionBuilder::build($condition);
-        }
-    
-        $condition = $this->mergeConditionWithScope($condition);
-    
-        $sql = SQLBuilder::build()->select()
-            ->from($this->getTableFullName())->where($condition)
-            ->limit($limit)->offset($position)->orders($orders)->toString();
-        $result = $this->doQuery($sql);
-    
-        $class = get_class($this);
-        foreach ( $result as $index => $attributes ) {
-            $result[$index] = $class::create($attributes, false);
-            if ( $triggerEvent ) {
-                $result[$index]->triggerEvent(self::ON_AFTER_FIND);
-            }
-        }
-    
-        $this->usingScope = self::SCOPE_DEFAULT_NAME;
-    
-        return $result;
-    }
-    
-    /**
-     * Find record by given condition, and return active
-     * record as result, if no record found, null would
-     * be returned.
-     * 
-     * @see \X\Database\SQL\Condition\Builder What's Condition builder
-     * @param mixed $condition
-     * @return ActiveRecord|null
-     */
-    public function find($condition=null) {
-        $result = $this->doFind($condition, 1);
-        if ( 0 == \count($result) ) {
-            return null;
-        }
-        return $result[0];
-    }
-    
-    /**
-     * Find record by given condition, and return active
-     * record as result, if no record found, null would
-     * be returned.
-     * 
-     * @param string $query The where part query string
-     * @return ActiveRecord|null
-     */
-    public function findBySql( $query ) {
-        return $this->find($query);
-    }
-    
-    /**
-     * Find record by given condition, and return active
-     * record as result, if no record found, null would
-     * be returned. The key of attributes is the name of 
-     * column and the value is you are gonna matched.
-     * 
-     * @param array $attributes
-     * @return ActiveRecord|null
-     */
-    public function findByAttribute( $attributes ) {
-        return $this->find($attributes);
-    }
-    
-    /**
-     * Find record by given condition, and return active
-     * record as result, if no record found, null would
-     * be returned.
-     * 
-     * @see \X\Database\SQL\Condition\Builder What's Condition builder
-     * @param \X\Database\SQL\Condition\Builder $condition
-     * @return ActiveRecord|null
-     */
-    public function findByCondition( \X\Database\SQL\Condition\Builder $condition ) {
-        return $this->find($condition);
-    }
-    
-    /**
-     * Find record by given primary key value, if there is not
-     * primary key to the active record, an exception would be
-     * throwed.
-     * 
-     * @param mixed $primaryKey
-     * @throws \X\Database\Exception Throw an exception if no primary key setted.
-     * @return ActiveRecord|null
-     */
-    public function findByPrimaryKey( $primaryKey ) {
-        $pkName = $this->getPrimaryKeyName();
-        if ( is_null($pkName) ) {
-            throw new Exception(sprintf('Can not find Primary key in %s', get_class($this)));
-        }
-        return $this->findByAttribute(array($pkName=>$primaryKey));
-    }
-    
-    /**
-     * Find records by given condition, and return active record
-     * array as result.
-     * 
-     * @see \X\Database\SQL\Condition\Builder What's Condition builder.
-     * @param mixed $condition The condition to find.
-     * @param integer $limit The limitation of result.
-     * @return ActiveRecord[] The records that matched condition.
-     */
-    public function findAll($condition=null, $limit=0, $position=0, $orders=null) {
-        return $this->doFind($condition, $limit, $position, $orders);
-    }
-    
-    /**
-     * Find records by given condition, and return active record
-     * array as result.
-     * 
-     * @param string $query The where part of query
-     * @param integer $limit The limitation of result
-     * @return ActiveRecord[]
-     */
-    public function findAllBySql( $query, $limit=0 ) {
-        return $this->findAll($query, $limit);
-    }
-    
-    /**
-     * Find records by given condition, and return active record
-     * array as result.
-     * 
-     * @param array $attributes The attribute you want to matched
-     * @param integer $limit The limitation of result
-     * @return ActiveRecord[]
-     */
-    public function findAllByAttributes( $attributes, $limit=0, $position=0 ) {
-        return $this->findAll($attributes, $limit, $position);
-    }
-    
-    /**
-     * Find records by given condition, and return active record
-     * array as result.
-     *
-     * @see \X\Database\SQL\Condition\Builder What's Condition builder
-     * @param mixed $condition The condition to find
-     * @param integer $limit The limitation of result
-     * @return ActiveRecord[] The records that matched condition.
-     */
-    public function findAllByCondition( $condition, $limit=0 ) {
-        return $this->findAll($condition, $limit);
-    }
-    
     /**
      * Delete current active record.
      * 
@@ -876,7 +680,10 @@ abstract class XActiveRecord extends Basic implements \Iterator {
      * @return integer The number of deleted record.
      */
     protected function doDeleteAll( $condition, $limit ){
-        $results = $this->doFind($condition, $limit, 0, null, false);
+        $criteria = new Criteria();
+        $criteria->condition = $condition;
+        $criteria->limit = $limit;
+        $results = $this->doFind($criteria);
         foreach ( $results as $result ) {
             $result->delete();
         }
@@ -926,7 +733,10 @@ abstract class XActiveRecord extends Basic implements \Iterator {
      * @return integer The number of updated records
      */
     protected function doUpdateAll( $values, $condition, $limit=0 ) {
-        $results = $this->doFind($condition, $limit, 0, null, false);
+        $criteria = new Criteria();
+        $criteria->condition = $condition;
+        $criteria->limit = $limit;
+        $results = $this->doFind($criteria);
         foreach ( $results as $result ) {
             $result->setAttributes($values);
             $result->save();

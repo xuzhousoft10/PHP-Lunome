@@ -15,13 +15,39 @@ use X\Service\XDatabase\Core\Basic;
  *
  */
 class Criteria extends Basic {
-    public function addCondition() {}
-    public function getCondition() {}
-    public function setOrder() {}
-    public function getOrder() {}
-    public function setLimit() {}
-    public function getLimit() {}
-    public function setGroup() {}
-    public function setPosition() {}
-    public function getPosition() {}
+    /**
+     * The condition for current query.
+     * @var mixed
+     */
+    public $condition = null;
+    
+    /**
+     * @var array
+     */
+    private $orders = array();
+    
+    /**
+     * @param mixed $expression
+     * @param string $order
+     */
+    public function addOrder( $expression, $order=null ) {
+        $this->orders[] = array('expression'=>$expression, 'order'=>$order);
+    }
+    
+    /**
+     * @return array
+     */
+    public function getOrders() {
+        return $this->orders;
+    }
+    
+    /**
+     * @var integer
+     */
+    public $limit = 0;
+    
+    /**
+     * @var integer
+     */
+    public $position = 0;
 }
