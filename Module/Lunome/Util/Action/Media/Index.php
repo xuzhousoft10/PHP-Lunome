@@ -32,7 +32,7 @@ abstract class Index extends VisualMain {
      * @see \X\Module\Lunome\Util\Action\VisualMain::afterRunAction()
      */
     protected function afterRunAction() {
-        $this->getView()->title = sprintf('%s | Lunome', $this->getMediaTypeName());
+        $this->getView()->title = sprintf('%s | Lunome', $this->getMediaService()->getMediaName());
         $this->activeMenuItem($this->getActiveMenuItem());
         
         $medias     = $this->getMediaData();
