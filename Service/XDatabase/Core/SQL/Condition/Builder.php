@@ -348,6 +348,15 @@ class Builder extends \X\Service\XDatabase\Core\Basic {
             $conditions[] = is_string($condition) ? $condition : $condition->toString();
         }
         if ( !empty($conditions) ) {
+            /* 去掉空白的条件。 */
+            for ( $i=0; $i<count($conditions); $i++ ) {
+                if ( !empty($conditions[$i]) ) {
+                    continue;
+                }
+                unset($conditions[$i]);
+                unset($conditions[$i+1]);
+                $i++;
+            }
             array_pop($conditions);
             $condition = implode(' ', $conditions);
             return $condition;

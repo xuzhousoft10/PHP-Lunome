@@ -19,7 +19,7 @@ class Find extends Basic {
     /**
      * 
      */
-    public function runAction( $mark, $condition, $position, $length ) {
+    public function runAction( $mark=0, $condition=null, $position=0, $length=20 ) {
         /* 整理查询条件 */
         $con = ConditionBuilder::build();
         $condition = empty($condition) ? array() : $condition;
@@ -35,7 +35,12 @@ class Find extends Basic {
         
         /* @var $service \X\Module\Lunome\Service\Movie\Service */
         $service = $this->getService('Movie');
-        $medias = $service->findAll($con, $position, $length);
+        if ( 0 === $mark*1 ) {
+            $medias = $service->getUnmarked($con, $length, $position);
+        } else {
+            $medias = $service->getMarked($mark, $con, $length, $position);
+        }
+        
         
         /* 填充封面信息 */
         foreach ( $medias as $index => $media ) {

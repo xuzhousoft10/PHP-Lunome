@@ -17,6 +17,7 @@ use X\Service\XDatabase\Core\SQL\Func\Count;
 use X\Service\XDatabase\Service as DatabaseService;
 use X\Module\Lunome\Service\Configuration\Service as ConfigService;
 use X\Service\XDatabase\Core\ActiveRecord\Criteria;
+use X\Service\XDatabase\Core\SQL\Expression;
 
 /**
  * 
@@ -118,6 +119,7 @@ abstract class Media extends \X\Core\Service\XService {
     public function getUnmarked($condition=array(), $length=0, $position=0) {
         $mediaModelName = $this->getMediaModelName();
         $basicCondition = $this->getUnmarkedMediaCondition();
+        $basicCondition->addCondition($condition);
         $criteria = new Criteria();
         $criteria->condition = $basicCondition;
         $criteria->limit = $length;
@@ -136,9 +138,10 @@ abstract class Media extends \X\Core\Service\XService {
      * @param number $position
      * @return unknown
      */
-    public function getMarked( $mark, $length=0, $position=0 ) {
+    public function getMarked( $mark, $condition=array(), $length=0, $position=0 ) {
         $mediaModelName = $this->getMediaModelName();
         $basicCondition = $this->getMarkedMediaCondition($mark);
+        $basicCondition->addCondition($condition);
         $criteria = new Criteria();
         $criteria->condition = $basicCondition;
         $criteria->limit = $length;
@@ -260,7 +263,7 @@ abstract class Media extends \X\Core\Service\XService {
             ->addExpression(new Count('marks.id'), 'mark_count')
             ->addTable($modelTableName, 'medias')
             ->addTable($markTableName, 'marks')
-            ->where(array('marks.mark'=>$type))
+            ->where(array('marks.mark'=>$type, 'medias.id'=>new Expression('`marks`.`media_id`')))
             ->groupBy('marks.media_id')
             ->orderBy('mark_count', 'DESC')
             ->toString();
