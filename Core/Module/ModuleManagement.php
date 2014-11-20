@@ -310,9 +310,10 @@ class ModuleManagement extends Management {
         
         /* Create migration folder */
         $path = X::system()->getPath(sprintf('Module/%s/Migration', $moduleName));
-        if ( !is_dir($path) ) {
-            mkdir($path);
+        if ( !is_dir($path) ) { 
+            mkdir($path); 
         }
+        $this->checkMigrationFolderPermission($path);
         
         /* Generate the migraion class name. */
         $hasHistory = file_exists(X::system()->getPath(sprintf('Module/%s/Migration/History.php', $moduleName)));
@@ -361,6 +362,8 @@ class ModuleManagement extends Management {
         
         /* Get migration file list. */
         $migrationPath = X::system()->getPath(sprintf('Module/%s/Migration', $moduleName));
+        $this->checkMigrationFolderPermission($migrationPath);
+        
         $files = scandir($migrationPath);
         $historyPath = X::system()->getPath(sprintf('Module/%s/Migration/History.php', $moduleName));
         $history = is_file($historyPath) ? require $historyPath : array();
@@ -397,6 +400,7 @@ class ModuleManagement extends Management {
         
         /* Get migration file list. */
         $historyPath = X::system()->getPath(sprintf('Module/%s/Migration/History.php', $moduleName));
+        $this->checkMigrationFolderPermission(dirname($historyPath));
         $history = is_file($historyPath) ? require $historyPath : array();
         
         $namespace = sprintf('\\X\\Module\\%s\\Migration', $moduleName);
@@ -412,6 +416,32 @@ class ModuleManagement extends Management {
             $migrationObject->down();
             XUtil::storeArrayToPHPFile($historyPath, $history);
             $stepCount --;
+        }
+    }
+    
+    /**
+     * @param unknown $path
+     * @throws Exception
+     */
+    private function checkMigrationFolderPermission( $path ) {
+        clearstatcache();
+        if ( !is_readable($path) ) {
+            throw new Exception('Migration path "'.$path.'" is unwritable.');
+        }
+        if ( !is_writable($path) ) {
+            throw new Exception('Migration path "'.$path.'" is unwritable.');
+        }
+        
+        $history = $path.DIRECTORY_SEPARATOR.'History.php';
+        if ( !is_file($history) ) {
+            return;
+        }
+        
+        if ( !is_readable($history) ) {
+            throw new Exception('Migration history "'.$history.'" is unwritable.');
+        }
+        if ( !is_writable($history) ) {
+            throw new Exception('Migration history "'.$history.'" is unwritable.');
         }
     }
 }
