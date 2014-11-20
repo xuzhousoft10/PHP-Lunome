@@ -58,7 +58,9 @@ abstract class ActionWithCondition extends Basic {
             $condition = ConditionBuilder::build($this->condition);
         }
         $condition = $condition->toString();
-        $this->sqlCommand[] = sprintf('WHERE %s', $condition);
+        if ( !empty($condition) ) {
+            $this->sqlCommand[] = sprintf('WHERE %s', $condition);
+        }
         return $this;
     }
     

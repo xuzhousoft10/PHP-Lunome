@@ -35,7 +35,6 @@ abstract class Index extends VisualMain {
         $this->getView()->title = sprintf('%s | Lunome', $this->getMediaService()->getMediaName());
         $this->activeMenuItem($this->getActiveMenuItem());
         
-        $medias     = $this->getMediaData();
         $markInfo   = $this->getMarkInformation();
         $total      = $markInfo[$this->currentMark]['count'];
         $pager      = $this->getPagerData($total);
@@ -50,13 +49,13 @@ abstract class Index extends VisualMain {
         $path   = $this->getParticleViewPath('Util/Media/Index');
         $option = array();
         $data   = array(
-            'medias'        => $medias, 
             'marks'         => $markInfo, 
             'pager'         => $pager, 
             'activeMark'    => $this->currentMark, 
             'markActions'   => $markActions,
             'mediaType'     => strtolower($this->getMediaType()),
             'mediaTypeName' => $this->getMediaService()->getMediaName(),
+            'currentMark'   => $this->currentMark,
         );
         $this->getView()->loadParticle($name, $path, $option, $data);
         
@@ -69,33 +68,6 @@ abstract class Index extends VisualMain {
         $this->getView()->loadParticle($name, $path, $option, $data);
         
         parent::afterRunAction();
-    }
-    
-    /**
-     * 
-     * @return array
-     */
-    protected function getMediaData() {
-        $pageSize   = $this->getPageSize();
-        $condition  = array();
-        $length     = $pageSize;
-        $position   = $pageSize * ($this->currentPage-1);
-        if ( empty($this->currentMark) ) {
-            $medias = $this->getMediaService()->getUnmarked($condition, $length, $position);
-        } else {
-            $medias = $this->getMediaService()->getMarked($this->currentMark, $length, $position);
-        }
-        
-        /* 填充封面图片信息。 */
-        foreach ( $medias as $index => $media ) {
-            if ( 0 === $media['has_cover']*1 ) {
-                $medias[$index]['cover'] = $this->getMediaService()->getMediaDefaultCoverURL();
-            } else {
-                $medias[$index]['cover'] = $this->getMediaService()->getMediaCoverURL($media['id']);
-            }
-        }
-        
-        return $medias;
     }
     
     /**

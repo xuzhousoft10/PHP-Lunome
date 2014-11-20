@@ -16,6 +16,7 @@ use X\Service\XDatabase\Core\SQL\Builder as SQLBuilder;
 use X\Service\XDatabase\Core\SQL\Func\Count;
 use X\Service\XDatabase\Service as DatabaseService;
 use X\Module\Lunome\Service\Configuration\Service as ConfigService;
+use X\Service\XDatabase\Core\ActiveRecord\Criteria;
 
 /**
  * 
@@ -39,7 +40,11 @@ abstract class Media extends \X\Core\Service\XService {
      */
     public function findAll( $condition=null, $position=0, $length=0 ) {
         $mediaModelName = $this->getMediaModelName();
-        $medias = $mediaModelName::model()->findAll($condition, $length, $position);
+        $criteria = new Criteria();
+        $criteria->condition = $condition;
+        $criteria->limit = $length;
+        $criteria->position = $position;
+        $medias = $mediaModelName::model()->findAll($criteria);
         foreach ( $medias as $index => $media ) {
             $medias[$index] = $media->toArray();
         }
@@ -113,7 +118,11 @@ abstract class Media extends \X\Core\Service\XService {
     public function getUnmarked($condition=array(), $length=0, $position=0) {
         $mediaModelName = $this->getMediaModelName();
         $basicCondition = $this->getUnmarkedMediaCondition();
-        $medias = $mediaModelName::model()->findAll($basicCondition, $length, $position);
+        $criteria = new Criteria();
+        $criteria->condition = $basicCondition;
+        $criteria->limit = $length;
+        $criteria->position = $position;
+        $medias = $mediaModelName::model()->findAll($criteria);
         foreach ( $medias as $index => $media ) {
             $medias[$index] = $media->toArray();
         }
@@ -130,7 +139,11 @@ abstract class Media extends \X\Core\Service\XService {
     public function getMarked( $mark, $length=0, $position=0 ) {
         $mediaModelName = $this->getMediaModelName();
         $basicCondition = $this->getMarkedMediaCondition($mark);
-        $medias = $mediaModelName::model()->findAll($basicCondition, $length, $position);
+        $criteria = new Criteria();
+        $criteria->condition = $basicCondition;
+        $criteria->limit = $length;
+        $criteria->position = $position;
+        $medias = $mediaModelName::model()->findAll($criteria);
         foreach ( $medias as $index => $media ) {
             $medias[$index] = $media->toArray();
         }

@@ -13,32 +13,6 @@ $(document).ready(function() {
        $('#main-footer').addClass('navbar-fixed-bottom');
     }
     
-    /* 针对Media列表页面， 当鼠标移动到项目上时，显示操作按钮。 */
-    $('.lnm-media-list-item').mouseenter(function() {
-        $(this).children().show();
-    });
-    $('.lnm-media-list-item').mouseleave(function() {
-        $(this).children().hide();
-    });
-    
-    /* 针对Media列表页面，如果鼠标点击非标记按钮则进入详细界面。 */
-    $('.lnm-media-list-item-intro-area').click(function() {
-        window.location = $(this).attr('data-detail-url');
-    });
-    
-    /* 仅当media处于可视区域时加载背景图片。 */
-    $('.lnm-media-list-item').waypoint(function(direction) {
-        if ( 'up' == direction ){
-            return;
-        }
-        var isLoaded = $(this).attr('data-poster-loaded');
-        if ( 'undefined' == typeof(isLoaded) ) {
-             var poster = $(this).attr('data-poster');
-             $(this).css('background-image', 'url("'+poster+'")');
-             $(this).attr('data-poster-loaded', true);
-        }
-    }, { offset: '100%' });
-    
     /* 定位media列表页面的media工具栏。 */
     if ( 0 < $('.media-index-tool-bar').length ) {
         $(window).resize(function(){

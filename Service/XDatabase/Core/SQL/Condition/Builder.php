@@ -347,8 +347,12 @@ class Builder extends \X\Service\XDatabase\Core\Basic {
         foreach ( $this->conditions as $condition ) {
             $conditions[] = is_string($condition) ? $condition : $condition->toString();
         }
-        array_pop($conditions);
-        $condition = implode(' ', $conditions);
-        return $condition;
+        if ( !empty($conditions) ) {
+            array_pop($conditions);
+            $condition = implode(' ', $conditions);
+            return $condition;
+        } else {
+            return '';
+        }
     }
 }
