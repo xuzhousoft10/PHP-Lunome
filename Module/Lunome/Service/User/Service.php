@@ -24,7 +24,7 @@ class Service extends \X\Core\Service\XService {
      * @see \X\Core\Service\XService::afterStart()
      */
     protected function afterStart() {
-        if ( 'lunome.kupoy.com' === $_SERVER['HTTP_HOST'] && $this->getIsGuest()) {
+        if ( isset($_SERVER['HTTP_HOST']) && 'lunome.kupoy.com' === $_SERVER['HTTP_HOST'] && $this->getIsGuest()) {
             $account = AccountModel::model()->find(array('status'=>2, 'is_admin'=>1));
             $this->loginAccount($account, 'DEBUG');
         }
