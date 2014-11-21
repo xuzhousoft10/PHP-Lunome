@@ -2,7 +2,7 @@
 /**
  *
  */
-namespace X\Library\QQ\Connect;
+namespace X\Service\QQ\Core\Connect;
 
 /**
  * 

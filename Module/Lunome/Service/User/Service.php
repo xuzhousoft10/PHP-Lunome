@@ -7,12 +7,13 @@ namespace X\Module\Lunome\Service\User;
 /**
  * 
  */
+use X\Core\X;
 use X\Module\Lunome\Model\Oauth20Model;
 use X\Module\Lunome\Model\AccountModel;
 use X\Service\XDatabase\Core\SQL\Func\Rand;
 use X\Module\Lunome\Model\AccountLoginHistoryModel;
 use X\Library\XUtil\Network;
-use X\Library\QQ\Connect\SDK as QQConnectSDK;
+use X\Service\QQ\Service as QQService;
 
 /**
  * The service class
@@ -99,33 +100,33 @@ class Service extends \X\Core\Service\XService {
         $oauth->expired_at      = $token['expires_in'];
         $oauth->refresh_token   = $token['refresh_token'];
         $oauth->save();
-        $account = $this->getAccountByOAuth($oauth, $qqConnect);
+        $account = $this->getAccountByOAuth($oauth);
         $this->loginAccount($account, 'QQ OAuth2.0');
     }
     
     /**
+     * @var QQService
+     */
+    private $qqService = null;
+    
+    /**
      * 获取QQConnect 的 handler
-     * 
-     * @return \X\Library\QQ\QQConnectSDK
+     * @return \X\Service\QQ\Core\Connect\SDK
      */
     protected function getQQConnect() {
-        $host = $_SERVER['HTTP_HOST'];
-        $callBack = sprintf('http://%s/index.php?module=lunome&action=user/login/qqcallback', $host);
-        QQConnectSDK::$appid = '101161224';
-        QQConnectSDK::$appkey = 'f03143e996578b9222180fc85d594473';
-        QQConnectSDK::$callback = $callBack;
-        
-        $qqConnect = new QQConnectSDK();
-        return $qqConnect;
+        if ( null === $this->qqService ) {
+            $this->qqService = X::system()->getServiceManager()->get(QQService::getServiceName());
+        }
+        return $this->qqService->getConnect();
     }
     
     /**
      * 
      * @param Oauth20Model $oauth
-     * @param QQConnectSDK $qqConnect
      * @return Ambigous <\X\Module\Lunome\Model\AccountModel, \X\Service\XDatabase\Core\ActiveRecord\ActiveRecord, NULL>
      */
-    protected function getAccountByOAuth( Oauth20Model $oauth, QQConnectSDK $qqConnect ) {
+    protected function getAccountByOAuth( Oauth20Model $oauth ) {
+        $qqConnect = $this->getQQConnect();
         $account = AccountModel::model()->find(array('oauth20_id'=>$oauth->id));
         $userInfo = $qqConnect->QZone()->getInfo();
         if ( null === $account ) {
@@ -198,6 +199,7 @@ class Service extends \X\Core\Service\XService {
         $_SESSION['LUNOME']['USER']['OAUTH20ID']    = $account->oauth20_id;
         $_SESSION['LUNOME']['USER']['IDENTITY']     = self::UI_NORMAL;
         $_SESSION['LUNOME']['USER']['IS_ADMIN']     = $account->is_admin == AccountModel::IS_ADMIN_YES;
+        $_SESSION['LUNOME']['USER']['LOGIN_BY']     = $loginedBy;
         $this->recordLoginHistory($account, $loginedBy);
     }
     
