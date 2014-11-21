@@ -42,6 +42,14 @@ class M00022_insert_init_configurations extends \X\Core\Module\Migrate {
             'updated_at'    => date('Y-m-d H:i:s', time()),
             'updated_by'    => 'MIGRATION_INIT',
         ));
+        
+        $table->insert(array(
+            'id'            =>'00000000-0000-0000-0000-000000000003',
+            'name'          =>'media_item_operation_waiting_image',
+            'value'         =>'http://lunome.qiniudn.com/configurations/waitting.gif',
+            'updated_at'    => date('Y-m-d H:i:s', time()),
+            'updated_by'    => 'MIGRATION_INIT',
+        ));
     }
 
     /** 

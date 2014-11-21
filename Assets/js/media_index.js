@@ -23,6 +23,7 @@ var MediaIndex = {
     _isLoading      : false,/* 标记当前时刻是否正在加载数据。 */
     _autoLoadCount  : 0,    /* 记录当前自动加载的次数。 */
     _conditions     : {},   /* 保存当前查询的条件。 */
+    waitingImage    : null, /* 当项目出现较长时间的处理时，显示的等待图片。 */
 };
 
 /**
@@ -39,6 +40,7 @@ MediaIndex.init = function() {
     this.marks          = $.parseJSON(parameters.attr('data-marks'));
     this.markURL        = parameters.attr('data-mark-url');
     this.currentMark    = parameters.attr('data-current-mark');
+    this.waitingImage   = parameters.attr('data-waiting-image');
     $(window).bind('scroll', MediaIndex._windowScrollEventHandler);
     $('#media-name-search-button').click(function() {
         var name = $.trim($('#media-name-search-text').val());
@@ -197,8 +199,10 @@ MediaIndex._generateMarkButton = function(mark, media) {
         var markCode = button.attr('data-mark-code');
         var mediaId  = button.attr('data-media-id');
         var url = MediaIndex.markURL.replace('{id}', mediaId).replace('{mark}', markCode);
+        var container = button.parent().parent().parent().empty();
+        container.append($('<img>').attr('src', MediaIndex.waitingImage).height(300).width(200));
         $.get(url, {}, function() {
-            button.parent().parent().parent().fadeOut(500, function() {
+            container.fadeOut(500, function() {
                 $('#mark-counter-'+markCode).html($('#mark-counter-'+markCode).text()*1+1);
                 $('#mark-counter-'+MediaIndex.currentMark).html($('#mark-counter-'+MediaIndex.currentMark).text()*1-1);
                 /* 如果剩余的项目过少， 则加载更多项目。 */

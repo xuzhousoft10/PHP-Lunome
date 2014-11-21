@@ -7,6 +7,7 @@ $pager = $vars['pager'];
 $mediaType = $vars['mediaType'];
 $mediaTypeName = $vars['mediaTypeName'];
 $currentMark = $vars['currentMark'];
+$mediaItemWaitingImage = $vars['mediaItemWaitingImage'];
 ?>
 <div class="panel panel-default">
     <!-- Media Index Header Start -->
@@ -53,6 +54,7 @@ $currentMark = $vars['currentMark'];
             data-pagesize       = "20"
             data-marks          = "<?php echo htmlspecialchars(json_encode($markActions)); ?>"
             data-current-mark   = "<?php echo $currentMark; ?>"
+            data-waiting-image  = "<?php echo $mediaItemWaitingImage; ?>"
         >
         <div class="clearfix lnm-media-list-container"></div>
     </div>

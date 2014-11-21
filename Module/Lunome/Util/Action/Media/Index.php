@@ -7,8 +7,10 @@ namespace X\Module\Lunome\Util\Action\Media;
 /**
  * Use statements
  */
+use X\Core\X;
 use X\Library\XMath\Number;
 use X\Module\Lunome\Util\Action\VisualMain;
+use X\Module\Lunome\Service\Configuration\Service as ConfigService;
 
 /**
  * Visual action class
@@ -32,6 +34,9 @@ abstract class Index extends VisualMain {
      * @see \X\Module\Lunome\Util\Action\VisualMain::afterRunAction()
      */
     protected function afterRunAction() {
+        /* @var $condifService ConfigService */
+        $condifService = X::system()->getServiceManager()->get(ConfigService::getServiceName());
+        
         $this->getView()->title = sprintf('%s | Lunome', $this->getMediaService()->getMediaName());
         $this->activeMenuItem($this->getActiveMenuItem());
         
@@ -56,6 +61,7 @@ abstract class Index extends VisualMain {
             'mediaType'     => strtolower($this->getMediaType()),
             'mediaTypeName' => $this->getMediaService()->getMediaName(),
             'currentMark'   => $this->currentMark,
+            'mediaItemWaitingImage' => $condifService->get('media_item_operation_waiting_image')
         );
         $this->getView()->loadParticle($name, $path, $option, $data);
         
