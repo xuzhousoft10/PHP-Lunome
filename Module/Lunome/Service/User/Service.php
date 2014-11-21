@@ -24,10 +24,10 @@ class Service extends \X\Core\Service\XService {
      * @see \X\Core\Service\XService::afterStart()
      */
     protected function afterStart() {
-        if ( isset($_SERVER['HTTP_HOST']) && 'lunome.kupoy.com' === $_SERVER['HTTP_HOST'] && $this->getIsGuest()) {
-            $account = AccountModel::model()->find(array('status'=>2, 'is_admin'=>1));
-            $this->loginAccount($account, 'DEBUG');
-        }
+//         if ( isset($_SERVER['HTTP_HOST']) && 'lunome.kupoy.com' === $_SERVER['HTTP_HOST'] && $this->getIsGuest()) {
+//             $account = AccountModel::model()->find(array('status'=>2, 'is_admin'=>1));
+//             $this->loginAccount($account, 'DEBUG');
+//         }
         $this->initCurrentUserInformation();
     }
     
@@ -100,6 +100,8 @@ class Service extends \X\Core\Service\XService {
         $oauth->expired_at      = $token['expires_in'];
         $oauth->refresh_token   = $token['refresh_token'];
         $oauth->save();
+        print_r($oauth);
+        exit();
         $account = $this->getAccountByOAuth($oauth);
         $this->loginAccount($account, 'QQ OAuth2.0');
     }
