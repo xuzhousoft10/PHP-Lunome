@@ -26,6 +26,14 @@ $currentMark = $vars['currentMark'];
                         </li>
                     <?php endforeach; ?>
                     </ul>
+                    <form class="navbar-form navbar-right">
+                        <div class="form-group">
+                            <input id="media-name-search-text" type="text" class="form-control" placeholder="Search">
+                        </div>
+                        <button id="media-name-search-button" type="button" class="btn btn-default">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </form>
                 </div>
             </div>
         </nav>

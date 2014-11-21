@@ -27,7 +27,7 @@ class Find extends Basic {
             $operator = $value[0];
             $value = trim(substr($value, 1));
             switch ( $operator ) {
-            case '*' : $con->like($item, $value); break;
+            case '*' : $con->includes($item, $value); break;
             case '=' : 
             default  : $con->equals($item, $value); break;
             }
@@ -37,8 +37,10 @@ class Find extends Basic {
         $service = $this->getService('Movie');
         if ( 0 === $mark*1 ) {
             $medias = $service->getUnmarked($con, $length, $position);
+            $count = $service->countUnmarked($con);
         } else {
             $medias = $service->getMarked($mark, $con, $length, $position);
+            $count = $service->countMarked($mark, null, 0, $con);
         }
         
         
@@ -52,6 +54,6 @@ class Find extends Basic {
         }
         
         /* 返回media列表 */
-        echo json_encode($medias);
+        echo json_encode(array('count'=>$count, 'medias'=>$medias));
     }
 }
