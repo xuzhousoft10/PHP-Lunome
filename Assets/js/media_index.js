@@ -198,13 +198,14 @@ MediaIndex._generateMarkButton = function(mark, media) {
         var mediaId  = button.attr('data-media-id');
         var url = MediaIndex.markURL.replace('{id}', mediaId).replace('{mark}', markCode);
         $.get(url, {}, function() {
-            button.parent().parent().parent().empty().remove();
-            $('#mark-counter-'+markCode).html($('#mark-counter-'+markCode).text()*1+1);
-            $('#mark-counter-'+MediaIndex.currentMark).html($('#mark-counter-'+MediaIndex.currentMark).text()*1-1);
-            /* 如果剩余的项目过少， 则加载更多项目。 */
-            $(window).trigger('scroll');
-            /* 刷新waypoints以解决原本不在显示区，在用户标记一个项目后，因位置提前而应该加载封面的问题。 */
-            $.waypoints('refresh');
+            button.parent().parent().parent().fadeOut(500, function() {
+                $('#mark-counter-'+markCode).html($('#mark-counter-'+markCode).text()*1+1);
+                $('#mark-counter-'+MediaIndex.currentMark).html($('#mark-counter-'+MediaIndex.currentMark).text()*1-1);
+                /* 如果剩余的项目过少， 则加载更多项目。 */
+                $(window).trigger('scroll');
+                /* 刷新waypoints以解决原本不在显示区，在用户标记一个项目后，因位置提前而应该加载封面的问题。 */
+                $.waypoints('refresh');
+            });
         }, 'text');
         return false;
     });
