@@ -34,7 +34,7 @@ $markUrlFormat = sprintf('/?module=lunome&action=%s/mark&mark=%%s&id=%%s', strto
         <table class="table table-bordered">
             <?php require dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.$mediaType.DIRECTORY_SEPARATOR.'Detail.php';?>
         </table>
-        <div>
+        <div class="clearfix">
             <div class="btn-group pull-left">
                 <?php foreach ( $markNames as $markKey => $markName ) : ?>
                     <?php if ( 0 === $markKey || $myMark === $markKey ) :?>
@@ -45,8 +45,33 @@ $markUrlFormat = sprintf('/?module=lunome&action=%s/mark&mark=%%s&id=%%s', strto
                     ><?php echo $markName;?></a>
                 <?php endforeach; ?>
             </div>
-            <div class="pull-right">
-                
+            <div class="pull-right text-right">
+                <span class="pull-left" style="line-height: 30px;">求包养&nbsp;<span class="glyphicon glyphicon-hand-right"></span>&nbsp;</span>
+                <div class = "pull-left lnm-qzone-share-container" >
+                    <script type="text/javascript">
+                    (function(){
+                    var p = {
+                        url         : location.href,
+                        showcount   : '0',
+                        desc        : '怀着各种复杂与激动的心情， 我来到了这里， 我抬头， 望了望天，想起了你，此时此刻， 我的心情不是别人所能理解的，土豪，请我看场《<?php echo $media['name'];?>》呗？',
+                        summary     : <?php echo json_encode(array('message'=>$media['introduction']));?>.message,
+                        title       : '<?php echo $media['name'];?>',
+                        site        : 'Lunome',
+                        pics        : '<?php echo $media['cover'];?>',
+                        style       : '202',
+                        width       : 24,
+                        height      : 24
+                    };
+                    
+                    var s = [];
+                    for(var i in p){
+                    s.push(i + '=' + encodeURIComponent(p[i]||''));
+                    }
+                    document.write(['<a version="1.0" class="qzOpenerDiv" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?',s.join('&'),'" target="_blank">分享</a>'].join(''));
+                    })();
+                    </script>
+                    <script src="http://qzonestyle.gtimg.cn/qzone/app/qzlike/qzopensl.js#jsdate=20111201" charset="utf-8"></script>
+                </div>
             </div>
         </div>
     </div>

@@ -5,6 +5,7 @@
 .lnm-media-list-item {background-size: 200px 300px; height: 300px; width:200px;}
 .lnm-media-list-item-intro-area {cursor:pointer;display: none;height:270px;line-height:1em;padding:10px;background-color:rgba(0, 0, 0, 0.5);overflow:hidden;color:#E9E9E9;}
 .lnm-media-list-item-mark-container {position: relative;display:none}
+.lnm-qzone-share-container {padding-top:4px;}
 .media-index-tool-bar {background-color:#000;color:#fff;line-height:50px;text-align:center;width: 50px;overflow: hidden;position: fixed;top: 200px;right: auto}
 .media-index-tool-bar-item {}
 .media-index-tool-bar-item > a {color: #DDDDDD;text-decoration: none;}
