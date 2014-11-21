@@ -100,8 +100,6 @@ class Service extends \X\Core\Service\XService {
         $oauth->expired_at      = $token['expires_in'];
         $oauth->refresh_token   = $token['refresh_token'];
         $oauth->save();
-        print_r($oauth);
-        exit();
         $account = $this->getAccountByOAuth($oauth);
         $this->loginAccount($account, 'QQ OAuth2.0');
     }
