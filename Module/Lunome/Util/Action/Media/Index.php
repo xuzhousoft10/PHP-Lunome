@@ -34,10 +34,6 @@ abstract class Index extends VisualMain {
      * @see \X\Module\Lunome\Util\Action\VisualMain::afterRunAction()
      */
     protected function afterRunAction() {
-        /* @var $connect \X\Service\QQ\Core\Connect\SDK */
-        $connect = X::system()->getServiceManager()->get('User')->getQQConnect();
-        $connect->Tweet()->add('sfsdfhsdkfhsdkfhsdkfjhskjdfhsdkjfhskdjfhskjdfhkjs');
-        
         /* @var $condifService ConfigService */
         $condifService = X::system()->getServiceManager()->get(ConfigService::getServiceName());
         
