@@ -7,7 +7,9 @@ namespace X\Module\Lunome\Util\Action\Media;
 /**
  * Use statements
  */
+use X\Core\X;
 use X\Module\Lunome\Util\Action\Visual;
+use X\Module\Lunome\Service\User\Service as UserService;
 
 /**
  * Visual action class
@@ -18,6 +20,12 @@ abstract class Detail extends Visual {
      * @see \X\Module\Lunome\Util\Action\Visual::beforeRunAction()
      */
     protected function beforeRunAction() {
+        $isGuest = $this->getService(UserService::getServiceName())->getIsGuest();
+        if ( $isGuest ) {
+            $this->gotoURL('/index.php?module=lunome&action=user/login/index');
+            X::system()->stop();
+        }
+        
         parent::beforeRunAction();
         $this->getView()->loadLayout($this->getLayoutViewPath('BlankThin'));
     }
