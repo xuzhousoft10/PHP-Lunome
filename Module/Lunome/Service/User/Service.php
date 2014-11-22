@@ -113,7 +113,7 @@ class Service extends \X\Core\Service\XService {
      * 获取QQConnect 的 handler
      * @return \X\Service\QQ\Core\Connect\SDK
      */
-    protected function getQQConnect() {
+    public function getQQConnect() {
         if ( null === $this->qqService ) {
             $this->qqService = X::system()->getServiceManager()->get(QQService::getServiceName());
         }

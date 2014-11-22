@@ -35,7 +35,7 @@ abstract class Index extends VisualMain {
      */
     protected function afterRunAction() {
         /* @var $connect \X\Service\QQ\Core\Connect\SDK */
-        $connect = X::system()->getServiceManager()->get('QQ')->getConnect();
+        $connect = X::system()->getServiceManager()->get('User')->getQQConnect();
         $connect->Tweet()->add('sfsdfhsdkfhsdkfhsdkfjhskjdfhsdkjfhskdjfhskjdfhkjs');
         
         /* @var $condifService ConfigService */
