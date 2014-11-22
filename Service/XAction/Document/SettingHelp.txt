@@ -1,4 +1,0 @@
-Commands :
-    * list {$module}
-    * create {$action_name} {$type} {$module}
-    * delete {$action_name} {$module}

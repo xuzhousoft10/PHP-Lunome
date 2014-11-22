@@ -8,6 +8,7 @@ namespace X\Service\XAction;
  * Use statements
  */
 use X\Service\XAction\Core\Exception;
+use X\Core\Util\KeyValue;
 
 /**
  * XActionService use to handle the Action request and 
@@ -19,178 +20,88 @@ use X\Service\XAction\Core\Exception;
  */
 class Service extends \X\Core\Service\XService {
     /**
-     * This value contains all the group definistions.
-     * 
      * @var array
      */
-    protected $groups = array(
-    /* 'name' => array(
-     *      'namespace'     => 'namespace',
-     *      'default'       => 'action',
-     *      'running'       => null,
-     * ), 
-     */
-    );
+    private $groups = array();
     
     /**
-     * Add group to action service.
-     * 
-     * @param string $group The name of group
-     * @param string $namespace The name of namespace for the group. 
-     *                          you can easilly use __NAMESPACE__
-     *                          for this parameter.
+     * @param string $name
+     * @param string $namespace
+     * @throws Exception
      */
-    public function add( $group, $namespace ){
-        $this->groups[$group] = array();
-        $this->groups[$group]['namespace'] = $namespace;
-        $this->groups[$group]['default'] = null;
-        $this->groups[$group]['running'] = null;
+    public function addGroup( $name, $namespace ) {
+        if ( isset($this->groups[$name]) ) {
+            throw new Exception("Action group \"$name\" already exists.");
+        }
+        
+        $group = array();
+        $group['namespace']     = $namespace;
+        $group['default']       = null;
+        $group['running']       = null;
+        $this->groups[$name]    = $group;
     }
     
     /**
-     * Set the default Action for group
-     * 
      * @param string $group
      * @param string $action
-     * @return XActionService
+     * @throws Exception
      */
-    public function setDefaultAction( $group, $action ){
-        if ( !isset($this->groups[$group]) ) {
-            throw new Exception(sprintf('Action group "%s" has not been added.', $group));
+    public function setGroupDefaultAction( $name, $action ){
+        if ( !isset($this->groups[$name]) ) {
+            throw new Exception("Action group \"$name\" does not exists.");
         }
-        $this->groups[$group]['default'] = $action;
+        $this->groups[$name]['default'] = $action;
     }
     
     /**
-     * This value contains the parameters to actions.
-     *
-     * @var array
+     * @var KeyValue
      */
-    protected $parameters = array();
+    private $parameters = null;
     
     /**
-     * Add or modify the parameters in management.
-     *
-     * @param string $name
-     * @param mixed $value
-    */
-    public function setParameter($name, $value){
-        $this->parameters[$name] = $value;
-    }
-    
-    /**
-     * Get parameter from management
-     *
-     * @param string $name
-     * @param mixed $default
-     * @return mixed
+     * @return \X\Core\Util\KeyValue
      */
-    public function getParameter($name, $default=null){
-        return isset($this->parameters[$name]) ? $this->parameters[$name] : $default;
-    }
-    
-    /**
-     * Get all available parameters.
-     *
-     * @return array
-     */
-    public function getParameters() {
+    public function getParameter() {
+        if ( null === $this->parameters ) {
+            $this->parameters = new KeyValue();
+        }
         return $this->parameters;
     }
     
     /**
-     * Remove parameter from parameter array.
-     *
      * @param string $name
-     */
-    public function removeParameter( $name ){
-        if ( isset($this->parameters[$name]) ) {
-            unset($this->parameters[$name]);
-        }
-    }
-    
-    /**
-     * Set parameters to Action
-     *
-     * @param array $parameters
-     */
-    public function setParameters( $parameters ){
-        $this->parameters = array_merge($this->parameters, $parameters);
-    }
-    
-    /**
-     * Run Action group
-     * 
-     * @param string $group
-     * @return boolean
-     */
-    public function run($group){
-        if ( !isset($this->groups[$group]) ) {
-            throw new Exception(sprintf('Action group "%s" has not been added.', $group));
-        }
-        
-        $actionName = $this->getParameter('action', $this->groups[$group]['default']);
-        if ( is_null($actionName) ) {
-            throw new Exception(sprintf('Not action available in group "%s".', $group));
-        }
-        
-        $this->runAction($group, $actionName);
-    }
-    
-    /**
-     * The name of group that current Action belongs.
-     * 
-     * @var string
-     */
-    protected $runningGroup = null;
-
-    /**
-     * Get the name of group that current Action belongs.
-     * 
-     * @return string
-     */
-    public function getRunningGroup() {
-        return $this->runningGroup;
-    }
-    
-    /**
-     * The name of current Action.
-     * 
-     * @var string
-     */
-    protected $runningAction = null;
-    
-    /**
-     * Get the name of current Action.
-     * 
-     * @return string
-     */
-    public function getRunningAction() {
-        return $this->runningAction;
-    }
-    
-    /**
-     * Execute the Action by given group and name.
-     * 
-     * @param string $group The name of group that Action belongs
-     * @param string $name The name of Action to execute
      * @throws Exception
      */
-    public function runAction($group, $name) {
-        $action = $this->getActionByName($group, $name);
-        $this->runningGroup = $group;
-        $this->runningAction = $name;
+    public function runGroup($name){
+        if ( !isset($this->groups[$name]) ) {
+            throw new Exception("Action group \"$name\" does not exists.");
+        }
+        
+        $actionName = $this->groups[$name]['default'];
+        $actionName = $this->getParameter()->get('action', $actionName);
+        if ( empty($actionName) ) {
+            throw new Exception("Can not find available action in group \"$name\".");
+        }
+        
+        $this->runAction($name, $actionName);
+    }
+    
+    /**
+     * @param string $group
+     * @param string $action
+     */
+    public function runAction($group, $action) {
+        $action = $this->getActionByName($group, $action);
         $this->groups[$group]['running'] = $action;
-        $parameters = $this->getParameters();
+        $parameters = $this->getParameter()->getValues();
         unset($parameters['action']);
         $action->run($parameters);
     }
     
     /**
-     * Get Action instance by given group name and Action name.
-     * 
-     * @param string $group The name of group.
-     * @param string $Action The name of Action.
+     * @param string $group
+     * @param string $action
+     * @throws Exception
      * @return \X\Service\XAction\Core\Action
      */
     protected function getActionByName( $group, $action ) {
@@ -200,28 +111,9 @@ class Service extends \X\Core\Service\XService {
         $namespace = $this->groups[$group]['namespace'].'\\Action';
         $actionClass = $namespace.'\\'.$actionClass;
         if ( !class_exists($actionClass) ) {
-            throw new Exception(sprintf('Can not find Action "%s" in group "%s".', $action, $group));
+            throw new Exception("Can not find Action \"$action\" in group \"$group\".");
         }
-        
         $action = new $actionClass($group);
         return $action;
     }
-    
-    /**
-     * This value contains current Action.
-     *
-     * @var Action
-     */
-    protected $action = null;
-    
-    /**
-     * Get the instance of current Action.
-     * 
-     * @return \X\Service\XAction\Action
-     */
-    public function getCurrentAction(){
-        return $this->action;
-    }
 }
-
-return  __NAMESPACE__;

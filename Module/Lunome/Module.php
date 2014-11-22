@@ -25,9 +25,9 @@ class Module extends \X\Core\Module\XModule {
         $actionService = X::system()->getServiceManager()->get(XActionService::getServiceName());
         
         $group = $this->getName();
-        $actionService->add($group, __NAMESPACE__);
-        $actionService->setParameters($parameters);
-        $actionService->setDefaultAction($group, 'movie/index');
-        $actionService->run($group);
+        $actionService->addGroup($group, __NAMESPACE__);
+        $actionService->setGroupDefaultAction($group, 'movie/index');
+        $actionService->getParameter()->setValues($parameters);
+        $actionService->runGroup($group);
     }
 }

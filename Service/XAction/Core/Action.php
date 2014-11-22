@@ -39,21 +39,6 @@ abstract class Action extends Basic {
     }
     
     /**
-     * The default action handler name
-     * 
-     * @var string
-     */
-    const ACTION_HANDLER_NAME = 'runAction';
-    
-    /**
-     * 
-     * @return string
-     */
-    public static function getHandlerName() {
-        return self::ACTION_HANDLER_NAME;
-    }
-    
-    /**
      * Execute this Action. If beforeRunAction returns false, then
      * it would not execute the Action and return false as Action 
      * result. Also, if Action implement method returns false, then
@@ -79,9 +64,9 @@ abstract class Action extends Basic {
      * @return boolean|mixed
      */
     protected function doRunAction($parameters) {
-        $handlerName = self::getHandlerName();
+        $handlerName = 'runAction';
         if ( !method_exists($this, $handlerName) ) {
-            throw new Exception(sprintf('Can not find action handler "%s".', $handlerName));
+            throw new Exception("Can not find action handler \"runAction()\".");
         }
         
         $paramsToMethod = array();

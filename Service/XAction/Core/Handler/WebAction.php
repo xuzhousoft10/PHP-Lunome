@@ -19,35 +19,35 @@ abstract class WebAction extends \X\Service\XAction\Core\Action {
      * @param array  $parms The parameters to that url
      */
     public function gotoURL( $url, $parms=null ) {
-        ob_start();
-        ob_end_clean();
-        
         $urlInfo = parse_url($url);
-        $parmConnector = (isset($urlInfo['query'])) ? '&' : '?';
-        
-        if ( !is_null($parms) ) {
-            $url = sprintf('%s%s%s', $url, $parmConnector, http_build_query($parms));
+        if ( null !== $parms ) {
+            $parmConnector = (isset($urlInfo['query'])) ? '&' : '?';
+            $url = $url.$parmConnector.http_build_query($parms);
         }
         
-        header(sprintf('Location: %s', $url));
+        header("Location: $url");
         exit();
     }
     
+    /**
+     * @return string
+     */
     public function getReferer( ) {
         $url = isset($_SERVER['HTTP_REFERER']) ?  $_SERVER['HTTP_REFERER'] : null;
         return $url;
     }
     
+    /**
+     * @return void
+     */
     public function goBack() {
         $referer = $this->getReferer();
         $url = (null===$referer) ?   '/' : $referer;
-        header(sprintf('Location: %s', $url));
-        exit();
+        $this->gotoURL($url);
     }
     
     /**
      * The handler of 404 page.
-     * 
      * @var string|callable
      */
     protected $E404Content = '404 NOT FOUND';
