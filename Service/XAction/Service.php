@@ -104,7 +104,7 @@ class Service extends \X\Core\Service\XService {
      * @throws Exception
      * @return \X\Service\XAction\Core\Action
      */
-    protected function getActionByName( $group, $action ) {
+    private function getActionByName( $group, $action ) {
         $actionClass = explode('/', $action);
         $actionClass = array_map('ucfirst', $actionClass);
         $actionClass = implode('\\', $actionClass);
@@ -116,4 +116,8 @@ class Service extends \X\Core\Service\XService {
         $action = new $actionClass($group);
         return $action;
     }
+    
+    public function create($module, $type, $name) {}
+    public function delete($module, $name) {}
+    public function register( $group, $action, $handler ) {}
 }

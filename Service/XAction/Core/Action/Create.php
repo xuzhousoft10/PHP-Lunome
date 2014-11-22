@@ -2,7 +2,7 @@
 /**
  * This file use to do the creation.
  */
-namespace X\Service\XAction\Controller;
+namespace X\Service\XAction\Core\Action;
 
 /**
  * Use statements
