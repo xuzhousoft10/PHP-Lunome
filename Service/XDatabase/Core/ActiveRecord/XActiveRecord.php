@@ -45,6 +45,7 @@ abstract class XActiveRecord extends Basic implements \Iterator {
             ->offset($criteria->position)
             ->orders($criteria->getOrders())
             ->toString();
+        var_dump($sql);
         $result = $this->doQuery($sql);
         
         $class = get_class($this);
