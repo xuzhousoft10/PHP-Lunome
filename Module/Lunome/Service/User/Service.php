@@ -120,11 +120,8 @@ class Service extends \X\Core\Service\XService {
         if ( !$this->getIsGuest() ) {
             $account = AccountModel::model()->find(array('id'=>1));
             $oauth = $this->getAccount()->getOauth($account->oauth20_id);
-            var_dump($oauth);
-            exit();
-            
-            $this->qqService->getConnect()->setOpenId($oauth->openid);
-            $this->qqService->getConnect()->setAccessToken($oauth->access_token);
+            $this->qqService->getConnect()->setOpenId($oauth['openid']);
+            $this->qqService->getConnect()->setAccessToken($oauth['access_token']);
         }
         
         return $this->qqService->getConnect();
