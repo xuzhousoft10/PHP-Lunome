@@ -16,7 +16,7 @@ abstract class Mark extends Basic {
      * @return void
      */ 
     public function runAction( $id, $mark ) {
-        $this->id = $id;
+        $this->mediaId = $id;
         $this->mark = $mark;
         $this->getMediaService()->mark($id, $mark);
     }
