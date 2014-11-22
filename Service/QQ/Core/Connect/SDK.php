@@ -113,6 +113,13 @@ class SDK {
     }
     
     /**
+     * @param unknown $token
+     */
+    public function setAccessToken( $token ) {
+        $this->token['access_token'] = $token;
+    }
+    
+    /**
      * 获取Access Token 信息， 包括当前token， 有效期和refresh token.
      * @return array
      */
@@ -128,6 +135,13 @@ class SDK {
      */
     public function getOpenId(){
         return $this->openId;
+    }
+    
+    /**
+     * @param unknown $id
+     */
+    public function setOpenId( $id ) {
+        $this->openId = $id;
     }
     
     /**

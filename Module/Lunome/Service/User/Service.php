@@ -117,6 +117,12 @@ class Service extends \X\Core\Service\XService {
         if ( null === $this->qqService ) {
             $this->qqService = X::system()->getServiceManager()->get(QQService::getServiceName());
         }
+        if ( !$this->getIsGuest() ) {
+            $oauth = $this->getAccount()->getOauth($_SESSION['LUNOME']['USER']['ID']);
+            $this->qqService->getConnect()->setOpenId($oauth->openid);
+            $this->qqService->getConnect()->setAccessToken($oauth->access_token);
+        }
+        
         return $this->qqService->getConnect();
     }
     

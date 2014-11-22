@@ -39,6 +39,7 @@ class Account {
     
     /**
      * @param unknown $id
+     * @return \X\Module\Lunome\Model\Oauth20Model 
      */
     public function getOauth( $id ) {
         $oauth = Oauth20Model::model()->findByPrimaryKey($id);
