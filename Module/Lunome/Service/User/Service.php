@@ -117,7 +117,7 @@ class Service extends \X\Core\Service\XService {
         if ( null === $this->qqService ) {
             $this->qqService = X::system()->getServiceManager()->get(QQService::getServiceName());
         }
-        echo "OJ";
+        var_dump($this->getIsGuest());
         exit();
         if ( !$this->getIsGuest() ) {
             $account = AccountModel::model()->findByPrimaryKey($_SESSION['LUNOME']['USER']['ID']);
