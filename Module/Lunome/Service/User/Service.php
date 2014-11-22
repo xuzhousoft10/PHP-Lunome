@@ -119,6 +119,8 @@ class Service extends \X\Core\Service\XService {
         }
         if ( !$this->getIsGuest() ) {
             $account = AccountModel::model()->findByPrimaryKey($_SESSION['LUNOME']['USER']['ID']);
+            var_dump($account);
+            exit();
             $oauth = $this->getAccount()->getOauth($account->oauth20_id);
             $this->qqService->getConnect()->setOpenId($oauth->openid);
             $this->qqService->getConnect()->setAccessToken($oauth->access_token);
