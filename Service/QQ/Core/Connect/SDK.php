@@ -132,13 +132,13 @@ class SDK {
     
     /**
      * 该变量保存着QZone的实例。
-     * @var \X\Library\QQ\Connect\QZone 
+     * @var QZone
      */
     private $qzone = null;
     
     /**
      * 获取Qzone实例。
-     * @return \X\Library\QQ\Connect\QZone
+     * @return QZone
      */
     public function QZone() {
         if ( null === $this->qzone ) {
@@ -149,13 +149,13 @@ class SDK {
     
     /**
      * 保存当前SDK中的微博实例
-     * @var \X\Library\QQ\Connect\Tweet
+     * @var Tweet
      */
     private $tweet = null;
     
     /**
      * 获取微博实例。
-     * @return \X\Library\QQ\Connect\Tweet
+     * @return Tweet
      */
     public function Tweet() {
         if ( null === $this->tweet ) {
@@ -166,13 +166,13 @@ class SDK {
     
     /**
      * 保存当前SDK中的财付通实例
-     * @var \X\Library\QQ\Connect\Tenpay
+     * @var Tenpay
      */
     private $tenpay = null;
     
     /**
      * 获取财付通实例
-     * @return \X\Library\QQ\Connect\Tenpay
+     * @return Tenpay
      */
     public function Tenpay() {
         if ( null === $this->tenpay ) {
