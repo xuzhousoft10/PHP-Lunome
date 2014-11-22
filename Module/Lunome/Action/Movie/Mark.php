@@ -24,13 +24,26 @@ class Mark extends MediaMark {
     protected function afterRunAction() {
         /* @var $userService UserService */
         $userService = X::system()->getServiceManager()->get(UserService::getServiceName());
-        $media = $this->getMediaService()->get($this->mediaId);
+        $mediaService = $this->getMediaService();
+        $media = $mediaService->get($this->mediaId);
         $message = $this->getMessageContentByMark($media, $this->mark);
-        $userService->getQQConnect()->Tweet()->add($message);
+        if ( 1 === $media['has_cover']*1 ) {
+            $tmpName = tempnam(sys_get_temp_dir(), 'LMK');
+            file_put_contents($tmpName, file_get_contents($mediaService->getMediaCoverURL($media['id'])));
+            $userService->getQQConnect()->Tweet()->addWithPicture($message, $tmpName);
+            unlink($tmpName);
+        } else {
+            $userService->getQQConnect()->Tweet()->add($message);
+        }
         
         parent::afterRunAction();
     }
     
+    /**
+     * @param unknown $media
+     * @param unknown $mark
+     * @return string
+     */
     private function getMessageContentByMark( $media, $mark ) {
         $message = '';
         switch ( $mark ) {
