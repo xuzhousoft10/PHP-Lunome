@@ -68,7 +68,7 @@ class Tweet extends ProductionBasic {
     public function addWithPicture( $content, $pic, $clientIp=null, $longitude=null, $latitude=null, $compatibleflag=null) {
         $params = array();
         $params['content'] = $content;
-        $params['pic'] = '@'.$pic;
+        $params['pic'] = function_exists('curl_file_create') ? curl_file_create($pic) : '@'.$pic;
         if ( null !== $clientIp )   $params['clientip'] = $clientIp;
         if ( null !== $longitude )  $params['longitude'] = $longitude;
         if ( null !== $latitude )   $params['latitude'] = $latitude;
