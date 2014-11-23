@@ -108,24 +108,25 @@ class Service extends \X\Core\Service\XService {
      * @return \X\Service\XAction\Core\Action
      */
     private function getActionByName( $group, $action ) {
-        if ( isset($this->groups[$group]['registered_actions'][$action]) ) {
-            $handler = $this->groups[$group]['registered_actions'][$action];
-            if ( class_exists($handler) ) {
-                $handler = new $handler($group);
-                return $handler;
-            }
-        }
-        
         $actionClass = explode('/', $action);
         $actionClass = array_map('ucfirst', $actionClass);
         $actionClass = implode('\\', $actionClass);
         $namespace = $this->groups[$group]['namespace'].'\\Action';
         $actionClass = $namespace.'\\'.$actionClass;
-        if ( !class_exists($actionClass) ) {
-            throw new Exception("Can not find Action \"$action\" in group \"$group\".");
+        if ( class_exists($actionClass) ) {
+            $action = new $actionClass($group);
+            return $action;
+        } else {
+            if ( isset($this->groups[$group]['registered_actions'][$action]) ) {
+                $handler = $this->groups[$group]['registered_actions'][$action];
+                if ( class_exists($handler) ) {
+                    $handler = new $handler($group);
+                    return $handler;
+                }
+            }
         }
-        $action = new $actionClass($group);
-        return $action;
+        
+        throw new Exception("Can not find Action \"$action\" in group \"$group\".");
     }
     
     /**
