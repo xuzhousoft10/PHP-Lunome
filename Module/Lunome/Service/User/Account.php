@@ -130,10 +130,11 @@ class Account {
             /* @var $service \X\Module\Lunome\Service\User\Service */
             $service = X::system()->getServiceManager()->get(Service::getServiceName());
             $user = $service->getCurrentUser();
+            $account = $user['ID'];
         }
         
         $history = new AccountHistoryModel();
-        $history->account_id = $user['ID'];
+        $history->account_id = $account;
         $history->time = date('Y-m-d H:i:s', time());
         $history->action = $action;
         $history->target = $target;
