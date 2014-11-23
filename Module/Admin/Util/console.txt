@@ -1,3 +1,7 @@
+use service XAction
+create Lunome web user/unregister
+delete Lunome user/unregister
+quit
 service create Movie Lunome
 quit
 module migrate up Lunome

@@ -4,7 +4,7 @@ class Console extends \X\Core\Basic {
     protected $inputHandler = null;
     
     public function __construct() {
-        $debug = false;
+        $debug = true;
         
         if ( $debug ) {
             $this->inputHandler = fopen(dirname(__FILE__).DIRECTORY_SEPARATOR.'console.txt','r');

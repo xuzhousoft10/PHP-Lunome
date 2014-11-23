@@ -8,7 +8,6 @@ namespace X\Service\XAction\Core\Action;
  * Use statements
  */
 use X\Core\X;
-use X\Service\XAction\Core\Action;
 
 /**
  * The action class.
@@ -17,12 +16,11 @@ use X\Service\XAction\Core\Action;
  */
 class Create {
     /**
-     * Execute the creation.
-     * 
      * @return void
      */
-    public function run($name, $type, $module) {
+    public function run($module, $type, $name) {
         try {
+            /* @var $module \X\Core\Module\XModule */
             $module = X::system()->getModuleManager()->get($module);
         } catch ( \X\Core\Module\Exception $e ) {
             printf("Module '%s' can not be found.\n", $module);
@@ -30,7 +28,7 @@ class Create {
         }
         
         /* create action folder. */
-        $actionPath = $module->getModulePath('Action');
+        $actionPath = $module->getPath('Action');
         if ( !is_dir($actionPath) ) {
             mkdir($actionPath);
         }
@@ -56,9 +54,6 @@ class Create {
             return;
         }
         
-        /* generate action handler name */
-        $actionHandlerName = Action::getHandlerName();
-        
         /* generate the content of action file. */
         $content = array();
         $content[] = '<?php';
@@ -68,7 +63,7 @@ class Create {
         $content[] = "/**\n * The action class for $name action.\n * @author Unknown\n */";
         $content[] = sprintf('class %s extends %s { ', $actionClassName, $handlerClassName);
         $content[] = "    /** \n     * The action handle for index action.\n     * @return void\n     */ ";
-        $content[] = sprintf('    public function %s( /* @TODO Add parameters here if you need. */ ) {', $actionHandlerName);
+        $content[] = sprintf('    public function runAction( /* @TODO Add parameters here if you need. */ ) {');
         $content[] = '        /* @TODO Input your own code here. */';
         $content[] = '    }';
         $content[] = '}';

@@ -7,8 +7,10 @@ namespace X\Service\XAction;
 /**
  * Use statements
  */
-use X\Service\XAction\Core\Exception;
+use X\Core\X;
 use X\Core\Util\KeyValue;
+use X\Service\XAction\Core\Exception;
+use X\Service\XAction\Core\Action\Create;
 
 /**
  * XActionService use to handle the Action request and 
@@ -38,6 +40,7 @@ class Service extends \X\Core\Service\XService {
         $group['namespace']     = $namespace;
         $group['default']       = null;
         $group['running']       = null;
+        $group['registered_actions'] = array();
         $this->groups[$name]    = $group;
     }
     
@@ -105,6 +108,14 @@ class Service extends \X\Core\Service\XService {
      * @return \X\Service\XAction\Core\Action
      */
     private function getActionByName( $group, $action ) {
+        if ( isset($this->groups[$group]['registered_actions'][$action]) ) {
+            $handler = $this->groups[$group]['registered_actions'][$action];
+            if ( class_exists($handler) ) {
+                $handler = new $handler($group);
+                return $handler;
+            }
+        }
+        
         $actionClass = explode('/', $action);
         $actionClass = array_map('ucfirst', $actionClass);
         $actionClass = implode('\\', $actionClass);
@@ -117,7 +128,48 @@ class Service extends \X\Core\Service\XService {
         return $action;
     }
     
-    public function create($module, $type, $name) {}
-    public function delete($module, $name) {}
-    public function register( $group, $action, $handler ) {}
+    /**
+     * @param string $module
+     * @param string $type
+     * @param string $name
+     */
+    public function create($module, $type, $name) {
+        $handler = new Create();
+        $handler->run($module, $type, $name);
+    }
+    
+    /**
+     * @param unknown $module
+     * @param unknown $name
+     * @throws Exception
+     */
+    public function delete($module, $name) {
+        $module = X::system()->getModuleManager()->get($module);
+        $path = implode('/', array_map('ucfirst', explode('/', $name)));
+        $path = $module->getPath('Action/'.$path.'.php');
+        if ( !file_exists($path) ) {
+            throw new Exception("Action \"$name\" does not exists.");
+        }
+        unlink($path);
+        if ( 2 == count(scandir(dirname($path))) ) {
+            rmdir(dirname($path));
+        }
+    }
+    
+    /**
+     * @param string $group
+     * @param string $action
+     * @param string $handler
+     */
+    public function register( $group, $action, $handler ) {
+        if ( !isset($this->groups[$group]) ) {
+            throw new Exception("Group \"$group\" does not exists.");
+        }
+        
+        if ( isset($this->groups[$group]['registered_actions'][$action]) ) {
+            throw new Exception("Action \"$action\" already exists.");
+        }
+        
+        $this->groups[$group]['registered_actions'][$action] = $handler;
+    }
 }

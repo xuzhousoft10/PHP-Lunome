@@ -38,20 +38,8 @@ class Custom extends \X\Service\XAction\Core\Action {
             return;
         }
         
-        $controller = $using->getSettingController();
         $parameters = str_getcsv($parameters, ' ');
-        $action = 'action';
-        while ( 0 < count($parameters) ) {
-            $action .= ucfirst(array_shift($parameters));
-            if ( !$controller->hasAction($action) ) {
-                continue;
-            }
-            
-            call_user_func_array(array($controller, $action), $parameters);
-            echo "\n";
-            return;
-        }
-        
-        $console->printLine('Command has not been supported.');
+        $action = array_shift($parameters);
+        call_user_func_array(array($using, $action), $parameters);
     }
 }

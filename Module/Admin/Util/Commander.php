@@ -22,7 +22,7 @@ class Commander extends \X\Core\Basic {
     /**
      * The action service.
      * 
-     * @var \X\Service\XAction\XActionService
+     * @var \X\Service\XAction\Service
      */
     protected $actionService = null;
     
@@ -34,7 +34,7 @@ class Commander extends \X\Core\Basic {
     public function start() {
         $group = 'admin';
         $actionService = X::system()->getServiceManager()->get('XAction');
-        $actionService->add($group, 'X\\Module\\Admin');
+        $actionService->addGroup($group, 'X\\Module\\Admin');
         $this->actionService = $actionService;
         
         while ( true ) {
@@ -83,13 +83,13 @@ class Commander extends \X\Core\Basic {
         }
         
         $actionService = $this->actionService;
-        $actionService->setParameters(array('action'=>$action,'parameters'=>$parameterString, 'console'=>$this->console));
+        $actionService->getParameter()->setValues(array('action'=>$action,'parameters'=>$parameterString, 'console'=>$this->console));
         
         try {
-            $actionService->run($group);
+            $actionService->runGroup($group);
         } catch ( Exception $e ) {
-            $actionService->setParameters(array('action'=>'custom','parameters'=>$command, 'console'=>$this->console));
-            $actionService->run($group);
+            $actionService->getParameter()->setValues(array('action'=>'custom','parameters'=>$command, 'console'=>$this->console));
+            $actionService->runGroup($group);
         }
     }
     
