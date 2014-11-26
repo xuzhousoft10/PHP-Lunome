@@ -18,6 +18,21 @@ use X\Module\Lunome\Service\Movie\Service;
 class Detail extends MediaDetail {
     /**
      * (non-PHPdoc)
+     * @see \X\Module\Lunome\Util\Action\Media\Detail::afterFindTheModel()
+     */
+    protected function afterFindTheModel($media) {
+        $media['region'] = $this->getMovieService()->getRegionById($media['region_id'])->name;
+        $media['language'] = $this->getMovieService()->getLanguageById($media['language_id'])->name;
+        $media['category'] = $this->getMovieService()->getCategoriesByMovieId($media['id']);
+        foreach ( $media['category'] as $index => $category ) {
+            $media['category'][$index] = $category->name;
+        }
+        $media['category'] = implode('，', $media['category']);
+        return $media;
+    }
+    
+    /**
+     * (non-PHPdoc)
      * @see \X\Module\Lunome\Util\Action\Media\Detail::getMarkStyles()
      */
     protected function getMarkStyles() {

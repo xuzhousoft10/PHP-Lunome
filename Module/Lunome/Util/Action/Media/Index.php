@@ -61,7 +61,8 @@ abstract class Index extends VisualMain {
             'mediaType'     => strtolower($this->getMediaType()),
             'mediaTypeName' => $this->getMediaService()->getMediaName(),
             'currentMark'   => $this->currentMark,
-            'mediaItemWaitingImage' => $condifService->get('media_item_operation_waiting_image')
+            'mediaItemWaitingImage' => $condifService->get('media_item_operation_waiting_image'),
+            'searchData'    => $this->getSearchData(),
         );
         $this->getView()->loadParticle($name, $path, $option, $data);
         
@@ -146,6 +147,13 @@ abstract class Index extends VisualMain {
             $markInfo[$key]['isActive'] = $this->currentMark === $key;
         }
         return $markInfo;
+    }
+    
+    /**
+     * @return multitype:
+     */
+    protected function getSearchData() {
+        return array();
     }
     
     /**

@@ -60,6 +60,7 @@ abstract class Detail extends Visual {
         } else {
             $media['cover'] = $service->getMediaCoverURL($media['id']);
         }
+        $media = $this->afterFindTheModel($media);
         $markCount = array();
         foreach ( $this->getMediaMarks() as $markValue ) {
             $markCount[$markValue]  = $service->countMarked($markValue, $id, null);
@@ -115,4 +116,12 @@ abstract class Detail extends Visual {
      * @param unknown $mark
      */
     abstract protected function getMarkStyles();
+    
+    /**
+     *
+     * @param unknown $model
+     */
+    protected function afterFindTheModel( $media ) {
+        return $media;
+    }
 }

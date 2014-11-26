@@ -18,6 +18,20 @@ use X\Module\Lunome\Util\Action\Media\Index as MediaIndex;
 class Index extends MediaIndex { 
     /**
      * (non-PHPdoc)
+     * @see \X\Module\Lunome\Util\Action\Media\Index::getSearchData()
+     */
+    protected function getSearchData() {
+        /* @var $movieService MovieService */
+        $movieService = $this->getMediaService();
+        $data = array();
+        $data['regions'] = $movieService->getRegions();
+        $data['languages'] = $movieService->getLanguages();
+        $data['categories'] = $movieService->getCategories();
+        return $data;
+    }
+    
+    /**
+     * (non-PHPdoc)
      * @see \X\Module\Lunome\Util\Action\Media\Index::getMarkActions()
      */
     protected function getMarkActions() {

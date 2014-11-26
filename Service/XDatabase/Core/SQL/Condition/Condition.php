@@ -145,7 +145,7 @@ class Condition extends Basic {
         $column = sprintf('`%s`', $this->column);
         $minVal = $this->quoteValue($this->value[0]);
         $maxVal = $this->quoteValue($this->value[1]);
-        return sprintf('%s BETWEEN (%s, %s)', $column, $minVal, $maxVal);
+        return sprintf('%s BETWEEN %s AND %s', $column, $minVal, $maxVal);
     }
     
     /**

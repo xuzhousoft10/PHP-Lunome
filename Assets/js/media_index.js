@@ -227,7 +227,25 @@ MediaIndex._loadMediaCoverOnVisible = function(direction) {
          $(this).css('background-image', 'url("'+cover+'")');
          $(this).attr('data-cover-loaded', true);
     }
-}
+};
+
+/**
+ * 增加搜索条件并刷新项目列表。
+ * @returns void
+ */
+MediaIndex.addCondition = function( attr, value ) {
+    MediaIndex._conditions[attr] = value;
+    MediaIndex.reload();
+};
+
+/**
+ * 删除搜索条件并刷新项目列表。
+ * @returns void
+ */
+MediaIndex.deleteCondition = function (attr, value) {
+    delete MediaIndex._conditions[attr];
+    MediaIndex.reload();
+};
 
 /**
  * 当文档处理完成后， 立即初始化列表。
@@ -235,4 +253,40 @@ MediaIndex._loadMediaCoverOnVisible = function(direction) {
  */
 $(document).ready(function() {
     MediaIndex.init();
+    
+    /* 当标签被点击时， 执行查询。 */
+    $('.media-search-condition-label').click(function() {
+        var label = $(this);
+        var attr = label.attr('data-attr');
+        var value = label.attr('data-value');
+        
+        $('.media-search-condition-label[data-attr="'+attr+'"]').removeClass('label').removeClass('label-primary');
+        $('.media-search-condition-select[data-attr="'+attr+'"]').val('');
+        label.addClass('label').addClass('label-primary');
+        
+        if ( '' == value ) {
+            MediaIndex.deleteCondition(attr, value);
+        } else {
+            MediaIndex.addCondition(attr, value);
+        }
+    }).css('cursor', 'pointer');
+    
+    /* 默认情况下为所有 */
+    $('.media-search-condition-label[data-value=""]').addClass('label').addClass('label-primary');
+    
+    /* 当条件选择改变时， 执行查询。 */
+    $('.media-search-condition-select').change(function() {
+        var selector = $(this);
+        var attr = selector.attr('data-attr');
+        var value = selector.val();
+        
+        $('.media-search-condition-label[data-attr="'+attr+'"]').removeClass('label').removeClass('label-primary');
+        
+        if ( '' == value ) {
+            $('.media-search-condition-label[data-value=""]').addClass('label').addClass('label-primary');
+            MediaIndex.deleteCondition(attr, value);
+        } else {
+            MediaIndex.addCondition(attr, value);
+        }
+    });
 });

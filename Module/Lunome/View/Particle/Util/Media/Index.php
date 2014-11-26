@@ -56,6 +56,10 @@ $mediaItemWaitingImage = $vars['mediaItemWaitingImage'];
             data-current-mark   = "<?php echo $currentMark; ?>"
             data-waiting-image  = "<?php echo $mediaItemWaitingImage; ?>"
         >
+        <div>
+        <?php require dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.'Movie'.DIRECTORY_SEPARATOR.'Search.php'; ?>
+        <hr/>
+        </div>
         <div class="clearfix lnm-media-list-container"></div>
     </div>
     <!-- Media List End -->

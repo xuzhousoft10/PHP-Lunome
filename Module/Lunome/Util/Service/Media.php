@@ -119,11 +119,12 @@ abstract class Media extends \X\Core\Service\XService {
     public function getUnmarked($condition=array(), $length=0, $position=0) {
         $mediaModelName = $this->getMediaModelName();
         $basicCondition = $this->getUnmarkedMediaCondition();
-        $basicCondition->addCondition($condition);
+        $basicCondition->addCondition($this->getExtenCondition($condition));
         $criteria = new Criteria();
         $criteria->condition = $basicCondition;
         $criteria->limit = $length;
         $criteria->position = $position;
+        $criteria->addOrder('date', 'DESC');
         $medias = $mediaModelName::model()->findAll($criteria);
         foreach ( $medias as $index => $media ) {
             $medias[$index] = $media->toArray();
@@ -141,11 +142,12 @@ abstract class Media extends \X\Core\Service\XService {
     public function getMarked( $mark, $condition=array(), $length=0, $position=0 ) {
         $mediaModelName = $this->getMediaModelName();
         $basicCondition = $this->getMarkedMediaCondition($mark);
-        $basicCondition->addCondition($condition);
+        $basicCondition->addCondition($this->getExtenCondition($condition));
         $criteria = new Criteria();
         $criteria->condition = $basicCondition;
         $criteria->limit = $length;
         $criteria->position = $position;
+        $criteria->addOrder('date', 'DESC');
         $medias = $mediaModelName::model()->findAll($criteria);
         foreach ( $medias as $index => $media ) {
             $medias[$index] = $media->toArray();
@@ -160,7 +162,7 @@ abstract class Media extends \X\Core\Service\XService {
     public function countUnmarked( $condition=array() ) {
         $mediaModel = $this->getMediaModelName();
         $basicCondition = $this->getUnmarkedMediaCondition();
-        $basicCondition->addCondition($condition);
+        $basicCondition->addCondition($this->getExtenCondition($condition));
         $count = $mediaModel::model()->count($basicCondition);
         return $count;
     }
@@ -186,7 +188,7 @@ abstract class Media extends \X\Core\Service\XService {
         } else {
             $condition->equals('account_id', $user);
         }
-        $condition->addCondition($extCondition);
+        $condition->addCondition($this->getExtenCondition($extCondition));
         $count = MediaUserMarksModel::model()->count($condition);
         return $count;
     }

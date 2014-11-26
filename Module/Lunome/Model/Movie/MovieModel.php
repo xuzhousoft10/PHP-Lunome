@@ -1,5 +1,5 @@
 <?php
-namespace X\Module\Lunome\Model;
+namespace X\Module\Lunome\Model\Movie;
 
 /**
  * Use statements
@@ -12,10 +12,10 @@ use X\Service\XDatabase\Core\ActiveRecord\Column;
  * @property string $id
  * @property string $name
  * @property string $length
- * @property string $year
- * @property string $region
+ * @property string $date
+ * @property string $region_id
  * @property string $category
- * @property string $language
+ * @property string $language_id
  * @property string $director
  * @property string $writer
  * @property string $producer
@@ -34,10 +34,9 @@ class MovieModel extends Basic {
         $columns[] = Column::create('id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setIsPrimaryKey(true)->setNullable(false);
         $columns[] = Column::create('name')->setType(ColumnType::T_VARCHAR)->setLength(128);
         $columns[] = Column::create('length')->setType(ColumnType::T_INT)->setIsUnsigned(true);
-        $columns[] = Column::create('year')->setType(ColumnType::T_INT)->setIsUnsigned(true);
-        $columns[] = Column::create('region')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('category')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('language')->setType(ColumnType::T_VARCHAR)->setLength(64);
+        $columns[] = Column::create('date')->setType(ColumnType::T_DATE);
+        $columns[] = Column::create('region_id')->setType(ColumnType::T_VARCHAR)->setLength(36);
+        $columns[] = Column::create('language_id')->setType(ColumnType::T_VARCHAR)->setLength(36);
         $columns[] = Column::create('director')->setType(ColumnType::T_VARCHAR)->setLength(128);
         $columns[] = Column::create('writer')->setType(ColumnType::T_VARCHAR)->setLength(128);
         $columns[] = Column::create('producer')->setType(ColumnType::T_VARCHAR)->setLength(128);
@@ -53,6 +52,6 @@ class MovieModel extends Basic {
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::getTableName()
      */
     protected function getTableName() {
-        return 'media_movies';
+        return 'movies';
     }
 }
