@@ -5,7 +5,7 @@ $media = $vars['media'];
 $markCount = $vars['markCount'];
 ?>
 <tr>
-    <td>时长: <?php echo $media['length'];?>分钟</td>
+    <td>时长: <?php echo intval($media['length']/60);?>分钟</td>
     <td>地区: <?php echo $media['region'];?></td>
     <td>类型: <?php echo $media['category'];?></td>
     <td>语言: <?php echo $media['language'];?></td>
