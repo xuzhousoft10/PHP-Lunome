@@ -26,4 +26,9 @@ $(document).ready(function() {
             }
         }).trigger('resize');
     }
+    
+    /* 用于返回顶部时的动画效果 */
+    $('#goto-top').click(function() {
+        $('body,html').animate({ scrollTop: 0 }, 1500);
+    });
 });
