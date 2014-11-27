@@ -15,9 +15,12 @@ abstract class Mark extends Basic {
      * The action handle for index action.
      * @return void
      */ 
-    public function runAction( $id, $mark ) {
+    public function runAction( $id, $mark, $redirect=false ) {
         $this->mediaId = $id;
         $this->mark = $mark;
         $this->getMediaService()->mark($id, $mark);
+        if ( $redirect ) {
+            $this->goBack();
+        }
     }
 }

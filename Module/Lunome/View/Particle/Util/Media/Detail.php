@@ -9,7 +9,7 @@ $markCount = $vars['markCount'];
 $myMark = $vars['myMark'];
 $markStyles = $vars['markStyles'];
 $markNames = $vars['markNames'];
-$markUrlFormat = sprintf('/?module=lunome&action=%s/mark&mark=%%s&id=%%s', strtolower($mediaType));
+$markUrlFormat = sprintf('/?module=lunome&action=%s/mark&mark=%%s&id=%%s&redirect=true', strtolower($mediaType));
 if ( MovieService::MARK_INTERESTED == $myMark ) {
     $shareMessageTitle = '求包养';
     $shareMessageContent = "怀着各种复杂与激动的心情， 我来到了这里， 我抬头， 望了望天，想起了你，此时此刻， 我的心情不是别人所能理解的，土豪，请我看场《{$media['name']}》呗？";
