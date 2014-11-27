@@ -16,16 +16,16 @@ use X\Module\Lunome\Service\User\Service as UserService;
  */
 abstract class Detail extends Visual {
     /**
+     * @var boolean
+     */
+    protected $isGuest = false;
+    
+    /**
      * (non-PHPdoc)
      * @see \X\Module\Lunome\Util\Action\Visual::beforeRunAction()
      */
     protected function beforeRunAction() {
-        $isGuest = $this->getService(UserService::getServiceName())->getIsGuest();
-        if ( $isGuest ) {
-            $this->gotoURL('/index.php?module=lunome&action=user/login/index');
-            X::system()->stop();
-        }
-        
+        $this->isGuest = $this->getService(UserService::getServiceName())->getIsGuest();
         parent::beforeRunAction();
         $this->getView()->loadLayout($this->getLayoutViewPath('BlankThin'));
     }
@@ -65,7 +65,7 @@ abstract class Detail extends Visual {
         foreach ( $this->getMediaMarks() as $markValue ) {
             $markCount[$markValue]  = $service->countMarked($markValue, $id, null);
         }
-        $myMark = $service->getMark($id);
+        $myMark = $this->isGuest ? 0 : $service->getMark($id);
         $names  = $service->getMarkNames();
         $styles = $this->getMarkStyles();
         
