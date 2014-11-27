@@ -1,4 +1,6 @@
 <?php 
+use X\Module\Lunome\Service\Movie\Service as MovieService;
+
 $vars = get_defined_vars();
 $media = $vars['media'];
 $mediaType = $vars['mediaType'];
@@ -8,6 +10,16 @@ $myMark = $vars['myMark'];
 $markStyles = $vars['markStyles'];
 $markNames = $vars['markNames'];
 $markUrlFormat = sprintf('/?module=lunome&action=%s/mark&mark=%%s&id=%%s', strtolower($mediaType));
+if ( MovieService::MARK_INTERESTED == $myMark ) {
+    $shareMessageTitle = '求包养';
+    $shareMessageContent = "怀着各种复杂与激动的心情， 我来到了这里， 我抬头， 望了望天，想起了你，此时此刻， 我的心情不是别人所能理解的，土豪，请我看场《{$media['name']}》呗？";
+} else if ( MovieService::MARK_WATCHED == $myMark ) {
+    $shareMessageTitle = '推荐给好友';
+    $shareMessageContent = "看完《{$media['name']}》， 我和我的小伙伴们都惊呆了！ GO！ GO! GO! ";
+} else {
+    $shareMessageTitle = '分享';
+    $shareMessageContent = "";
+}
 ?>
 <div class="row margin-top-5">
     <ol class="breadcrumb">
@@ -46,14 +58,14 @@ $markUrlFormat = sprintf('/?module=lunome&action=%s/mark&mark=%%s&id=%%s', strto
                 <?php endforeach; ?>
             </div>
             <div class="pull-right text-right">
-                <span class="pull-left" style="line-height: 30px;">求包养&nbsp;<span class="glyphicon glyphicon-hand-right"></span>&nbsp;</span>
+                <span class="pull-left" style="line-height: 30px;"><?php echo $shareMessageTitle; ?>&nbsp;<span class="glyphicon glyphicon-hand-right"></span>&nbsp;</span>
                 <div class = "pull-left lnm-qzone-share-container" >
                     <script type="text/javascript">
                     (function(){
                     var p = {
                         url         : location.href,
                         showcount   : '0',
-                        desc        : '怀着各种复杂与激动的心情， 我来到了这里， 我抬头， 望了望天，想起了你，此时此刻， 我的心情不是别人所能理解的，土豪，请我看场《<?php echo $media['name'];?>》呗？',
+                        desc        : '<?php echo $shareMessageContent;?>',
                         summary     : <?php echo json_encode(array('message'=>$media['introduction']));?>.message,
                         title       : '<?php echo $media['name'];?>',
                         site        : 'Lunome',
