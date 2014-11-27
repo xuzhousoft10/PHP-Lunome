@@ -28,7 +28,7 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
     </ol>
     
     <div class="col-md-2 padding-0">
-        <a href="http://www.baidu.com/s?wd=<?php echo urlencode($media['name']); ?>" target="_black">
+        <a href="http://v.baidu.com/v?word=<?php echo urlencode(mb_convert_encoding($media['name'],'gb2312','utf-8' )); ?>" target="_black">
             <img src="<?php echo $media['cover'];?>" width="200" height="300">
         </a>
     </div>
