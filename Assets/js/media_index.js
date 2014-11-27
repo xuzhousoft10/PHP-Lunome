@@ -24,6 +24,7 @@ var MediaIndex = {
     _autoLoadCount  : 0,    /* 记录当前自动加载的次数。 */
     _conditions     : {},   /* 保存当前查询的条件。 */
     waitingImage    : null, /* 当项目出现较长时间的处理时，显示的等待图片。 */
+    loaddingImage   : null, /* 加载项目时显示的图片链接。 */
 };
 
 /**
@@ -41,6 +42,7 @@ MediaIndex.init = function() {
     this.markURL        = parameters.attr('data-mark-url');
     this.currentMark    = parameters.attr('data-current-mark');
     this.waitingImage   = parameters.attr('data-waiting-image');
+    this.loaddingImage  = parameters.attr('data-loading-image');
     $(window).bind('scroll', MediaIndex._windowScrollEventHandler);
     $('#media-name-search-button').click(function() {
         var name = $.trim($('#media-name-search-text').val());
@@ -104,15 +106,21 @@ MediaIndex.load = function( refresh ) {
     
     $this._isLoading = true;
     $this._autoLoadCount ++;
+    console.log('[MediaLoader] Loading medias...');
+    var loaddingBar = $('<div>').addClass('row').addClass('text-center').addClass('padding-20').appendTo(this.container);
+    $('<img>').attr('src', this.loaddingImage).appendTo(loaddingBar);
     $.post($this.url, {
         condition   : $this._conditions,
         position    : $this.loadedCount,
         length      : $this.pageSize,
     }, function( response ) {
         $this.totalCount = response.count;
+        console.log('[MediaLoader] Done loading medias. '+response.medias.length+' Loaded.');
         $this._InsertMediasIntoContainer(response.medias);
+        console.log('[MediaLoader] Done display loaded medias.');
         $this.loadedCount += response.medias.length;
         $this._isLoading = false;
+        loaddingBar.remove();
     }, 'json');
 };
 

@@ -62,6 +62,7 @@ abstract class Index extends VisualMain {
             'mediaTypeName' => $this->getMediaService()->getMediaName(),
             'currentMark'   => $this->currentMark,
             'mediaItemWaitingImage' => $condifService->get('media_item_operation_waiting_image'),
+            'mediaLoaderLoaddingImage' => $condifService->get('media_loader_loading_image'),
             'searchData'    => $this->getSearchData(),
         );
         $this->getView()->loadParticle($name, $path, $option, $data);

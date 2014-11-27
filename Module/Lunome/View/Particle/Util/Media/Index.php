@@ -55,6 +55,7 @@ $mediaItemWaitingImage = $vars['mediaItemWaitingImage'];
             data-marks          = "<?php echo htmlspecialchars(json_encode($markActions)); ?>"
             data-current-mark   = "<?php echo $currentMark; ?>"
             data-waiting-image  = "<?php echo $mediaItemWaitingImage; ?>"
+            data-loading-image  = "<?php echo $vars['mediaLoaderLoaddingImage'];?>"
         >
         <div>
         <?php require dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.'Movie'.DIRECTORY_SEPARATOR.'Search.php'; ?>
