@@ -12,6 +12,9 @@ use X\Service\XDatabase\Core\ActiveRecord\Column;
  * @property string $id
  * @property string $name
  * @property string $count
+ * @property string $beg_message
+ * @property string $recommend_message
+ * @property string $share_message
  **/
 class MovieCategoryModel extends Basic {
     /**
@@ -23,6 +26,9 @@ class MovieCategoryModel extends Basic {
         $columns[] = Column::create('id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setIsPrimaryKey(true)->setNullable(false);
         $columns[] = Column::create('name')->setType(ColumnType::T_VARCHAR)->setLength(45);
         $columns[] = Column::create('count')->setType(ColumnType::T_INT)->setIsUnsigned(true);
+        $columns[] = Column::create('beg_message')->setType(ColumnType::T_VARCHAR)->setLength(256);
+        $columns[] = Column::create('recommend_message')->setType(ColumnType::T_VARCHAR)->setLength(256);
+        $columns[] = Column::create('share_message')->setType(ColumnType::T_VARCHAR)->setLength(256);
         return $columns;
     }
 

@@ -73,13 +73,14 @@ abstract class Detail extends Visual {
         $path   = $this->getParticleViewPath('Util/Media/Detail');
         $option = array();
         $data   = array(
-            'media'     => $media, 
-            'markCount' => $markCount, 
-            'myMark'    => $myMark,
-            'markStyles'=> $styles,
-            'markNames' => $names,
-            'mediaType' => $mediaType,
-            'mediaName' => $service->getMediaName(),
+            'media'         => $media, 
+            'markCount'     => $markCount, 
+            'myMark'        => $myMark,
+            'markStyles'    => $styles,
+            'markNames'     => $names,
+            'mediaType'     => $mediaType,
+            'mediaName'     => $service->getMediaName(),
+            'shareMessage'  => $this->getShareMessage($media['id'], $myMark)
         );
         $this->getView()->loadParticle($name, $path, $option, $data);
         
@@ -123,5 +124,14 @@ abstract class Detail extends Visual {
      */
     protected function afterFindTheModel( $media ) {
         return $media;
+    }
+    
+    /**
+     * 
+     * @param unknown $myMark
+     * @return string
+     */
+    protected function getShareMessage( $mediaId, $myMark ) {
+        return '';
     }
 }

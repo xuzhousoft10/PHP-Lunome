@@ -10,15 +10,13 @@ $myMark = $vars['myMark'];
 $markStyles = $vars['markStyles'];
 $markNames = $vars['markNames'];
 $markUrlFormat = sprintf('/?module=lunome&action=%s/mark&mark=%%s&id=%%s&redirect=true', strtolower($mediaType));
+$shareMessageContent = str_replace('{name}', $media['name'], $vars['shareMessage']);
 if ( MovieService::MARK_INTERESTED == $myMark ) {
     $shareMessageTitle = '求包养';
-    $shareMessageContent = "怀着各种复杂与激动的心情， 我来到了这里， 我抬头， 望了望天，想起了你，此时此刻， 我的心情不是别人所能理解的，土豪，请我看场《{$media['name']}》呗？";
 } else if ( MovieService::MARK_WATCHED == $myMark ) {
     $shareMessageTitle = '推荐给好友';
-    $shareMessageContent = "看完《{$media['name']}》， 我和我的小伙伴们都惊呆了！ GO！ GO! GO! ";
 } else {
     $shareMessageTitle = '分享';
-    $shareMessageContent = "";
 }
 ?>
 <div class="row margin-top-5">
