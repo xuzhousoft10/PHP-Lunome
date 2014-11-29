@@ -1,5 +1,5 @@
 <?php
-namespace X\Module\Lunome\Model;
+namespace X\Module\Lunome\Model\Account;
 
 /**
  * Use statements

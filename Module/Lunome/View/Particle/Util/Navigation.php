@@ -25,12 +25,6 @@ $user = $vars['user'];
                         </a>
                         <ul class="dropdown-menu">
                             <!-- 
-                            <li>
-                            <a href="/?module=lunome&action=user/information/basic">
-                            <span class="glyphicon glyphicon-user"></span>
-                            My Profile
-                            </a>
-                            </li>
                             <li class="divider"></li>
                             <li>
                             <a href="/?module=lunome&action=security/password">
@@ -39,15 +33,22 @@ $user = $vars['user'];
                             </a>
                             </li>
                             -->
+                            <li>
+                                <a href="/?module=lunome&action=user/setting">
+                                    <span class=" glyphicon glyphicon-cog"></span>
+                                    个人设置
+                                </a>
+                            </li>
                             <?php if ($user['isAdmin']) : ?>
+                                <li class="divider"></li>
                                 <li>
                                     <a href="/?module=backend">
                                         <span class="glyphicon glyphicon-tower"></span>
                                         后台管理
                                     </a>
                                 </li>
-                                <li class="divider"></li>
-                             <?php endif; ?>
+                            <?php endif; ?>
+                            <li class="divider"></li>
                             <li>
                                 <a href="/?module=lunome&action=user/logout">
                                     <span class="glyphicon glyphicon-off"></span>

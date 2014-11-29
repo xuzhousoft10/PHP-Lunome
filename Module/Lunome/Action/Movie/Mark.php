@@ -8,6 +8,7 @@ namespace X\Module\Lunome\Action\Movie;
  * Use statements
  */
 use X\Core\X;
+use X\Module\Lunome\Service\User\Account;
 use X\Module\Lunome\Util\Action\Media\Mark as MediaMark;
 use X\Module\Lunome\Service\User\Service as UserService;
 use X\Module\Lunome\Service\Movie\Service as MovieService;
@@ -24,16 +25,21 @@ class Mark extends MediaMark {
     protected function afterRunAction() {
         /* @var $userService UserService */
         $userService = X::system()->getServiceManager()->get(UserService::getServiceName());
-        $mediaService = $this->getMediaService();
-        $media = $mediaService->get($this->mediaId);
-        $message = $this->getMessageContentByMark($media, $this->mark);
-        if ( 1 === $media['has_cover']*1 ) {
-            $tmpName = tempnam(sys_get_temp_dir(), 'LMK');
-            file_put_contents($tmpName, file_get_contents($mediaService->getMediaCoverURL($media['id'])));
-            $userService->getQQConnect()->Tweet()->addWithPicture($message, $tmpName);
-            unlink($tmpName);
-        } else {
-            $userService->getQQConnect()->Tweet()->add($message);
+        $isAutoShare = $userService->getAccount()->getConfiguration(Account::SETTING_TYPE_SNS, 'auto_share', '1');
+        $isAutoShare = '1' === $isAutoShare;
+        
+        if ( $isAutoShare ) {
+            $mediaService = $this->getMediaService();
+            $media = $mediaService->get($this->mediaId);
+            $message = $this->getMessageContentByMark($media, $this->mark);
+            if ( 1 === $media['has_cover']*1 ) {
+                $tmpName = tempnam(sys_get_temp_dir(), 'LMK');
+                file_put_contents($tmpName, file_get_contents($mediaService->getMediaCoverURL($media['id'])));
+                $userService->getQQConnect()->Tweet()->addWithPicture($message, $tmpName);
+                unlink($tmpName);
+            } else {
+                $userService->getQQConnect()->Tweet()->add($message);
+            }
         }
         
         parent::afterRunAction();

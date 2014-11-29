@@ -9,9 +9,9 @@ namespace X\Module\Lunome\Service\User;
  */
 use X\Core\X;
 use X\Module\Lunome\Model\Oauth20Model;
-use X\Module\Lunome\Model\AccountModel;
+use X\Module\Lunome\Model\Account\AccountModel;
 use X\Service\XDatabase\Core\SQL\Func\Rand;
-use X\Module\Lunome\Model\AccountLoginHistoryModel;
+use X\Module\Lunome\Model\Account\AccountLoginHistoryModel;
 use X\Library\XUtil\Network;
 use X\Service\QQ\Service as QQService;
 
@@ -66,6 +66,18 @@ class Service extends \X\Core\Service\XService {
      */
     public function getCurrentUser() {
         return $_SESSION['LUNOME']['USER'];
+    }
+    
+    /**
+     * @return string
+     */
+    public function getCurrentUserId() {
+        if ( $this->getIsGuest() ) {
+            return null;
+        } else {
+            $user = $this->getCurrentUser();
+            return $user['ID'];
+        }
     }
     
     /**

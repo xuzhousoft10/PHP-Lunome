@@ -8,10 +8,11 @@ namespace X\Module\Lunome\Service\User;
  * 
  */
 use X\Core\X;
-use X\Module\Lunome\Model\AccountModel;
+use X\Module\Lunome\Model\Account\AccountModel;
 use X\Module\Lunome\Model\Oauth20Model;
-use X\Module\Lunome\Model\AccountLoginHistoryModel;
-use X\Module\Lunome\Model\AccountHistoryModel;
+use X\Module\Lunome\Model\Account\AccountLoginHistoryModel;
+use X\Module\Lunome\Model\Account\AccountHistoryModel;
+use X\Module\Lunome\Model\Account\AccountConfigurationModel;
 
 /**
  * Handle all friend operations.
@@ -144,7 +145,70 @@ class Account {
         $history->save();
     }
     
-
+    /**
+     * @var array
+     */
+    private $configurations = array();
+    
+    /**
+     * 
+     * @param unknown $type
+     * @return AccountConfigurationModel[]
+     */
+    public function getConfigurations( $type ) {
+        if (!isset($this->configurations[$type]) ) {
+            $this->configurations[$type] = array();
+            $configurations = AccountConfigurationModel::model()->findAll(array('type'=>$type));
+            foreach ( $configurations as $configuration ) {
+                /* @var $configuration AccountConfigurationModel */
+                $this->configurations[$type][$configuration->name] = $configuration->value;
+            }
+        }
+        return $this->configurations[$type];
+    }
+    
+    /**
+     * @param unknown $type
+     * @param unknown $name
+     * @param string $default
+     */
+    public function getConfiguration( $type, $name, $default=null ) {
+        $configurations = $this->getConfigurations($type);
+        if ( isset($configurations[$name]) ) {
+            return $configurations[$name];
+        } else {
+            return $default;
+        }
+    }
+    
+    /**
+     * @param unknown $type
+     * @param unknown $values
+     */
+    public function setConfigurations( $type, $values ) {
+        $currentUserId = $this->getCurrentUserId();
+        AccountConfigurationModel::model()->deleteAllByAttributes(array('type'=>$type, 'account_id'=>$currentUserId));
+        $this->configurations[$type] = $values;
+        foreach ( $values as $name => $value ) {
+            $configuration = new AccountConfigurationModel();
+            $configuration->account_id = $currentUserId;
+            $configuration->type = $type;
+            $configuration->name = $name;
+            $configuration->value = $value;
+            $configuration->save();
+        }
+    }
+    
+    /**
+     * @return string
+     */
+    private function getCurrentUserId() {
+        return X::system()->getServiceManager()->get(Service::getServiceName())->getCurrentUserId();
+    }
+    
+    /* Account setting types */
+    const SETTING_TYPE_SNS = 'sns';
+    
     /* Actions */
     const ACTION_ENABLE = 'ACCOUNT_ENABLE';
     const ACTION_LOGIN  = 'ACCOUNT_LOGIN';

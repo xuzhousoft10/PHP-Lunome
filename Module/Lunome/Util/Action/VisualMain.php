@@ -57,6 +57,12 @@ abstract class VisualMain extends Visual {
         $items[self::MENU_ITEM_MOVIE]['label']       = '电影';
         $items[self::MENU_ITEM_MOVIE]['isActive']    = false;
         $items[self::MENU_ITEM_MOVIE]['link']        = '/?module=lunome&action=movie/index';
+        
+        $items[self::MENU_ITEM_SETTING] = array();
+        $items[self::MENU_ITEM_SETTING]['label']     = '设置';
+        $items[self::MENU_ITEM_SETTING]['isActive']  = false;
+        $items[self::MENU_ITEM_SETTING]['link']      = '/?module=lunome&action=user/setting/sns';
+        
         /*
         $items[self::MENU_ITEM_TV] = array();
         $items[self::MENU_ITEM_TV]['label']         = '电视';
@@ -94,4 +100,5 @@ abstract class VisualMain extends Visual {
     const MENU_ITEM_GAME    = 'game';
     const MENU_ITEM_COMIC   = 'comic';
     const MENU_ITEM_FRIEND  = 'friend';
+    const MENU_ITEM_SETTING = 'setting';
 }
