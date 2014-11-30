@@ -31,4 +31,9 @@ $(document).ready(function() {
     $('#goto-top').click(function() {
         $('body,html').animate({ scrollTop: 0 }, 1500);
     });
+    
+    /* 用户点击添加按钮时， 需要确认 */
+    $('#toolbar-add-new').click(function() {
+        return confirm("确定添加新电影么？");
+    });
 });

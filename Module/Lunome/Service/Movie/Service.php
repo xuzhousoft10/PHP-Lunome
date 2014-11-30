@@ -16,6 +16,7 @@ use X\Service\XDatabase\Core\SQL\Condition\Builder as ConditionBuilder;
 use X\Service\XDatabase\Core\SQL\Expression as SQLExpression;
 use X\Module\Lunome\Model\Movie\MovieModel;
 use X\Module\Lunome\Model\Movie\MovieCategoryMapModel;
+use X\Service\XDatabase\Core\Exception as DBException;
 
 /**
  * The service class
@@ -103,6 +104,10 @@ class Service extends Media {
      */
     public function getCategoriesByMovieId( $movieId ) {
         $categories = MovieCategoryMapModel::model()->findAll(array('movie_id'=>$movieId));
+        if ( 0 === count($categories) ) {
+            return array();
+        }
+        
         foreach ( $categories as $index => $category ) {
             $categories[$index] = $category->category_id;
         }
@@ -128,6 +133,88 @@ class Service extends Media {
         $criteria->addOrder('count', 'DESC');
         $languages = MovieCategoryModel::model()->findAll($criteria);
         return $languages;
+    }
+    
+    /**
+     * @param unknown $id
+     * @param unknown $categories
+     */
+    public function setCategories( $id, $categories ) {
+        $oldCategoryMaps = MovieCategoryMapModel::model()->findAll(array('movie_id'=>$id));
+        foreach ( $oldCategoryMaps as $oldCategoryMap ) {
+            $oldCategory = MovieCategoryModel::model()->findByPrimaryKey($oldCategoryMap->category_id);
+            $oldCategory->count --;
+            $oldCategory->save();
+            
+            $oldCategoryMap->delete();
+        }
+        
+        foreach ( $categories as $category ) {
+            $map = new MovieCategoryMapModel();
+            $map->category_id = $category;
+            $map->movie_id = $id;
+            $map->save();
+            
+            $newCategory = MovieCategoryModel::model()->findByPrimaryKey($category);
+            $newCategory->count ++;
+            $newCategory->save();
+        }
+    }
+    
+    /**
+     *
+     * @param unknown $id
+     * @param unknown $media
+     * @return \X\Module\Lunome\Model\Movie\MovieModel
+     */
+    public function update( $movie, $id=null ) {
+        $mediaModelName = $this->getMediaModelName();
+        $language = array('new'=>$movie['language_id']);
+        $region   = array('new'=>$movie['region_id']);
+        
+        /* @var $mediaModel \X\Util\Model\Basic */
+        if ( empty($id) ) {
+            $mediaModel = new $mediaModelName();
+        } else {
+            $mediaModel = $mediaModelName::model()->findByPrimaryKey($id);
+            $language['old'] = $mediaModel->language_id;
+            $region['old'] = $mediaModel->region_id;
+        }
+        
+        foreach ( $movie as $attr => $value ) {
+            $mediaModel->set($attr, $value);
+        }
+    
+        try {
+            $mediaModel->save();
+            
+            if ( !empty($language['new']) ) {
+                $languageModel = MovieLanguageModel::model()->findByPrimaryKey($language['new']);
+                $languageModel->count ++;
+                $languageModel->save();
+            }
+            
+            if ( !empty($region['new']) ) {
+                $regionModel = MovieRegionModel::model()->findByPrimaryKey($region['new']);
+                $regionModel->count ++;
+                $regionModel->save();
+            }
+            
+            if ( isset($language['old']) && !empty($language['old']) ) {
+                $languageModel = MovieLanguageModel::model()->findByPrimaryKey($language['old']);
+                $languageModel->count --;
+                $languageModel->save();
+            }
+            
+            if ( !empty($region['old']) && !empty($region['old']) ) {
+                $regionModel = MovieRegionModel::model()->findByPrimaryKey($region['old']);
+                $regionModel->count --;
+                $regionModel->save();
+            }
+            
+            $this->logAction($this->getActionName('add'), $mediaModel->id);
+        } catch ( DBException $e ){}
+        return $mediaModel;
     }
     
     const MARK_UNMARKED     = 0;

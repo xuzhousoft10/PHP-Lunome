@@ -18,6 +18,8 @@ use X\Service\XDatabase\Service as DatabaseService;
 use X\Module\Lunome\Service\Configuration\Service as ConfigService;
 use X\Service\XDatabase\Core\ActiveRecord\Criteria;
 use X\Service\XDatabase\Core\SQL\Expression;
+use X\Service\QiNiu\Service as QiniuService;
+use X\Util\ImageResize;
 
 /**
  * 
@@ -59,41 +61,6 @@ abstract class Media extends \X\Core\Service\XService {
     public function count($condition=null) {
         $mediaModelName = $this->getMediaModelName();
         return $mediaModelName::model()->count($condition);
-    }
-    
-    /**
-     * 
-     * @param unknown $media
-     * @return Ambigous <multitype:, multitype:NULL >
-     */
-    public function add( $media ) {
-        $mediaModelName = $this->getMediaModelName();
-        /* @var $mediaModel \X\Util\Model\Basic */
-        $mediaModel = new $mediaModelName();
-        foreach ( $media as $attr => $value ) {
-            $mediaModel->set($attr, $value);
-        }
-        $mediaModel->save();
-        $this->logAction($this->getActionName('add'), $mediaModel->id);
-        return $mediaModel->toArray();
-    }
-    
-    /**
-     * 
-     * @param unknown $id
-     * @param unknown $media
-     * @return Ambigous <multitype:, multitype:NULL >
-     */
-    public function update( $id, $media ) {
-        $mediaModelName = $this->getMediaModelName();
-        /* @var $mediaModel \X\Util\Model\Basic */
-        $mediaModel = $mediaModelName::model()->findByPrimaryKey($id);
-        foreach ( $media as $attr => $value ) {
-            $mediaModel->set($attr, $value);
-        }
-        $mediaModel->save();
-        $this->logAction($this->getActionName('update'), $mediaModel->id);
-        return $mediaModel->toArray();
     }
     
     /**
@@ -296,6 +263,44 @@ abstract class Media extends \X\Core\Service\XService {
         $type = $this->getMediaType();
         $path = 'http://lunome.qiniudn.com/covers/'.$type.'s/'.$id.'.png';
         return $path;
+    }
+    
+    /**
+     * 
+     */
+    public function addCover( $id, $coverPath ) {
+        $mediaModelName = $this->getMediaModelName();
+        $type = $this->getMediaType();
+        
+        $image = new ImageResize($coverPath);
+        $image->resize(200, 300);
+        $tempPath = tempnam(sys_get_temp_dir(), 'RSCV');
+        $image->save($tempPath);
+        
+        /* @var $qiniuService QiniuService */
+        $qiniuService = X::system()->getServiceManager()->get(QiniuService::getServiceName());
+        $qiniuService->putFile($tempPath, "covers/{$type}s", "$id.png");
+        unlink($tempPath);
+        
+        $model = $mediaModelName::model()->findByPrimaryKey($id);
+        $model->has_cover = 1;
+        $model->save();
+    }
+    
+    /**
+     * @param unknown $id
+     */
+    public function deleteCover( $id ) {
+        $mediaModelName = $this->getMediaModelName();
+        $type = $this->getMediaType();
+        
+        /* @var $qiniuService QiniuService */
+        $qiniuService = X::system()->getServiceManager()->get(QiniuService::getServiceName());
+        $qiniuService->delete("covers/{$type}s/$id.png");
+        
+        $model = $mediaModelName::model()->findByPrimaryKey($id);
+        $model->has_cover = 0;
+        $model->save();
     }
     
     /**

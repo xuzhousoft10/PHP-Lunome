@@ -31,15 +31,23 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
         </a>
     </div>
     <div class="col-md-10">
-        <h4>
-            <?php echo $media['name'];?>
-            <small>
-                 --
-                 <span class="label label-<?php echo $markStyles[$myMark];?>">
-                    <?php echo $markNames[$myMark];?>
-                 </span>
-            </small>
-        </h4>
+        <div class="clearfix">
+            <h4 class="pull-left">
+                <?php echo $media['name'];?>
+                <small>
+                     --
+                     <span class="label label-<?php echo $markStyles[$myMark];?>">
+                        <?php echo $markNames[$myMark];?>
+                     </span>
+                </small>
+            </h4>
+            <span class="pull-right">
+                <a href="/?module=lunome&action=movie/edit&id=<?php echo $media['id']; ?>">
+                    <span class="glyphicon glyphicon-pencil"></span>编辑
+                </a>
+            </span>
+        </div>
+        
         <br>
         <table class="table table-bordered">
             <?php require dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.$mediaType.DIRECTORY_SEPARATOR.'Detail.php';?>

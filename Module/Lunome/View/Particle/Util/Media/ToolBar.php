@@ -4,11 +4,16 @@ $mediaType = $vars['mediaType'];
 ?>
 <div class="media-index-tool-bar">
     <div class="media-index-tool-bar-item">
-        <a href="/?module=lunome&action=<?php echo $mediaType;?>/top"><strong>排行榜</strong></a>
+        <a href="/?module=lunome&action=<?php echo $mediaType;?>/top" title="标记排行榜"><strong>排行榜</strong></a>
     </div>
     <div class="media-index-tool-bar-item" id="goto-top">
-        <a href="#">
-            <img src="http://lunome.kupoy.com/Assets/image/goup.png" width="50">
+        <a href="#" title="返回顶端">
+            <img src="/Assets/image/goup.png" width="50">
+        </a>
+    </div>
+    <div class="media-index-tool-bar-item" id="goto-top">
+        <a href="/?module=lunome&action=movie/edit" id="toolbar-add-new" title="添加新电影信息">
+            <img src="/Assets/image/add.png" width="50">
         </a>
     </div>
 </div>

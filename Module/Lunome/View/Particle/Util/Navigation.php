@@ -33,12 +33,6 @@ $user = $vars['user'];
                             </a>
                             </li>
                             -->
-                            <li>
-                                <a href="/?module=lunome&action=user/setting">
-                                    <span class=" glyphicon glyphicon-cog"></span>
-                                    个人设置
-                                </a>
-                            </li>
                             <?php if ($user['isAdmin']) : ?>
                                 <li class="divider"></li>
                                 <li>

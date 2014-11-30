@@ -21,8 +21,11 @@ class Detail extends MediaDetail {
      * @see \X\Module\Lunome\Util\Action\Media\Detail::afterFindTheModel()
      */
     protected function afterFindTheModel($media) {
-        $media['region'] = $this->getMovieService()->getRegionById($media['region_id'])->name;
-        $media['language'] = $this->getMovieService()->getLanguageById($media['language_id'])->name;
+        $region = $this->getMovieService()->getRegionById($media['region_id']);
+        $language = $this->getMovieService()->getLanguageById($media['language_id']);
+        
+        $media['region'] = (null===$region) ? '其他' : $region->name;
+        $media['language'] = (null===$language) ? '其他' : $language->name;
         $media['category'] = $this->getMovieService()->getCategoriesByMovieId($media['id']);
         foreach ( $media['category'] as $index => $category ) {
             $media['category'][$index] = $category->name;
