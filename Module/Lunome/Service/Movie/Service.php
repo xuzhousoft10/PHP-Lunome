@@ -17,6 +17,7 @@ use X\Service\XDatabase\Core\SQL\Expression as SQLExpression;
 use X\Module\Lunome\Model\Movie\MovieModel;
 use X\Module\Lunome\Model\Movie\MovieCategoryMapModel;
 use X\Service\XDatabase\Core\Exception as DBException;
+use X\Module\Lunome\Model\Movie\MovieShortCommentModel;
 
 /**
  * The service class
@@ -215,6 +216,56 @@ class Service extends Media {
             $this->logAction($this->getActionName('add'), $mediaModel->id);
         } catch ( DBException $e ){}
         return $mediaModel;
+    }
+    
+    /**
+     * @param unknown $id
+     * @param unknown $content
+     * @return \X\Module\Lunome\Model\Movie\MovieShortCommentModel
+     */
+    public function addShortComment( $id, $content ) {
+        $model = new MovieShortCommentModel();
+        $model->movie_id = $id;
+        $model->content = $content;
+        $model->commented_at = date('Y-m-d H:i:s', time());
+        $model->commented_by = $this->getCurrentUserId();
+        $model->parent_id = '00000000-0000-0000-0000-000000000000';
+        $model->save();
+        return $model;
+    }
+    
+    /**
+     * @param unknown $id
+     * @param string $parent
+     * @return Ambigous <multitype:\X\Service\XDatabase\Core\ActiveRecord\XActiveRecord , multitype:>
+     */
+    public function getShortComments( $id, $parent=null, $position, $length ) {
+        $condition = array();
+        $condition['movie_id'] = $id;
+        $condition['parent_id'] = (null===$parent)?'00000000-0000-0000-0000-000000000000':$id;
+        
+        $criteria = new Criteria();
+        $criteria->limit = $length;
+        $criteria->position = $position;
+        $criteria->condition = $condition;
+        $criteria->addOrder('commented_at', 'DESC');
+        
+        $comments = MovieShortCommentModel::model()->findAll($criteria);
+        return $comments;
+    }
+    
+    /**
+     * @param unknown $id
+     * @param string $parent
+     * @return Ambigous <multitype:\X\Service\XDatabase\Core\ActiveRecord\XActiveRecord , multitype:>
+     */
+    public function countShortComments( $id, $parent=null ) {
+        $condition = array();
+        $condition['movie_id'] = $id;
+        $condition['parent_id'] = (null===$parent)?'00000000-0000-0000-0000-000000000000':$id;
+        
+        $count = MovieShortCommentModel::model()->count($condition);
+        return $count;
     }
     
     const MARK_UNMARKED     = 0;

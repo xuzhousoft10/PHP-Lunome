@@ -69,6 +69,7 @@ abstract class Detail extends Visual {
         $names  = $service->getMarkNames();
         $styles = $this->getMarkStyles();
         
+        $userData = $this->isGuest ? null : $this->getUserService()->getAccount()->get($this->getUserService()->getCurrentUserId());
         $name   = 'MEDIA_DETAIL';
         $path   = $this->getParticleViewPath('Util/Media/Detail');
         $option = array();
@@ -80,7 +81,9 @@ abstract class Detail extends Visual {
             'markNames'     => $names,
             'mediaType'     => $mediaType,
             'mediaName'     => $service->getMediaName(),
-            'shareMessage'  => $this->getShareMessage($media['id'], $myMark)
+            'shareMessage'  => $this->getShareMessage($media['id'], $myMark),
+            'isGuestUser'   => $this->isGuest,
+            'currentUser'   => $userData,
         );
         $this->getView()->loadParticle($name, $path, $option, $data);
         

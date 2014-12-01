@@ -19,6 +19,15 @@ use X\Module\Lunome\Model\Account\AccountConfigurationModel;
  */
 class Account {
     /**
+     * @param unknown $id
+     * @return AccountModel
+     */
+    public function get( $id ) {
+        $account = AccountModel::model()->findByPrimaryKey($id);
+        return $account;
+    }
+    
+    /**
      * @return array
      */
     public function findAll( $condition=null, $position=0, $limit=0 ) {

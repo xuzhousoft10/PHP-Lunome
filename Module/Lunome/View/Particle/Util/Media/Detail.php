@@ -1,4 +1,6 @@
 <?php 
+$this->addScriptFile('detail-comments', '/Assets/js/media_comment.js');
+
 use X\Module\Lunome\Service\Movie\Service as MovieService;
 
 $vars = get_defined_vars();
@@ -94,7 +96,17 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
         </div>
     </div>
 </div>
+
 <hr>
 <div class="margin-top-5">
     <p><?php echo $media['introduction'];?></p>
 </div>
+<hr>
+
+<!-- 评论列表 -->
+<div    id                  = "movie-short-comment-container"
+        data-is-guest-user  = "<?php echo (null===$vars['currentUser'])?'true':'false'; ?>"
+        data-user-nickname  = "<?php echo (null===$vars['currentUser'])?'':$vars['currentUser']->nickname; ?>"
+        data-user-photo     = "<?php echo (null===$vars['currentUser'])?'':$vars['currentUser']->photo; ?>"
+        data-media-id       ="<?php echo $media['id']; ?>"
+></div>
