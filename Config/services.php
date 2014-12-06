@@ -75,4 +75,10 @@ return array (
     'delay' => true,
     'class' => 'X\\Service\\QQ\\Service',
   ),
+  'Sina' => 
+  array (
+    'enable' => true,
+    'delay' => true,
+    'class' => 'X\\Service\\Sina\\Service',
+  ),
 );

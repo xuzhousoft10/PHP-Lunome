@@ -12,6 +12,7 @@ use X\Module\Lunome\Service\User\Account;
 use X\Module\Lunome\Util\Action\Media\Mark as MediaMark;
 use X\Module\Lunome\Service\User\Service as UserService;
 use X\Module\Lunome\Service\Movie\Service as MovieService;
+use X\Module\Lunome\Model\Oauth20Model;
 
 /**
  * The action class for movie/ignore action.
@@ -32,13 +33,30 @@ class Mark extends MediaMark {
             $mediaService = $this->getMediaService();
             $media = $mediaService->get($this->mediaId);
             $message = $this->getMessageContentByMark($media, $this->mark);
+            $image = false;
             if ( 1 === $media['has_cover']*1 ) {
                 $tmpName = tempnam(sys_get_temp_dir(), 'LMK');
                 file_put_contents($tmpName, file_get_contents($mediaService->getMediaCoverURL($media['id'])));
-                $userService->getQQConnect()->Tweet()->addWithPicture($message, $tmpName);
-                unlink($tmpName);
-            } else {
-                $userService->getQQConnect()->Tweet()->add($message);
+                $image = $tmpName;
+            }
+            
+            $oauth = $userService->getAccount()->getOauth();
+            if ( Oauth20Model::SERVER_QQ === $oauth['server'] ) {
+                if ( false === $image ) {
+                    $userService->getQQConnect()->Tweet()->add($message);
+                } else {
+                    $userService->getQQConnect()->Tweet()->addWithPicture($message, $tmpName);
+                }
+            } else if ( Oauth20Model::SERVER_SINA === $oauth['server'] ) {
+                if ( false === $image ) {
+                    $userService->getWeiboConnect()->Status()->update($message);
+                } else {
+                    $userService->getWeiboConnect()->Status()->upload($message, $image);
+                }
+            }
+            
+            if ( false !== $image ) {
+                unlink($image);
             }
         }
         

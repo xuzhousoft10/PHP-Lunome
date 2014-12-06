@@ -54,4 +54,5 @@ class Oauth20Model extends Basic {
     
     /* OAuthr services */
     const SERVER_QQ = 'qq';
+    const SERVER_SINA = 'sina';
 }

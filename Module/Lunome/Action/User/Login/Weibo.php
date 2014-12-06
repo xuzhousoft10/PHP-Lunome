@@ -8,20 +8,20 @@ namespace X\Module\Lunome\Action\User\Login;
  * 
  */
 use X\Core\X;
-use X\Module\Lunome\Util\Action\Basic;
 use X\Module\Lunome\Service\User\Service;
 
 /**
  * The action class for user/login/qq action.
  * @author Unknown
  */
-class Qq extends Basic { 
+class Weibo extends \X\Util\Action\Basic { 
     /** 
      * The action handle for index action.
      * @return void
      */ 
     public function runAction( ) {
-        $url = $this->getService(Service::getServiceName())->getQQLoginURL();
+        $callback = "http://{$_SERVER['HTTP_HOST']}/index.php?module=lunome&action=user/login/weibocallback";
+        $url = $this->getService(Service::getServiceName())->getWeiboLoginURL($callback);
         header("Location:$url");
         X::system()->stop();
     }

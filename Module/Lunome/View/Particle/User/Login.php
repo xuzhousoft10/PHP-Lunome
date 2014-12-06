@@ -14,6 +14,11 @@ $this->addStyle('body', array(
             <a href="/index.php?module=lunome&action=user/login/qq">
                 <img src="<?php echo $QQLoginIcon; ?>">
             </a>
+            <br>
+            <br>
+            <a href="/index.php?module=lunome&action=user/login/weibo">
+                <img src="/Assets/image/weibo_login.png">
+            </a>
         </div>
     </div>
 </div>

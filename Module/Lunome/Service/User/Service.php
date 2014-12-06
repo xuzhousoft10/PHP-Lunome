@@ -14,6 +14,7 @@ use X\Service\XDatabase\Core\SQL\Func\Rand;
 use X\Module\Lunome\Model\Account\AccountLoginHistoryModel;
 use X\Library\XUtil\Network;
 use X\Service\QQ\Service as QQService;
+use X\Service\Sina\Service as SinaService;
 
 /**
  * The service class
@@ -24,10 +25,6 @@ class Service extends \X\Core\Service\XService {
      * @see \X\Core\Service\XService::afterStart()
      */
     protected function afterStart() {
-        if ( isset($_SERVER['HTTP_HOST']) && 'lunome.kupoy.com' === $_SERVER['HTTP_HOST'] && $this->getIsGuest()) {
-            $account = AccountModel::model()->find(array('status'=>2, 'is_admin'=>1));
-            $this->loginAccount($account, 'DEBUG');
-        }
         $this->initCurrentUserInformation();
     }
     
@@ -85,7 +82,7 @@ class Service extends \X\Core\Service\XService {
      * 
      * @return void
      */
-    public function loginByQQ() {
+    public function getQQLoginURL() {
         $qqConnect = $this->getQQConnect();
         return $qqConnect->getLoginUrl();
     }
@@ -117,6 +114,40 @@ class Service extends \X\Core\Service\XService {
     }
     
     /**
+     * 获取微博登录的URL
+     * @param unknown $callbackURL
+     * @return Ambigous <multitype:, string>
+     */
+    public function getWeiboLoginURL( $callbackURL ) {
+        $url = $this->getWeiboConnect()->getAuthorizeURL($callbackURL);
+        return $url;
+    }
+    
+    /**
+     * @return void
+     */
+    public function loginByWeiboCallback( $code, $callbackURL ) {
+        $connect = $this->getWeiboConnect();
+        $connect->handleCallbackByCode($code, $callbackURL);
+        $token = $connect->accessToken;
+        $openId = $connect->uid;
+        
+        $condition = array('server'=>Oauth20Model::SERVER_SINA, 'openid'=>$openId);
+        $oauth = Oauth20Model::model()->find($condition);
+        if ( null === $oauth ) {
+            $oauth = new Oauth20Model();
+            $oauth->server = Oauth20Model::SERVER_SINA;
+            $oauth->openid = $openId;
+        }
+        $oauth->access_token    = $token;
+        $oauth->expired_at      = date('Y-m-d H:i:s', time()+$connect->accessTokenLifeTime);
+        $oauth->refresh_token   = '';
+        $oauth->save();
+        $account = $this->getAccountByOAuth($oauth);
+        $this->loginAccount($account, 'Sina OAuth2.0');
+    }
+    
+    /**
      * @var QQService
      */
     private $qqService = null;
@@ -128,18 +159,41 @@ class Service extends \X\Core\Service\XService {
     public function getQQConnect() {
         if ( null === $this->qqService ) {
             $this->qqService = X::system()->getServiceManager()->get(QQService::getServiceName());
-        }
-        if ( !$this->getIsGuest() ) {
-            $account = AccountModel::model()->find(array('id'=>$_SESSION['LUNOME']['USER']['ID']));
-            $oauth = $this->getAccount()->getOauth($account->oauth20_id);
-            if ( empty($oauth) ) {
-                return false;
+            if ( !$this->getIsGuest() ) {
+                $account = AccountModel::model()->find(array('id'=>$_SESSION['LUNOME']['USER']['ID']));
+                $oauth = $this->getAccount()->getOauth($account->oauth20_id);
+                if ( empty($oauth) ) {
+                    return false;
+                }
+                $this->qqService->getConnect()->setOpenId($oauth['openid']);
+                $this->qqService->getConnect()->setAccessToken($oauth['access_token']);
             }
-            $this->qqService->getConnect()->setOpenId($oauth['openid']);
-            $this->qqService->getConnect()->setAccessToken($oauth['access_token']);
         }
         
         return $this->qqService->getConnect();
+    }
+    
+    /**
+     * @var SinaService
+     */
+    private $sinaService = null;
+    
+    /**
+     * @return \X\Service\Sina\Core\Connect\SDK
+     */
+    public function getWeiboConnect() {
+        if ( null === $this->sinaService ) {
+            $this->sinaService = X::system()->getServiceManager()->get(SinaService::getServiceName());
+            if ( !$this->getIsGuest() ) {
+                $oauth = $this->getAccount()->getOauth();
+                if ( empty($oauth) ) {
+                    return false;
+                }
+                $this->sinaService->getConnect()->accessToken = $oauth['access_token'];
+                $this->sinaService->getConnect()->uid = $oauth['openid'];
+            }
+        }
+        return $this->sinaService->getConnect();
     }
     
     /**
@@ -148,15 +202,26 @@ class Service extends \X\Core\Service\XService {
      * @return Ambigous <\X\Module\Lunome\Model\AccountModel, \X\Service\XDatabase\Core\ActiveRecord\ActiveRecord, NULL>
      */
     protected function getAccountByOAuth( Oauth20Model $oauth ) {
-        $qqConnect = $this->getQQConnect();
         $account = AccountModel::model()->find(array('oauth20_id'=>$oauth->id));
-        $userInfo = $qqConnect->QZone()->getInfo();
+        
+        $information = array();
+        if ( Oauth20Model::SERVER_QQ === $oauth->server ) {
+            $connect = $this->getQQConnect();
+            $userInfo = $connect->QZone()->getInfo();
+            $information['nickname'] = $userInfo['nickname'];
+            $information['photo'] = $userInfo['figureurl_qq_2'];
+        } else if ( Oauth20Model::SERVER_SINA === $oauth->server ) {
+            $connect = $this->getWeiboConnect();
+            $userInfo = $connect->User()->getInfo();
+            $information['nickname'] = $userInfo['name'];
+            $information['photo'] = $userInfo['avatar_large'];
+        }
+        
         if ( null === $account ) {
             $account = $this->enableRandomAccount();
         }
-        
-        $account->nickname      = $userInfo['nickname'];
-        $account->photo         = $userInfo['figureurl_qq_2'];
+        $account->nickname      = $information['nickname'];
+        $account->photo         = $information['photo'];
         $account->oauth20_id    = $oauth->id;
         $account->save();
         return $account;
