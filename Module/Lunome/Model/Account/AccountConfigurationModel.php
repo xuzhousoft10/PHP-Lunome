@@ -4,8 +4,6 @@ namespace X\Module\Lunome\Model\Account;
 /**
  * Use statements
  */
-use X\Service\XDatabase\Core\Table\ColumnType;
-use X\Service\XDatabase\Core\ActiveRecord\Column;
 use X\Util\Model\Basic;
 
 /**
@@ -22,11 +20,11 @@ class AccountConfigurationModel extends Basic {
      */
     protected function describe() {
         $columns = array();
-        $columns[] = Column::create('id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setIsPrimaryKey(true)->setNullable(false);
-        $columns[] = Column::create('account_id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setNullable(false);
-        $columns[] = Column::create('type')->setType(ColumnType::T_VARCHAR)->setLength(32);
-        $columns[] = Column::create('name')->setType(ColumnType::T_VARCHAR)->setLength(64);
-        $columns[] = Column::create('value')->setType(ColumnType::T_VARCHAR)->setLength(64);
+        $columns['id']          = 'PRIMARY VARCHAR(36) NN';
+        $columns['account_id']  = 'VARCHAR(36) NN';
+        $columns['type']        = 'VARCHAR(32)';
+        $columns['name']        = 'VARCHAR(64)';
+        $columns['value']       = 'VARCHAR(64)';
         return $columns;
     }
 

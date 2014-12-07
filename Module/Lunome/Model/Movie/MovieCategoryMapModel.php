@@ -5,8 +5,6 @@ namespace X\Module\Lunome\Model\Movie;
  * Use statements
  */
 use X\Util\Model\Basic;
-use X\Service\XDatabase\Core\Table\ColumnType;
-use X\Service\XDatabase\Core\ActiveRecord\Column;
 
 /**
  * @property string $id
@@ -20,9 +18,9 @@ class MovieCategoryMapModel extends Basic {
      */
     protected function describe() {
         $columns = array();
-        $columns[] = Column::create('id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setIsPrimaryKey(true)->setNullable(false);
-        $columns[] = Column::create('movie_id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setNullable(false);
-        $columns[] = Column::create('category_id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setNullable(false);
+        $columns['id']          = 'PRIMARY VARCHAR(36) NOTNULL';
+        $columns['movie_id']     = 'VARCHAR(36) NOTNULL';
+        $columns['category_id']  = 'VARCHAR(36) NOTNULL';
         return $columns;
     }
 

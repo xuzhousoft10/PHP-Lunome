@@ -4,8 +4,6 @@ namespace X\Module\Lunome\Model\Account;
 /**
  * Use statements
  */
-use X\Service\XDatabase\Core\Table\ColumnType;
-use X\Service\XDatabase\Core\ActiveRecord\Column;
 use X\Util\Model\Basic;
 
 /**
@@ -39,14 +37,14 @@ class AccountModel extends Basic {
      */
     protected function describe() {
         $columns = array();
-        $columns[] = Column::create('id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setIsPrimaryKey(true)->setNullable(false);
-        $columns[] = Column::create('account')->setType(ColumnType::T_INT)->setNullable(false);
-        $columns[] = Column::create('oauth20_id')->setType(ColumnType::T_VARCHAR)->setLength(36);
-        $columns[] = Column::create('nickname')->setType(ColumnType::T_VARCHAR)->setLength(64);
-        $columns[] = Column::create('status')->setType(ColumnType::T_TINYINT)->setNullable(false);
-        $columns[] = Column::create('enabled_at')->setType(ColumnType::T_DATETIME);
-        $columns[] = Column::create('photo')->setType(ColumnType::T_VARCHAR)->setLength(256);
-        $columns[] = Column::create('is_admin')->setType(ColumnType::T_TINYINT)->setDefault(0)->setIsUnsigned(true);
+        $columns['id']          = 'PRIMARY VARCHAR(36) NOTNULL';
+        $columns['account']     = 'INT NOTNULL';
+        $columns['oauth20_id']  = 'VARCHAR(36)';
+        $columns['nickname']    = 'VARCHAR(64)';
+        $columns['status']      = 'TINYINT NOTNULL';
+        $columns['enabled_at']  = 'DATETIME';
+        $columns['photo']       = 'VARCHAR(256)';
+        $columns['is_admin']    = 'TINYINT [0] UNSIGNED';
         return $columns;
     }
 

@@ -4,8 +4,6 @@ namespace X\Module\Lunome\Model\Account;
 /**
  * Use statements
  */
-use X\Service\XDatabase\Core\Table\ColumnType;
-use X\Service\XDatabase\Core\ActiveRecord\Column;
 use X\Util\Model\Basic;
 
 /**
@@ -34,10 +32,10 @@ class AccountFriendshipModel extends Basic {
      */
     protected function describe() {
         $columns = array();
-        $columns[] = Column::create('id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setIsPrimaryKey(true)->setNullable(false);
-        $columns[] = Column::create('account_me')->setType(ColumnType::T_VARCHAR)->setLength(36)->setNullable(false);
-        $columns[] = Column::create('account_him')->setType(ColumnType::T_VARCHAR)->setLength(36)->setNullable(false);
-        $columns[] = Column::create('started_at')->setType(ColumnType::T_VARCHAR)->setLength(36)->setNullable(false);
+        $columns['id']          = 'PRIMARY VARCHAR(36) NN';
+        $columns['account_me']  = 'VARCHAR(36) NN';
+        $columns['account_him'] = 'VARCHAR(32)';
+        $columns['started_at']  = 'DATETIME';
         return $columns;
     }
 

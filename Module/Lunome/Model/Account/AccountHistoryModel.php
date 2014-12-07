@@ -4,8 +4,6 @@ namespace X\Module\Lunome\Model\Account;
 /**
  * Use statements
  */
-use X\Service\XDatabase\Core\Table\ColumnType;
-use X\Service\XDatabase\Core\ActiveRecord\Column;
 use X\Util\Model\Basic;
 
 /**
@@ -25,15 +23,14 @@ class AccountHistoryModel extends Basic {
      */
     protected function describe() {
         $columns = array();
-        $columns[] = Column::create('id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setIsPrimaryKey(true)->setNullable(false);
-        $columns[] = Column::create('account_id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setNullable(false);
-        $columns[] = Column::create('time')->setType(ColumnType::T_DATETIME)->setNullable(false);
-        $columns[] = Column::create('action')->setType(ColumnType::T_VARCHAR)->setLength(64)->setNullable(false);
-        $columns[] = Column::create('target')->setType(ColumnType::T_VARCHAR)->setLength(36);
-        $columns[] = Column::create('code')->setType(ColumnType::T_TINYINT)->setIsUnsigned(true)->setDefault(0);
-        $columns[] = Column::create('message')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('comment')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        
+        $columns['id']          = 'PRIMARY VARCHAR(36) NOTNULL';
+        $columns['account_id']  = 'VARCHAR(36) NOTNULL';
+        $columns['time']        = 'DATETIME NOTNULL';
+        $columns['action']      = 'VARCHAR(64) NOTNULL';
+        $columns['target']      = 'VARCHAR(36) NOTNULL';
+        $columns['code']        = 'TINYINT UNSIGNED [0]';
+        $columns['message']     = 'VARCHAR(128)';
+        $columns['comment']     = 'VARCHAR(128)';
         return $columns;
     }
 

@@ -5,8 +5,6 @@ namespace X\Module\Lunome\Model\Movie;
  * Use statements
  */
 use X\Util\Model\Basic;
-use X\Service\XDatabase\Core\Table\ColumnType;
-use X\Service\XDatabase\Core\ActiveRecord\Column;
 
 /**
  * @property string $id
@@ -23,12 +21,12 @@ class MovieCategoryModel extends Basic {
      */
     protected function describe() {
         $columns = array();
-        $columns[] = Column::create('id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setIsPrimaryKey(true)->setNullable(false);
-        $columns[] = Column::create('name')->setType(ColumnType::T_VARCHAR)->setLength(45);
-        $columns[] = Column::create('count')->setType(ColumnType::T_INT)->setIsUnsigned(true);
-        $columns[] = Column::create('beg_message')->setType(ColumnType::T_VARCHAR)->setLength(256);
-        $columns[] = Column::create('recommend_message')->setType(ColumnType::T_VARCHAR)->setLength(256);
-        $columns[] = Column::create('share_message')->setType(ColumnType::T_VARCHAR)->setLength(256);
+        $columns['id']                  = 'PRIMARY VARCHAR(36) NOTNULL';
+        $columns['name']                = 'VARCHAR(45)';
+        $columns['count']               = 'INT UNSIGNED';
+        $columns['beg_message']         = 'VARCHAR(256)';
+        $columns['recommend_message']   = 'VARCHAR(256)';
+        $columns['share_message']       = 'VARCHAR(256)';
         return $columns;
     }
 

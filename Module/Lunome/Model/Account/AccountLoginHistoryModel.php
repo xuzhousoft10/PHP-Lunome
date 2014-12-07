@@ -4,8 +4,6 @@ namespace X\Module\Lunome\Model\Account;
 /**
  * Use statements
  */
-use X\Service\XDatabase\Core\Table\ColumnType;
-use X\Service\XDatabase\Core\ActiveRecord\Column;
 use X\Util\Model\Basic;
 
 /**
@@ -26,15 +24,15 @@ class AccountLoginHistoryModel extends Basic {
      */
     protected function describe() {
         $columns = array();
-        $columns[] = Column::create('id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setIsPrimaryKey(true)->setNullable(false);
-        $columns[] = Column::create('account_id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setNullable(false);
-        $columns[] = Column::create('time')->setType(ColumnType::T_DATETIME)->setNullable(false);
-        $columns[] = Column::create('ip')->setType(ColumnType::T_VARCHAR)->setLength(64)->setNullable(false);
-        $columns[] = Column::create('logined_by')->setType(ColumnType::T_VARCHAR)->setLength(32)->setNullable(false);
-        $columns[] = Column::create('country')->setType(ColumnType::T_VARCHAR)->setLength(64);
-        $columns[] = Column::create('province')->setType(ColumnType::T_VARCHAR)->setLength(64);
-        $columns[] = Column::create('city')->setType(ColumnType::T_VARCHAR)->setLength(64);
-        $columns[] = Column::create('isp')->setType(ColumnType::T_VARCHAR)->setLength(64);
+        $columns['id']          = 'PRIMARY VARCHAR(36) NN';
+        $columns['account_id']  = 'VARCHAR(36) NN';
+        $columns['time']        = 'DATETIME NN';
+        $columns['ip']          = 'VARCHAR(64) NN';
+        $columns['logined_by']  = 'VARCHAR(32) NN';
+        $columns['country']     = 'VARCHAR(64)';
+        $columns['province']    = 'VARCHAR(64)';
+        $columns['city']        = 'VARCHAR(64)';
+        $columns['isp']         = 'VARCHAR(64)';
         return $columns;
     }
 

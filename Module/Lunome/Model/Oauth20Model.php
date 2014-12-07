@@ -4,8 +4,6 @@ namespace X\Module\Lunome\Model;
 /**
  * Use statements
  */
-use X\Service\XDatabase\Core\Table\ColumnType;
-use X\Service\XDatabase\Core\ActiveRecord\Column;
 use X\Util\Model\Basic;
 
 /**
@@ -35,12 +33,12 @@ class Oauth20Model extends Basic {
      */
     protected function describe() {
         $columns = array();
-        $columns[] = Column::create('id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setIsPrimaryKey(true)->setNullable(false);
-        $columns[] = Column::create('server')->setType(ColumnType::T_VARCHAR)->setLength(36)->setNullable(false);
-        $columns[] = Column::create('openid')->setType(ColumnType::T_VARCHAR)->setLength(36)->setNullable(false);
-        $columns[] = Column::create('access_token')->setType(ColumnType::T_VARCHAR)->setLength(36)->setNullable(false);
-        $columns[] = Column::create('refresh_token')->setType(ColumnType::T_VARCHAR)->setLength(36)->setNullable(false);
-        $columns[] = Column::create('expired_at')->setType(ColumnType::T_DATETIME)->setNullable(false);
+        $columns['id']              = 'PRIMARY VARCHAR(36) NOTNULL';
+        $columns['server']          = 'VARCHAR(36) NOTNULL';
+        $columns['openid']          = 'VARCHAR(36) NOTNULL';
+        $columns['access_token']    = 'VARCHAR(36) NOTNULL';
+        $columns['refresh_token']   = 'VARCHAR(36) NOTNULL';
+        $columns['expired_at']      = 'DATETIME NOTNULL';
         return $columns;
     }
 

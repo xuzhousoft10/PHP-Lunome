@@ -5,8 +5,6 @@ namespace X\Module\Lunome\Model;
  * Use statements
  */
 use X\Util\Model\Basic;
-use X\Service\XDatabase\Core\Table\ColumnType;
-use X\Service\XDatabase\Core\ActiveRecord\Column;
 
 /**
  * @property string $id
@@ -31,21 +29,21 @@ class ComicModel extends Basic {
      */
     protected function describe() {
         $columns = array();
-        $columns[] = Column::create('id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setIsPrimaryKey(true)->setNullable(false);
-        $columns[] = Column::create('name')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('author')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('region')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('status')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('magazine')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('press')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('published_at')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('finished_at')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('episode_count')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('volume_count')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('category')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('premiered_at')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('character')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('introduction')->setType(ColumnType::T_VARCHAR)->setLength(128);
+        $columns['id']              = 'PRIMARY VARCHAR(36) NOTNULL';
+        $columns['name']            = 'VARCHAR(128)';
+        $columns['author']          = 'VARCHAR(128)';
+        $columns['region']          = 'VARCHAR(128)';
+        $columns['status']          = 'VARCHAR(128)';
+        $columns['magazine']        = 'VARCHAR(128)';
+        $columns['press']           = 'VARCHAR(128)';
+        $columns['published_at']    = 'VARCHAR(128)';
+        $columns['finished_at']     = 'VARCHAR(128)';
+        $columns['episode_count']   = 'VARCHAR(128)';
+        $columns['volume_count']    = 'VARCHAR(128)';
+        $columns['category']        = 'VARCHAR(128)';
+        $columns['premiered_at']    = 'VARCHAR(128)';
+        $columns['character']       = 'VARCHAR(128)';
+        $columns['introduction']    = 'VARCHAR(128)';
         return $columns;
     }
 

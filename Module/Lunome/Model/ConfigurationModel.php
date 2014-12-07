@@ -4,8 +4,6 @@ namespace X\Module\Lunome\Model;
 /**
  * Use statements
  */
-use X\Service\XDatabase\Core\Table\ColumnType;
-use X\Service\XDatabase\Core\ActiveRecord\Column;
 use X\Util\Model\Basic;
 
 /**
@@ -22,11 +20,11 @@ class ConfigurationModel extends Basic {
      */
     protected function describe() {
         $columns = array();
-        $columns[] = Column::create('id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setNullable(false)->setIsPrimaryKey(true);
-        $columns[] = Column::create('name')->setType(ColumnType::T_VARCHAR)->setLength(128)->setNullable(false);
-        $columns[] = Column::create('value')->setType(ColumnType::T_VARCHAR)->setLength(256);
-        $columns[] = Column::create('updated_at')->setType(ColumnType::T_DATETIME);
-        $columns[] = Column::create('updated_by')->setType(ColumnType::T_VARCHAR)->setLength(36);
+        $columns['id']          = 'PRIMARY VARCHAR(36) NOTNULL';
+        $columns['name']        = 'VARCHAR(128) NOTNULL';
+        $columns['value']       = 'VARCHAR(256)';
+        $columns['updated_at']  = 'DATETIME';
+        $columns['updated_by']  = 'VARCHAR(36)';
         return $columns;
     }
 

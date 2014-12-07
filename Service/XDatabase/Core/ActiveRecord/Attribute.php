@@ -14,7 +14,33 @@ use X\Service\XDatabase\Core\Table\Column as TableColumn;
 /**
  * 
  */
-class Column extends TableColumn {
+class Attribute extends TableColumn {
+    /**
+     * @param string $description
+     */
+    public function setupByString( $description ) {
+        $description = str_getcsv($description, ' ', '"');
+        while ( null !== ( $item=array_pop($description) ) ) {
+            switch ( strtoupper($item) ) {
+            case 'PRIMARY'  : $this->setIsPrimaryKey(true); break;
+            case 'UNSIGNED' : $this->setIsUnsigned(true); break;
+            case 'UNIQUE'   : $this->setIsUnique(true); break;
+            case 'NOTNULL'  : $this->setNullable(false); break;
+            default:
+                if ( ('[' === $item[0]) && (']' === $item[strlen($item)-1]) ) {
+                    $this->setDefault(substr($item, 1, strlen($item)-1));
+                } else {
+                    $type = explode('(', $item);
+                    $this->setType($type[0]);
+                    if ( isset($type[1]) ) {
+                        $this->setLength(substr($type[1], 0, strlen($type[1])-1));
+                    }
+                }
+                break;
+            }
+        }
+    }
+    
     /**
      * @var \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord
      */

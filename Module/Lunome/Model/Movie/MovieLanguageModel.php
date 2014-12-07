@@ -5,8 +5,6 @@ namespace X\Module\Lunome\Model\Movie;
  * Use statements
  */
 use X\Util\Model\Basic;
-use X\Service\XDatabase\Core\Table\ColumnType;
-use X\Service\XDatabase\Core\ActiveRecord\Column;
 
 /**
  * @property string $id
@@ -20,9 +18,9 @@ class MovieLanguageModel extends Basic {
      */
     protected function describe() {
         $columns = array();
-        $columns[] = Column::create('id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setIsPrimaryKey(true)->setNullable(false);
-        $columns[] = Column::create('name')->setType(ColumnType::T_VARCHAR)->setLength(45);
-        $columns[] = Column::create('count')->setType(ColumnType::T_INT)->setIsUnsigned(true);
+        $columns['id']      = 'PRIMARY VARCHAR(36) NOTNULL';
+        $columns['name']    = 'VARCHAR(45)';
+        $columns['count']   = 'INT UNSIGNED';
         return $columns;
     }
 

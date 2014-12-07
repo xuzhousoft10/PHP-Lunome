@@ -5,8 +5,6 @@ namespace X\Module\Lunome\Model\Movie;
  * Use statements
  */
 use X\Util\Model\Basic;
-use X\Service\XDatabase\Core\Table\ColumnType;
-use X\Service\XDatabase\Core\ActiveRecord\Column;
 
 /**
  * @property string $id
@@ -31,19 +29,19 @@ class MovieModel extends Basic {
      */
     protected function describe() {
         $columns = array();
-        $columns[] = Column::create('id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setIsPrimaryKey(true)->setNullable(false);
-        $columns[] = Column::create('name')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('length')->setType(ColumnType::T_INT)->setIsUnsigned(true);
-        $columns[] = Column::create('date')->setType(ColumnType::T_DATE);
-        $columns[] = Column::create('region_id')->setType(ColumnType::T_VARCHAR)->setLength(36);
-        $columns[] = Column::create('language_id')->setType(ColumnType::T_VARCHAR)->setLength(36);
-        $columns[] = Column::create('director')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('writer')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('producer')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('executive')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('actor')->setType(ColumnType::T_VARCHAR)->setLength(256);
-        $columns[] = Column::create('introduction')->setType(ColumnType::T_VARCHAR)->setLength(1024);
-        $columns[] = Column::create('has_cover')->setType(ColumnType::T_TINYINT)->setDefault(0);
+        $columns['id']              = 'PRIMARY VARCHAR(36) NOTNULL';
+        $columns['name']            = 'VARCHAR(128)';
+        $columns['length']          = 'INT UNSIGNED';
+        $columns['date']            = 'DATE';
+        $columns['region_id']       = 'VARCHAR(36)';
+        $columns['language_id']     = 'VARCHAR(36)';
+        $columns['director']        = 'VARHCAR(128)';
+        $columns['writer']          = 'VARCHAR(128)';
+        $columns['producer']        = 'VARCHAR(128)';
+        $columns['executive']       = 'VARCHAR(128)';
+        $columns['actor']           = 'VARCHAR(256)';
+        $columns['introduction']    = 'VARCHAR(1024)';
+        $columns['has_cover']       = 'TINYINT [0]';
         return $columns;
     }
 

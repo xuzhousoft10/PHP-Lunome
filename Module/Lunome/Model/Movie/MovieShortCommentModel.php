@@ -5,8 +5,6 @@ namespace X\Module\Lunome\Model\Movie;
  * Use statements
  */
 use X\Util\Model\Basic;
-use X\Service\XDatabase\Core\Table\ColumnType;
-use X\Service\XDatabase\Core\ActiveRecord\Column;
 
 /**
  * @property string $id
@@ -23,12 +21,12 @@ class MovieShortCommentModel extends Basic {
      */
     protected function describe() {
         $columns = array();
-        $columns[] = Column::create('id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setIsPrimaryKey(true)->setNullable(false);
-        $columns[] = Column::create('movie_id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setNullable(false);
-        $columns[] = Column::create('content')->setType(ColumnType::T_VARCHAR)->setLength(256)->setNullable(false);
-        $columns[] = Column::create('commented_at')->setType(ColumnType::T_DATETIME)->setNullable(false);
-        $columns[] = Column::create('commented_by')->setType(ColumnType::T_VARCHAR)->setLength(36)->setNullable(false);
-        $columns[] = Column::create('parent_id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setNullable(false);
+        $columns['id']              = 'PRIMARY VARCHAR(36) NOTNULL';
+        $columns['movie_id']        = 'VARCHAR(36) NOTNULL';
+        $columns['content']         = 'VARCHAR(256)';
+        $columns['commented_at']    = 'DATETIME NOTNULL';
+        $columns['commented_by']    = 'VARCHAR(36) NOTNULL';
+        $columns['parent_id']       = 'VARCHAR(36) NOTNULL';
         return $columns;
     }
 

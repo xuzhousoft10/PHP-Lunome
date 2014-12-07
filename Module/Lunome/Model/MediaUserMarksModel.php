@@ -5,8 +5,6 @@ namespace X\Module\Lunome\Model;
  * Use statements
  */
 use X\Util\Model\Basic;
-use X\Service\XDatabase\Core\Table\ColumnType;
-use X\Service\XDatabase\Core\ActiveRecord\Column;
 
 /**
  * @property string $id
@@ -22,11 +20,11 @@ class MediaUserMarksModel extends Basic {
      */
     protected function describe() {
         $columns = array();
-        $columns[] = Column::create('id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setIsPrimaryKey(true)->setNullable(false);
-        $columns[] = Column::create('media_type')->setType(ColumnType::T_VARCHAR)->setLength(128)->setNullable(false);
-        $columns[] = Column::create('media_id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setNullable(false);
-        $columns[] = Column::create('account_id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setNullable(false);
-        $columns[] = Column::create('mark')->setType(ColumnType::T_TINYINT)->setNullable(false);
+        $columns['id']          = 'PRIMARY VARCHAR(36) NOTNULL';
+        $columns['media_type']  = 'VARCHAR(128) NOTNULL';
+        $columns['media_id']    = 'VARCHAR(36) NOTNULL';
+        $columns['account_id']  = 'VARCHAR(36) NOTNULL';
+        $columns['mark']        = 'TINYINT NOTNULL';
         return $columns;
     }
 

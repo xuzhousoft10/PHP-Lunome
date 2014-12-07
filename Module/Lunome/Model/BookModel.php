@@ -5,8 +5,6 @@ namespace X\Module\Lunome\Model;
  * Use statements
  */
 use X\Util\Model\Basic;
-use X\Service\XDatabase\Core\Table\ColumnType;
-use X\Service\XDatabase\Core\ActiveRecord\Column;
 
 /**
  * @property string $id
@@ -26,15 +24,15 @@ class BookModel extends Basic {
      */
     protected function describe() {
         $columns = array();
-        $columns[] = Column::create('id')->setType(ColumnType::T_VARCHAR)->setLength(36)->setIsPrimaryKey(true)->setNullable(false);
-        $columns[] = Column::create('name')->setType(ColumnType::T_VARCHAR)->setLength(128)->setNullable(false);
-        $columns[] = Column::create('author')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('category')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('published_at')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('published_by')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('word_count')->setType(ColumnType::T_INT)->setIsUnsigned(true);
-        $columns[] = Column::create('status')->setType(ColumnType::T_VARCHAR)->setLength(128);
-        $columns[] = Column::create('introduction')->setType(ColumnType::T_VARCHAR)->setLength(512);
+        $columns['id']              = 'PRIMARY VARCHAR(36) NOTNULL';
+        $columns['name']            = 'VARCHAR(128) NOTNULL';
+        $columns['author']          = 'VARCHAR(128)';
+        $columns['category']        = 'VARCHAR(128)';
+        $columns['published_at']    = 'VARCHAR(128)';
+        $columns['published_by']    = 'VARCHAR(128)';
+        $columns['word_count']      = 'INT UNSIGNED';
+        $columns['status']          = 'VARCHAR(128)';
+        $columns['introduction']    = 'VARCHAR(512)';
         return $columns;
     }
 
