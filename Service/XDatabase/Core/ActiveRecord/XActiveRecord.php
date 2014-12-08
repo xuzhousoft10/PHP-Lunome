@@ -549,7 +549,7 @@ abstract class XActiveRecord extends Basic implements \Iterator {
      * @return \X\Service\XDB\Core\Database
      */
     protected function getDb() {
-        return X::system()->getServiceManager()->get(XDatabaseService::SERVICE_NAME)->getDb();
+        return X::system()->getServiceManager()->get(XDatabaseService::getServiceName())->getDatabase();
     }
     
     /**

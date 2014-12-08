@@ -13,65 +13,6 @@ namespace X\Service\XDatabase\Core\SQL\Action;
  */
 class Update extends ActionWithCondition {
     /**
-     * Whether use low priority during the Update.
-     *
-     * @var boolean
-     */
-    protected $lowPriority = false;
-    
-    /**
-     * Use low priority model during the updation.
-     *
-     * @return Update
-     */
-    public function lowPriority() {
-        $this->lowPriority = true;
-        return $this;
-    }
-    
-    /**
-     * Add low priority mode into query.
-     *
-     * @return Update
-     */
-    protected function getLowPriorityString() {
-        if ( $this->lowPriority ) {
-            $this->sqlCommand[] = 'LOW_PRIORITY';
-        }
-        return $this;
-    }
-    
-    /**
-     * Whether use ignore model
-     *
-     * @var boolean
-     */
-    protected $ignore = false;
-    
-    /**
-     * Set ingore mode during the updation.
-     *
-     * @return Update
-     */
-    public function ignore() {
-        $this->ignore = true;
-        return $this;
-    }
-    
-    /**
-     * Add ingore part into query.
-     *
-     * @return Update
-     */
-    protected function getIgnoreString() {
-        if ( $this->ignore ) {
-            $this->sqlCommand[] = 'IGNORE';
-        }
-    
-        return $this;
-    }
-    
-    /**
      * The table reference. 
      * 
      * @var string
@@ -141,7 +82,7 @@ class Update extends ActionWithCondition {
         $changes = array();
         
         foreach ( $this->values as $name => $value ) {
-            $column = sprintf('`%s`', $name);
+            $column = $this->quoteColumnName($name);
             $value = $this->quoteValue($value);
             $changes[] = sprintf('%s=%s', $column, $value);
         }
@@ -166,8 +107,6 @@ class Update extends ActionWithCondition {
     protected function getBuildHandlers() {
         return array(
                 'getActionNameString',
-                'getLowPriorityString',
-                'getIgnoreString',
                 'getTableString',
                 'getValueString',
                 'getConditionString',

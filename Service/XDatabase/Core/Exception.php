@@ -6,7 +6,6 @@ namespace X\Service\XDatabase\Core;
 
 /**
  * Exception
- * 
  * @author  Michael Luthor <michael.the.ranidae@gmail.com>
  * @since   0.0.0
  * @version 0.0.0

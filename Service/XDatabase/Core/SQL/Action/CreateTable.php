@@ -24,9 +24,8 @@ class CreateTable extends ActionAboutTable {
      */
     protected function getNameString() {
         if ( is_null($this->name) ) {
-            throw new  Exception(sprintf('Name can not be empty to create the table.', $this->name));
+            throw new  Exception('Name can not be empty to create the table.');
         }
-        
         $this->sqlCommand[] = sprintf('CREATE TABLE %s', $this->quoteTableName($this->name));
         return $this;
     }

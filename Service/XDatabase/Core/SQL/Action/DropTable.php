@@ -24,9 +24,8 @@ class DropTable extends ActionAboutTable {
      */
     protected function getNameString() {
         if ( is_null($this->name) ) {
-            throw new Exception(sprintf('Name can not be empty to delete the table.', $this->name));
+            throw new Exception('Name can not be empty to delete the table.');
         }
-        
         $this->sqlCommand[] = sprintf('DROP TABLE %s', $this->quoteColumnName($this->name));
         return $this;
     }

@@ -57,7 +57,14 @@ abstract class Basic extends \X\Service\XDatabase\Core\Basic {
      * @return string
      */
     protected function quoteColumnName( $name ) {
-        return sprintf('`%s`', $name);
+        if ( false === strpos($name, '.') ) {
+            return $this->getDatabase()->quoteColumnName($name);
+        } else {
+            $columnInfo = explode('.', $name);
+            $tableName = $this->getDatabase()->quoteTableName($columnInfo[0]);
+            $columnName = $this->quoteColumn($columnInfo[1]);
+            return $tableName.'.'.$columnName;
+        }
     }
     
     /**
@@ -77,7 +84,7 @@ abstract class Basic extends \X\Service\XDatabase\Core\Basic {
      * @return string
      */
     protected function quoteTableName( $name ) {
-        return sprintf('`%s`', $name);
+        return $this->getDatabase()->quoteTableName($name);
     }
     
     /**
@@ -87,7 +94,13 @@ abstract class Basic extends \X\Service\XDatabase\Core\Basic {
      * @return string
      */
     protected function quoteValue( $value ) {
-        $dbService = X::system()->getServiceManager()->get(XDatabaseService::SERVICE_NAME);
-        return $dbService->getDb()->quote($value);
+        return $this->getDatabase()->quote($value);
+    }
+    
+    /**
+     * @return \X\Service\XDatabase\Core\Database
+     */
+    protected function getDatabase() {
+        return X::system()->getServiceManager()->get(XDatabaseService::getServiceName())->getDatabase();
     }
 }

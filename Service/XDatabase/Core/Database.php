@@ -10,10 +10,11 @@ namespace X\Service\XDatabase\Core;
  * @author  Michael Luthor <michael.the.ranidae@gmail.com>
  * @since   0.0.0
  * @version 0.0.0
- * 
  * @method array query( $query ) Executes an SQL statement, returning an array as result set.
  * @method boolean exec( $query ) Executes an SQL statement, returning true or false.
  * @method integer lastInertId() Returns the ID of the last inserted row or sequence value.
+ * @method string quoteColumnName($name)
+ * @method string quoteTableName($name)
  */
 class Database extends Basic {
     /**
@@ -37,14 +38,12 @@ class Database extends Basic {
     
     /**
      * The config about the db.
-     * 
      * @var array
      */
     protected $config = array();
     
     /**
      * The driver that current database object is using.
-     * 
      * @var \X\Database\Driver\Driver
      */
     protected $driver = null;
@@ -63,7 +62,6 @@ class Database extends Basic {
     
     /**
      * Get The current for current Database object by config.
-     *
      * @return \X\Database\Driver\Driver
      */
     protected function getDriverByConfig() {
@@ -91,7 +89,7 @@ class Database extends Basic {
      * @param string $name The name of config option.
      * @return mixed
      */
-    public function getConfig( $name ) {
+    private function getConfig( $name ) {
         return $this->config[ $name ];
     }
 }

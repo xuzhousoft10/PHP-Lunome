@@ -5,6 +5,11 @@
 namespace X\Service\XDatabase\Core\SQL\Action;
 
 /**
+ * 
+ */
+use X\Service\XDatabase\Core\Exception;
+
+/**
  * Rename
  * 
  * @author  Michael Luthor <michael.the.ranidae@gmail.com>
@@ -37,13 +42,11 @@ class Rename extends ActionAboutTable {
      */
     protected function getNameString() {
         if ( is_null($this->name) ) {
-            throw new \X\Database\Exception(sprintf('Name can not be empty to rename the table.', $this->name));
+            throw new Exception('Name can not be empty to rename the table.');
         }
-        
         if ( is_null($this->newName) ) {
-            throw new \X\Database\Exception(sprintf('New name can not be empty to the table.', $this->name));
+            throw new Exception('New name can not be empty to the table.');
         }
-        
         $this->sqlCommand[] = sprintf('RENAME TABLE %s TO %s', $this->quoteColumnName($this->name), $this->quoteColumnName($this->newName));
         return $this;
     }

@@ -34,106 +34,6 @@ use X\Service\XDatabase\Core\Exception as DBException;
  */
 class Delete extends ActionWithCondition {
     /**
-     * Whether use low priority on delete action. Default to false.
-     * 
-     * @default false
-     * @var boolean
-     */
-    protected $lowPriority = false;
-    
-    /**
-     * If you specify low priority, the server delays execution of the DELETE 
-     * until no other clients are reading from the table. 
-     * This affects only storage engines that use only table-level locking 
-     * (such as MyISAM, MEMORY, and MERGE). 
-     * 
-     * @return Delete
-     */
-    public function lowPriority() {
-        $this->lowPriority = true;
-        return $this;
-    }
-    
-    /**
-     * Build low priority string, this method is called by toString() method.
-     *
-     * @return Delete
-     */
-    protected function getLowPriorityString() {
-        if ( $this->lowPriority ) {
-            $this->sqlCommand[] = 'LOW_PRIORITY';
-        }
-        return $this;
-    }
-    
-    /**
-     * Whether use quick model on delete action. Default to false. 
-     * 
-     * @default false
-     * @var boolean
-     */
-    protected $quick = false;
-    
-    /**
-     * For MyISAM tables, if you use the QUICK keyword, the storage engine does 
-     * not merge index leaves during delete, which may speed up some kinds of
-     * delete operations. 
-     * 
-     * @return Delete
-     */
-    public function quick() {
-        $this->quick = true;
-        return $this;
-    }
-    
-    /**
-     * Build quick model string, this method is called by toString() method.
-     * 
-     * @return Delete
-     */
-    protected function getQuickString() {
-        if ( $this->quick ) {
-            $this->sqlCommand[] = 'QUICK';
-        }
-        return $this;
-    }
-    
-    /**
-     * Whether ignore errors on delete action.
-     * 
-     * @default false
-     * @var boolean
-     */
-    protected $ignore = false;
-    
-    /**
-     * The IGNORE keyword causes MySQL to ignore all errors during the 
-     * process of deleting rows. (Errors encountered during the parsing
-     * stage are processed in the usual manner.) Errors that are ignored 
-     * due to the use of IGNORE are returned as warnings. 
-     * 
-     * @uses Mysql
-     * @return Delete
-     */
-    public function ignore() {
-        $this->ignore = true;
-        return $this;
-    }
-    
-    /**
-     * Build ignore model string, this method is called by toString() method.
-     * 
-     * @return Delete
-     */
-    protected function getIgnoreString() {
-        if ( $this->ignore ) {
-            $this->sqlCommand[] = 'IGNORE';
-        }
-        
-        return $this;
-    }
-    
-    /**
      * The table names that will delete from.
      * 
      * @var string[]
@@ -165,10 +65,9 @@ class Delete extends ActionWithCondition {
             $messages = 'Delete action requires at least one table to delete from.';
             throw new DBException($messages);
         }
-        
         $tables = array();
         foreach ( $this->tables as $table ) {
-            $tables[] = sprintf('`%s`', $table);
+            $tables[] = $this->quoteTableName($table);
         }
         $this->sqlCommand[] = sprintf('FROM %s', implode(',', $tables));
         return $this;
@@ -205,9 +104,6 @@ class Delete extends ActionWithCondition {
     protected function getBuildHandlers() {
         return array(
             'getActionNameString',
-            'getLowPriorityString',
-            'getQuickString',
-            'getIgnoreString',
             'getTableNameString',
             'getConditionString',
             'getLimitString',

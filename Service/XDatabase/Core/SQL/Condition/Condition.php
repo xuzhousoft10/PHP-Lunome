@@ -74,8 +74,7 @@ class Condition extends Basic {
         $handler = sprintf('stringBuilder%s', self::$operators[$this->operator]);
         if ( method_exists($this, $handler) ) {
             return $this->$handler();
-        }
-        else {
+        } else {
             return $this->defaultStringBuilder();
         }
     }
@@ -86,9 +85,9 @@ class Condition extends Basic {
      * @return string
      */
     protected function defaultStringBuilder() {
-        $column = sprintf('`%s`', str_replace('.', '`.`', $this->column));
+        $column = $this->getQuotedCurrentColumn();
         $value  = $this->quoteValue($this->value);
-        $condition = sprintf('%s %s %s', $column, self::$operators[$this->operator], $value);
+        $condition = sprintf('%s %s "%s"', $column, self::$operators[$this->operator], $value);
         return $condition;
     }
     
@@ -98,7 +97,7 @@ class Condition extends Basic {
      * @return string
      */
     protected function stringBuilderLike() {
-        $column = sprintf('`%s`', $this->column);
+        $column = $this->getQuotedCurrentColumn();
         $value  = $this->quoteValue($this->value);
         return sprintf('%s LIKE %s', $column, $value);
     }
@@ -109,7 +108,7 @@ class Condition extends Basic {
      * @return string
      */
     protected function stringBuilderStartWith() {
-        $column = sprintf('`%s`', $this->column);
+        $column = $this->getQuotedCurrentColumn();
         $value  = sprintf('%s', $this->quoteValue($this->value.'%%'));
         return sprintf('%s LIKE %s', $column, $value);
     }
@@ -120,7 +119,7 @@ class Condition extends Basic {
      * @return string
      */
     protected function stringBuilderEndWith() {
-        $column = sprintf('`%s`', $this->column);
+        $column = $this->getQuotedCurrentColumn();
         $value  = sprintf('%s', $this->quoteValue('%%'.$this->value));
         return sprintf('%s LIKE %s', $column, $value);
     }
@@ -131,7 +130,7 @@ class Condition extends Basic {
      * @return string
      */
     protected function stringBuilderIncludes() {
-        $column = sprintf('`%s`', $this->column);
+        $column = $this->getQuotedCurrentColumn();
         $value  = sprintf('%s', $this->quoteValue('%%'.$this->value.'%%'));
         return sprintf('%s LIKE %s', $column, $value);
     }
@@ -142,7 +141,7 @@ class Condition extends Basic {
      * @return string
      */
     protected function stringBuilderBetween() {
-        $column = sprintf('`%s`', $this->column);
+        $column = $this->getQuotedCurrentColumn();
         $minVal = $this->quoteValue($this->value[0]);
         $maxVal = $this->quoteValue($this->value[1]);
         return sprintf('%s BETWEEN %s AND %s', $column, $minVal, $maxVal);
@@ -154,7 +153,7 @@ class Condition extends Basic {
      * @return string
      */
     protected function stringBuilderIn() {
-        $column = sprintf('`%s`', $this->column);
+        $column = $this->getQuotedCurrentColumn();
         if ( is_array($this->value) ) {
             $values = array();
             foreach ( $this->value as $value ) {
@@ -177,7 +176,7 @@ class Condition extends Basic {
      * @return string
      */
     protected function stringBuilderNotIn() {
-        $column = sprintf('`%s`', $this->column);
+        $column = $this->getQuotedCurrentColumn();
         $values = array();
         foreach ( $this->value as $value ) {
             $values[] = $this->quoteValue($value);
@@ -207,10 +206,38 @@ class Condition extends Basic {
         if ( $value instanceof SQLExpression ) {
             $value = $value->toString();
         } else {
-            $dbService = X::system()->getServiceManager()->get(XDatabaseService::SERVICE_NAME);
-            $value = $dbService->getDb()->quote($value);
+            $this->getDatabase()->quote($value);
         }
         return $value;
+    }
+    
+    /**
+     * @param unknown $name
+     */
+    private function quoteColumn( $name ) {
+        return $this->getDatabase()->quoteColumnName($name);
+    }
+    
+    /**
+     * @return string
+     */
+    private function getQuotedCurrentColumn() {
+        if ( false === strpos($this->column, '.') ) {
+            return $this->quoteColumn($this->column);
+        } else {
+            $columnInfo = explode('.', $this->column);
+            $tableName = $this->getDatabase()->quoteTableName($columnInfo[0]);
+            $columnName = $this->quoteColumn($columnInfo[1]);
+            return $tableName.'.'.$columnName;
+        }
+    }
+    
+    /**
+     * @return \X\Service\XDatabase\Core\Database
+     */
+    private function getDatabase() {
+        $dbService = X::system()->getServiceManager()->get(XDatabaseService::getServiceName());
+        return $dbService->getDatabase();
     }
     
     const OPERATOR_EQUAL            = 0;

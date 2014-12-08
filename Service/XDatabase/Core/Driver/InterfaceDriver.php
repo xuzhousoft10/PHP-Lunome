@@ -45,6 +45,8 @@ interface InterfaceDriver {
      */
     public function quoteTableName( $name );
     
+    public function quoteColumnName( $name );
+    
     /**
      * Get the last insert id after execute a insert query.
      *

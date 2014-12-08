@@ -1,8 +1,0 @@
-Commands : 
-    create model [all|{$table_name}] {$module_name}
-    create migration [all|{$table_name}] {$module_name}
-Configurations :
-    databases.{$dbname}.dsn         The connection string to database.
-    databases.{$dbname}.username    The username to database.
-    databases.{$dbname}.password    The password to database of user.
-    databases.{$dbname}.charset     The charset to database.

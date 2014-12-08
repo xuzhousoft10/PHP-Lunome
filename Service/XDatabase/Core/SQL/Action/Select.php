@@ -5,6 +5,7 @@
 namespace X\Service\XDatabase\Core\SQL\Action;
 
 use X\Service\XDatabase\Core\SQL\Func\XFunction;
+use X\Service\XDatabase\Core\SQL\Condition\Builder as ConditionBuilder;
 /**
  * Select
  * 
@@ -20,63 +21,6 @@ class Select extends ActionWithCondition {
      */
     protected function getActionNameString() {
         $this->sqlCommand[] = 'SELECT';
-        return $this;
-    }
-    
-    /**
-     * The name of fileter "ALL"
-     * 
-     * @var string
-     */
-    const FILTER_ALL            = 'ALL';
-    
-    /**
-     * The name of fileter "DISTINCT"
-     * 
-     * @var string
-     */
-    const FILTER_DISTINCT       = 'DISTINCT';
-    
-    /**
-     * The name of fileter "DISTINCTROW"
-     * 
-     * @var string
-     */
-    const FILTER_DISTINCTROW    = 'DISTINCTROW';
-    
-    /**
-     * The way to filter results. 
-     * The ALL and DISTINCT options specify whether duplicate 
-     * rows should be returned.
-     * 
-     * @var string
-     */
-    protected $filter = null;
-    
-    /**
-     * Set filters to Select query results.
-     * <pre>
-     * $Select->from('table')->filter(SQLBuilderActionSelect::DISTINCT);
-     * </pre>
-     * @param string $filter Select::FILTER_*
-     * @return Select
-     */
-    public function filter( $filter ) {
-        $this->filter = $filter;
-        return $this;
-    }
-    
-    /**
-     * Add filter option into query.
-     *
-     * Get filter part of command stirng. 
-     * This method is called by toStirng() method.
-     *
-     * @return Select
-     */
-    protected function getFilterString() {
-        if ( is_null($this->filter) ) return $this;
-        $this->sqlCommand[] = $this->filter;
         return $this;
     }
     
@@ -159,7 +103,7 @@ class Select extends ActionWithCondition {
                 $tempExpr = sprintf('%s', $column);
             }
             if ( null !== $expression['name'] ) {
-                $tempExpr = sprintf('%s AS `%s`', $tempExpr, $expression['name']);
+                $tempExpr = sprintf('%s AS %s', $tempExpr, $this->quoteColumnName($expression['name']));
             }
             $expressions[] = $tempExpr;
         }
@@ -229,9 +173,9 @@ class Select extends ActionWithCondition {
         
         $tables = array();
         foreach ( $this->tableReferences as $alias => $table ) {
-            $reference = sprintf('`%s`', $table);
+            $reference = $this->quoteTableName($table);
             if ( !is_numeric($alias) ) {
-                $reference = sprintf('%s AS `%s`', $reference, $alias);
+                $reference = sprintf('%s AS %s', $reference, $this->quoteTableName($alias));
             }
             $tables[] = $reference;
         }
@@ -285,7 +229,7 @@ class Select extends ActionWithCondition {
     
         $groups = array();
         foreach ( $this->groups as $group ) {
-            $groupItem = sprintf('`%s`', str_replace('.', '`.`', $group['name']));
+            $groupItem = $this->quoteColumnName($group['name']);
             if ( !is_null($group['order']) ) {
                 $groupItem = sprintf('%s %s', $groupItem, $group['order']);
             }
@@ -328,120 +272,11 @@ class Select extends ActionWithCondition {
         if ( empty($this->havingCondition) ) return $this;
     
         $condition = $this->havingCondition;
-        if ( !($this->havingCondition instanceof \X\Database\SQL\Condition\Builder ) ) {
-            $condition = \X\Database\SQL\Condition\Builder::build($this->havingCondition);
+        if ( !($this->havingCondition instanceof ConditionBuilder ) ) {
+            $condition = ConditionBuilder::build($this->havingCondition);
         }
         $condition = $condition->toString();
         $this->sqlCommand[] = sprintf('HAVING %s', $condition);
-        return $this;
-    }
-    
-    /**
-     * The options of into command.
-     * 
-     * @var array
-     */
-    protected $selectIntoOptions = array('handler'=>null, 'options'=>array());
-    
-    /**
-     * Set out file to command
-     * <pre>
-     * $Select->from('table')->intoOutFile('1.txt', $options);
-     * </pre>
-     * @param string $path The path of file to save result.
-     * @param string $option The option for Select query.
-     * @return Select
-     */
-    public function intoOutFile( $path, $option=array() ) {
-        $this->selectIntoOptions['handler'] = 'OutFile';
-        $this->selectIntoOptions['options']['path'] = $path;
-        $this->selectIntoOptions['options']['option'] = $option;
-        return $this;
-    }
-    
-    /**
-     * Set dump file to command.
-     * <pre>
-     * $Select->from('table')->intoDumpFile( '1.txt' )
-     * </pre>
-     * 
-     * @param string $path The path where dump file saved.
-     * @return Select
-     */
-    public function intoDumpFile( $path ) {
-        $this->selectIntoOptions['handler'] = 'DumpFile';
-        $this->selectIntoOptions['options']['path'] = $path;
-        return $this;
-    }
-    
-    /**
-     * Set the value names the Select into.
-     * <pre>
-     * $Select->from('table')->intoVar('varname1', 'varname2');
-     * </pre>
-     * 
-     * @param string $var The name of value.
-     * @param string $_ 
-     * @return Select
-     */
-    public function intoVar( $var ) {
-        $this->selectIntoOptions['handler'] = 'Var';
-        $this->selectIntoOptions['options']['vars'] = func_get_args();
-        return $this;
-    }
-    
-    /**
-     * Get into string of command. 
-     * This method is called by toString() method.
-     * 
-     * @return Select
-     */
-    protected function getIntoString() {
-        if ( is_null($this->selectIntoOptions['handler']) ) return $this;
-        
-        $handler = sprintf('getIntoString%s', $this->selectIntoOptions['handler']);
-        $this->$handler();
-        return $this;
-    }
-    
-    /**
-     * getIntoStringOutFile
-     * 
-     * @return Select
-     */
-    protected function getIntoStringOutFile() {
-        $file = $this->selectIntoOptions['options']['path'];
-        $file = \X\Database\Management::getManager()->getDb()->quote($file);
-        $options = $this->selectIntoOptions['options']['option'];
-        $sql = sprintf('INTO OUTFILE %s', $file);
-        if ( 0 < count($options) ) {
-            $sql = sprintf('%s %s', $sql, implode(',', $options));
-        }
-        
-        $this->sqlCommand[] = $sql;
-        return $this;
-    }
-    
-    /**
-     * getIntoStringDumpFile
-     * 
-     * @return Select
-     */
-    protected function getIntoStringDumpFile() {
-        $file = $this->selectIntoOptions['options']['path'];
-        $file = \X\Database\Management::getManager()->getDb()->quote($file);
-        $this->sqlCommand[] = sprintf('INTO DUMPFILE %s', $file);
-        return $this;
-    }
-    
-    /**
-     * getIntoStringVar
-     *
-     * @return Select
-     */
-    protected function getIntoStringVar() {
-        $vars = $this->selectIntoOptions['options']['vars'];
-        $this->sqlCommand[] = sprintf('INTO %s', implode(',', $vars));
         return $this;
     }
     
@@ -452,7 +287,6 @@ class Select extends ActionWithCondition {
     protected function getBuildHandlers() {
         return array(
             'getActionNameString',
-            'getFilterString',
             'getExpressionString',
             'getFromString',
             'getConditionString',
@@ -461,7 +295,6 @@ class Select extends ActionWithCondition {
             'getHavingString',
             'getLimitString',
             'getOffsetString',
-            'getIntoString'
         );
     }
 }

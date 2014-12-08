@@ -47,7 +47,7 @@ class Describe extends Basic {
      * @return Update
      */
     protected function getTableString() {
-        $this->sqlCommand[] = sprintf('`%s`', $this->tableReference);
+        $this->sqlCommand[] = $this->quoteTableName($this->tableReference);
         return $this;
     }
     

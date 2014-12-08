@@ -151,7 +151,7 @@ abstract class ActionWithCondition extends Basic {
                 $expr = $expr->toString();
             }
             else {
-                $expr = sprintf('`%s`', $expr);
+                $expr = $this->quoteTableName($expr);
             }
             $orders[] = sprintf('%s %s', $expr, is_null($order['order']) ? '' : $order['order']);
         }

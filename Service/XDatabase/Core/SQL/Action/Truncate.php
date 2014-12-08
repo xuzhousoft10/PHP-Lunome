@@ -3,6 +3,12 @@
  * truncate.php
  */
 namespace X\Service\XDatabase\Core\SQL\Action;
+
+/**
+ * 
+ */
+use X\Service\XDatabase\Core\Exception;
+
 /**
  * Truncate
  * 
@@ -17,10 +23,9 @@ class Truncate extends ActionAboutTable {
      * @return Truncate
      */
     protected function getNameString() {
-        if ( is_null($this->name) ) {
-            throw new \X\Database\Exception(sprintf('Name can not be empty to truncate the table.', $this->name));
+        if ( empty($this->name) ) {
+            throw new Exception("Name can not be empty to truncate the table.");
         }
-        
         $this->sqlCommand[] = sprintf('TRUNCATE TABLE %s', $this->quoteTableName($this->name));
         return $this;
     }

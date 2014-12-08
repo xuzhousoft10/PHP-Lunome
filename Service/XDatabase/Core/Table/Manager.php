@@ -26,7 +26,7 @@ class Manager extends Basic {
      */
     public static function getTables() {
         $service = self::getService();
-        $tables = $service->getDb()->getTables();
+        $tables = $service->getDatabase()->getTables();
         return $tables;
     }
     
@@ -237,7 +237,7 @@ class Manager extends Basic {
      * @return unknown
      */
     private function query( $sql ) {
-        $result = self::getService()->getDb()->query($sql);
+        $result = self::getService()->getDatabase()->query($sql);
         return $result;
     }
     
@@ -274,6 +274,6 @@ class Manager extends Basic {
      */
     private static function executeSQLQueryWithOutResult( $query ) {
         $dbService = self::getService();
-        $dbService->getDb()->exec($query);
+        $dbService->getDatabase()->exec($query);
     }
 }

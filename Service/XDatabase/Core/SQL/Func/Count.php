@@ -3,6 +3,13 @@
  * count.php
  */
 namespace X\Service\XDatabase\Core\SQL\Func;
+
+/**
+ * 
+ */
+use X\Core\X;
+use X\Service\XDatabase\Service as XDatabaseService;
+
 /**
  * Count
  * 
@@ -45,10 +52,19 @@ class Count extends XFunction {
         } else {
             $column = explode('.', $this->column);
             foreach ( $column as $index => $name ) {
-                $column[$index] = sprintf('`%s`', $name);
+                $column[$index] = $this->getDatabase()->quoteColumnName($name);
             }
             $column = implode('.', $column);
             return $column;
         }
+    }
+    
+    /**
+     * Get the xdatabse service.
+     *
+     * @return \X\Service\XDatabase\Core\Database
+     */
+    private function getDatabase() {
+        return X::system()->getServiceManager()->get(XDatabaseService::getServiceName());
     }
 }

@@ -3,6 +3,7 @@
  * rand.php
  */
 namespace X\Service\XDatabase\Core\SQL\Func;
+
 /**
  * Rand
  * 

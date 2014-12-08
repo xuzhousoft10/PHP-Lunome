@@ -4,7 +4,11 @@
  */
 namespace X\Service\XDatabase\Core\SQL;
 
+/**
+ * 
+ */
 use X\Service\XDatabase\Core\Basic;
+
 /**
  * SQLBuilder
  * 

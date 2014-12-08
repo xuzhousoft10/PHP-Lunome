@@ -307,7 +307,7 @@ abstract class Media extends \X\Core\Service\XService {
      * @return \X\Service\XDatabase\Core\Database
      */
     protected function getDb() {
-        return X::system()->getServiceManager()->get(DatabaseService::getServiceName())->getDb();
+        return X::system()->getServiceManager()->get(DatabaseService::getServiceName())->getDatabase();
     }
     
     /**

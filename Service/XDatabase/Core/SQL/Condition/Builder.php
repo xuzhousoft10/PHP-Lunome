@@ -27,7 +27,7 @@ class Builder extends \X\Service\XDatabase\Core\Basic {
      */
     public static function build( $condition=null ) {
         $builder = new Builder();
-        if ( !is_null($condition) ) {
+        if ( null !== $condition ) {
             $builder->addCondition($condition);
         }
         return $builder;
@@ -44,14 +44,12 @@ class Builder extends \X\Service\XDatabase\Core\Basic {
             foreach ( $condition as $name => $value ) {
                 if ( is_array($value) ||  ($value instanceof \Iterator) ) {
                     $con = new Condition($name, Condition::OPERATOR_IN, $value);
-                }
-                else {
+                } else {
                     $con = new Condition($name, Condition::OPERATOR_EQUAL, $value);
                 }
                 $this->addCondition($con);
             }
-        }
-        else if ( is_string($condition) 
+        } else if ( is_string($condition) 
             || $condition instanceof Condition 
             || $condition instanceof Builder ) {
             $this->conditions[] = $condition;
@@ -85,8 +83,7 @@ class Builder extends \X\Service\XDatabase\Core\Basic {
         $connector = new Connector($connector);
         if ($this->conditions[count($this->conditions)-1] instanceof Connector ) {
             $this->conditions[count($this->conditions)-1] = $connector;
-        }
-        else {
+        } else {
             $this->conditions[] = $connector;
         }
         return $this;

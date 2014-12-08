@@ -4,6 +4,8 @@
  */
 namespace X\Service\XDatabase\Core\SQL\Action;
 
+use X\Service\XDatabase\Core\Exception;
+use X\Service\XDatabase\Core\SQL\DefaultValue;
 /**
  * Insert
  * @author  Michael Luthor <michael.the.ranidae@gmail.com>
@@ -47,10 +49,9 @@ class Insert extends Basic {
      */
     protected function getIntoString() {
         if ( is_null($this->tblName) ) {
-            throw new \X\Database\Exception('Table name can not be empty in insert action.');
+            throw new Exception('Table name can not be empty in insert action.');
         }
-        
-        $this->sqlCommand[] = sprintf('INTO `%s`', $this->tblName);
+        $this->sqlCommand[] = sprintf('INTO %s', $this->quoteTableName($this->tblName));
         return $this;
     }
     
@@ -88,13 +89,12 @@ class Insert extends Basic {
         
         if ( isset($this->values[0]) && count($this->values[0]) != count($this->columns) ) {
             $message = 'The value to insert does not match the column.';
-            throw new \X\Database\Exception($message);
+            throw new Exception($message);
         }
         
         $columns = array();
-        
         foreach ( $this->columns as $name ) {
-            $columns[] = sprintf('`%s`', $name);
+            $columns[] = $this->quoteColumnName($name);
         }
         $columns = implode(',', $columns);
         $this->sqlCommand[] = sprintf('(%s)', $columns);
@@ -103,7 +103,6 @@ class Insert extends Basic {
     
     /**
      * The data would be insert into the record.
-     * 
      * @var array
      */
     protected $values = array();
@@ -159,7 +158,7 @@ class Insert extends Basic {
     protected function getValueString() {
         if ( 0 == count($this->values) && is_null($this->select)) {
             $message = 'Can not insert empty record into table.';
-            throw new \X\Database\Exception($message);
+            throw new Exception($message);
         }
         
         if ( 0 == count($this->values) ) { return $this; }
@@ -168,7 +167,7 @@ class Insert extends Basic {
         foreach ( $this->values as $value ) {
             $values = array();
             foreach ( $value as $cellValue ) {
-                if ( $cellValue instanceof \X\Database\SQL\Other\DefaultValue ) {
+                if ( $cellValue instanceof DefaultValue ) {
                     $values[] = 'DEFAULT';
                 }
                 else {
@@ -213,137 +212,11 @@ class Insert extends Basic {
      */
     protected function getSelectString() {
         if ( is_null($this->select) ) return $this;
-        
         $select = $this->select;
-        if ( $this->select instanceof \X\Database\SQL\Action\Select ) {
+        if ( $this->select instanceof Select ) {
             $select = $this->select->toString();
         }
         $this->sqlCommand[] = $select;
-        return $this;
-    }
-    
-    /**
-     * An array contains all hanslers when key is duplicated.
-     * 
-     * @var array
-     */
-    protected $onDuplicateKeyUpdateHandlers = array();
-    
-    /**
-     * Set the handlers when unquie column is duplicated. you can call 
-     * this method with over one parms to set multi handlers or call
-     * it over one times to do the same thing.
-     * 
-     * <pre>
-     * $insert->into('table')->onDuplicateKeyUpdate('col1 = col1+1', 'col2 = col2+1');
-     * </pre>
-     * 
-     * @param mixed $handler The action on duplicated key exists.
-     * @param mixed $_
-     * @return Insert
-     */
-    public function onDuplicateKeyUpdate( $handler ) {
-        $this->onDuplicateKeyUpdateHandlers = array_merge($this->onDuplicateKeyUpdateHandlers, func_get_args());
-        return $this;
-    }
-    
-    /**
-     * Get the command part of sql string, this method is call by
-     * toString() method.
-     * 
-     * @return Insert
-     */
-    protected function getOnDuplicateKeyUpdate() {
-        if( 0 == count($this->onDuplicateKeyUpdateHandlers) ) return $this;
-        
-        $handlers = implode(',', $this->onDuplicateKeyUpdateHandlers);
-        $this->sqlCommand[] = sprintf('ON DUPLICATE KEY UPDATE %s', $handlers);
-        return $this;
-    }
-    
-    /**
-     * Wether ignore the data when duplicate key exists during insert.
-     * 
-     * @var boolean
-     */
-    protected $ignoreOnDuplicateKey = false;
-    
-    /**
-     * Set wether ignore the data when duplicate key exists during insert.
-     * <pre>
-     * $insert->into('table')->values($values)->ignoreOnDuplicateKey();
-     * </pre>
-     * @return Insert
-     */
-    public function ignoreOnDuplicateKey( ) {
-        $this->ignoreOnDuplicateKey = true;
-        return $this;
-    }
-    
-    /**
-     * Get ignore part of insert command, this method is called by toString()
-     * method.
-     * 
-     * @return Insert
-     */
-    protected function getIgnoreOnDuplicateKeyString() {
-        if ( $this->ignoreOnDuplicateKey ) {
-            $this->sqlCommand[] = 'IGNORE';
-        }
-        return $this;
-    }
-    
-    /**
-     * This value contains the priority of the insertelation.
-     * 
-     * @var string
-     */
-    protected $priority = null;
-    
-    /**
-     * The priority name of low priority.
-     * 
-     * @var string
-     */
-    const PRIORITY_LOW      = 'LOW_PRIORITY';
-    
-    /**
-     * The priority name of delayed.
-     * 
-     * @var string
-     */
-    const PRIORITY_DELAYED  = 'DELAYED';
-    
-    /**
-     * The priority name of high priority.
-     * 
-     * @var string
-     */
-    const PRIORITY_HIGH     = 'HIGH_PRIORITY';
-    
-    /**
-     * Set the value of priority of the insertelation.
-     * <pre>
-     * $insert->into('table')->value($value)->priority(SQLBuilderActionInsert::PRIORITY_LOW)
-     * </pre>
-     * @param string $priority The name of priority.
-     * @return Insert
-     */
-    public function priority( $priority ) {
-        $this->priority = $priority;
-        return $this;
-    }
-    
-    /**
-     * Get the proority part of the command, this method is called by 
-     * toString() method.
-     * 
-     * @return Insert
-     */
-    protected function getPriorityString() {
-        if ( !is_null($this->priority) ) {
-            $this->sqlCommand[] = $this->priority;
-        }
         return $this;
     }
     
@@ -354,13 +227,10 @@ class Insert extends Basic {
     protected function getBuildHandlers() {
         return array(
             'getActionNameString',
-            'getPriorityString', 
-            'getIgnoreOnDuplicateKeyString',
             'getIntoString',
             'getColumnString',
             'getValueString',
             'getSelectString',
-            'getOnDuplicateKeyUpdate',
         );
     }
 }

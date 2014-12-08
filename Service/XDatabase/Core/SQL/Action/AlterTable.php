@@ -25,9 +25,8 @@ class AlterTable extends ActionAboutTable {
      */
     protected function getNameString() {
         if ( is_null($this->name) ) {
-            throw new Exception(sprintf('Name can not be empty to rename the table.', $this->name));
+            throw new Exception('Name can not be empty to rename the table.');
         }
-    
         $this->sqlCommand[] = sprintf('ALTER TABLE %s', $this->quoteTableName($this->name));
         return $this;
     }
@@ -95,8 +94,8 @@ class AlterTable extends ActionAboutTable {
      * @return void
      */
     protected function actionHandlerAddIndex() {
-        $this->sqlCommand[] = sprintf('ADD INDEX `%s` (%s)',
-            $this->action['parms']['name'],
+        $this->sqlCommand[] = sprintf('ADD INDEX %s (%s)',
+            $this->quoteColumnName($this->action['parms']['name']),
             implode(',', $this->quoteColumnNames($this->action['parms']['columns'])));
     }
     
@@ -194,7 +193,7 @@ class AlterTable extends ActionAboutTable {
      * @return void
      */
     protected function actionHandlerDropColumn() {
-        $this->sqlCommand[] = sprintf('DROP COLUMN `%s`', $this->action['parms']['name']);
+        $this->sqlCommand[] = sprintf('DROP COLUMN %s', $this->quoteColumnName($this->action['parms']['name']));
     }
     
     /**

@@ -7,7 +7,7 @@ namespace X\Service\XDatabase\Core;
 /**
  * Base
  * @author  Michael Luthor <michael.the.ranidae@gmail.com>
- * @since   0.0.0
+ * @since   0.0.1
  * @version 0.0.0
  */
 abstract class Basic extends \X\Core\Basic {

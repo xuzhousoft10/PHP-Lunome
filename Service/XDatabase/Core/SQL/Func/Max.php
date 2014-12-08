@@ -3,6 +3,7 @@
  * count.php
  */
 namespace X\Service\XDatabase\Core\SQL\Func;
+
 /**
  * Count
  * 
@@ -33,6 +34,6 @@ class Max extends XFunction {
      * @see \X\Database\SQL\Func\Func::toString() Func::toString()
      */
     public function toString() {
-        return sprintf('MAX(%s)', $this->column);
+        return "MAX({$this->column})";
     }
 }

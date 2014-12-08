@@ -97,6 +97,14 @@ class PDO extends Basic implements InterfaceDriver {
     }
     
     /**
+     * @param unknown $name
+     * @return string
+     */
+    public function quoteColumnName( $name ) {
+        return "`$name`";
+    }
+    
+    /**
      * Get the name list of table.
      * 
      * @return array
