@@ -73,6 +73,9 @@ class Service extends Media {
             $categoryCondition = MovieCategoryMapModel::query()->activeColumns(array('movie_id'))->find($categoryCondition);
             $con->exists($categoryCondition);
         }
+        if ( isset($condition['name']) ) {
+            $con->includes('name', substr($condition['name'], 1));
+        }
         return $con;
     }
     
