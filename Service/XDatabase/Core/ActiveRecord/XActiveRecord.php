@@ -456,7 +456,7 @@ abstract class XActiveRecord extends Basic implements \Iterator {
      * @param integer $limit The limitation of deleteion.
      * @return integer The number of deleted record.
      */
-    protected function deleteAll( $condition, $limit=0 ){
+    public function deleteAll( $condition, $limit=0 ){
         $criteria = new Criteria();
         $criteria->condition = $condition;
         $criteria->limit = $limit;

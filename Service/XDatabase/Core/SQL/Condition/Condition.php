@@ -72,11 +72,13 @@ class Condition extends Basic {
      */
     public function toString() {
         $handler = sprintf('stringBuilder%s', self::$operators[$this->operator]);
+        $condition = null;
         if ( method_exists($this, $handler) ) {
-            return $this->$handler();
+            $condition = $this->$handler();
         } else {
-            return $this->defaultStringBuilder();
+            $condition = $this->defaultStringBuilder();
         }
+        return $condition;
     }
     
     /**
@@ -87,7 +89,7 @@ class Condition extends Basic {
     protected function defaultStringBuilder() {
         $column = $this->getQuotedCurrentColumn();
         $value  = $this->quoteValue($this->value);
-        $condition = sprintf('%s %s "%s"', $column, self::$operators[$this->operator], $value);
+        $condition = sprintf('%s %s %s', $column, self::$operators[$this->operator], $value);
         return $condition;
     }
     
@@ -206,7 +208,7 @@ class Condition extends Basic {
         if ( $value instanceof SQLExpression ) {
             $value = $value->toString();
         } else {
-            $this->getDatabase()->quote($value);
+            $value = $this->getDatabase()->quote($value);
         }
         return $value;
     }

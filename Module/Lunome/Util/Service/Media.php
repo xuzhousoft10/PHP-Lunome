@@ -172,7 +172,7 @@ abstract class Media extends \X\Core\Service\XService {
         $deleteCondition['media_type'] = $mediaModelName;
         $deleteCondition['media_id'] = $id;
         $deleteCondition['account_id'] = $this->getCurrentUserId();
-        MediaUserMarksModel::model()->deleteAllByAttributes($deleteCondition);
+        MediaUserMarksModel::model()->deleteAll($deleteCondition);
         
         if ( 0 === $mark*1 ) {
             return;
@@ -199,7 +199,7 @@ abstract class Media extends \X\Core\Service\XService {
         $deleteCondition['media_type'] = $mediaModelName;
         $deleteCondition['media_id'] = $id;
         $deleteCondition['account_id'] = $this->getCurrentUserId();
-        MediaUserMarksModel::model()->deleteAllByAttributes($deleteCondition);
+        MediaUserMarksModel::model()->deleteAll($deleteCondition);
         $this->logAction($this->getActionName('unmark'), $id, self::RESULT_CODE_SUCCESS, null, $mark);
     }
     
