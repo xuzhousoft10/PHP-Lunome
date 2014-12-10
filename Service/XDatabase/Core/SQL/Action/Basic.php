@@ -62,7 +62,7 @@ abstract class Basic extends \X\Service\XDatabase\Core\Basic {
         } else {
             $columnInfo = explode('.', $name);
             $tableName = $this->getDatabase()->quoteTableName($columnInfo[0]);
-            $columnName = $this->quoteColumn($columnInfo[1]);
+            $columnName = $this->getDatabase()->quoteColumnName($columnInfo[1]);
             return $tableName.'.'.$columnName;
         }
     }
