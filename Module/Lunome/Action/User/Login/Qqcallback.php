@@ -7,14 +7,13 @@ namespace X\Module\Lunome\Action\User\Login;
 /**
  *
  */
-use X\Module\Lunome\Util\Action\Basic;
 use X\Module\Lunome\Service\User\Service;
 
 /**
  * The action class for user/login/qqcallback action.
  * @author Unknown
  */
-class Qqcallback extends Basic { 
+class Qqcallback extends \X\Util\Action\Basic { 
     /** 
      * The action handle for index action.
      * @return void
