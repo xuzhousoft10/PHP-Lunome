@@ -17,7 +17,7 @@ $this->addStyle('body', array(
             <br>
             <br>
             <a href="/index.php?module=lunome&action=user/login/weibo">
-                <img src="/Assets/image/weibo_login.png">
+                <img src="http://lunome-assets.qiniudn.com/image/weibo_login.png">
             </a>
         </div>
     </div>
