@@ -8,14 +8,13 @@ namespace X\Module\Lunome\Action\User\Login;
  * 
  */
 use X\Core\X;
-use X\Module\Lunome\Util\Action\Basic;
 use X\Module\Lunome\Service\User\Service;
 
 /**
  * The action class for user/login/qq action.
  * @author Unknown
  */
-class Qq extends Basic { 
+class Qq extends \X\Util\Action\Basic { 
     /** 
      * The action handle for index action.
      * @return void
