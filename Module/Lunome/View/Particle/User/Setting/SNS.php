@@ -2,8 +2,8 @@
 /* @var $this X\Service\XView\Core\Handler\Html */
 $vars = get_defined_vars();
 $config = $vars['configurations'];
-$this->addCssLink('Bootstrap-Switch', '/Assets/library/bootstrap/plugin/bootstrap-switch/css/bootstrap3/bootstrap-switch.css');
-$this->addScriptFile('Bootstrap-Switch', '/Assets/library/bootstrap/plugin/bootstrap-switch/js/bootstrap-switch.js');
+$this->addCssLink('Bootstrap-Switch', 'http://lunome-assets.qiniudn.com/library/bootstrap/plugin/bootstrap-switch/css/bootstrap3/bootstrap-switch.min.css');
+$this->addScriptFile('Bootstrap-Switch', 'http://lunome-assets.qiniudn.com/library/bootstrap/plugin/bootstrap-switch/js/bootstrap-switch.min.js');
 $switchOption = json_encode(array('size'=>'mini', 'onText'=>'已开启', 'offText'=>'已关闭'));
 $this->addScriptString('Bootstrap-Switch-Enable', '$(document).ready(function(){$("#sns-auto-share").bootstrapSwitch('.$switchOption.');});');
 ?>

@@ -65,6 +65,6 @@ class Count extends XFunction {
      * @return \X\Service\XDatabase\Core\Database
      */
     private function getDatabase() {
-        return X::system()->getServiceManager()->get(XDatabaseService::getServiceName());
+        return X::system()->getServiceManager()->get(XDatabaseService::getServiceName())->getDatabase();
     }
 }

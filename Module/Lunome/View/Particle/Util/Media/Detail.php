@@ -1,5 +1,5 @@
 <?php 
-$this->addScriptFile('detail-comments', '/Assets/js/media_comment.js');
+$this->addScriptFile('detail-comments', 'http://lunome-assets.qiniudn.com/js/media_comment.js');
 
 use X\Module\Lunome\Service\Movie\Service as MovieService;
 

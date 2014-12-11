@@ -103,15 +103,15 @@ abstract class Visual extends Basic {
      * @see \X\Service\XAction\Core\Action::afterRunAction()
      */
     protected function afterRunAction() {
-        $this->getView()->addCssLink('bootstrap', 'Assets/library/bootstrap/css/bootstrap.css');
-        $this->getView()->addCssLink('bootstrap-theme', 'Assets/library/bootstrap/css/bootstrap-theme.css');
-        $this->getView()->addCssLink('application', 'Assets/css/application.css');
-        $this->getView()->addCssLink('bootstrap-ext', 'Assets/css/bootstrap-ext.css');
+        $this->getView()->addCssLink('bootstrap',       'http://lunome-assets.qiniudn.com/library/bootstrap/css/bootstrap.min.css');
+        $this->getView()->addCssLink('bootstrap-theme', 'http://lunome-assets.qiniudn.com/library/bootstrap/css/bootstrap-theme.min.css');
+        $this->getView()->addCssLink('application',     'http://lunome-assets.qiniudn.com/css/application.css');
+        $this->getView()->addCssLink('bootstrap-ext',   'http://lunome-assets.qiniudn.com/css/bootstrap-ext.css');
         
-        $this->getView()->addScriptFile('jquery', 'Assets/library/jquery/jquery-1.11.1.js');
-        $this->getView()->addScriptFile('jquery-waypoints', 'Assets/library/jquery/plugin/waypoints.js');
-        $this->getView()->addScriptFile('bootstrap', 'Assets/library/bootstrap/js/bootstrap.js');
-        $this->getView()->addScriptFile('application', 'Assets/js/application.js');
+        $this->getView()->addScriptFile('jquery',           'http://lunome-assets.qiniudn.com/library/jquery/jquery-1.11.1.min.js');
+        $this->getView()->addScriptFile('jquery-waypoints', 'http://lunome-assets.qiniudn.com/library/jquery/plugin/waypoints.js');
+        $this->getView()->addScriptFile('bootstrap',        'http://lunome-assets.qiniudn.com/library/bootstrap/js/bootstrap.min.js');
+        $this->getView()->addScriptFile('application',      'http://lunome-assets.qiniudn.com/js/application.js');
         
         /* 该行代码是为了完成新浪微博网站所有权的验证。 */
         $this->getView()->addOpenGraphData('SINA-WEIBO-VERIFICATION', 'wb:webmaster', '9598c04587327873');
