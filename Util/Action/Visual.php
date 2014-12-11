@@ -113,6 +113,9 @@ abstract class Visual extends Basic {
         $this->getView()->addScriptFile('bootstrap', 'Assets/library/bootstrap/js/bootstrap.js');
         $this->getView()->addScriptFile('application', 'Assets/js/application.js');
         
+        /* 该行代码是为了完成新浪微博网站所有权的验证。 */
+        $this->getView()->addOpenGraphData('SINA-WEIBO-VERIFICATION', 'wb:webmaster', '9598c04587327873');
+        
         $this->getView()->display();
     }
 }

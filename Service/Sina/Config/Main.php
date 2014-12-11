@@ -1,6 +1,6 @@
 <?php 
 return array(
 'Connect' => array(
-    'AppKey'        => '597799449',
-    'AppSecret'     => 'e746500e4c7318d342ca22edc6f3209b',
+    'AppKey'        => '1113439342',
+    'AppSecret'     => 'b480c29356e2db6892b224ba609a0ae0',
 ));
