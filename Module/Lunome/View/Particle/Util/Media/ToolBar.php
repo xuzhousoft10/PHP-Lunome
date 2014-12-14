@@ -11,9 +11,4 @@ $mediaType = $vars['mediaType'];
             <img src="http://lunome-assets.qiniudn.com/image/goup.png" width="50">
         </a>
     </div>
-    <div class="media-index-tool-bar-item" id="goto-top">
-        <a href="/?module=lunome&action=movie/edit" id="toolbar-add-new" title="添加新电影信息">
-            <img src="http://lunome-assets.qiniudn.com/image/add.png" width="50">
-        </a>
-    </div>
 </div>

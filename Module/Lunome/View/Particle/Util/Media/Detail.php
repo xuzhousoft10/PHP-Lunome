@@ -43,11 +43,6 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                      </span>
                 </small>
             </h4>
-            <span class="pull-right">
-                <a href="/?module=lunome&action=movie/edit&id=<?php echo $media['id']; ?>">
-                    <span class="glyphicon glyphicon-pencil"></span>编辑
-                </a>
-            </span>
         </div>
         
         <br>
