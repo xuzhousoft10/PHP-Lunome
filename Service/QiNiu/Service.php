@@ -50,6 +50,23 @@ class Service extends \X\Core\Service\XService {
     
     /**
      * @param unknown $path
+     */
+    public function isExists ( $path ) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->getURL($path));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_NOBODY, false);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+        $responseContent = curl_exec($ch);
+        $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        return 200 === $responseCode*1;
+    }
+    
+    /**
+     * @param unknown $path
      * @return string
      */
     public function getURL( $path ) {
