@@ -107,8 +107,9 @@ MediaIndex.load = function( refresh ) {
     $this._isLoading = true;
     $this._autoLoadCount ++;
     console.log('[MediaLoader] Loading medias...');
-    var loaddingBar = $('<div>').addClass('row').addClass('text-center').addClass('padding-20').appendTo(this.container);
+    var loaddingBar = $('<div>').addClass('row').addClass('pull-left').width('100%').addClass('text-center').addClass('padding-20').appendTo(this.container);
     $('<img>').attr('src', this.loaddingImage).appendTo(loaddingBar);
+    
     $.post($this.url, {
         condition   : $this._conditions,
         position    : $this.loadedCount,

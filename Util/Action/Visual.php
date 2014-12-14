@@ -103,15 +103,16 @@ abstract class Visual extends Basic {
      * @see \X\Service\XAction\Core\Action::afterRunAction()
      */
     protected function afterRunAction() {
-        $this->getView()->addCssLink('bootstrap',       'http://lunome-assets.qiniudn.com/library/bootstrap/css/bootstrap.min.css');
-        $this->getView()->addCssLink('bootstrap-theme', 'http://lunome-assets.qiniudn.com/library/bootstrap/css/bootstrap-theme.min.css');
-        $this->getView()->addCssLink('application',     'http://lunome-assets.qiniudn.com/css/application.css');
-        $this->getView()->addCssLink('bootstrap-ext',   'http://lunome-assets.qiniudn.com/css/bootstrap-ext.css');
+        $assetsURL = X::system()->getConfiguration()->get('assets-base-url');
+        $this->getView()->addCssLink('bootstrap',       $assetsURL.'/library/bootstrap/css/bootstrap.min.css');
+        $this->getView()->addCssLink('bootstrap-theme', $assetsURL.'/library/bootstrap/css/bootstrap-theme.min.css');
+        $this->getView()->addCssLink('application',     $assetsURL.'/css/application.css');
+        $this->getView()->addCssLink('bootstrap-ext',   $assetsURL.'/css/bootstrap-ext.css');
         
-        $this->getView()->addScriptFile('jquery',           'http://lunome-assets.qiniudn.com/library/jquery/jquery-1.11.1.min.js');
-        $this->getView()->addScriptFile('jquery-waypoints', 'http://lunome-assets.qiniudn.com/library/jquery/plugin/waypoints.js');
-        $this->getView()->addScriptFile('bootstrap',        'http://lunome-assets.qiniudn.com/library/bootstrap/js/bootstrap.min.js');
-        $this->getView()->addScriptFile('application',      'http://lunome-assets.qiniudn.com/js/application.js');
+        $this->getView()->addScriptFile('jquery',           $assetsURL.'/library/jquery/jquery-1.11.1.min.js');
+        $this->getView()->addScriptFile('jquery-waypoints', $assetsURL.'/library/jquery/plugin/waypoints.js');
+        $this->getView()->addScriptFile('bootstrap',        $assetsURL.'/library/bootstrap/js/bootstrap.min.js');
+        $this->getView()->addScriptFile('application',      $assetsURL.'/js/application.js');
         
         /* 该行代码是为了完成新浪微博网站所有权的验证。 */
         $this->getView()->addOpenGraphData('SINA-WEIBO-VERIFICATION', 'wb:webmaster', '9598c04587327873');

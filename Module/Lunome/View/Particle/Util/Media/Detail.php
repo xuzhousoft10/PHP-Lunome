@@ -1,7 +1,9 @@
 <?php 
-$this->addScriptFile('detail-comments', 'http://lunome-assets.qiniudn.com/js/media_comment.js');
-
+use X\Core\X;
 use X\Module\Lunome\Service\Movie\Service as MovieService;
+
+$assetsURL = X::system()->getConfiguration()->get('assets-base-url');
+$this->addScriptFile('detail-comments', $assetsURL.'/js/media_comment.js');
 
 $vars = get_defined_vars();
 $media = $vars['media'];

@@ -1,5 +1,8 @@
 <?php 
-$this->addScriptFile('media-index', 'http://lunome-assets.qiniudn.com/js/media_index.js');
+use X\Core\X;
+$assetsURL = X::system()->getConfiguration()->get('assets-base-url');
+$this->addScriptFile('media-index', $assetsURL.'/js/media_index.js');
+
 $vars = get_defined_vars();
 $marks = $vars['marks'];
 $markActions = $vars['markActions'];
