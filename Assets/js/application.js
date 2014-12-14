@@ -4,6 +4,20 @@
  * 
  * @author Michael Luthor <michelluthor@163.com>
  */
+(function($) {
+    /**
+     * 记录日志到控制台。
+     */
+    $.log = function(message, category) {
+        if ( ('undefined'==console) || ('undefined'==console.log) ) {
+            return;
+        }
+        console.log('['+category+']:'+message);
+        return this;
+    }
+ 
+})(jQuery);
+
 $(document).ready(function() {
     /* 如果页面不够长， 则强制footer到页面底部。 */
     var top = $('#main-footer')[0].offsetTop;

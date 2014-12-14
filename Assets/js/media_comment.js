@@ -10,6 +10,13 @@
     var currentPage     = 1;
     var containerID     = 'short-comment-container-'+mediaId;
     
+    /**
+     * 
+     */
+    function log( message ) {
+        $.log(message, 'MediaCommentManager');
+    }
+    
     /* 生成用于编辑的评论编辑器。 */
     function generateCommentEditor() {
         editorContainer = $('<div>').addClass('media').appendTo(container);
@@ -38,6 +45,7 @@
                             time.getHours()+':'+time.getMinutes()+':'+time.getSeconds();
                     addCommentToContainer({userPhoto:userPhoto,userNickName:userNickName,time:time, content:content}, true);
                     $($this).prev().prev().val('');
+                    log('Done Add Comment');
                 }, 'text');
             })
         );
@@ -69,6 +77,7 @@
     
     /* 加载指定页评论内容。 */
     function loadComments(page, goAnchor) {
+        log('Start Loadding Comment List, Page['+currentPage+']');
         $.get('/?module=lunome&action=movie/comments', {id:mediaId, page:page}, function(response) {
             if ( null != listContainer ) {
                 listContainer.empty();
@@ -84,9 +93,13 @@
                 addCommentToContainer(comment, false);
             }
             goAnchor ? location.hash='#'+containerID : null;
+            log('Done Loading Comment List. Length['+response.list.length+']');
         }, 'json');
     }
     
+    /**
+     * 
+     */
     function generatePager() {
         var prev = $('<a>').attr('href', '#').text('上一页').click(function() {
             if ( 1 >= currentPage ) {
@@ -124,6 +137,7 @@
         }
         listContainer = $('<div>').addClass('clearfix').appendTo(container);
         generatePager();
+        log('CommentManager Initialization Done');
     })();
 };})(jQuery);
 

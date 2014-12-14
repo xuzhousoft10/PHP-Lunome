@@ -59,6 +59,7 @@ $mediaItemWaitingImage = $vars['mediaItemWaitingImage'];
             data-current-mark   = "<?php echo $currentMark; ?>"
             data-waiting-image  = "<?php echo $mediaItemWaitingImage; ?>"
             data-loading-image  = "<?php echo $vars['mediaLoaderLoaddingImage'];?>"
+            data-is-debug       = "<?php echo X::system()->getConfiguration()->get('isDebug') ? 'true' : 'false'; ?>"
         >
         <div>
         <?php require dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.'Movie'.DIRECTORY_SEPARATOR.'Search.php'; ?>

@@ -25,6 +25,7 @@ var MediaIndex = {
     _conditions     : {},   /* 保存当前查询的条件。 */
     waitingImage    : null, /* 当项目出现较长时间的处理时，显示的等待图片。 */
     loaddingImage   : null, /* 加载项目时显示的图片链接。 */
+    isDebug         : false,/* 是否处于调试模式。 */ 
 };
 
 /**
@@ -43,6 +44,7 @@ MediaIndex.init = function() {
     this.currentMark    = parameters.attr('data-current-mark');
     this.waitingImage   = parameters.attr('data-waiting-image');
     this.loaddingImage  = parameters.attr('data-loading-image');
+    this.isDebug        = parameters.attr('data-is-debug');
     $(window).bind('scroll', MediaIndex._windowScrollEventHandler);
     $('#media-name-search-button').click(function() {
         var name = $.trim($('#media-name-search-text').val());
@@ -55,6 +57,7 @@ MediaIndex.init = function() {
         }
         MediaIndex.reload();
     });
+    MediaIndex._log('Initialization Done.');
     this.load();
 };
 
@@ -101,12 +104,13 @@ MediaIndex.load = function( refresh ) {
     var shouldLoad = $this.totalCount*1 > $this.loadedCount*1;
     shouldLoad = shouldLoad || ( 'undefined'!=refresh && true==refresh );
     if ( !shouldLoad ) {
-        return true; /* No more medias. */
+        MediaIndex._log('No More Medias.');
+        return true;
     }
     
     $this._isLoading = true;
     $this._autoLoadCount ++;
-    console.log('[MediaLoader] Loading medias...');
+    MediaIndex._log('Start To Load Medias [Position: '+$this.loadedCount+' Condition:'+JSON.stringify(this._conditions)+']');
     var loaddingBar = $('<div>').addClass('row').addClass('pull-left').width('100%').addClass('text-center').addClass('padding-20').appendTo(this.container);
     $('<img>').attr('src', this.loaddingImage).appendTo(loaddingBar);
     
@@ -116,9 +120,9 @@ MediaIndex.load = function( refresh ) {
         length      : $this.pageSize,
     }, function( response ) {
         $this.totalCount = response.count;
-        console.log('[MediaLoader] Done loading medias. '+response.medias.length+' Loaded.');
+        MediaIndex._log('Done Loading Medias. ('+response.medias.length+' Loaded)');
         $this._InsertMediasIntoContainer(response.medias);
-        console.log('[MediaLoader] Done display loaded medias.');
+        MediaIndex._log('Done Render Medias.');
         $this.loadedCount += response.medias.length;
         $this._isLoading = false;
         loaddingBar.remove();
@@ -126,7 +130,7 @@ MediaIndex.load = function( refresh ) {
 };
 
 /**
- * 将请求过来的项目列表加载到当前列表中。
+ * 将请求过来的项目列表加载到当前列表中。如果自动加载次数超过指定数目， 将会显示手动加载按钮。
  * @returns void
  */
 MediaIndex._InsertMediasIntoContainer = function( medias ) {
@@ -189,6 +193,7 @@ MediaIndex._InsertMediaIntoContainer = function( media, sign ) {
         .addClass('white-space-nowrap')
         .html('<strong>'+media.name+'<strong>')
         .appendTo(itemContainer);
+    MediaIndex._log('Render Media Item ['+media.name+'] Done.');
 };
 
 /**
@@ -231,10 +236,10 @@ MediaIndex._generateMarkButton = function(mark, media) {
 MediaIndex._loadMediaCoverOnVisible = function(direction) {
     var isLoaded = $(this).attr('data-cover-loaded');
     if ( 'undefined' == typeof(isLoaded) ) {
-         console.log('Loading cover for :'+$(this).next().text());
-         var cover = $(this).attr('data-cover-url');
-         $(this).css('background-image', 'url("'+cover+'")');
-         $(this).attr('data-cover-loaded', true);
+        MediaIndex._log('Load Cover For ['+$(this).next().text()+']'); 
+        var cover = $(this).attr('data-cover-url');
+        $(this).css('background-image', 'url("'+cover+'")');
+        $(this).attr('data-cover-loaded', true);
     }
 };
 
@@ -254,6 +259,17 @@ MediaIndex.addCondition = function( attr, value ) {
 MediaIndex.deleteCondition = function (attr, value) {
     delete MediaIndex._conditions[attr];
     MediaIndex.reload();
+};
+
+/**
+ * 记录日志到控制台。 该方法仅在调试模式下起作用。
+ * @returns void
+ */
+MediaIndex._log            = function ( message ) {
+    if ( 'true' != this.isDebug ) {
+        return;
+    }
+    $.log(message, 'MediaIndexLoader');
 };
 
 /**
