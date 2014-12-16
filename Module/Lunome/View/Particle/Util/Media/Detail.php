@@ -4,6 +4,7 @@ use X\Module\Lunome\Service\Movie\Service as MovieService;
 
 $assetsURL = X::system()->getConfiguration()->get('assets-base-url');
 $this->addScriptFile('detail-comments', $assetsURL.'/js/media_comment.js');
+$this->addScriptFile('detail-common', $assetsURL.'/js/media_detail.js');
 
 $vars = get_defined_vars();
 $media = $vars['media'];
@@ -62,6 +63,17 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                     ><?php echo $markName;?></a>
                 <?php endforeach; ?>
             </div>
+            
+            <div class="pull-left padding-left-10">
+                <button class="btn btn-default"
+                        data-online-play-trigger="true"
+                        data-player-container="#movie-online-play-container"
+                        data-movie-name="<?php echo $media['name'];?>"
+                        data-loadding-img="<?php echo $assetsURL.'/image/loadding.gif';?>"
+                        data-assets-path="<?php echo $assetsURL;?>"
+                >在线观看</button>
+            </div>
+            
             <div class="pull-right text-right">
                 <span class="pull-left" style="line-height: 30px;"><?php echo $shareMessageTitle; ?>&nbsp;<span class="glyphicon glyphicon-hand-right"></span>&nbsp;</span>
                 <div class = "pull-left lnm-qzone-share-container" >
@@ -95,6 +107,8 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
 </div>
 
 <hr>
+<div id="movie-online-play-container"></div>
+
 <div class="margin-top-5">
     <p><?php echo $media['introduction'];?></p>
 </div>
