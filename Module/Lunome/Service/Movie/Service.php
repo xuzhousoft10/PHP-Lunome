@@ -18,6 +18,7 @@ use X\Module\Lunome\Model\Movie\MovieModel;
 use X\Module\Lunome\Model\Movie\MovieCategoryMapModel;
 use X\Service\XDatabase\Core\Exception as DBException;
 use X\Module\Lunome\Model\Movie\MovieShortCommentModel;
+use X\Module\Lunome\Model\Movie\MovieClassicDialogueModel;
 
 /**
  * The service class
@@ -269,6 +270,21 @@ class Service extends Media {
         
         $count = MovieShortCommentModel::model()->count($condition);
         return $count;
+    }
+    
+    /**
+     * @param unknown $id
+     * @param unknown $position
+     * @param unknown $length
+     * @return \X\Module\Lunome\Model\Movie\MovieClassicDialogueModel[]
+     */
+    public function getClassicDialogues( $id, $position, $length ) {
+        $criteria = new Criteria();
+        $criteria->condition = array('movie_id'=>$id);
+        $criteria->position = $position;
+        $criteria->limit = $length;
+        $dialogues = MovieClassicDialogueModel::model()->findAll($criteria);
+        return $dialogues;
     }
     
     const MARK_UNMARKED     = 0;

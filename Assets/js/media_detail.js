@@ -1,4 +1,59 @@
 $(document).ready(function() {
+    /**
+     * @param dialogues
+     * @returns
+     */
+    function refreshClassicDialogues( dialogues ) {
+        
+    }
+    
+    /**
+     * @returns
+     */
+    function getClassicDialogues( ) {
+        $.get('/?module=lunome&action=movie/classicDialogues', {
+            id   : $('#movie-classic-dialogues-container').attr('data-movie-id'),
+            page : $('#movie-classic-dialogues-container').attr('data-page')
+        }, function( response ) {
+            if (0 == response.length ) {
+                $('#movie-classic-dialogues-prev-page').trigger('click');
+                return;
+            }
+            $('#movie-classic-dialogues-container-items').empty();
+            for( var i in response ) {
+                $('#movie-classic-dialogues-container-items').append(
+                    $('<div>').addClass('well').addClass('well-sm').html(response[i].content)
+                );
+            }
+        }, 'json');
+    }
+    getClassicDialogues();
+    $('#movie-classic-dialogues-prev-page').addClass('disabled');
+    
+    $('#movie-classic-dialogues-prev-page').click(function() {
+        var currentPage = $('#movie-classic-dialogues-container').attr('data-page')*1;
+        if ( 0>=currentPage-1 ) {
+            return false;
+        }
+        
+        if ( 1>=currentPage-1 ) {
+            $(this).addClass('disabled');
+        }
+        
+        $('#movie-classic-dialogues-container').attr('data-page',currentPage-1);
+        getClassicDialogues();
+        return false;
+    });
+    
+    $('#movie-classic-dialogues-next-page').click(function() {
+        $('#movie-classic-dialogues-container').attr('data-page', 
+            $('#movie-classic-dialogues-container').attr('data-page')*1+1
+        );
+        $('#movie-classic-dialogues-prev-page').removeClass('disabled');
+        getClassicDialogues();
+        return false;
+    });
+    
     /* 绑定事件到在线观看按钮 */
     var playerTrigger = $('[data-online-play-trigger="true"]');
     $(playerTrigger.attr('data-player-container')).hide();

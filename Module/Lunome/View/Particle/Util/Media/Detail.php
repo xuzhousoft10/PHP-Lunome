@@ -114,10 +114,39 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
 </div>
 <hr>
 
-<!-- 评论列表 -->
-<div    id                  = "movie-short-comment-container"
-        data-is-guest-user  = "<?php echo (null===$vars['currentUser'])?'true':'false'; ?>"
-        data-user-nickname  = "<?php echo (null===$vars['currentUser'])?'':$vars['currentUser']->nickname; ?>"
-        data-user-photo     = "<?php echo (null===$vars['currentUser'])?'':$vars['currentUser']->photo; ?>"
-        data-media-id       ="<?php echo $media['id']; ?>"
-></div>
+<div class="row">
+    <div class="col-md-8">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#home" data-toggle="tab">经典台词</a></li>
+        </ul>
+        
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div    class           = "tab-pane active" 
+                    id              = "movie-classic-dialogues-container"
+                    data-movie-id   = "<?php echo $media['id']; ?>"
+                    data-page       = "1"
+            >
+                <br>
+                <div id="movie-classic-dialogues-container-items"></div>
+                <div>
+                    <nav>
+                        <ul class="pager">
+                            <li class="previous" id="movie-classic-dialogues-prev-page"><a href="#">&larr; 上一页</a></li>
+                            <li class="next" id="movie-classic-dialogues-next-page"><a href="#">下一页 &rarr;</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <!-- 评论列表 -->
+        <div    id                  = "movie-short-comment-container"
+                data-is-guest-user  = "<?php echo (null===$vars['currentUser'])?'true':'false'; ?>"
+                data-user-nickname  = "<?php echo (null===$vars['currentUser'])?'':$vars['currentUser']->nickname; ?>"
+                data-user-photo     = "<?php echo (null===$vars['currentUser'])?'':$vars['currentUser']->photo; ?>"
+                data-media-id       ="<?php echo $media['id']; ?>"
+        ></div>
+    </div>
+</div>
