@@ -13,8 +13,13 @@ class Service extends \X\Core\Service\XService {
      * @see \X\Core\Service\XService::afterStart()
      */
     protected function afterStart() {
-        \Logger::configure($this->getConfiguration());
+        require_once $this->getPath('Core/Log4PHP/Logger.php');
+        $configuration = $this->getConfiguration()->getAll();
+        \Logger::configure($configuration['log4php']);
         $this->logger = \Logger::getRootLogger();
+        $this->logger->info('sfsdfsdf');
+        
+        exit();
     }
     
     /**

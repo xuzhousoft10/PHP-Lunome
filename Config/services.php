@@ -53,8 +53,8 @@ return array (
   ),
   'XLog' => 
   array (
-    'enable' => false,
-    'delay' => true,
+    'enable' => true,
+    'delay' => false,
     'class' => 'X\\Service\\XLog\\Service',
   ),
   'QiNiu' => 
