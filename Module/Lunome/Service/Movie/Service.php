@@ -287,6 +287,17 @@ class Service extends Media {
         return $dialogues;
     }
     
+    /**
+     * @param unknown $id
+     * @param unknown $content
+     */
+    public function addClassicDialogues( $id, $content ) {
+        $dialogues = new MovieClassicDialogueModel();
+        $dialogues->movie_id = $id;
+        $dialogues->content = $content;
+        $dialogues->save();
+    }
+    
     const MARK_UNMARKED     = 0;
     const MARK_INTERESTED   = 1;
     const MARK_WATCHED      = 2;

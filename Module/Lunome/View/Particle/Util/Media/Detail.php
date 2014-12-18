@@ -1,6 +1,7 @@
 <?php 
 use X\Core\X;
 use X\Module\Lunome\Service\Movie\Service as MovieService;
+use X\Module\Lunome\Service\Movie\Service;
 
 $assetsURL = X::system()->getConfiguration()->get('assets-base-url');
 $this->addScriptFile('detail-comments', $assetsURL.'/js/media_comment.js');
@@ -133,6 +134,9 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                     <nav>
                         <ul class="pager">
                             <li class="previous" id="movie-classic-dialogues-prev-page"><a href="#">&larr; 上一页</a></li>
+                            <?php if (Service::MARK_WATCHED == $myMark ): ?>
+                            <li id="movie-classic-dialogues-add"><a href="#" data-toggle="modal" data-target="#movie-classic-dialogues-add-dialog">添加经典台词</a></li>
+                            <?php endif; ?>
                             <li class="next" id="movie-classic-dialogues-next-page"><a href="#">下一页 &rarr;</a></li>
                         </ul>
                     </nav>
@@ -148,5 +152,24 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                 data-user-photo     = "<?php echo (null===$vars['currentUser'])?'':$vars['currentUser']->photo; ?>"
                 data-media-id       ="<?php echo $media['id']; ?>"
         ></div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="movie-classic-dialogues-add-dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">添加经典台词</h4>
+            </div>
+            <div class="modal-body">
+                <textarea class="width-full" id="movie-classic-dialogues-content"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="movie-classic-dialogues-save">保存</button>
+            </div>
+        </div>
     </div>
 </div>

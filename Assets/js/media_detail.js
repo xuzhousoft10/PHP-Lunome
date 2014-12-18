@@ -1,17 +1,9 @@
 $(document).ready(function() {
     /**
-     * @param dialogues
-     * @returns
-     */
-    function refreshClassicDialogues( dialogues ) {
-        
-    }
-    
-    /**
      * @returns
      */
     function getClassicDialogues( ) {
-        $.get('/?module=lunome&action=movie/classicDialogues', {
+        $.get('/?module=lunome&action=movie/classicDialogue/index', {
             id   : $('#movie-classic-dialogues-container').attr('data-movie-id'),
             page : $('#movie-classic-dialogues-container').attr('data-page')
         }, function( response ) {
@@ -52,6 +44,19 @@ $(document).ready(function() {
         $('#movie-classic-dialogues-prev-page').removeClass('disabled');
         getClassicDialogues();
         return false;
+    });
+    
+    $('#movie-classic-dialogues-save').click(function() {
+        var content = $('#movie-classic-dialogues-content').val();
+        $.post('/?module=lunome&action=movie/classicDialogue/add', {
+            id : $('#movie-classic-dialogues-container').attr('data-movie-id'),
+            content : content
+        }, function( response ) {
+            $('#movie-classic-dialogues-content').val('');
+            $('#movie-classic-dialogues-add-dialog').modal('hide');
+            $('#movie-classic-dialogues-container').attr('data-page',2);
+            $('#movie-classic-dialogues-prev-page').trigger('click');
+        }, 'json');
     });
     
     /* 绑定事件到在线观看按钮 */
