@@ -7,13 +7,19 @@ return array(
     
     'appenders' => array(
         'default' => array(
-            'class' => 'LoggerAppenderFile',
+            'class' => 'LoggerAppenderPDO',
             'layout' => array(
                 'class' => 'LoggerLayoutSimple'
             ),
             'params' => array(
-                'file' => dirname(__FILE__).DIRECTORY_SEPARATOR.'my.log',
-                'append' => true
+                'dsn'           => 'mysql:host=localhost;dbname=lunome',
+                'user'          => 'root',
+                'password'      => '',
+                'table'         => 'system_log_debug',
+                'insertSql'     => 'INSERT INTO system_log_debug ('.
+                                   'time,logger,level,message,exception,file,line,class,method,sid,session,pid,env,server,request,cookie'.
+                                   ') VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+                'insertPattern' => '%date{Y-m-d H:i:s},%logger,%level,%message,%exception,%file,%line,%class,%method,%sid,%session,%pid,%env,%server,%request,%cookie'
             ),
         )
     )

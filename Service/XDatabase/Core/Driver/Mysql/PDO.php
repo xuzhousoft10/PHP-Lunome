@@ -7,9 +7,11 @@ namespace X\Service\XDatabase\Core\Driver\Mysql;
 /**
  * Use statements
  */
+use X\Core\X;
 use X\Service\XDatabase\Core\Basic;
 use X\Service\XDatabase\Core\Exception;
 use X\Service\XDatabase\Core\Driver\InterfaceDriver;
+use X\Service\XLog\Service as XLogService;
 
 /**
  * PDO
@@ -43,7 +45,9 @@ class PDO extends Basic implements InterfaceDriver {
      * @return boolean
      */
     public function exec( $query ) {
+        $timeStarted = microtime(true);
         $this->connection->exec($query);
+        $this->recordQuery($timeStarted, microtime(true), $query);
         $errorCode = $this->connection->errorCode();
         if ( '00000' !== $errorCode ) {
             throw new Exception($this->getErrorMessage());
@@ -58,7 +62,9 @@ class PDO extends Basic implements InterfaceDriver {
      * @return boolean|array
      */
     public function query( $query ) {
+        $timeStart = microtime(true);
         $result = $this->connection->query($query);
+        $this->recordQuery($timeStart, microtime(true), $query);
         if ( false === $result ) {
             throw new Exception($this->getErrorMessage());
         }
@@ -127,5 +133,23 @@ class PDO extends Basic implements InterfaceDriver {
     private function getErrorMessage() {
         $error = $this->connection->errorInfo();
         return isset($error[2]) ? $error[2] : '';
+    }
+    
+    /**
+     * @var XLogService
+     */
+    private static $logger = null;
+    
+    /**
+     * @param unknown $timeSpend
+     * @param unknown $query
+     */
+    private function recordQuery( $timeStarted, $timeEnded, $query) {
+        if ( null === self::$logger ) {
+            self::$logger = X::system()->getServiceManager()->get(XLogService::getServiceName());
+        }
+        $timeSpend = bcsub($timeEnded, $timeStarted, 4);
+        $message = '['.$timeSpend.'s]     '.$query;
+        self::$logger->getLogger('XDATABASE_DRIVER')->debug($message);
     }
 }

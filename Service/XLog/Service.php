@@ -17,13 +17,18 @@ class Service extends \X\Core\Service\XService {
         $configuration = $this->getConfiguration()->getAll();
         \Logger::configure($configuration['log4php']);
         $this->logger = \Logger::getRootLogger();
-        $this->logger->info('sfsdfsdf');
-        
-        exit();
     }
     
     /**
      * @var \LoggerRoot
      */
     private $logger = null;
+    
+    /**
+     * @param string $name
+     * @return \Logger
+     */
+    public function getLogger( $name ) {
+        return $this->logger->getLogger($name);
+    }
 }

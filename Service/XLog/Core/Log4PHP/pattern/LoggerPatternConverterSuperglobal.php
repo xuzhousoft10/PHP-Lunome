@@ -88,15 +88,24 @@ abstract class LoggerPatternConverterSuperglobal extends LoggerPatternConverter 
 		
 		// When the key is not set, display all values
 		else {
-			$values = array();
-			foreach($source as $key => $value) {
-				$values[] = "$key=$value";
-			}
-			$this->value = implode(', ', $values);			
+			$this->value = $this->convertArrayToString($source);			
 		}
 	}
 	
 	public function convert(LoggerLoggingEvent $event) {
 		return $this->value;
+	}
+	
+	private function convertArrayToString( $array ) {
+	    $values = array();
+	    foreach($array as $key => $value) {
+	        if ( is_array($value) ) {
+	            $values[] = "$key=[".$this->convertArrayToString($value)."]";
+	        } else {
+	            $values[] = "$key=$value";
+	        }
+	    }
+	    $values = implode(', ', $values);
+	    return $values;
 	}
 }
