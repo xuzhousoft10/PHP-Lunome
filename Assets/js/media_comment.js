@@ -23,8 +23,8 @@
         container.append('<hr>');
         
         $('<div>').addClass('pull-left').appendTo(editorContainer).append(
-            $('<img>').attr('src', userPhoto).attr('width', 100).attr('height', 100)
-        ).append('<br>').append('<span>'+userNickName+'</span>');
+            $('<img>').attr('src', userPhoto).attr('width', 90).attr('height', 90).addClass('thumbnail').addClass('margin-bottom-0')
+        ).append('<span>'+userNickName+'</span>');
         
         $('<div>').appendTo(editorContainer).addClass('media-body').append(
             $('<textarea>').addClass('width-full')
@@ -61,7 +61,7 @@
         }
         
         $('<div>').addClass('pull-left').appendTo(itemContainer).append(
-            $('<img>').attr('src', comment.userPhoto).attr('width', 50).attr('height', 50)
+            $('<img>').attr('src', comment.userPhoto).attr('width', 50).attr('height', 50).addClass('thumbnail').addClass('margin-bottom-0')
         );
         
         $('<div>').appendTo(itemContainer).addClass('media-body').append(
