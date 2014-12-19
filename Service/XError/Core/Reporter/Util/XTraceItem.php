@@ -2,7 +2,7 @@
 /**
  * Namespace defination 
  */
-namespace X\Service\XError\Reporter;
+namespace X\Service\XError\Core\Reporter\Util;
 
 /**
  * The XtraceItem class
@@ -21,6 +21,7 @@ class XTraceItem extends \stdClass {
         $traceItems = array();
         $trace = debug_backtrace();
         $trace = array_reverse($trace);
+        array_pop($trace);
         array_pop($trace);
         array_pop($trace);
         array_pop($trace);

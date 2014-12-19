@@ -2,7 +2,7 @@
 /**
  * Namespace defination
  */
-namespace X\Service\XError\Reporter;
+namespace X\Service\XError\Core\Reporter\Util;
 
 /**
  * The interface for error reporter.

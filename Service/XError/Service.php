@@ -5,21 +5,27 @@
 namespace X\Service\XError;
 
 /**
- * XError service.
  * 
+ */
+use X\Core\X;
+use X\Service\XMail\Service as MailService;
+
+/**
+ * XError service.
  * @author  Michael Luthor <michaelluthor@163.com>
  * @version 0.0.0
  * @since   Version 0.0.0
  */
-class XErrorService extends \X\Core\Service\XService {
+class Service extends \X\Core\Service\XService {
     /**
      * (non-PHPdoc)
      * @see \X\Core\Service\XService::afterStart()
      */
     protected function afterStart() {
-        if ( 'Default' !== $this->configuration['ErrorReport']['handler'] ) {
-            set_error_handler(array($this, 'errorHandler'), E_ALL);
+        if ( 'Default' === $this->getConfiguration()->get('handler') ) {
+            return;
         }
+        set_error_handler(array($this, 'errorHandler'), E_ALL);
     }
     
     /**
@@ -43,7 +49,7 @@ class XErrorService extends \X\Core\Service\XService {
             'context'   => $context,
         );
         
-        if ( 'on' == $this->config['EmailError']['status'] ) {
+        if ( $this->getConfiguration()->get('EmailError') ) {
             $this->emailError($errorInfo);
         }
         
@@ -59,26 +65,16 @@ class XErrorService extends \X\Core\Service\XService {
      * @param string $error The error information
      */
     protected function emailError( $error ) {
-        $mail = new \X\Library\XEmail\XMailer();
-        $mail->isSMTP();
-        $mail->Host = $this->config['EmailError']['server'];
-        $mail->Port = $this->config['EmailError']['port'];
-        $mail->From = $this->config['EmailError']['from'];
-        $mail->FromName = $this->config['EmailError']['name'];
-        $mail->SMTPAuth = true;
-        $mail->Username=$this->config['EmailError']['username'];
-        $mail->Password = $this->config['EmailError']['password'];
-        $mail->Subject = 'Stumoc System Error';
-        $path = sprintf('%s/core/views/email.php', dirname(__FILE__));
+        /* @var $mailService MailService */
+        $mailService = X::system()->getServiceManager()->get(MailService::getServiceName());
+        $subject = $this->getConfiguration()->get('EmailErrorSubject');
+        $content = $this->getPath('Core/View/Email.php');
         ob_start();
         ob_implicit_flush(false);
-        require $path;
-        $mail->Body = ob_get_clean();
-        $recipients = explode(';', $this->config['EmailError']['recipients']);
-        foreach ( $recipients as $recipient ) {
-            $mail->addAddress($recipient);
-        }
-        $mail->send();
+        require $content;
+        $content = ob_get_clean();
+        $recipients = $this->getConfiguration()->get('EmailErrorRecipients');
+        $mailService->send($subject, $content, $recipients);
     }
     
     /**
@@ -87,17 +83,10 @@ class XErrorService extends \X\Core\Service\XService {
      * @return \X\Service\XError\Reporter\ReporterBasic
      */
     protected function getReporter() {
-        $handler = $this->config['ErrorReport']['handler'];
-        $handlerClass = sprintf('\\X\\Service\\XError\\Reporter\\%sReporter', $handler);
-        $handlerFile = sprintf('%s/core/reporter/%s.php', dirname(__FILE__), $handler);
+        $handler = $this->getConfiguration()->get('Reporter');
+        $handler = '\\X\\Service\\XError\\Core\\Reporter\\'.$handler;
         
-        if ( !class_exists($handlerClass, false) ) {
-            require $handlerFile;
-        }
-        
-        $handler = new $handlerClass($this->config['ErrorReport']);
+        $handler = new $handler();
         return $handler;
     }
 }
-
-return __NAMESPACE__;

@@ -1,11 +1,11 @@
 <?php 
 return array(
 'handler'       => 'smtp',
-'host'          => 'smtp.163.com',
+'host'          => 'smtp.qq.com',
 'port'          => '25',
-'from'          => 'michaelluthor@163.com',
+'from'          => '568109749@qq.com',
 'from name'     => 'Michael Luthor',
 'auth_required' => true,
-'username'      => 'michaelluthor@163.com',
-'password'      => 'ginhappy@1215',
+'username'      => '568109749@qq.com',
+'password'      => 'yanmin',
 );

@@ -87,4 +87,10 @@ return array (
     'delay' => true,
     'class' => 'X\\Service\\XMail\\Service',
   ),
+  'XError' =>
+  array (
+    'enable' => true,
+    'delay' => false,
+    'class' => 'X\\Service\\XError\\Service',
+  ),
 );

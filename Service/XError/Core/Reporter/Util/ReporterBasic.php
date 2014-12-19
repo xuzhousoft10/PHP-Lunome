@@ -2,7 +2,7 @@
 /**
  * Namespace defination
  */
-namespace X\Service\XError\Reporter;
+namespace X\Service\XError\Core\Reporter\Util;
 
 /**
  * The abstract class for reporter.
@@ -23,7 +23,7 @@ abstract class ReporterBasic implements InterfaceReporter {
      * 
      * @param array $config
      */
-    public function __construct( $config ) {
+    public function __construct( $config=array() ) {
         $this->config = $config;
         $this->init();
     }
