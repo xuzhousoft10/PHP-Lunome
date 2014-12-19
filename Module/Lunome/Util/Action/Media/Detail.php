@@ -9,6 +9,7 @@ namespace X\Module\Lunome\Util\Action\Media;
  */
 use X\Core\X;
 use X\Module\Lunome\Util\Action\Visual;
+use X\Module\Lunome\Util\Exception as LunomeException;
 use X\Module\Lunome\Service\User\Service as UserService;
 
 /**
@@ -54,7 +55,11 @@ abstract class Detail extends Visual {
         $service = $this->getService($mediaType);
         
         /* Load detail view */
-        $media = $service->get($id);
+        try {
+            $media = $service->get($id);
+        } catch ( LunomeException $e ) {
+            $this->throw404();
+        }
         if ( 0 === $media['has_cover']*1 ) {
             $media['cover'] = $service->getMediaDefaultCoverURL();
         } else {

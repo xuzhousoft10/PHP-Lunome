@@ -5,6 +5,12 @@
 namespace X\Module\Lunome\Util\Action;
 
 /**
+ * 
+ */
+use X\Core\X;
+use X\Service\XView\Service as XViewService;
+
+/**
  * Visual action class
  * 
  * @method \X\Module\Lunome\Service\User\Service getUserService()
@@ -19,8 +25,10 @@ abstract class Visual extends \X\Util\Action\Visual {
     protected function beforeRunAction() {
         parent::beforeRunAction();
         
-        /* Load navigation bar */
+        /* Setup 404 content */
+        $this->E404Content = array($this, 'error404Handler');
         
+        /* Load navigation bar */
         $name   = 'INDEX_NAV_BAR';
         $path   = $this->getParticleViewPath('Util/Navigation');
         $option = array('zone'=>'header');
@@ -43,6 +51,9 @@ abstract class Visual extends \X\Util\Action\Visual {
         parent::afterRunAction();
     }
     
+    /**
+     * @return multitype:unknown NULL
+     */
     protected function getCurrentUserData() {
         $userData = array();
         $userData['isGuest'] = $this->getUserService()->getIsGuest();
@@ -55,5 +66,21 @@ abstract class Visual extends \X\Util\Action\Visual {
             $userData['isAdmin']    = $data['IS_ADMIN'];
         }
         return $userData;
+    }
+    
+    /**
+     * 
+     */
+    protected function error404Handler() {
+        /* @var $viewService \X\Service\XView\XViewService */
+        $viewService = X::system()->getServiceManager()->get(XViewService::getServiceName());
+        $viewType = XViewService::VIEW_TYPE_HTML;
+        
+        /* @var $view \X\Service\XView\Core\Handler\Html */
+        $view = $viewService->create('ERROR_404', $viewType);
+        $view->setCharset('UTF-8');
+        $view->loadLayout($this->getLayoutViewPath('Blank'));
+        $view->loadParticle('ERROR_404_CONTENT', $this->getParticleViewPath('Util/Error404'));
+        $view->display();
     }
 }

@@ -44,7 +44,7 @@ class Service extends \X\Core\Service\XService {
      * @param string $name The name of the view.
      * @param string $type The type of the view, the value of it could be a name of view
      *                     handler class or the const values of XViewService::VIEW_TYPE_*
-     * @return X\Service\XView\View
+     * @return \X\Service\XView\Service
      */
     public function create( $name, $type ) {
         if ( isset($this->views[$name]) ) {

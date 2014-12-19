@@ -20,6 +20,7 @@ use X\Service\XDatabase\Core\ActiveRecord\Criteria;
 use X\Service\XDatabase\Core\SQL\Expression;
 use X\Service\QiNiu\Service as QiniuService;
 use X\Util\ImageResize;
+use X\Module\Lunome\Util\Exception as LunomeException;
 
 /**
  * 
@@ -72,6 +73,9 @@ abstract class Media extends \X\Core\Service\XService {
         $mediaModelName = $this->getMediaModelName();
         /* @var $mediaModel \X\Util\Model\Basic */
         $mediaModel = $mediaModelName::model()->find(array('id'=>$id));
+        if ( null === $mediaModel ) {
+            throw new LunomeException("Can not find model '{$mediaModelName}' by primary key '{$id}'");
+        }
         return $mediaModel->toArray();
     }
     
