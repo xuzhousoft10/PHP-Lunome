@@ -77,8 +77,14 @@ return array (
   ),
   'Sina' => 
   array (
-    'enable' => true,
+    'enable' => false,
     'delay' => true,
     'class' => 'X\\Service\\Sina\\Service',
+  ),
+  'XMail' => 
+  array (
+    'enable' => true,
+    'delay' => true,
+    'class' => 'X\\Service\\XMail\\Service',
   ),
 );
