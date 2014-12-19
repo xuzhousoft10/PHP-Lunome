@@ -31,6 +31,30 @@ class Service extends \X\Core\Service\XService {
     }
     
     /**
+     * @param unknown $path
+     * @param string $target
+     */
+    public function sync( $path, $target='' ) {
+        $files = scandir($path);
+        foreach ( $files as $file ) {
+            if ( '.' === $file || '..' === $file ){continue;}
+            $filePath = $path.DIRECTORY_SEPARATOR.$file;
+            $targetFile = $target.'/'.$file;
+            if ( is_file($filePath) ) {
+                if ( '/' === $targetFile[0] ) {
+                    $targetFile = substr($targetFile, 1);
+                }
+                if ( $this->isExists($targetFile) ) {
+                    continue;
+                }
+                $this->putFile($filePath, $target);
+            } else if ( is_dir($filePath) ) {
+                $this->sync($filePath, $targetFile);
+            }
+        }
+    }
+    
+    /**
      * 上传文件到七牛OSS
      * @param string $file 本地文件路径。
      * @param string $path 目标文件路径， 默认为跟目录。
