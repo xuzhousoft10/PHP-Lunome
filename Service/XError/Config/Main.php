@@ -1,16 +1,7 @@
 <?php
 return array(
-'ErrorReport' => array(
-    'handler' => 'Default'),
-                
-'EmailError' => array(
-    'status'        => 'off',
-    'recipients'    => 'xxx@xxx.xxx;yyy@yyy.yyy',
-    'server'        => 'smtp.zzz.com',
-    'port'          => '25',
-    'from'          => '**********',
-    'name'          => '**********',
-    'username'      => '**********',
-    'password'      => '**********',
-    'handler'       => 'smtp',),
+'Reporter' => 'Tracker',
+'EmailError' => true,
+'EmailErrorRecipients' => array('michaelluthor@163.com'),
+'EmailErrorSubject'=> 'Lunome Error ',
 );
