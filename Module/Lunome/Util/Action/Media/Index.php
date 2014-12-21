@@ -11,6 +11,7 @@ use X\Core\X;
 use X\Library\XMath\Number;
 use X\Module\Lunome\Util\Action\VisualMain;
 use X\Module\Lunome\Service\Configuration\Service as ConfigService;
+use X\Module\Lunome\Service\Movie\Service as MovieService;
 
 /**
  * Visual action class
@@ -51,7 +52,11 @@ abstract class Index extends VisualMain {
         
         /* Load index view */
         $name   = 'MEDIA_INDEX';
-        $path   = $this->getParticleViewPath('Util/Media/Index');
+        if ( MovieService::MARK_WATCHED === $this->currentMark*1 ) {
+            $path   = $this->getParticleViewPath('Util/Media/IndexDid');
+        } else {
+            $path   = $this->getParticleViewPath('Util/Media/Index');
+        }
         $option = array();
         $data   = array(
             'marks'         => $markInfo, 

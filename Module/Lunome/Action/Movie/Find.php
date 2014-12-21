@@ -18,7 +18,7 @@ class Find extends Basic {
     /**
      * 
      */
-    public function runAction( $mark=0, $condition=null, $position=0, $length=20 ) {
+    public function runAction( $mark=0, $condition=null, $position=0, $length=20, $score=false ) {
         $condition = empty($condition) ? array() : $condition;
         /* @var $service \X\Module\Lunome\Service\Movie\Service */
         $service = $this->getService('Movie');
@@ -36,6 +36,9 @@ class Find extends Basic {
                 $medias[$index]['cover'] = $service->getMediaDefaultCoverURL();
             } else {
                 $medias[$index]['cover'] = $service->getMediaCoverURL($media['id']);
+            }
+            if ( $score ) {
+                $medias[$index]['score'] = $service->getRateScore($media['id']);
             }
         }
         

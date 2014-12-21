@@ -19,6 +19,7 @@ use X\Module\Lunome\Model\Movie\MovieCategoryMapModel;
 use X\Service\XDatabase\Core\Exception as DBException;
 use X\Module\Lunome\Model\Movie\MovieShortCommentModel;
 use X\Module\Lunome\Model\Movie\MovieClassicDialogueModel;
+use X\Module\Lunome\Model\Movie\MovieUserRateModel;
 
 /**
  * The service class
@@ -296,6 +297,36 @@ class Service extends Media {
         $dialogues->movie_id = $id;
         $dialogues->content = $content;
         $dialogues->save();
+    }
+    
+    /**
+     * @param unknown $id
+     * @param unknown $score
+     */
+    public function setRateScore( $id, $score ) {
+        $currentUserId = $this->getCurrentUserId();
+        $condition = array('movie_id'=>$id, 'account_id'=>$currentUserId);
+        $rate = MovieUserRateModel::model()->find($condition);
+        if ( null === $rate ) {
+            $rate = new MovieUserRateModel();
+        }
+        $rate->movie_id = $id;
+        $rate->score = $score;
+        $rate->account_id = $this->getCurrentUserId();
+        $rate->save();
+    }
+    
+    /**
+     * @param unknown $id
+     */
+    public function getRateScore( $id ) {
+        $currentUserId = $this->getCurrentUserId();
+        $condition = array('movie_id'=>$id, 'account_id'=>$currentUserId);
+        $rate = MovieUserRateModel::model()->find($condition);
+        if ( null === $rate ) {
+            return 0;
+        }
+        return $rate->score*1;
     }
     
     const MARK_UNMARKED     = 0;
