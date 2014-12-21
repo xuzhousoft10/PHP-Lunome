@@ -144,23 +144,13 @@ abstract class Media extends \X\Core\Service\XService {
      * @return number
      */
     public function countMarked( $mark, $id=null, $user=0, $extCondition=array() ) {
-        $mediaModelName = $this->getMediaModelName();
-        
-        $condition = ConditionBuilder::build();
-        $condition->equals('mark', $mark);
-        $condition->equals('media_type', $mediaModelName);
+        $mediaModel = $this->getMediaModelName();
+        $condition = $this->getMarkedMediaCondition($mark, $user);
         if ( null !== $id ) {
-            $condition->equals('media_id', $id);
-        }
-        if ( 0 === $user ) {
-            $condition->equals('account_id', $this->getCurrentUserId());
-        } else if (null === $user) {
-            // all users
-        } else {
-            $condition->equals('account_id', $user);
+            $condition->equals('id', $id);
         }
         $condition->addCondition($this->getExtenCondition($extCondition));
-        $count = MediaUserMarksModel::model()->count($condition);
+        $count = $mediaModel::model()->count($condition);
         return $count;
     }
     
@@ -337,14 +327,21 @@ abstract class Media extends \X\Core\Service\XService {
      * Get the condition for marked media
      * @param unknown $mark
      */
-    protected function getMarkedMediaCondition($mark) {
+    protected function getMarkedMediaCondition($mark, $account=0) {
         $mediaModelName = $this->getMediaModelName();
         $mediaTable = $mediaModelName::model()->getTableFullName();
         
         $markedCondition = array();
         $markedCondition['media_type'] = $mediaModelName;
         $markedCondition['media_id'] = new SQLExpression($mediaTable.'.id');
-        $markedCondition['account_id'] = $this->getCurrentUserId();
+        
+        if ( 0 === $account ) {
+            $markedCondition['account_id'] = $this->getCurrentUserId();
+        } else if (null === $account) {
+            // all users
+        } else {
+            $markedCondition['account_id'] = $account;
+        }
         $markedCondition['mark'] = $mark;
 
         $markCondition = MediaUserMarksModel::query()->activeColumns(array('media_id'))->find($markedCondition);
