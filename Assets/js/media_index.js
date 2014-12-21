@@ -45,6 +45,21 @@ MediaIndex.init = function() {
     this.waitingImage   = parameters.attr('data-waiting-image');
     this.loaddingImage  = parameters.attr('data-loading-image');
     this.isDebug        = parameters.attr('data-is-debug');
+    
+    var history = MediaIndex._getHistory();
+    if ( null != history ) {
+        this._conditions = history.condition;
+        this.loadedCount = history.loadedCount-20;
+        if ( 0 < this.loadedCount ) {
+            $('<div class="alert alert-info pull-left text-center" style="width:100%;cursor:pointer"></div>')
+            .html('显示之前的结果')
+            .click(function() {
+                MediaIndex.reload();
+            })
+            .appendTo(this.container);
+        }
+    }
+    
     $(window).bind('scroll', MediaIndex._windowScrollEventHandler);
     $('#media-name-search-button').click(function() {
         var name = $.trim($('#media-name-search-text').val());
@@ -59,6 +74,30 @@ MediaIndex.init = function() {
     });
     MediaIndex._log('Initialization Done.');
     this.load();
+};
+
+/**
+ * 
+ */
+MediaIndex._getHistory = function() {
+    var history = $.cookie('search-condition-'+this.currentMark);
+    if ( 'undefined' == typeof(history) ) {
+        return null;
+    } else {
+        history = $.parseJSON(history);
+        return history;
+    }
+};
+
+/**
+ * 
+ */
+MediaIndex._updateHistory = function() {
+    var history = {
+        condition   : this._conditions,
+        loadedCount : this.loadedCount,
+    };
+    $.cookie('search-condition-'+this.currentMark,JSON.stringify(history),{ expires:1});
 };
 
 /**
@@ -126,6 +165,7 @@ MediaIndex.load = function( refresh ) {
         $this.loadedCount += response.medias.length;
         $this._isLoading = false;
         loaddingBar.remove();
+        MediaIndex._updateHistory();
     }, 'json');
 };
 
@@ -277,6 +317,8 @@ MediaIndex._log            = function ( message ) {
  * @returns void
  */
 $(document).ready(function() {
+    $('html,body').animate({scrollTop:'0px'});
+    var doSearch = false;
     MediaIndex.init();
     
     /* 当标签被点击时， 执行查询。 */
@@ -288,6 +330,10 @@ $(document).ready(function() {
         $('.media-search-condition-label[data-attr="'+attr+'"]').removeClass('label').removeClass('label-primary');
         $('.media-search-condition-select[data-attr="'+attr+'"]').val('');
         label.addClass('label').addClass('label-primary');
+        
+        if ( !doSearch ) {
+            return;
+        }
         
         if ( '' == value ) {
             MediaIndex.deleteCondition(attr, value);
@@ -304,8 +350,11 @@ $(document).ready(function() {
         var selector = $(this);
         var attr = selector.attr('data-attr');
         var value = selector.val();
-        
         $('.media-search-condition-label[data-attr="'+attr+'"]').removeClass('label').removeClass('label-primary');
+        
+        if ( !doSearch ) {
+            return;
+        }
         
         if ( '' == value ) {
             $('.media-search-condition-label[data-value=""]').addClass('label').addClass('label-primary');
@@ -314,4 +363,20 @@ $(document).ready(function() {
             MediaIndex.addCondition(attr, value);
         }
     });
+    
+    /* 初始化历史搜索记录 */
+    var history = MediaIndex._getHistory();
+    if ( null != history ) {
+        for ( var i in history.condition ) {
+            if ( 'name' != i ) {
+                var item = $('.media-search-condition-label[data-value="'+history.condition[i]+'"][data-attr="'+i+'"]');
+                if ( 0 == item.length ) {
+                    $('.media-search-condition-select[data-attr="'+i+'"]').val(history.condition[i]).trigger('change');
+                } else {
+                    item.trigger('click');
+                }
+            }
+        }
+    }
+    doSearch = true;
 });

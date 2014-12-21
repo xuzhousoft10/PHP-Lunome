@@ -5,6 +5,7 @@ $assetsURL = X::system()->getConfiguration()->get('assets-base-url');
 $this->addScriptFile('media-index', $assetsURL.'/js/media_index_did.js');
 $this->addScriptFile('rate-it', $assetsURL.'/library/jquery/plugin/rate/rateit.js');
 $this->addCssLink('rate-it', $assetsURL.'/library/jquery/plugin/rate/rateit.css');
+$this->addScriptFile('cookie', $assetsURL.'/library/jquery/plugin/cookie.js');
 
 $vars = get_defined_vars();
 $marks = $vars['marks'];

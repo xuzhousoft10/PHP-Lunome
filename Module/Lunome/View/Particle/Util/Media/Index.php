@@ -2,6 +2,7 @@
 use X\Core\X;
 $assetsURL = X::system()->getConfiguration()->get('assets-base-url');
 $this->addScriptFile('media-index', $assetsURL.'/js/media_index.js');
+$this->addScriptFile('rate-it', $assetsURL.'/library/jquery/plugin/cookie.js');
 
 $vars = get_defined_vars();
 $marks = $vars['marks'];
