@@ -47,6 +47,16 @@ class Service extends Media {
     }
     
     /**
+     * 根据ID返回相应Media的封面图片URL
+     * @param unknown $id
+     * @return string
+     */
+    public function getCoverURL( $id ) {
+        $path = 'http://7sbycx.com1.z0.glb.clouddn.com/'.$id.'.jpg';
+        return $path;
+    }
+    
+    /**
      * (non-PHPdoc)
      * @see \X\Module\Lunome\Util\Service\Markable::getMediaModelName()
      */

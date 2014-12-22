@@ -253,7 +253,7 @@ abstract class Media extends \X\Core\Service\XService {
      * @param unknown $id
      * @return string
      */
-    public function getMediaCoverURL( $id ) {
+    public function getCoverURL( $id ) {
         $type = $this->getMediaType();
         $path = 'http://lunome.qiniudn.com/covers/'.$type.'s/'.$id.'.png';
         return $path;

@@ -63,7 +63,7 @@ abstract class Detail extends Visual {
         if ( 0 === $media['has_cover']*1 ) {
             $media['cover'] = $service->getMediaDefaultCoverURL();
         } else {
-            $media['cover'] = $service->getMediaCoverURL($media['id']);
+            $media['cover'] = $service->getCoverURL($media['id']);
         }
         $media = $this->afterFindTheModel($media);
         $markCount = array();

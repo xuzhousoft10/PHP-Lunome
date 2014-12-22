@@ -41,7 +41,7 @@ class Edit extends VisualMain {
         }
         
         if ( isset($movieData['has_cover']) && 1 === $movieData['has_cover']*1 ) {
-            $coverURL = $movieService->getMediaCoverURL($id);
+            $coverURL = $movieService->getCoverURL($id);
         } else {
             $coverURL = $movieService->getMediaDefaultCoverURL();
         }

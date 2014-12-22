@@ -36,7 +36,7 @@ class Mark extends MediaMark {
             $image = false;
             if ( 1 === $media['has_cover']*1 ) {
                 $tmpName = tempnam(sys_get_temp_dir(), 'LMK');
-                file_put_contents($tmpName, file_get_contents($mediaService->getMediaCoverURL($media['id'])));
+                file_put_contents($tmpName, file_get_contents($mediaService->getCoverURL($media['id'])));
                 $image = $tmpName;
             }
             

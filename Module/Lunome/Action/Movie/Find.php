@@ -35,7 +35,7 @@ class Find extends Basic {
             if ( 0 === $media['has_cover']*1 ) {
                 $medias[$index]['cover'] = $service->getMediaDefaultCoverURL();
             } else {
-                $medias[$index]['cover'] = $service->getMediaCoverURL($media['id']);
+                $medias[$index]['cover'] = $service->getCoverURL($media['id']);
             }
             if ( $score ) {
                 $medias[$index]['score'] = $service->getRateScore($media['id']);
