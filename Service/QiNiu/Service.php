@@ -31,6 +31,22 @@ class Service extends \X\Core\Service\XService {
     }
     
     /**
+     * @param unknown $name
+     * @param string $isPublic
+     */
+    public function setBucket( $name, $isPublic=true ) {
+        $this->OSS->bucket = $name;
+        $this->OSS->isPublic = $isPublic;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getBucket( ) {
+        return $this->OSS->bucket;
+    }
+    
+    /**
      * @param unknown $path
      * @param string $target
      */

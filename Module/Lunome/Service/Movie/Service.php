@@ -7,6 +7,7 @@ namespace X\Module\Lunome\Service\Movie;
 /**
  * Use statement
  */
+use X\Core\X;
 use X\Module\Lunome\Util\Service\Media;
 use X\Module\Lunome\Model\Movie\MovieRegionModel;
 use X\Service\XDatabase\Core\ActiveRecord\Criteria;
@@ -20,6 +21,8 @@ use X\Service\XDatabase\Core\Exception as DBException;
 use X\Module\Lunome\Model\Movie\MovieShortCommentModel;
 use X\Module\Lunome\Model\Movie\MovieClassicDialogueModel;
 use X\Module\Lunome\Model\Movie\MovieUserRateModel;
+use X\Module\Lunome\Model\Movie\MoviePosterModel;
+use X\Service\QiNiu\Service as QiniuService;
 
 /**
  * The service class
@@ -337,6 +340,45 @@ class Service extends Media {
             return 0;
         }
         return $rate->score*1;
+    }
+    
+    /**
+     * @param unknown $id
+     * @param unknown $path
+     * @param unknown $type
+     */
+    public function addPoster( $id, $path ) {
+        $poster = new MoviePosterModel();
+        $poster->movie_id = $id;
+        $poster->save();
+        
+        /* @var $qiniu QiniuService */
+        $qiniu = X::system()->getServiceManager()->get(QiniuService::getServiceName());
+        $qiniu->setBucket('lunome-movie-posters');
+        $qiniu->putFile($path, null, $poster->id);
+    }
+    
+    /**
+     * @param unknown $id
+     * @param unknown $position
+     * @param unknown $length
+     * @return \X\Module\Lunome\Model\Movie\MoviePosterModel[]
+     */
+    public function getPosters( $id, $position, $length ) {
+        $criteria = new Criteria();
+        $criteria->condition = array('movie_id'=>$id);
+        $criteria->position = $position;
+        $criteria->limit = $length;
+        $dialogues = MoviePosterModel::model()->findAll($criteria);
+        return $dialogues;
+    }
+    
+    /**
+     * @param unknown $id
+     * @return string
+     */
+    public function getPosterUrlById( $id ) {
+        return 'http://7sbyuj.com1.z0.glb.clouddn.com/'.$id;
     }
     
     const MARK_UNMARKED     = 0;

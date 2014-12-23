@@ -1,4 +1,91 @@
 $(document).ready(function() {
+    /* 海报管理开始 */
+    $('#movie-poster-save').click(function() {
+        if ( '' === $('#movie-poster-file').val() ) {
+            alert('没有要保存的海报文件。');
+            return;
+        }
+        if ( !(/(jpg|png)/.test($('#movie-poster-file').val())) ) {
+            alert('海报文件仅支持JPG和PNG格式文件。');
+            return;
+        }
+        
+        var movieId = $('#movie-posters-container').attr('data-movie-id');
+        $('#movie-poster-file').parent().children().hide();
+        $('#movie-poster-file').parent().append('<img src="http://7sbnm1.com1.z0.glb.clouddn.com/image/loadding.gif">');
+        $.ajaxFileUpload({
+            url             : '/?module=lunome&action=movie/poster/upload&id='+movieId,
+            secureuri       : false,
+            fileElementId   : 'movie-poster-file',
+            dataType        : 'text',
+            success         : function (data, status){
+                $('#movie-poster-file').parent()
+                .empty()
+                .html('<input type="file" name="poster" id="movie-poster-file">');
+                $('#movie-posters-add-dialog').modal('hide');
+                $('#movie-posters-container').attr('data-page',2);
+                $('#movie-posters-prev-page').trigger('click');
+            },
+            error           : function (data, status, e){
+                $('#movie-posters-add-dialog').modal('hide');
+            }
+        });
+    });
+    
+    function getPosters( ) {
+        $.get('/?module=lunome&action=movie/poster/index', {
+            id   : $('#movie-posters-container').attr('data-movie-id'),
+            page : $('#movie-posters-container').attr('data-page')
+        }, function( response ) {
+            if (0 == response.length ) {
+                $('#movie-posters-prev-page').trigger('click');
+                return;
+            }
+            $('#movie-posters-container-items').empty();
+            for( var i in response ) {
+                $('#movie-posters-container-items').append(
+                    $('<img>')
+                    .attr('src', response[i].url)
+                    .addClass('img-thumbnail')
+                    .addClass('margin-5')
+                    .width(100)
+                    .height(150)
+                    .click(function() {
+                        $('#movie-poster-view-container').attr('src', $(this).attr('src'));
+                        $('#movie-posters-view-dialog').modal('show');
+                    })
+                );
+            }
+        }, 'json');
+    }
+    
+    $('#movie-postes-prev-page').addClass('disabled');
+    
+    $('#movie-posters-prev-page').click(function() {
+        var currentPage = $('#movie-posters-container').attr('data-page')*1;
+        if ( 0>=currentPage-1 ) {
+            return false;
+        }
+        
+        if ( 1>=currentPage-1 ) {
+            $(this).addClass('disabled');
+        }
+        
+        $('#movie-posters-container').attr('data-page',currentPage-1);
+        getPosters();
+        return false;
+    });
+    
+    $('#movie-posters-next-page').click(function() {
+        $('#movie-posters-container').attr('data-page', 
+            $('#movie-posters-container').attr('data-page')*1+1
+        );
+        $('#movie-posters-prev-page').removeClass('disabled');
+        getPosters();
+        return false;
+    });
+    /* 海报管理结束 */
+    
     /**
      * @returns
      */
@@ -58,6 +145,27 @@ $(document).ready(function() {
             $('#movie-classic-dialogues-prev-page').trigger('click');
         }, 'json');
     });
+    
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        var target = $(e.target);
+        var containerId = target.attr('href');
+        if ( '#movie-classic-dialogues-container' == containerId ) {
+            return;
+        }
+        
+        switch ( containerId ) {
+        case '#movie-posters-container' :
+            var isInited = $('#movie-posters-container').attr('data-is-inited');
+            if ( 'undefined' == typeof(isInited) ) {
+                getPosters();
+                $('#movie-posters-container').attr('data-is-inited', 'true');
+            }
+            break;
+        default:
+            break;
+        }
+    })
+    
     
     /* 绑定事件到在线观看按钮 */
     var playerTrigger = $('[data-online-play-trigger="true"]');

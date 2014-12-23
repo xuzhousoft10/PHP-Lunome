@@ -4,6 +4,7 @@ use X\Module\Lunome\Service\Movie\Service as MovieService;
 use X\Module\Lunome\Service\Movie\Service;
 
 $assetsURL = X::system()->getConfiguration()->get('assets-base-url');
+$this->addScriptFile('ajaxfileupload', $assetsURL.'/library/jquery/plugin/ajaxfileupload.js');
 $this->addScriptFile('detail-comments', $assetsURL.'/js/media_comment.js');
 $this->addScriptFile('detail-common', $assetsURL.'/js/media_detail.js');
 
@@ -118,11 +119,13 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
 <div class="row">
     <div class="col-md-8">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#home" data-toggle="tab">经典台词</a></li>
+            <li class="active"><a href="#movie-classic-dialogues-container" data-toggle="tab">经典台词</a></li>
+            <li><a href="#movie-posters-container" data-toggle="tab">宣传海报</a></li>
         </ul>
         
         <!-- Tab panes -->
         <div class="tab-content">
+            <!-- 经典台词Tab -->
             <div    class           = "tab-pane active" 
                     id              = "movie-classic-dialogues-container"
                     data-movie-id   = "<?php echo $media['id']; ?>"
@@ -138,6 +141,27 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                             <li id="movie-classic-dialogues-add"><a href="#" data-toggle="modal" data-target="#movie-classic-dialogues-add-dialog">添加经典台词</a></li>
                             <?php endif; ?>
                             <li class="next" id="movie-classic-dialogues-next-page"><a href="#">下一页 &rarr;</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            
+            <!-- 宣传海报Tab -->
+            <div    class           = "tab-pane" 
+                    id              = "movie-posters-container"
+                    data-movie-id   = "<?php echo $media['id']; ?>"
+                    data-page       = "1"
+            >
+                <br>
+                <div id="movie-posters-container-items"></div>
+                <div>
+                    <nav>
+                        <ul class="pager">
+                            <li class="previous" id="movie-posters-prev-page"><a href="#">&larr; 上一页</a></li>
+                            <?php if (Service::MARK_WATCHED == $myMark ): ?>
+                            <li id="movie-posters-add"><a href="#" data-toggle="modal" data-target="#movie-posters-add-dialog">添加海报</a></li>
+                            <?php endif; ?>
+                            <li class="next" id="movie-posters-next-page"><a href="#">下一页 &rarr;</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -169,6 +193,41 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-primary" id="movie-classic-dialogues-save">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="movie-posters-add-dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">添加海报</h4>
+            </div>
+            <div class="modal-body">
+                <input type="file" name="poster" id="movie-poster-file">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="movie-poster-save">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="movie-posters-view-dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">查看海报</h4>
+            </div>
+            <div class="modal-body">
+                <img src="#" class="img-thumbnail" id="movie-poster-view-container" >
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div>
     </div>
