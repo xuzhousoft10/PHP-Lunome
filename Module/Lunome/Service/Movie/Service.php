@@ -23,6 +23,9 @@ use X\Module\Lunome\Model\Movie\MovieClassicDialogueModel;
 use X\Module\Lunome\Model\Movie\MovieUserRateModel;
 use X\Module\Lunome\Model\Movie\MoviePosterModel;
 use X\Service\QiNiu\Service as QiniuService;
+use X\Module\Lunome\Model\Movie\MovieDirectorMapModel;
+use X\Module\Lunome\Model\People\PeopleModel;
+use X\Module\Lunome\Model\Movie\MovieActorMapModel;
 
 /**
  * The service class
@@ -379,6 +382,39 @@ class Service extends Media {
      */
     public function getPosterUrlById( $id ) {
         return 'http://7sbyuj.com1.z0.glb.clouddn.com/'.$id;
+    }
+    
+    /**
+     * @param unknown $id
+     * @return \X\Module\Lunome\Model\People\PeopleModel[]
+     */
+    public function getDirectors( $id ) {
+        $directors = MovieDirectorMapModel::model()->findAll(array('movie_id'=>$id));
+        if ( empty($directors) ) {
+            return array();
+        }
+        
+        foreach ( $directors as $index => $director ) {
+            $directors[$index] = $director->director_id;
+        }
+        $directors = PeopleModel::model()->findAll(array('id'=>$directors));
+        return $directors;
+    }
+    
+    /**
+     * @param unknown $id
+     */
+    public function getActors( $id ) {
+        $actors = MovieActorMapModel::model()->findAll(array('movie_id'=>$id));
+        if ( empty($actors) ) {
+            return array();
+        }
+        
+        foreach ( $actors as $index => $actor ) {
+            $actors[$index] = $actor->actor_id;
+        }
+        $directors = PeopleModel::model()->findAll(array('id'=>$actors));
+        return $directors;
     }
     
     const MARK_UNMARKED     = 0;

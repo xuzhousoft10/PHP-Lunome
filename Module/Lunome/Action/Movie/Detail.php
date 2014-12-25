@@ -31,6 +31,19 @@ class Detail extends MediaDetail {
             $media['category'][$index] = $category->name;
         }
         $media['category'] = implode('，', $media['category']);
+        
+        $media['directors'] = $this->getMovieService()->getDirectors($media['id']);
+        foreach ( $media['directors'] as $index => $item ) {
+            $media['directors'][$index] = $item->name;
+        }
+        $media['directors'] = implode('，', $media['directors']);
+        
+        $media['actors'] = $this->getMovieService()->getActors($media['id']);
+        foreach ( $media['actors'] as $index => $item ) {
+            $media['actors'][$index] = $item->name;
+        }
+        $media['actors'] = implode('，', $media['actors']);
+        
         return $media;
     }
     

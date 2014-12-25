@@ -11,20 +11,18 @@ $markCount = $vars['markCount'];
     <td>语言: <?php echo $media['language'];?></td>
 </tr>
 <tr>
-    <td>导演: <?php echo $media['director'];?></td>
-    <td>编剧: <?php echo $media['writer'];?></td>
-    <td>制片人: <?php echo $media['producer'];?></td>
-    <td>监制:<?php echo $media['executive'];?></td>
+    <td>导演: <?php echo $media['directors'];?></td>
+    <td colspan="3">主演： <?php echo $media['actors'];?></td>
 </tr>
 <tr>
-    <td colspan="4">主演： <?php echo $media['actor'];?></td>
+    <td colspan="4">&nbsp;</td>
+<tr>
+<tr>
+    <td colspan="4">&nbsp;</td>
 </tr>
 <tr>
     <td>想看: <?php echo $markCount[Service::MARK_INTERESTED];?></td>
     <td>已看: <?php echo $markCount[Service::MARK_WATCHED];?></td>
     <td>忽略: <?php echo $markCount[Service::MARK_IGNORED];?></td>
     <td></td>
-</tr>
-<tr>
-    <td colspan="4">&nbsp;</td>
 </tr>
