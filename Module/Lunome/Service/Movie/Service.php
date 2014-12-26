@@ -26,6 +26,7 @@ use X\Service\QiNiu\Service as QiniuService;
 use X\Module\Lunome\Model\Movie\MovieDirectorMapModel;
 use X\Module\Lunome\Model\People\PeopleModel;
 use X\Module\Lunome\Model\Movie\MovieActorMapModel;
+use X\Module\Lunome\Model\Movie\MovieCharacterModel;
 
 /**
  * The service class
@@ -415,6 +416,50 @@ class Service extends Media {
         }
         $directors = PeopleModel::model()->findAll(array('id'=>$actors));
         return $directors;
+    }
+    
+    /**
+     * @param unknown $movieId
+     * @param unknown $characterInfo
+     * @return \X\Module\Lunome\Model\Movie\MovieCharacterModel
+     */
+    public function addCharacter( $movieId, $characterInfo, $image=null ) {
+        $character = new MovieCharacterModel();
+        $character->movie_id = $movieId;
+        $character->name = $characterInfo['name'];
+        $character->description = $characterInfo['description'];
+        $character->save();
+        
+        if ( null !== $image ) {
+            /* @var $qiniu QiniuService */
+            $qiniu = X::system()->getServiceManager()->get(QiniuService::getServiceName());
+            $qiniu->setBucket('lunome-movie-characters');
+            $qiniu->putFile($image, null, $character->id);
+        }
+        return $character;
+    }
+    
+    /**
+     * @param unknown $movieId
+     * @param unknown $offset
+     * @param unknown $length
+     * @return \X\Module\Lunome\Model\Movie\MovieCharacterModel[]
+     */
+    public function getCharacters( $movieId, $offset, $length ) {
+        $criteria = new Criteria();
+        $criteria->condition = array('movie_id'=>$movieId);
+        $criteria->position = $offset;
+        $criteria->limit = $length;
+        $characters = MovieCharacterModel::model()->findAll($criteria);
+        return $characters;
+    }
+    
+    /**
+     * @param unknown $characterId
+     * @return string
+     */
+    public function getCharacterUrlById( $characterId ) {
+        return 'http://7te9pc.com1.z0.glb.clouddn.com/'.$characterId;
     }
     
     const MARK_UNMARKED     = 0;

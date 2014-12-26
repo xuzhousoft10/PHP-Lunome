@@ -121,6 +121,7 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
         <ul class="nav nav-tabs">
             <li class="active"><a href="#movie-classic-dialogues-container" data-toggle="tab">经典台词</a></li>
             <li><a href="#movie-posters-container" data-toggle="tab">宣传海报</a></li>
+            <li><a href="#movie-characters-container" data-toggle="tab">人物角色</a></li>
         </ul>
         
         <!-- Tab panes -->
@@ -162,6 +163,35 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                             <li id="movie-posters-add"><a href="#" data-toggle="modal" data-target="#movie-posters-add-dialog">添加海报</a></li>
                             <?php endif; ?>
                             <li class="next" id="movie-posters-next-page"><a href="#">下一页 &rarr;</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            
+            <!-- 人物角色Tab -->
+            <div    class           = "tab-pane" 
+                    id              = "movie-characters-container"
+                    data-movie-id   = "<?php echo $media['id']; ?>"
+                    data-page       = "1"
+            >
+                <br>
+                <div id="movie-characters-container-items"></div>
+                <div>
+                    <nav>
+                        <ul class="pager">
+                            <li class="previous" id="movie-characters-prev-page">
+                                <a href="#">&larr; 上一页</a>
+                            </li>
+                            <?php if (Service::MARK_WATCHED == $myMark ): ?>
+                            <li id="movie-characters-add">
+                                <a href="#" data-toggle="modal" data-target="#movie-characters-edit-dialog">
+                                    添加角色
+                                </a>
+                            </li>
+                            <?php endif; ?>
+                            <li class="next" id="movie-characters-next-page">
+                                <a href="#">下一页 &rarr;</a>
+                            </li>
                         </ul>
                     </nav>
                 </div>
@@ -228,6 +258,39 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="movie-characters-edit-dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">增加人物角色</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label>角色名称</label>
+                        <input id="movie-character-name" type="text" class="form-control" >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>角色描述</label>
+                        <textarea id="movie-character-description" class="form-control" rows="" cols=""></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>角色头像</label>
+                        <input id="movie-character-image" type="file" name="image">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-default" id="movie-character-save">保存</button>
             </div>
         </div>
     </div>

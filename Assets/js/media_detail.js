@@ -1,4 +1,124 @@
 $(document).ready(function() {
+    /* 角色管理开始 */
+    function getCharacters() {
+        $.get('/?module=lunome&action=movie/character/index', {
+            id   : $('#movie-characters-container').attr('data-movie-id'),
+            page : $('#movie-characters-container').attr('data-page')
+        }, function( response ) {
+            if (0 == response.length ) {
+                $('#movie-characters-prev-page').trigger('click');
+                return;
+            }
+            
+            $('#movie-characters-container-items').empty();
+            
+            for( var i in response ) {
+                $('#movie-characters-container-items').append(
+                    $('<div>')
+                    .addClass('thumbnail')
+                    .addClass('clearfix')
+                    .append(
+                        $('<div>')
+                        .addClass('col-md-2')
+                        .html(  $('<img>')
+                                .addClass('img-thumbnail')
+                                .width(60)
+                                .height(60)
+                                .attr('src', response[i].imageURL)
+                                .attr('alt',response[i].name)
+                        )
+                    )
+                    .append(
+                        $('<div>')
+                        .addClass('col-md-10')
+                        .append(
+                            $('<p>').html(response[i].name)
+                        )
+                        .append(
+                            $('<p>').html(response[i].description)
+                        )
+                    )
+                );
+            }
+        }, 'json');
+    }
+    
+    $('#movie-characters-prev-page').addClass('disabled');
+    
+    $('#movie-characters-prev-page').click(function() {
+        var currentPage = $('#movie-characters-container').attr('data-page')*1;
+        if ( 0>=currentPage-1 ) {
+            return false;
+        }
+        
+        if ( 1>=currentPage-1 ) {
+            $(this).addClass('disabled');
+        }
+        
+        $('#movie-characters-container').attr('data-page',currentPage-1);
+        getPosters();
+        return false;
+    });
+    
+    $('#movie-characters-next-page').click(function() {
+        $('#movie-characters-container').attr('data-page', 
+            $('#movie-characters-container').attr('data-page')*1+1
+        );
+        $('#movie-characters-prev-page').removeClass('disabled');
+        getPosters();
+        return false;
+    });
+    
+    $('#movie-character-save').click(function() {
+        var movieId = $('#movie-characters-container').attr('data-movie-id');
+        var name = $.trim($('#movie-character-name').val());
+        
+        if ( 0 == name.length ) {
+            alert('角色名称不能为空。');
+            return false;
+        }
+        
+        if ( !(/(jpg|png)/.test($('#movie-character-image').val())) ) {
+            alert('头像仅支持JPG和PNG格式文件。');
+            return;
+        }
+        
+        var postData = {
+            movie:movieId,
+            'character[name]':name,
+            'character[description]':$('#movie-character-description').val()
+        };
+        
+        var afterSaved = function() {
+            $('#movie-character-name').val('');
+            $('#movie-character-description').val('');
+            $('#movie-character-image').replaceWith('<input type="file" name="image" id="movie-character-image">');
+            $('#movie-characters-edit-dialog').modal('hide');
+        };
+        
+        if ( 0 === $.trim($('#movie-character-image').val()) ) {
+            $.post('/?module=lunome&action=movie/character/edit', postData, function(response) {
+                afterSaved();
+            }, 'text');
+        } else {
+            $.ajaxFileUpload({
+                url             : '/?module=lunome&action=movie/character/edit',
+                data            : postData,
+                secureuri       : false,
+                fileElementId   : 'movie-character-image',
+                dataType        : 'text',
+                success         : function (data, status){
+                    afterSaved();
+                },
+                error           : function (data, status, e){
+                    afterSaved();
+                }
+            });
+        }
+    });
+    
+    /* 角色管理结束 */
+    
     /* 海报管理开始 */
     $('#movie-poster-save').click(function() {
         if ( '' === $('#movie-poster-file').val() ) {
@@ -153,12 +273,21 @@ $(document).ready(function() {
             return;
         }
         
+        console.log(containerId);
+        
         switch ( containerId ) {
         case '#movie-posters-container' :
             var isInited = $('#movie-posters-container').attr('data-is-inited');
             if ( 'undefined' == typeof(isInited) ) {
                 getPosters();
                 $('#movie-posters-container').attr('data-is-inited', 'true');
+            }
+            break;
+        case '#movie-characters-container' :
+            var isInited = $('#movie-characters-container').attr('data-is-inited');
+            if ( 'undefined' == typeof(isInited) ) {
+                getCharacters();
+                $('#movie-characters-container').attr('data-is-inited', 'true');
             }
             break;
         default:
