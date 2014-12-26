@@ -24,7 +24,7 @@ class Index extends Basic {
             $page = 1;
         }
         
-        $pageSize = 2;
+        $pageSize = 5;
         /* @var $movieService MovieService */
         $movieService = $this->getService(MovieService::getServiceName());
         $characters = $movieService->getCharacters($id, ($page-1)*$pageSize, $pageSize);

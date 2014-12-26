@@ -32,7 +32,7 @@ $(document).ready(function() {
                         $('<div>')
                         .addClass('col-md-10')
                         .append(
-                            $('<p>').html(response[i].name)
+                            $('<p>').append($('<strong>').html(response[i].name))
                         )
                         .append(
                             $('<p>').html(response[i].description)
@@ -56,7 +56,7 @@ $(document).ready(function() {
         }
         
         $('#movie-characters-container').attr('data-page',currentPage-1);
-        getPosters();
+        getCharacters();
         return false;
     });
     
@@ -65,7 +65,7 @@ $(document).ready(function() {
             $('#movie-characters-container').attr('data-page')*1+1
         );
         $('#movie-characters-prev-page').removeClass('disabled');
-        getPosters();
+        getCharacters();
         return false;
     });
     
@@ -94,6 +94,8 @@ $(document).ready(function() {
             $('#movie-character-description').val('');
             $('#movie-character-image').replaceWith('<input type="file" name="image" id="movie-character-image">');
             $('#movie-characters-edit-dialog').modal('hide');
+            $('#movie-characters-container').attr('data-page',2);
+            $('#movie-characters-prev-page').trigger('click');
         };
         
         if ( 0 === $.trim($('#movie-character-image').val()) ) {

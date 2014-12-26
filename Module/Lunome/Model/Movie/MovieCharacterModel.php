@@ -20,7 +20,7 @@ class MovieCharacterModel extends Basic {
     protected function describe() {
         $columns = array();
         $columns['id']                  = 'PRIMARY VARCHAR(36) NOTNULL';
-        $columns['movie_id']                = 'VARCHAR(36) NOTNULL';
+        $columns['movie_id']            = 'VARCHAR(36) NOTNULL';
         $columns['name']                = 'VARCHAR(64) NOTNULL';
         $columns['description']         = 'VARCHAR(1024)';
         return $columns;
