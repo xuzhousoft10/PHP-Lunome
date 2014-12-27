@@ -127,75 +127,28 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
         <!-- Tab panes -->
         <div class="tab-content">
             <!-- 经典台词Tab -->
-            <div    class           = "tab-pane active" 
-                    id              = "movie-classic-dialogues-container"
-                    data-movie-id   = "<?php echo $media['id']; ?>"
-                    data-page       = "1"
-            >
-                <br>
-                <div id="movie-classic-dialogues-container-items"></div>
-                <div>
-                    <nav>
-                        <ul class="pager">
-                            <li class="previous" id="movie-classic-dialogues-prev-page"><a href="#">&larr; 上一页</a></li>
-                            <?php if (Service::MARK_WATCHED == $myMark ): ?>
-                            <li id="movie-classic-dialogues-add"><a href="#" data-toggle="modal" data-target="#movie-classic-dialogues-add-dialog">添加经典台词</a></li>
-                            <?php endif; ?>
-                            <li class="next" id="movie-classic-dialogues-next-page"><a href="#">下一页 &rarr;</a></li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
+            <div    class               = "tab-pane active" 
+                    id                  = "movie-classic-dialogues-container"
+                    data-index-url      = "/?module=lunome&action=movie/classicDialogue/index&id=<?php echo $media['id']; ?>"
+                    data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
+                    data-movie-id       = "<?php echo $media['id']; ?>"
+            ></div>
             
             <!-- 宣传海报Tab -->
-            <div    class           = "tab-pane" 
-                    id              = "movie-posters-container"
-                    data-movie-id   = "<?php echo $media['id']; ?>"
-                    data-page       = "1"
-            >
-                <br>
-                <div id="movie-posters-container-items"></div>
-                <div>
-                    <nav>
-                        <ul class="pager">
-                            <li class="previous" id="movie-posters-prev-page"><a href="#">&larr; 上一页</a></li>
-                            <?php if (Service::MARK_WATCHED == $myMark ): ?>
-                            <li id="movie-posters-add"><a href="#" data-toggle="modal" data-target="#movie-posters-add-dialog">添加海报</a></li>
-                            <?php endif; ?>
-                            <li class="next" id="movie-posters-next-page"><a href="#">下一页 &rarr;</a></li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
+            <div    class               = "tab-pane" 
+                    id                  = "movie-posters-container"
+                    data-index-url      = "/?module=lunome&action=movie/poster/index&id=<?php echo $media['id']; ?>"
+                    data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
+                    data-movie-id       = "<?php echo $media['id']; ?>"
+            ></div>
             
             <!-- 人物角色Tab -->
-            <div    class           = "tab-pane" 
-                    id              = "movie-characters-container"
-                    data-movie-id   = "<?php echo $media['id']; ?>"
-                    data-page       = "1"
-            >
-                <br>
-                <div id="movie-characters-container-items"></div>
-                <div>
-                    <nav>
-                        <ul class="pager">
-                            <li class="previous" id="movie-characters-prev-page">
-                                <a href="#">&larr; 上一页</a>
-                            </li>
-                            <?php if (Service::MARK_WATCHED == $myMark ): ?>
-                            <li id="movie-characters-add">
-                                <a href="#" data-toggle="modal" data-target="#movie-characters-edit-dialog">
-                                    添加角色
-                                </a>
-                            </li>
-                            <?php endif; ?>
-                            <li class="next" id="movie-characters-next-page">
-                                <a href="#">下一页 &rarr;</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
+            <div    class               = "tab-pane"
+                    id                  = "movie-characters-container"
+                    data-index-url      = "/?module=lunome&action=movie/character/index&id=<?php echo $media['id']; ?>"
+                    data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
+                    data-movie-id       = "<?php echo $media['id']; ?>"
+            ></div>
         </div>
     </div>
     <div class="col-md-4">

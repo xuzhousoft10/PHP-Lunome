@@ -120,7 +120,7 @@ class Service extends \X\Core\Service\XService {
      * 
      * @var boolean
      */
-    protected $isAutoDisplay = true;
+    protected $isAutoDisplay = false;
     
     /**
      * Enable the auto display function.

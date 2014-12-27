@@ -1031,6 +1031,13 @@ class Html extends \X\Service\XView\Core\View {
     }
     
     /**
+     * @return boolean
+     */
+    public function hasLayout() {
+        return !(null === $this->layout['view']);
+    }
+    
+    /**
      * Add data to this view
      * 
      * @param string $name The name of the value

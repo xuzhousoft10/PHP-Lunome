@@ -1,72 +1,99 @@
 $(document).ready(function() {
-    /* 角色管理开始 */
-    function getCharacters() {
-        $.get('/?module=lunome&action=movie/character/index', {
-            id   : $('#movie-characters-container').attr('data-movie-id'),
-            page : $('#movie-characters-container').attr('data-page')
-        }, function( response ) {
-            if (0 == response.length ) {
-                $('#movie-characters-prev-page').trigger('click');
-                return;
-            }
-            
-            $('#movie-characters-container-items').empty();
-            
-            for( var i in response ) {
-                $('#movie-characters-container-items').append(
-                    $('<div>')
-                    .addClass('thumbnail')
-                    .addClass('clearfix')
-                    .append(
-                        $('<div>')
-                        .addClass('col-md-2')
-                        .html(  $('<img>')
-                                .addClass('img-thumbnail')
-                                .width(60)
-                                .height(60)
-                                .attr('src', response[i].imageURL)
-                                .attr('alt',response[i].name)
-                        )
-                    )
-                    .append(
-                        $('<div>')
-                        .addClass('col-md-10')
-                        .append(
-                            $('<p>').append($('<strong>').html(response[i].name))
-                        )
-                        .append(
-                            $('<p>').html(response[i].description)
-                        )
-                    )
-                );
-            }
-        }, 'json');
+    /**
+     * @returns void
+     */
+    function ResourceManager ( managerId ) {
+        this.mangerId = managerId;
+        this.manager = $(managerId);
+        this.itemContainer = null;
+        this.afterResourceLoaded = function(){};
+        
+        this._init();
     }
     
-    $('#movie-characters-prev-page').addClass('disabled');
+    /**
+     * Init the resource manager.
+     * @returns void
+     */
+    ResourceManager.prototype._init = function() {
+        this.itemContainer = $('<div>').attr('id', this.mangerId+'-items');
+        this.manager.append('<br>').append(this.itemContainer);
+        this._loadResources(this.manager.attr('data-index-url'));
+    };
     
-    $('#movie-characters-prev-page').click(function() {
-        var currentPage = $('#movie-characters-container').attr('data-page')*1;
-        if ( 0>=currentPage-1 ) {
-            return false;
-        }
-        
-        if ( 1>=currentPage-1 ) {
-            $(this).addClass('disabled');
-        }
-        
-        $('#movie-characters-container').attr('data-page',currentPage-1);
-        getCharacters();
-        return false;
-    });
+    /**
+     * Refresh the management
+     * @returns void
+     */
+    ResourceManager.prototype.refresh = function() {
+        this._loadResources(this.manager.attr('data-index-url'));
+    };
     
-    $('#movie-characters-next-page').click(function() {
-        $('#movie-characters-container').attr('data-page', 
-            $('#movie-characters-container').attr('data-page')*1+1
-        );
-        $('#movie-characters-prev-page').removeClass('disabled');
-        getCharacters();
-        return false;
+    /**
+     * Load resources by url.
+     * @returns void
+     */
+    ResourceManager.prototype._loadResources = function( url ) {
+        var $this = this;
+        $this.itemContainer.empty();
+        var pager = '.'+$this.mangerId.replace('#','')+'-pager';
+        $(pager).unbind('click');
+        var loadding = $('<img>').attr('src', $this.manager.attr('data-loadding-image'));
+        $this.itemContainer.addClass('text-center').append(loadding);
+        $.get(url, {}, function( response ) {
+            $this.itemContainer.removeClass('text-center');
+            $this.itemContainer.html(response);
+            $(pager).click(function() {$this._pagerClicked(this); return false;});
+            $this.afterResourceLoaded();
+        }, 'text');
+    };
+    
+    /**
+     * Handler pager click event.
+     * @returns void
+     */
+    ResourceManager.prototype._pagerClicked = function( trigger ) {
+        trigger = $(trigger);
+        if ( '#' == trigger.attr('href') ) {
+            return;
+        }
+        this._loadResources(trigger.attr('href'));
+    };
+    
+    /* @var characterResourceManager ResourceManager */
+    var characterResourceManager = null;
+    /* @var posterResourceManager ResourceManager */
+    var posterResourceManager = null;
+    /* @var classicDialogueManagert ResourceManager */
+    var classicDialogueManagert = new ResourceManager('#movie-classic-dialogues-container');
+    
+    /* manage the tab, load the resource when the table is actived. */
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        var target = $(e.target);
+        var containerId = target.attr('href');
+        if ( '#movie-classic-dialogues-container' == containerId ) {
+            return;
+        }
+        switch ( containerId ) {
+        case '#movie-posters-container' :
+            if ( null == posterResourceManager ) {
+                posterResourceManager = new ResourceManager('#movie-posters-container');
+                posterResourceManager.afterResourceLoaded = function() {
+                    $('.movie-poster-item').click(function() {
+                        $('#movie-poster-view-container').attr('src', $(this).attr('src'));
+                        $('#movie-posters-view-dialog').modal('show');
+                    });
+                };
+            }
+            break;
+        case '#movie-characters-container' :
+            if ( null == characterResourceManager ) {
+                characterResourceManager = new ResourceManager('#movie-characters-container');
+            }
+            break;
+        default:
+            break;
+        }
     });
     
     $('#movie-character-save').click(function() {
@@ -94,8 +121,7 @@ $(document).ready(function() {
             $('#movie-character-description').val('');
             $('#movie-character-image').replaceWith('<input type="file" name="image" id="movie-character-image">');
             $('#movie-characters-edit-dialog').modal('hide');
-            $('#movie-characters-container').attr('data-page',2);
-            $('#movie-characters-prev-page').trigger('click');
+            characterResourceManager.refresh();
         };
         
         if ( 0 === $.trim($('#movie-character-image').val()) ) {
@@ -118,8 +144,6 @@ $(document).ready(function() {
             });
         }
     });
-    
-    /* 角色管理结束 */
     
     /* 海报管理开始 */
     $('#movie-poster-save').click(function() {
@@ -145,114 +169,12 @@ $(document).ready(function() {
                 .empty()
                 .html('<input type="file" name="poster" id="movie-poster-file">');
                 $('#movie-posters-add-dialog').modal('hide');
-                $('#movie-posters-container').attr('data-page',2);
-                $('#movie-posters-prev-page').trigger('click');
+                posterResourceManager.refresh();
             },
             error           : function (data, status, e){
                 $('#movie-posters-add-dialog').modal('hide');
             }
         });
-    });
-    
-    function getPosters( ) {
-        $.get('/?module=lunome&action=movie/poster/index', {
-            id   : $('#movie-posters-container').attr('data-movie-id'),
-            page : $('#movie-posters-container').attr('data-page')
-        }, function( response ) {
-            if (0 == response.length ) {
-                $('#movie-posters-prev-page').trigger('click');
-                return;
-            }
-            $('#movie-posters-container-items').empty();
-            for( var i in response ) {
-                $('#movie-posters-container-items').append(
-                    $('<img>')
-                    .attr('src', response[i].url)
-                    .addClass('img-thumbnail')
-                    .addClass('margin-5')
-                    .width(100)
-                    .height(150)
-                    .click(function() {
-                        $('#movie-poster-view-container').attr('src', $(this).attr('src'));
-                        $('#movie-posters-view-dialog').modal('show');
-                    })
-                );
-            }
-        }, 'json');
-    }
-    
-    $('#movie-postes-prev-page').addClass('disabled');
-    
-    $('#movie-posters-prev-page').click(function() {
-        var currentPage = $('#movie-posters-container').attr('data-page')*1;
-        if ( 0>=currentPage-1 ) {
-            return false;
-        }
-        
-        if ( 1>=currentPage-1 ) {
-            $(this).addClass('disabled');
-        }
-        
-        $('#movie-posters-container').attr('data-page',currentPage-1);
-        getPosters();
-        return false;
-    });
-    
-    $('#movie-posters-next-page').click(function() {
-        $('#movie-posters-container').attr('data-page', 
-            $('#movie-posters-container').attr('data-page')*1+1
-        );
-        $('#movie-posters-prev-page').removeClass('disabled');
-        getPosters();
-        return false;
-    });
-    /* 海报管理结束 */
-    
-    /**
-     * @returns
-     */
-    function getClassicDialogues( ) {
-        $.get('/?module=lunome&action=movie/classicDialogue/index', {
-            id   : $('#movie-classic-dialogues-container').attr('data-movie-id'),
-            page : $('#movie-classic-dialogues-container').attr('data-page')
-        }, function( response ) {
-            if (0 == response.length ) {
-                $('#movie-classic-dialogues-prev-page').trigger('click');
-                return;
-            }
-            $('#movie-classic-dialogues-container-items').empty();
-            for( var i in response ) {
-                $('#movie-classic-dialogues-container-items').append(
-                    $('<div>').addClass('well').addClass('well-sm').html(response[i].content)
-                );
-            }
-        }, 'json');
-    }
-    getClassicDialogues();
-    $('#movie-classic-dialogues-prev-page').addClass('disabled');
-    
-    $('#movie-classic-dialogues-prev-page').click(function() {
-        var currentPage = $('#movie-classic-dialogues-container').attr('data-page')*1;
-        if ( 0>=currentPage-1 ) {
-            return false;
-        }
-        
-        if ( 1>=currentPage-1 ) {
-            $(this).addClass('disabled');
-        }
-        
-        $('#movie-classic-dialogues-container').attr('data-page',currentPage-1);
-        getClassicDialogues();
-        return false;
-    });
-    
-    $('#movie-classic-dialogues-next-page').click(function() {
-        $('#movie-classic-dialogues-container').attr('data-page', 
-            $('#movie-classic-dialogues-container').attr('data-page')*1+1
-        );
-        $('#movie-classic-dialogues-prev-page').removeClass('disabled');
-        getClassicDialogues();
-        return false;
     });
     
     $('#movie-classic-dialogues-save').click(function() {
@@ -263,39 +185,11 @@ $(document).ready(function() {
         }, function( response ) {
             $('#movie-classic-dialogues-content').val('');
             $('#movie-classic-dialogues-add-dialog').modal('hide');
-            $('#movie-classic-dialogues-container').attr('data-page',2);
-            $('#movie-classic-dialogues-prev-page').trigger('click');
+            classicDialogueManagert.refresh();
         }, 'json');
     });
     
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-        var target = $(e.target);
-        var containerId = target.attr('href');
-        if ( '#movie-classic-dialogues-container' == containerId ) {
-            return;
-        }
-        
-        console.log(containerId);
-        
-        switch ( containerId ) {
-        case '#movie-posters-container' :
-            var isInited = $('#movie-posters-container').attr('data-is-inited');
-            if ( 'undefined' == typeof(isInited) ) {
-                getPosters();
-                $('#movie-posters-container').attr('data-is-inited', 'true');
-            }
-            break;
-        case '#movie-characters-container' :
-            var isInited = $('#movie-characters-container').attr('data-is-inited');
-            if ( 'undefined' == typeof(isInited) ) {
-                getCharacters();
-                $('#movie-characters-container').attr('data-is-inited', 'true');
-            }
-            break;
-        default:
-            break;
-        }
-    })
+    
     
     
     /* 绑定事件到在线观看按钮 */

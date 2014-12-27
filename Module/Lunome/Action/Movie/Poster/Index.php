@@ -7,14 +7,14 @@ namespace X\Module\Lunome\Action\Movie\Poster;
 /**
  * Use statements
  */
-use X\Module\Lunome\Util\Action\Basic;
+use X\Module\Lunome\Util\Action\Visual;
 use X\Module\Lunome\Service\Movie\Service as MovieService;
 
 /**
  * The action class for movie/ignore action.
  * @author Unknown
  */
-class Index extends Basic { 
+class Index extends Visual { 
     /**
      * @param unknown $id
      * @param unknown $content
@@ -24,7 +24,7 @@ class Index extends Basic {
             $page = 1;
         }
         
-        $pageSize = 10;
+        $pageSize = 12;
         /* @var $movieService MovieService */
         $movieService = $this->getService(MovieService::getServiceName());
         $posters = $movieService->getPosters($id, ($page-1)*$pageSize, $pageSize);
@@ -32,6 +32,17 @@ class Index extends Basic {
             $posters[$index] = $poster->toArray();
             $posters[$index]['url'] = $movieService->getPosterUrlById($poster->id);
         }
-        echo json_encode($posters);
+        
+        $pager = array();
+        $pager['prev'] = (1 >= $page) ? false : $page-1;
+        $pager['next'] = (($page)*$pageSize >= $movieService->countPosters($id)) ? false : $page+1;
+        
+        $isWatched = MovieService::MARK_WATCHED === $movieService->getMark($id);
+        $name   = 'POSTERS_INDEX';
+        $path   = $this->getParticleViewPath('Movie/Posters');
+        $option = array();
+        $data   = array('posters'=>$posters, 'id'=>$id, 'pager'=>$pager, 'isWatched'=>$isWatched);
+        $this->getView()->loadParticle($name, $path, $option, $data);
+        $this->getView()->displayParticle($name);
     }
 }

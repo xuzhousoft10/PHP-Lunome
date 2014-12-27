@@ -306,6 +306,14 @@ class Service extends Media {
     }
     
     /**
+     * @param unknown $movieID
+     * @return number
+     */
+    public function countClasicDialogues( $movieID ) {
+        return MovieClassicDialogueModel::model()->count(array('movie_id'=>$movieID));
+    }
+    
+    /**
      * @param unknown $id
      * @param unknown $content
      */
@@ -375,6 +383,14 @@ class Service extends Media {
         $criteria->limit = $length;
         $dialogues = MoviePosterModel::model()->findAll($criteria);
         return $dialogues;
+    }
+    
+    /**
+     * @param unknown $movieID
+     * @return number
+     */
+    public function countPosters( $movieID ) {
+        return MoviePosterModel::model()->count(array('movie_id'=>$movieID));
     }
     
     /**
@@ -452,6 +468,14 @@ class Service extends Media {
         $criteria->limit = $length;
         $characters = MovieCharacterModel::model()->findAll($criteria);
         return $characters;
+    }
+    
+    /**
+     * @param unknown $movieID
+     * @return number
+     */
+    public function countCharacters( $movieID ) {
+        return MovieCharacterModel::model()->count(array('movie_id'=>$movieID));
     }
     
     /**
