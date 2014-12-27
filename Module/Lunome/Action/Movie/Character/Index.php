@@ -25,7 +25,7 @@ class Index extends Visual {
             $page = 1;
         }
         
-        $pageSize = 2;
+        $pageSize = 5;
         
         /* @var $movieService MovieService */
         $movieService = $this->getService(MovieService::getServiceName());

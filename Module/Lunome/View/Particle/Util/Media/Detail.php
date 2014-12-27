@@ -1,7 +1,6 @@
 <?php 
 use X\Core\X;
 use X\Module\Lunome\Service\Movie\Service as MovieService;
-use X\Module\Lunome\Service\Movie\Service;
 
 $assetsURL = X::system()->getConfiguration()->get('assets-base-url');
 $this->addScriptFile('ajaxfileupload', $assetsURL.'/library/jquery/plugin/ajaxfileupload.js');
@@ -126,25 +125,28 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
         
         <!-- Tab panes -->
         <div class="tab-content">
-            <!-- 经典台词Tab -->
+            <!-- classic dialogue Tab -->
             <div    class               = "tab-pane active" 
                     id                  = "movie-classic-dialogues-container"
+                    data-resource-type  = "dialogue"
                     data-index-url      = "/?module=lunome&action=movie/classicDialogue/index&id=<?php echo $media['id']; ?>"
                     data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
                     data-movie-id       = "<?php echo $media['id']; ?>"
             ></div>
             
-            <!-- 宣传海报Tab -->
+            <!-- poster Tab -->
             <div    class               = "tab-pane" 
                     id                  = "movie-posters-container"
+                    data-resource-type  = "poster"
                     data-index-url      = "/?module=lunome&action=movie/poster/index&id=<?php echo $media['id']; ?>"
                     data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
                     data-movie-id       = "<?php echo $media['id']; ?>"
             ></div>
             
-            <!-- 人物角色Tab -->
+            <!-- character Tab -->
             <div    class               = "tab-pane"
                     id                  = "movie-characters-container"
+                    data-resource-type  = "character"
                     data-index-url      = "/?module=lunome&action=movie/character/index&id=<?php echo $media['id']; ?>"
                     data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
                     data-movie-id       = "<?php echo $media['id']; ?>"
@@ -152,7 +154,7 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
         </div>
     </div>
     <div class="col-md-4">
-        <!-- 评论列表 -->
+        <!-- comment list -->
         <div    id                  = "movie-short-comment-container"
                 data-is-guest-user  = "<?php echo (null===$vars['currentUser'])?'true':'false'; ?>"
                 data-user-nickname  = "<?php echo (null===$vars['currentUser'])?'':$vars['currentUser']->nickname; ?>"
@@ -162,43 +164,98 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="movie-classic-dialogues-add-dialog" tabindex="-1">
+<!-- Classic dialogues edit modal -->
+<div class="modal fade" id="movie-classic-dialogues-edit-dialog" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">添加经典台词</h4>
-            </div>
-            <div class="modal-body">
-                <textarea class="width-full" id="movie-classic-dialogues-content"></textarea>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" id="movie-classic-dialogues-save">保存</button>
-            </div>
+            <form   action="/?module=lunome&action=movie/classicDialogue/edit" 
+                    data-dialog="#movie-classic-dialogues-edit-dialog" 
+                    data-resource-type="dialogue"
+                    data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
+            >
+                <input type="hidden" name="id" value="<?php echo $media['id']; ?>">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">添加经典台词</h4>
+                </div>
+                <div class="modal-body">
+                    <textarea class="width-full" name="content"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary dialog-save-button">保存</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
+<!-- poster edit model -->
 <div class="modal fade" id="movie-posters-add-dialog" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">添加海报</h4>
-            </div>
-            <div class="modal-body">
-                <input type="file" name="poster" id="movie-poster-file">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" id="movie-poster-save">保存</button>
-            </div>
+            <form   action="/?module=lunome&action=movie/poster/upload&" 
+                    data-dialog="#movie-posters-add-dialog" 
+                    data-resource-type="poster"
+                    data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
+            >
+                <input type="hidden" name="id" value="<?php echo $media['id']; ?>">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">添加海报</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="file" name="poster" id="movie-poster-file">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary dialog-save-button">保存</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
+<!-- character edit dialog -->
+<div class="modal fade" id="movie-characters-edit-dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form   action="/?module=lunome&action=movie/character/edit" 
+                    data-dialog="#movie-characters-edit-dialog" 
+                    data-resource-type="character"
+                    data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
+            >
+                <input type="hidden" name="movie" value="<?php echo $media['id']; ?>">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">增加人物角色</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>角色名称</label>
+                        <input name="character[name]" type="text" class="form-control" >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>角色描述</label>
+                        <textarea name="character[description]" class="form-control" rows="" cols=""></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>角色头像</label>
+                        <input id="movie-character-image" type="file" name="image">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary dialog-save-button">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- poster view dialog -->
 <div class="modal fade" id="movie-posters-view-dialog" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -211,39 +268,6 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="movie-characters-edit-dialog" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">增加人物角色</h4>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label>角色名称</label>
-                        <input id="movie-character-name" type="text" class="form-control" >
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>角色描述</label>
-                        <textarea id="movie-character-description" class="form-control" rows="" cols=""></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>角色头像</label>
-                        <input id="movie-character-image" type="file" name="image">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-default" id="movie-character-save">保存</button>
             </div>
         </div>
     </div>

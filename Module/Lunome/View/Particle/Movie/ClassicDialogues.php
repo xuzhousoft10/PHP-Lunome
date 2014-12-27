@@ -19,7 +19,7 @@
             </li>
             <?php if ( $vars['isWatched'] ): ?>
             <li id="movie-posters-add">
-                <a href="#" data-toggle="modal" data-target="#movie-classic-dialogues-add-dialog">
+                <a href="#" data-toggle="modal" data-target="#movie-classic-dialogues-edit-dialog">
                     添加经典台词
                 </a>
             </li>

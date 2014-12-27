@@ -60,137 +60,142 @@ $(document).ready(function() {
         this._loadResources(trigger.attr('href'));
     };
     
-    /* @var characterResourceManager ResourceManager */
-    var characterResourceManager = null;
-    /* @var posterResourceManager ResourceManager */
-    var posterResourceManager = null;
-    /* @var classicDialogueManagert ResourceManager */
-    var classicDialogueManagert = new ResourceManager('#movie-classic-dialogues-container');
+    /**
+     * Defaine the poster item handler to open the poster after click.
+     * @returns void
+     */
+    var posterItemClickHandler = function() {
+        $('.movie-poster-item').click(function() {
+            $('#movie-poster-view-container').attr('src', $(this).attr('src'));
+            $('#movie-posters-view-dialog').modal('show');
+        });
+    };
     
-    /* manage the tab, load the resource when the table is actived. */
+    /**
+     * Validate the data for classic dialogue.
+     * @returns boolean
+     */
+    var classicDialogueValidator = function( data ) {
+        if ( 0 >= $.trim(data.content).length ) {
+            alert('内容不能为空啊～～～');
+            return false;
+        } else if ( 1000 <= $.trim(data.content).length ) {
+            alert('太长了，字数不要超过1000， OK？');
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Validate the data for add poster
+     * @returns boolean
+     */
+    var posterValidator = function( data, file ) {
+        if ( '' === file.val() ) {
+            alert('没有要保存的海报文件。');
+            return false;
+        }
+        if ( !(/(jpg|png)/.test(file.val())) ) {
+            alert('海报文件仅支持JPG和PNG格式文件。');
+            return false;
+        }
+        return true;
+    };
+    
+    /**
+     * Validate the data for add character
+     * @returnes boolean
+     */
+    var characterValidator = function( data, file ) {
+        if ( 0 == $.trim(data['character[name]']).length ) {
+            alert('角色名称不能为空。');
+            return false;
+        }
+        
+        if ( !(/(jpg|png)/.test(file.val())) ) {
+            alert('头像仅支持JPG和PNG格式文件。');
+            return false;
+        }
+        
+        return true;
+    };
+    
+    /**
+     * Resource managers.
+     */
+    var resourceManagers = {
+        character : {manager:null, afterResourceLoaded:function(){}, validator:characterValidator},
+        poster    : {manager:null, afterResourceLoaded:posterItemClickHandler, validator:posterValidator},
+        dialogue  : {manager:new ResourceManager('#movie-classic-dialogues-container'), afterResourceLoaded:function(){}, validator:classicDialogueValidator}
+    };
+    
+    /**
+     * manage the tab, load the resource when the table is actived.
+     */
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         var target = $(e.target);
         var containerId = target.attr('href');
         if ( '#movie-classic-dialogues-container' == containerId ) {
             return;
         }
-        switch ( containerId ) {
-        case '#movie-posters-container' :
-            if ( null == posterResourceManager ) {
-                posterResourceManager = new ResourceManager('#movie-posters-container');
-                posterResourceManager.afterResourceLoaded = function() {
-                    $('.movie-poster-item').click(function() {
-                        $('#movie-poster-view-container').attr('src', $(this).attr('src'));
-                        $('#movie-posters-view-dialog').modal('show');
-                    });
-                };
-            }
-            break;
-        case '#movie-characters-container' :
-            if ( null == characterResourceManager ) {
-                characterResourceManager = new ResourceManager('#movie-characters-container');
-            }
-            break;
-        default:
-            break;
+        
+        var resourceType = $(containerId).attr('data-resource-type');
+        if ( null === resourceManagers[resourceType].manager ) {
+            resourceManagers[resourceType].manager = new ResourceManager(containerId);
+            resourceManagers[resourceType].manager.afterResourceLoaded = resourceManagers[resourceType].afterResourceLoaded;
         }
     });
     
-    $('#movie-character-save').click(function() {
-        var movieId = $('#movie-characters-container').attr('data-movie-id');
-        var name = $.trim($('#movie-character-name').val());
+    /**
+     * Handle the dialog save button click event
+     * @returns void
+     */
+    $('.dialog-save-button').click(function() {
+        var form = $($(this)[0].form);
+        var data = form.serializeArray();
+        var postData = {};
+        for ( var i in data ) {
+            postData[data[i].name] = data[i].value;
+        }
         
-        if ( 0 == name.length ) {
-            alert('角色名称不能为空。');
+        var file = form.find('input[type="file"]');
+        if ( false == resourceManagers[form.attr('data-resource-type')].validator(postData, file) ) {
             return false;
         }
         
-        if ( !(/(jpg|png)/.test($('#movie-character-image').val())) ) {
-            alert('头像仅支持JPG和PNG格式文件。');
-            return;
+        var loaddingImage = $('<img>').attr('src', form.attr('data-loadding-image'));
+        form.find('.modal-body').children().hide();
+        form.find('.modal-body').addClass('text-center').append(loaddingImage);
+        
+        var afterFormCommited = function() {
+            form.find('.modal-body').removeClass('text-center');
+            loaddingImage.remove();
+            form.find('.modal-body').children().show();
+            form[0].reset();
+            $(form.attr('data-dialog')).modal('hide');
+            resourceManagers[form.attr('data-resource-type')].manager.refresh();
         }
         
-        var postData = {
-            movie:movieId,
-            'character[name]':name,
-            'character[description]':$('#movie-character-description').val()
-        };
-        
-        var afterSaved = function() {
-            $('#movie-character-name').val('');
-            $('#movie-character-description').val('');
-            $('#movie-character-image').replaceWith('<input type="file" name="image" id="movie-character-image">');
-            $('#movie-characters-edit-dialog').modal('hide');
-            characterResourceManager.refresh();
-        };
-        
-        if ( 0 === $.trim($('#movie-character-image').val()) ) {
-            $.post('/?module=lunome&action=movie/character/edit', postData, function(response) {
-                afterSaved();
+        if ( 0 == file.length ) {
+            $.post(form.attr('action'), postData, function( response ) {
+                afterFormCommited(response);
             }, 'text');
         } else {
             $.ajaxFileUpload({
-                url             : '/?module=lunome&action=movie/character/edit',
+                url             : form.attr('action'),
                 data            : postData,
                 secureuri       : false,
-                fileElementId   : 'movie-character-image',
+                fileElementId   : file.attr('id'),
                 dataType        : 'text',
                 success         : function (data, status){
-                    afterSaved();
+                    afterFormCommited(data);
                 },
                 error           : function (data, status, e){
-                    afterSaved();
+                    afterFormCommited(data);
                 }
             });
         }
     });
-    
-    /* 海报管理开始 */
-    $('#movie-poster-save').click(function() {
-        if ( '' === $('#movie-poster-file').val() ) {
-            alert('没有要保存的海报文件。');
-            return;
-        }
-        if ( !(/(jpg|png)/.test($('#movie-poster-file').val())) ) {
-            alert('海报文件仅支持JPG和PNG格式文件。');
-            return;
-        }
-        
-        var movieId = $('#movie-posters-container').attr('data-movie-id');
-        $('#movie-poster-file').parent().children().hide();
-        $('#movie-poster-file').parent().append('<img src="http://7sbnm1.com1.z0.glb.clouddn.com/image/loadding.gif">');
-        $.ajaxFileUpload({
-            url             : '/?module=lunome&action=movie/poster/upload&id='+movieId,
-            secureuri       : false,
-            fileElementId   : 'movie-poster-file',
-            dataType        : 'text',
-            success         : function (data, status){
-                $('#movie-poster-file').parent()
-                .empty()
-                .html('<input type="file" name="poster" id="movie-poster-file">');
-                $('#movie-posters-add-dialog').modal('hide');
-                posterResourceManager.refresh();
-            },
-            error           : function (data, status, e){
-                $('#movie-posters-add-dialog').modal('hide');
-            }
-        });
-    });
-    
-    $('#movie-classic-dialogues-save').click(function() {
-        var content = $('#movie-classic-dialogues-content').val();
-        $.post('/?module=lunome&action=movie/classicDialogue/add', {
-            id : $('#movie-classic-dialogues-container').attr('data-movie-id'),
-            content : content
-        }, function( response ) {
-            $('#movie-classic-dialogues-content').val('');
-            $('#movie-classic-dialogues-add-dialog').modal('hide');
-            classicDialogueManagert.refresh();
-        }, 'json');
-    });
-    
-    
-    
     
     /* 绑定事件到在线观看按钮 */
     var playerTrigger = $('[data-online-play-trigger="true"]');

@@ -14,7 +14,7 @@ use X\Module\Lunome\Service\Movie\Service as MovieService;
  * The action class for movie/ignore action.
  * @author Unknown
  */
-class Add extends Basic { 
+class Edit extends Basic { 
     /**
      * @param unknown $id
      * @param unknown $content
