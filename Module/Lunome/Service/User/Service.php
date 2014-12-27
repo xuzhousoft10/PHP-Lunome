@@ -341,21 +341,21 @@ class Service extends \X\Core\Service\XService {
         return $this->account;
     }
     
-    /**
-     * @var \X\Module\Lunome\Service\User\Friend
-     */
-    private $friend = null;
+//     /**
+//      * @var \X\Module\Lunome\Service\User\Friend
+//      */
+//     private $friend = null;
     
-    /**
-     * 
-     * @return \X\Module\Lunome\Service\User\Friend
-     */
-    public function getFriend() {
-        if ( null === $this->friend ) {
-            $this->friend = new Friend($this);
-        }
-        return $this->friend;
-    }
+//     /**
+//      * 
+//      * @return \X\Module\Lunome\Service\User\Friend
+//      */
+//     public function getFriend() {
+//         if ( null === $this->friend ) {
+//             $this->friend = new Friend($this);
+//         }
+//         return $this->friend;
+//     }
     
     /* User indentity consts. */
     const UI_GUEST  = 1;
