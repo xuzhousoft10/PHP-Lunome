@@ -1,5 +1,67 @@
 $(document).ready(function() {
     /**
+     * 评论管理。
+     */
+    function ShortCommentManager ( containerId ) {
+        this.container     = $(containerId);
+        this.isGuestUser   = this.container.attr('data-is-guest-user');
+        this.userNickName  = this.container.attr('data-user-nickname');
+        this.userPhoto     = this.container.attr('data-user-photo');
+        this.mediaId       = this.container.attr('data-media-id');
+        this.listContainer = $(this.container.attr('data-container'));
+        this.loadingImage  = $('<div>').addClass('width-full').addClass('text-center').append($('<img>').attr('src', this.container.attr('data-loadding-image')));
+        
+        this._init();
+    }
+    
+    /**
+     * Init the comment list.
+     * @returns void
+     */
+    ShortCommentManager.prototype._init = function() {
+        var button = this.container.find('button');
+        var $this = this;
+        button.click(function() {
+            var form = $($(this)[0].form);
+            var data = form.serializeArray();
+            var postData = {};
+            for ( var i in data ) {
+                postData[data[i].name] = data[i].value;
+            }
+            
+            $.post(form.attr('action'), postData, function( response ) {
+                form[0].reset();
+                $this.load($this.container.attr('data-index-url'));
+            }, 'text');
+        });
+        this.load(this.container.attr('data-index-url'));
+    };
+    
+    /**
+     * Load comments
+     * @returns void
+     */
+    ShortCommentManager.prototype.load = function( url ) {
+        var $this = this;
+        $this.listContainer.empty().append($this.loadingImage);
+        $.get(url, {}, function(response) {
+            $('.movie-comments-container-pager').unbind('click');
+            $this.listContainer.empty();
+            $this.listContainer.html(response);
+            $('.movie-comments-container-pager').click(function() {
+                $this.load($(this).attr('href'));
+                return false;
+            });
+        }, 'text');
+    };
+    
+    /**
+     * 初始化评论列表。
+     * @returns void
+     */
+    var shortCommentManager = new ShortCommentManager('#movie-short-comment-container');
+    
+    /**
      * @returns void
      */
     function ResourceManager ( managerId ) {

@@ -2,7 +2,7 @@
 /**
  * The action file for movie/ignore action.
  */
-namespace X\Module\Lunome\Action\Movie;
+namespace X\Module\Lunome\Action\Movie\Comment;
 
 /**
  * Use statements
@@ -14,7 +14,7 @@ use X\Module\Lunome\Service\Movie\Service as MovieService;
  * The action class for movie/ignore action.
  * @author Unknown
  */
-class Comment extends Basic { 
+class Add extends Basic { 
     /**
      * @param unknown $id
      * @param unknown $content

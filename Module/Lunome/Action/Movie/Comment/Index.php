@@ -2,19 +2,19 @@
 /**
  * The action file for movie/ignore action.
  */
-namespace X\Module\Lunome\Action\Movie;
+namespace X\Module\Lunome\Action\Movie\Comment;
 
 /**
  * Use statements
  */
-use X\Module\Lunome\Util\Action\Basic;
+use X\Module\Lunome\Util\Action\Visual;
 use X\Module\Lunome\Service\Movie\Service as MovieService;
 
 /**
  * The action class for movie/ignore action.
  * @author Unknown
  */
-class Comments extends Basic { 
+class Index extends Visual { 
     /**
      * @param unknown $id
      * @param unknown $content
@@ -29,10 +29,19 @@ class Comments extends Basic {
         $comments = $movieService->getShortComments($id, null, $position, $length);
         foreach ( $comments as $index => $comment ) {
             $comments[$index] = array();
-            $comments[$index]['comment'] = $comment->toArray();
+            $comments[$index]['content'] = $comment->toArray();
             $comments[$index]['user'] = $account->get($comment->commented_by)->toArray();
         }
-        $count = $movieService->countShortComments($id);
-        echo json_encode(array('list'=>$comments, 'count'=>$count));
+        
+        $pager = array();
+        $pager['prev'] = (1 >= $page) ? false : $page-1;
+        $pager['next'] = (($page)*$length >= $movieService->countShortComments($id)) ? false : $page+1;
+        
+        $name   = 'COMMENTS_INDEX';
+        $path   = $this->getParticleViewPath('Movie/Comments');
+        $option = array();
+        $data   = array('comments'=>$comments, 'id'=>$id, 'pager'=>$pager);
+        $this->getView()->loadParticle($name, $path, $option, $data);
+        $this->getView()->displayParticle($name);
     }
 }

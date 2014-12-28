@@ -4,8 +4,7 @@ use X\Module\Lunome\Service\Movie\Service as MovieService;
 
 $assetsURL = X::system()->getConfiguration()->get('assets-base-url');
 $this->addScriptFile('ajaxfileupload', $assetsURL.'/library/jquery/plugin/ajaxfileupload.js');
-$this->addScriptFile('detail-comments', $assetsURL.'/js/media_comment.js');
-$this->addScriptFile('detail-common', $assetsURL.'/js/media_detail.js');
+$this->addScriptFile('detail-detail', $assetsURL.'/js/media_detail.js');
 
 $vars = get_defined_vars();
 $media = $vars['media'];
@@ -160,8 +159,28 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                 data-is-guest-user  = "<?php echo (null===$vars['currentUser'])?'true':'false'; ?>"
                 data-user-nickname  = "<?php echo (null===$vars['currentUser'])?'':$vars['currentUser']->nickname; ?>"
                 data-user-photo     = "<?php echo (null===$vars['currentUser'])?'':$vars['currentUser']->photo; ?>"
-                data-media-id       ="<?php echo $media['id']; ?>"
-        ></div>
+                data-media-id       = "<?php echo $media['id']; ?>"
+                data-index-url      = "/?module=lunome&action=movie/comment/index&id=<?php echo $media['id']; ?>"
+                data-container      = "#movie-short-comment-list-container"
+                data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
+        >
+            <div class="media pull-left">
+                <div class="pull-left">
+                    <img src="<?php echo (null===$vars['currentUser'])?'':$vars['currentUser']->photo; ?>" width="90" height="90" class="thumbnail margin-bottom-0">
+                    <span><?php echo (null===$vars['currentUser'])?'':$vars['currentUser']->nickname; ?></span>
+                </div>
+            </div>
+            <div class="media-body">
+                <form action="/?module=lunome&action=movie/comment/add">
+                    <input type="hidden" name="id" value="<?php echo $media['id']; ?>" >
+                    <textarea name="content" class="width-full" rows="" cols=""></textarea>
+                    <br>
+                    <button class="btn btn-primary" name="save" type="button">发表</button>
+                </form>
+            </div>
+            <hr>
+            <div class="clearfix" id="movie-short-comment-list-container"></div>
+        </div>
     </div>
 </div>
 
