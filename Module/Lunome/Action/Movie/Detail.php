@@ -21,28 +21,11 @@ class Detail extends MediaDetail {
      * @see \X\Module\Lunome\Util\Action\Media\Detail::afterFindTheModel()
      */
     protected function afterFindTheModel($media) {
-        $region = $this->getMovieService()->getRegionById($media['region_id']);
-        $language = $this->getMovieService()->getLanguageById($media['language_id']);
-        
-        $media['region'] = (null===$region) ? '其他' : $region->name;
-        $media['language'] = (null===$language) ? '其他' : $language->name;
+        $media['region'] = $this->getMovieService()->getRegionById($media['region_id']);
+        $media['language'] = $this->getMovieService()->getLanguageById($media['language_id']);
         $media['category'] = $this->getMovieService()->getCategoriesByMovieId($media['id']);
-        foreach ( $media['category'] as $index => $category ) {
-            $media['category'][$index] = $category->name;
-        }
-        $media['category'] = implode('，', $media['category']);
-        
         $media['directors'] = $this->getMovieService()->getDirectors($media['id']);
-        foreach ( $media['directors'] as $index => $item ) {
-            $media['directors'][$index] = $item->name;
-        }
-        $media['directors'] = implode('，', $media['directors']);
-        
         $media['actors'] = $this->getMovieService()->getActors($media['id']);
-        foreach ( $media['actors'] as $index => $item ) {
-            $media['actors'][$index] = $item->name;
-        }
-        $media['actors'] = implode('，', $media['actors']);
         
         return $media;
     }

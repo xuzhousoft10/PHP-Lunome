@@ -19,15 +19,17 @@ use X\Module\Lunome\Service\Movie\Service as MovieService;
 abstract class Index extends VisualMain {
     protected $currentMark = 0;
     protected $currentPage = 1;
+    protected $query = null;
     
     /**
      *
      * @param unknown $mark
      * @param number $page
      */
-    public function runAction( $mark=0, $page=1 ) {
+    public function runAction( $mark=0, $page=1, $query=null ) {
         $this->currentMark = intval($mark);
         $this->currentPage = $page;
+        $this->query = empty($query) ? array() : $query;
     }
     
     /**
@@ -59,6 +61,7 @@ abstract class Index extends VisualMain {
         }
         $option = array();
         $data   = array(
+            'query'         => $this->query,
             'marks'         => $markInfo, 
             'pager'         => $pager, 
             'activeMark'    => $this->currentMark, 

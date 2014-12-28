@@ -9,6 +9,7 @@ $this->addScriptFile('cookie', $assetsURL.'/library/jquery/plugin/cookie.js');
 
 $vars = get_defined_vars();
 $marks = $vars['marks'];
+$query = $vars['query'];
 $markActions = $vars['markActions'];
 $pager = $vars['pager'];
 $mediaType = $vars['mediaType'];
@@ -53,6 +54,7 @@ $mediaItemWaitingImage = $vars['mediaItemWaitingImage'];
         <input 
             id                  = "media-index-parameters" 
             type                = "hidden" 
+            data-init-query     = "<?php echo htmlspecialchars(json_encode($query));?>"
             data-url            = "<?php printf('/?module=lunome&action=%s/find&mark=%s', $mediaType, $currentMark); ?>"
             data-detail-url     = "<?php printf('/?module=lunome&action=%s/detail&id={id}', $mediaType); ?>"
             data-mark-url       = "<?php printf('/?module=lunome&action=%s/mark&mark={mark}&id={id}', $mediaType); ?>"

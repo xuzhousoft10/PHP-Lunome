@@ -85,6 +85,28 @@ class Service extends Media {
         if ( isset($condition['language']) ) {
             $con->equals('language_id', $condition['language']);
         }
+        if ( isset( $condition['director'] ) ) {
+            $directors = PeopleModel::model()->findAll(array('name'=>$condition['director']));
+            foreach ( $directors as $index => $director ) {
+                $directors[$index] = $director->id;
+            }
+            $directorCondition = array();
+            $directorCondition['movie_id'] = new SQLExpression(MovieModel::model()->getTableFullName().'.id');
+            $directorCondition['director_id'] = $directors;
+            $directorCondition = MovieDirectorMapModel::query()->activeColumns(array('movie_id'))->find($directorCondition);
+            $con->exists($directorCondition);
+        }
+        if ( isset( $condition['actor'] ) ) {
+            $actors = PeopleModel::model()->findAll(array('name'=>$condition['actor']));
+            foreach ( $actors as $index => $actor ) {
+                $actors[$index] = $actor->id;
+            }
+            $actorCondition = array();
+            $actorCondition['movie_id'] = new SQLExpression(MovieModel::model()->getTableFullName().'.id');
+            $actorCondition['actor_id'] = $directors;
+            $actorCondition = MovieActorMapModel::query()->activeColumns(array('movie_id'))->find($actorCondition);
+            $con->exists($actorCondition);
+        }
         if ( isset($condition['category']) ) {
             $categoryCondition = array();
             $categoryCondition['movie_id'] = new SQLExpression(MovieModel::model()->getTableFullName().'.id');
@@ -93,7 +115,7 @@ class Service extends Media {
             $con->exists($categoryCondition);
         }
         if ( isset($condition['name']) ) {
-            $con->includes('name', substr($condition['name'], 1));
+            $con->includes('name', $condition['name']);
         }
         return $con;
     }

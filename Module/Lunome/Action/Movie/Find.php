@@ -20,6 +20,24 @@ class Find extends Basic {
      */
     public function runAction( $mark=0, $condition=null, $position=0, $length=20, $score=false ) {
         $condition = empty($condition) ? array() : $condition;
+        if ( isset($condition['name']) ) {
+            $extConditions = explode(';', $condition['name']);
+            $fixedExtConditions = array();
+            $map = array('导演'=>'director', '演员'=>'actor');
+            foreach ( $extConditions as $index => $extCondition ) {
+                $extCondition = explode(':', $extCondition);
+                if ( isset( $map[$extCondition[0]] ) ) {
+                    $fixedExtConditions[$map[$extCondition[0]]] = explode(',', $extCondition[1]);
+                    unset($extConditions[$index]);
+                }
+            }
+            $fixedExtConditions['name'] = implode(';', $extConditions);
+            $condition = array_merge($condition, $fixedExtConditions);
+            if ( empty($condition['name']) ) {
+                unset($condition['name']);
+            }
+        }
+        
         /* @var $service \X\Module\Lunome\Service\Movie\Service */
         $service = $this->getService('Movie');
         if ( 0 === $mark*1 ) {

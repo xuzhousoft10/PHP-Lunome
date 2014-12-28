@@ -46,17 +46,29 @@ MediaIndex.init = function() {
     this.loaddingImage  = parameters.attr('data-loading-image');
     this.isDebug        = parameters.attr('data-is-debug');
     
-    var history = MediaIndex._getHistory();
-    if ( null != history ) {
-        this._conditions = history.condition;
-        this.loadedCount = history.loadedCount-20;
-        if ( 0 < this.loadedCount ) {
-            $('<div class="alert alert-info pull-left text-center" style="width:100%;cursor:pointer"></div>')
-            .html('显示之前的结果')
-            .click(function() {
-                MediaIndex.reload();
-            })
-            .appendTo(this.container);
+    var initQuery = $.parseJSON(parameters.attr('data-init-query'));
+    var conditionInited = false;
+    for( var i in initQuery ) {
+        this._conditions[i] = initQuery[i];
+        conditionInited = true;
+    }
+    
+    if ( !conditionInited ) {
+        var history = MediaIndex._getHistory();
+        if ( null != history ) {
+            this._conditions = history.condition;
+            this.loadedCount = history.loadedCount-20;
+            if ( 0 > this.loadedCount ) {
+                this.loadedCount = 0;
+            }
+            if ( 0 < this.loadedCount ) {
+                $('<div class="alert alert-info pull-left text-center" style="width:100%;cursor:pointer"></div>')
+                .html('显示之前的结果')
+                .click(function() {
+                    MediaIndex.reload();
+                })
+                .appendTo(this.container);
+            }
         }
     }
     
@@ -68,7 +80,7 @@ MediaIndex.init = function() {
                 delete MediaIndex._conditions.name;
             }
         } else {
-            MediaIndex._conditions.name = '*'+name;
+            MediaIndex._conditions.name = name;
         }
         MediaIndex.reload();
     });
@@ -126,11 +138,18 @@ MediaIndex._windowScrollEventHandler = function() {
  * @returns void
  */
 MediaIndex.reload = function() {
+    this.clear();
+    this.load(true);
+};
+
+/**
+ * 清楚掉搜索历史
+ */
+MediaIndex.clear = function() {
     $(this.container).empty();
     this.totalCount = 0;
     this.loadedCount = 0;
     this._autoLoadCount = 0;
-    this.load(true);
 };
 
 /**
@@ -319,8 +338,6 @@ MediaIndex._log            = function ( message ) {
 $(document).ready(function() {
     $('html,body').animate({scrollTop:'0px'});
     var doSearch = false;
-    MediaIndex.init();
-    
     /* 当标签被点击时， 执行查询。 */
     $('.media-search-condition-label').click(function() {
         var label = $(this);
@@ -364,19 +381,43 @@ $(document).ready(function() {
         }
     });
     
-    /* 初始化历史搜索记录 */
-    var history = MediaIndex._getHistory();
-    if ( null != history ) {
-        for ( var i in history.condition ) {
-            if ( 'name' != i ) {
-                var item = $('.media-search-condition-label[data-value="'+history.condition[i]+'"][data-attr="'+i+'"]');
-                if ( 0 == item.length ) {
-                    $('.media-search-condition-select[data-attr="'+i+'"]').val(history.condition[i]).trigger('change');
+    /* 初始化搜索条件, 如果url中的搜索条件不为空， 则使用URL中的条件， 并清空历史查询。 */
+    var parameters      = $('#media-index-parameters');
+    var initQuery = $.parseJSON(parameters.attr('data-init-query'));
+    var isConditionInited = false;
+    MediaIndex.clear();
+    for( var i in initQuery ) {
+        isConditionInited = true;
+        if ( 'name' != i ) {
+            var item = $('.media-search-condition-label[data-value="'+initQuery[i]+'"][data-attr="'+i+'"]');
+            if ( 0 == item.length ) {
+                $('.media-search-condition-select[data-attr="'+i+'"]').val(initQuery[i]).trigger('change');
+            } else {
+                item.trigger('click');
+            }
+        } else {
+            $('#media-name-search-text').val(initQuery.name);
+        }
+    }
+    
+    MediaIndex.init();
+    if ( !isConditionInited ) {
+        var history = MediaIndex._getHistory();
+        if ( null != history ) {
+            for ( var i in history.condition ) {
+                if ( 'name' != i ) {
+                    var item = $('.media-search-condition-label[data-value="'+history.condition[i]+'"][data-attr="'+i+'"]');
+                    if ( 0 == item.length ) {
+                        $('.media-search-condition-select[data-attr="'+i+'"]').val(history.condition[i]).trigger('change');
+                    } else {
+                        item.trigger('click');
+                    }
                 } else {
-                    item.trigger('click');
+                    $('#media-name-search-text').val(history.condition.name);
                 }
             }
         }
     }
+    
     doSearch = true;
 });

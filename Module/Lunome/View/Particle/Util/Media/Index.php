@@ -5,6 +5,7 @@ $this->addScriptFile('media-index', $assetsURL.'/js/media_index.js');
 $this->addScriptFile('rate-it', $assetsURL.'/library/jquery/plugin/cookie.js');
 
 $vars = get_defined_vars();
+$query = $vars['query'];
 $marks = $vars['marks'];
 $markActions = $vars['markActions'];
 $pager = $vars['pager'];
@@ -49,7 +50,8 @@ $mediaItemWaitingImage = $vars['mediaItemWaitingImage'];
     <div class="panel-body">
         <input 
             id                  = "media-index-parameters" 
-            type                = "hidden" 
+            type                = "hidden"
+            data-init-query     = "<?php echo htmlspecialchars(json_encode($query));?>"
             data-url            = "<?php printf('/?module=lunome&action=%s/find&mark=%s', $mediaType, $currentMark); ?>"
             data-detail-url     = "<?php printf('/?module=lunome&action=%s/detail&id={id}', $mediaType); ?>"
             data-mark-url       = "<?php printf('/?module=lunome&action=%s/mark&mark={mark}&id={id}', $mediaType); ?>"
