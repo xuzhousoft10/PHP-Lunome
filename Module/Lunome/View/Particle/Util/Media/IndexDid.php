@@ -37,7 +37,7 @@ $mediaItemWaitingImage = $vars['mediaItemWaitingImage'];
                     </ul>
                     <form class="navbar-form navbar-right">
                         <div class="form-group">
-                            <input id="media-name-search-text" type="text" class="form-control" placeholder="Search">
+                            <input id="media-name-search-text" type="text" class="form-control" placeholder="查询名称，导演，演员">
                         </div>
                         <button id="media-name-search-button" type="button" class="btn btn-default">
                             <span class="glyphicon glyphicon-search"></span>
