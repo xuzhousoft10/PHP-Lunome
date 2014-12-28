@@ -66,12 +66,13 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
             </div>
             
             <div class="pull-left padding-left-10">
-                <button class="btn btn-default"
-                        data-online-play-trigger="true"
-                        data-player-container="#movie-online-play-container"
-                        data-movie-name="<?php echo $media['name'];?>"
-                        data-loadding-img="<?php echo $assetsURL.'/image/loadding.gif';?>"
-                        data-assets-path="<?php echo $assetsURL;?>"
+                <button class                       = "btn btn-default"
+                        data-online-play-trigger    = "true"
+                        data-player-container       = "#movie-online-play-container"
+                        data-movie-name             = "<?php echo $media['name'];?>"
+                        data-loadding-img           = "<?php echo $assetsURL.'/image/loadding.gif';?>"
+                        data-assets-path            = "<?php echo $assetsURL;?>"
+                        data-global-search-url      = "http://lunome.kupoy.com/?module=lunome&action=movie/globalSearch"
                 >在线观看</button>
             </div>
             

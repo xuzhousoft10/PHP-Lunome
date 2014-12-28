@@ -7,15 +7,15 @@ namespace X\Module\Lunome\Action\Movie;
 /**
  * Use statements
  */
-use X\Module\Lunome\Util\Action\Basic;
 use X\Library\Html\Parser;
+use X\Module\Lunome\Util\Action\Visual;
 
 /**
  * The action class for movie/ignore action.
  * @method \X\Module\Lunome\Service\Movie\Service getMovieService()
  * @author Unknown
  */
-class GlobalSearch extends Basic {
+class GlobalSearch extends Visual {
     /**
      * 
      */
@@ -24,7 +24,13 @@ class GlobalSearch extends Basic {
         $movies = array_merge($movies, $this->searchMovieOnIQiYi($name));
         $movies = array_merge($movies, $this->searchMovieOnTuDou($name));
         $movies = array_merge($movies, $this->searchMovieOnSohu($name));
-        echo json_encode($movies);
+        
+        $name   = 'GLOBAL_SEARCH_RESULT_INDEX';
+        $path   = $this->getParticleViewPath('Movie/GlobalSearchResult');
+        $option = array();
+        $data   = array('movies'=>$movies);
+        $this->getView()->loadParticle($name, $path, $option, $data);
+        $this->getView()->displayParticle($name);
     }
     
     /**
