@@ -342,10 +342,10 @@ $(document).ready(function() {
             playerContainer
             .append($('<div>').html(response))
             .append($('<div>')
-                    .addClass('clearfix')
-                    .append($('<div>').addClass('col-md-2').append(returnBackToSearchResult))
-                    .append($('<div>').addClass('col-md-8').append($('<h5>').html($($this).attr('data-name'))))
-                    .append($('<div>').addClass('col-md-2').append(gotoVideoOwnerWebsite))
+                .addClass('clearfix')
+                .append($('<div>').addClass('col-md-2').append(returnBackToSearchResult))
+                .append($('<div>').addClass('col-md-8').append($('<h5>').html($($this).attr('data-name'))))
+                .append($('<div>').addClass('col-md-2').append(gotoVideoOwnerWebsite))
             )
             .addClass('padding-10');
             
