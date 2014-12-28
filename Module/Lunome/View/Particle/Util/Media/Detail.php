@@ -73,6 +73,7 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                         data-assets-path            = "<?php echo $assetsURL;?>"
                         data-global-search-url      = "http://lunome.kupoy.com/?module=lunome&action=movie/globalSearch"
                 >在线观看</button>
+                <a href="https://www.baidu.com/s?wd=<?php echo urlencode($media['name']);?>" target="_black" class="btn btn-default">百度一下</a>
             </div>
             
             <div class="pull-right text-right">
