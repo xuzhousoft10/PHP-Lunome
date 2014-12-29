@@ -1,6 +1,6 @@
 <?php
 return array(
-'Reporter' => 'Default',
+'Reporter' => 'default',
 'EmailError' => false,
 'EmailErrorRecipients' => array('michaelluthor@163.com'),
 'EmailErrorSubject'=> 'Lunome Error ',

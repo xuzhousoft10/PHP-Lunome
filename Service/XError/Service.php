@@ -22,7 +22,7 @@ class Service extends \X\Core\Service\XService {
      * @see \X\Core\Service\XService::afterStart()
      */
     protected function afterStart() {
-        if ( 'Default' === $this->getConfiguration()->get('handler') ) {
+        if ( 'DEFAULT' === strtoupper($this->getConfiguration()->get('Reporter')) ) {
             return;
         }
         set_error_handler(array($this, 'errorHandler'), E_ALL);

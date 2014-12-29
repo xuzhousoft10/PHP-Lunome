@@ -61,7 +61,7 @@ abstract class VisualMain extends Visual {
         $items[self::MENU_ITEM_SETTING] = array();
         $items[self::MENU_ITEM_SETTING]['label']     = '设置';
         $items[self::MENU_ITEM_SETTING]['isActive']  = false;
-        $items[self::MENU_ITEM_SETTING]['link']      = '/?module=lunome&action=user/setting/sns';
+        $items[self::MENU_ITEM_SETTING]['link']      = '/?module=lunome&action=user/setting/information';
         
         /*
         $items[self::MENU_ITEM_TV] = array();

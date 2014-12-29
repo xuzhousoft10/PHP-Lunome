@@ -13,6 +13,7 @@ use X\Module\Lunome\Model\Oauth20Model;
 use X\Module\Lunome\Model\Account\AccountLoginHistoryModel;
 use X\Module\Lunome\Model\Account\AccountHistoryModel;
 use X\Module\Lunome\Model\Account\AccountConfigurationModel;
+use X\Module\Lunome\Model\Account\AccountInformation;
 
 /**
  * Handle all friend operations.
@@ -211,6 +212,16 @@ class Account {
             $configuration->value = $value;
             $configuration->save();
         }
+    }
+    
+    /**
+     * @param string $accountID
+     * @return \X\Module\Lunome\Model\Account\AccountInformation
+     */
+    public function getInformation( $accountID=null ) {
+        $accountID = ( null === $accountID ) ? $this->getCurrentUserId() : $accountID;
+        $info = AccountInformation::model()->find(array('account_id'=>$accountID));
+        return $info;
     }
     
     /**

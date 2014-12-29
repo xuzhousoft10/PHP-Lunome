@@ -51,6 +51,11 @@ abstract class UserSetting extends VisualMain {
     private function initSettingItems () {
         $items = array();
         
+        $items[self::SETTING_ITEM_INFO] = array();
+        $items[self::SETTING_ITEM_INFO]['label']     = '个人信息';
+        $items[self::SETTING_ITEM_INFO]['isActive']  = false;
+        $items[self::SETTING_ITEM_INFO]['link']      = '/?module=lunome&action=user/setting/information';
+        
         $items[self::SETTING_ITEM_SNS] = array();
         $items[self::SETTING_ITEM_SNS]['label']     = '社交平台';
         $items[self::SETTING_ITEM_SNS]['isActive']  = false;
@@ -72,6 +77,7 @@ abstract class UserSetting extends VisualMain {
     /**
      * @var unknown
      */
+    const SETTING_ITEM_INFO = 'information';
     const SETTING_ITEM_SNS = 'sns';
     
     /**
