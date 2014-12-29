@@ -19,9 +19,26 @@ use X\Util\Model\Basic;
   `sex` TINYINT NULL ,
   `sexuality` TINYINT NULL,
   `birthday` DATE NULL ,
+  `is_lunar_calendar` TINYINT NULL,
   `emotion_status` TINYINT NULL ,
   PRIMARY KEY (`id`) ,
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) );
+ */
+/**
+ * @property string $id
+ * @property string $account_id
+ * @property string $email
+ * @property string $cellphone
+ * @property string $qq
+ * @property string $cellphone
+ * @property string $living_country
+ * @property string $living_province
+ * @property string $living_city
+ * @property string $sex
+ * @property string $sexuality
+ * @property string $birthday
+ * @property string $emotion_status
+ * @property string $is_lunar_calendar
  */
 class AccountInformation extends Basic {
     /**
@@ -40,6 +57,7 @@ class AccountInformation extends Basic {
         $columns['living_city']         = 'VARCHAR(36)';
         $columns['sex']                 = 'TINYINT';
         $columns['sexuality']           = 'TINYINT';
+        $columns['is_lunar_calendar']   = 'TINYINT';
         $columns['birthday']            = 'DATE';
         $columns['emotion_status']      = 'TINYINT';
         return $columns;

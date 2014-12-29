@@ -225,6 +225,23 @@ class Account {
     }
     
     /**
+     * @param unknown $information
+     * @param string $accountID
+     * @return \X\Module\Lunome\Model\Account\AccountInformation
+     */
+    public function updateInformation( $information, $accountID=null ) {
+        $accountID = ( null === $accountID ) ? $this->getCurrentUserId() : $accountID;
+        $informationModel = AccountInformation::model()->find(array('account_id'=>$accountID));
+        if ( null === $informationModel ) {
+            $informationModel = new AccountInformation();
+        }
+        $information['account_id'] = $accountID;
+        $informationModel->setAttributeValues($information);
+        $informationModel->save();
+        return $informationModel;
+    }
+    
+    /**
      * @return string
      */
     private function getCurrentUserId() {

@@ -158,6 +158,15 @@ abstract class XActiveRecord extends Basic implements \Iterator {
     }
     
     /**
+     * @param unknown $values
+     */
+    public function setAttributeValues ( $values ) {
+        foreach ( $values as $key => $value ) {
+            $this->set($key, $value);
+        }
+    }
+    
+    /**
      * (non-PHPdoc)
      * @see \X\Core\Basic::__get()
      */

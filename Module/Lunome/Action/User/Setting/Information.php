@@ -18,8 +18,13 @@ class Information extends UserSetting {
      * The action handle for index action.
      * @return void
      */ 
-    public function runAction( $config ) {
-        $account = $this->getUserService()->getAccount()->getInformation();
+    public function runAction( $information=array() ) {
+        $accountManager = $this->getUserService()->getAccount();
+        $account = $accountManager->getInformation();
+        
+        if ( !empty($information) ) {
+            $account = $accountManager->updateInformation($information);
+        }
         
         $name   = 'USER_SETTING_INFRMATION';
         $path   = $this->getParticleViewPath('User/Setting/Information');
