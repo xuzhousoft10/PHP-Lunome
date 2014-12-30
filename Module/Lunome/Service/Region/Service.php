@@ -20,4 +20,13 @@ class Service extends \X\Core\Service\XService {
         $regions = RegionModel::model()->findAll( array('parent'=>$parent) );
         return $regions;
     }
+    
+    /**
+     * @param unknown $regionID
+     * @return string
+     */
+    public function getNameByID( $regionID ) {
+        $region = RegionModel::model()->findByPrimaryKey($regionID);
+        return (null === $region) ? '' : $region->name;
+    }
 }

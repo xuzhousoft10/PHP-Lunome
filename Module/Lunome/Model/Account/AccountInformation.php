@@ -27,8 +27,8 @@ use X\Util\Model\Basic;
 /**
  * @property string $id
  * @property string $account_id
+ * @property string $account_number
  * @property string $email
- * @property string $cellphone
  * @property string $qq
  * @property string $cellphone
  * @property string $living_country
@@ -49,6 +49,7 @@ class AccountInformation extends Basic {
         $columns = array();
         $columns['id']                  = 'PRIMARY VARCHAR(36) NN';
         $columns['account_id']          = 'VARCHAR(36) NOTNULL';
+        $columns['account_number']      = 'INT NOTNULL UNSIGNED';
         $columns['email']               = 'VARCHAR(36)';
         $columns['qq']                  = 'VARCHAR(16)';
         $columns['cellphone']           = 'VARCHAR(16)';

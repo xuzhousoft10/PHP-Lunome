@@ -14,6 +14,8 @@ use X\Module\Lunome\Model\Account\AccountLoginHistoryModel;
 use X\Module\Lunome\Model\Account\AccountHistoryModel;
 use X\Module\Lunome\Model\Account\AccountConfigurationModel;
 use X\Module\Lunome\Model\Account\AccountInformation;
+use X\Service\XDatabase\Core\ActiveRecord\Criteria;
+use X\Service\XDatabase\Core\SQL\Condition\Builder as ConditionBuilder;
 
 /**
  * Handle all friend operations.
@@ -231,14 +233,46 @@ class Account {
      */
     public function updateInformation( $information, $accountID=null ) {
         $accountID = ( null === $accountID ) ? $this->getCurrentUserId() : $accountID;
+        $account = $this->get($accountID);
+        
         $informationModel = AccountInformation::model()->find(array('account_id'=>$accountID));
         if ( null === $informationModel ) {
             $informationModel = new AccountInformation();
         }
+        $information['account_number'] = $account->account;
         $information['account_id'] = $accountID;
         $informationModel->setAttributeValues($information);
         $informationModel->save();
         return $informationModel;
+    }
+    
+    /**
+     * @param unknown $condition
+     * @param unknown $offset
+     * @param unknown $limit
+     */
+    public function findInformations( $condition, $offset=0, $limit=0 ) {
+        $conditionObject = ConditionBuilder::build();
+        if ( isset($condition['main']) ) {
+            $conditionObject->groupStart()
+                ->is('cellphone', $condition['main'])
+                ->orThat()
+                ->is('qq', $condition['main'])
+                ->orThat()
+                ->is('email', $condition['main'])
+                ->orThat()
+                ->is('account_number', $condition['main'])
+            ->groupEnd();
+            unset($condition['main']);
+        }
+        $conditionObject->addCondition($condition);
+        
+        $criteria = new Criteria();
+        $criteria->position = $offset;
+        $criteria->limit = $limit;
+        $criteria->condition = $conditionObject;
+        $informations = AccountInformation::model()->findAll($criteria);
+        return $informations;
     }
     
     /**
