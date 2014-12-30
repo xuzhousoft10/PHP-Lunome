@@ -101,42 +101,55 @@
             </div>
         </div>
     </div>
-    <div class="clearfix thumbnail">
-        <?php $sexMap = array(''=>'保密', '0'=>'保密','1'=>'♂','2'=>'♀','3'=>'其他'); ?>
-        <?php $sexualitysMap = array(''=>'保密', '0'=>'保密','1'=>'异性','2'=>'同性','3'=>'双性','4'=>'无性','5'=>'二禁'); ?>
-        <?php $emotionStatusMap = array(''=>'保密', '0'=>'保密','1'=>'单身','2'=>'热恋中','3'=>'同居','4'=>'已订婚','5'=>'已婚','6'=>'分居','7'=>'离异','8'=>'很难说','9'=>'其他'); ?>
-        <?php foreach ( $informations as $information ) : ?>
-            <div class="col-md-6 well well-sm clearfix">
-                <div class="pull-left">
-                    <img    class="img-thumbnail"
-                            alt="<?php echo $information['account']['nickname'];?>" 
-                            src="<?php echo $information['account']['photo'];?>"
-                            width="80"
-                            height="80"
-                    >
-                </div>
-                <div class="pull-left padding-left-5">
-                    <p>
-                        <strong>
-                            <span class="text-info"><?php echo $sexMap[$information['sex']];?></span>
-                            <?php echo $information['account']['nickname'];?>
-                        </strong>
-                    </p>
-                    <p>
-                        <span class="glyphicon glyphicon-heart"></span>
-                        <?php echo $sexualitysMap[$information['sexuality']];?>
-                        &nbsp;&nbsp;&nbsp;
-                        <span class="glyphicon glyphicon-user"></span>
-                        <?php echo $emotionStatusMap[$information['emotion_status']];?>
-                    </p>
-                    <p>
-                        <?php echo $information['living_country'];?>
-                        <?php echo $information['living_province'];?>
-                        <?php echo $information['living_city'];?>
-                    </p>
-                </div>
+    
+    <?php if ( false === $informations ) : ?>
+    <?php elseif ( 0 === count($informations) ) : ?>
+        <div class="clearfix">
+            <div class="pull-left">
+                <img src="<?php echo $assetsURL;?>/image/nothing.gif" width="100" height="100">
             </div>
-        <?php endforeach; ?>
-    </div>
+            <div class="margin-top-70 text-muted">
+                <small>额~~~ 没有找到~~~</small>
+            </div>
+        </div>
+    <?php else : ?>
+        <div class="clearfix thumbnail">
+            <?php $sexMap = array(''=>'保密', '0'=>'保密','1'=>'♂','2'=>'♀','3'=>'其他'); ?>
+            <?php $sexualitysMap = array(''=>'保密', '0'=>'保密','1'=>'异性','2'=>'同性','3'=>'双性','4'=>'无性','5'=>'二禁'); ?>
+            <?php $emotionStatusMap = array(''=>'保密', '0'=>'保密','1'=>'单身','2'=>'热恋中','3'=>'同居','4'=>'已订婚','5'=>'已婚','6'=>'分居','7'=>'离异','8'=>'很难说','9'=>'其他'); ?>
+            <?php foreach ( $informations as $information ) : ?>
+                <div class="col-md-6 well well-sm clearfix">
+                    <div class="pull-left">
+                        <img    class="img-thumbnail"
+                                alt="<?php echo $information['account']['nickname'];?>" 
+                                src="<?php echo $information['account']['photo'];?>"
+                                width="80"
+                                height="80"
+                        >
+                    </div>
+                    <div class="pull-left padding-left-5">
+                        <p>
+                            <strong>
+                                <span class="text-info"><?php echo $sexMap[$information['sex']];?></span>
+                                <?php echo $information['account']['nickname'];?>
+                            </strong>
+                        </p>
+                        <p>
+                            <span class="glyphicon glyphicon-heart"></span>
+                            <?php echo $sexualitysMap[$information['sexuality']];?>
+                            &nbsp;&nbsp;&nbsp;
+                            <span class="glyphicon glyphicon-user"></span>
+                            <?php echo $emotionStatusMap[$information['emotion_status']];?>
+                        </p>
+                        <p>
+                            <?php echo $information['living_country'];?>
+                            <?php echo $information['living_province'];?>
+                            <?php echo $information['living_city'];?>
+                        </p>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
 </div>
 </form>
