@@ -54,14 +54,19 @@ abstract class VisualMain extends Visual {
     
     protected function initMainMenuItems() {
         $items[self::MENU_ITEM_MOVIE] = array();
-        $items[self::MENU_ITEM_MOVIE]['label']       = '电影';
-        $items[self::MENU_ITEM_MOVIE]['isActive']    = false;
-        $items[self::MENU_ITEM_MOVIE]['link']        = '/?module=lunome&action=movie/index';
+        $items[self::MENU_ITEM_MOVIE]['label']      = '电影';
+        $items[self::MENU_ITEM_MOVIE]['isActive']   = false;
+        $items[self::MENU_ITEM_MOVIE]['link']       = '/?module=lunome&action=movie/index';
+        
+        $items[self::MENU_ITEM_FRIEND] = array();
+        $items[self::MENU_ITEM_FRIEND]['label']     = '好友';
+        $items[self::MENU_ITEM_FRIEND]['isActive']  = false;
+        $items[self::MENU_ITEM_FRIEND]['link']      = '/?module=lunome&action=user/friend/index';
         
         $items[self::MENU_ITEM_SETTING] = array();
-        $items[self::MENU_ITEM_SETTING]['label']     = '设置';
-        $items[self::MENU_ITEM_SETTING]['isActive']  = false;
-        $items[self::MENU_ITEM_SETTING]['link']      = '/?module=lunome&action=user/setting/information';
+        $items[self::MENU_ITEM_SETTING]['label']    = '设置';
+        $items[self::MENU_ITEM_SETTING]['isActive'] = false;
+        $items[self::MENU_ITEM_SETTING]['link']     = '/?module=lunome&action=user/setting/information';
         
         /*
         $items[self::MENU_ITEM_TV] = array();
@@ -95,10 +100,13 @@ abstract class VisualMain extends Visual {
     }
     
     const MENU_ITEM_MOVIE   = 'movie';
+    const MENU_ITEM_FRIEND  = 'friend';
+    const MENU_ITEM_SETTING = 'setting';
+    
+    
     const MENU_ITEM_TV      = 'tv';
     const MENU_ITEM_BOOK    = 'book';
     const MENU_ITEM_GAME    = 'game';
     const MENU_ITEM_COMIC   = 'comic';
-    const MENU_ITEM_FRIEND  = 'friend';
-    const MENU_ITEM_SETTING = 'setting';
+    
 }
