@@ -1,7 +1,8 @@
 $(document).ready(function() {
     /* 当省份变化时， 更新城市数据。 */
     $('#user-friend-search-living-province').change(function() {
-        if ( 0 === $(this).val().length ) {
+        var province = $('#user-friend-search-living-province').val();
+        if ( null == province || 0 == province.length ) {
             $('#user-friend-search-living-city').empty();
             return;
         }
@@ -15,7 +16,7 @@ $(document).ready(function() {
     
     /* 当国家变化时， 更新省份数据。 */
     $('#user-friend-search-living-country').change(function() {
-        if ( 0 === $(this).val().length ) {
+        if ( 0 === $('#user-friend-search-living-country').val().length ) {
             $('#user-friend-search-living-province').val('').trigger('change').empty();
             return;
         }
@@ -47,5 +48,29 @@ $(document).ready(function() {
         if ( 'none' == $('#advance-search-container').css('display') ) {
             $('.advance-search-item').val('');
         }
+    });
+    
+    /* 点击添加好友时， 打开对话框。 */
+    $('.btn-add-as-friend-open-dialog').click(function() {
+        $('#add-friend-dialog').modal('show');
+        $('#btn-add-as-friend').attr('data-recipient', $(this).attr('data-recipient'));
+        return false;
+    });
+    
+    /* 绑定点击事件到添加好友按钮 */
+    $('#btn-add-as-friend').click(function() {
+       $.post('/?module=lunome&action=user/friend/SendToBeFriendRequest', {
+           recipient : $(this).attr('data-recipient'),
+           message   : $('#add-as-friend-message').val(),
+       }, function( response ) {
+           alert('请求已发送，请等待对方确认。');
+           $('#add-friend-dialog').modal('hide');
+       }, 'text');
+    });
+    
+    /* 清空好友信息请求 */
+    $('#add-friend-dialog').on('hidden.bs.modal', function (e) {
+        $('#btn-add-as-friend').attr('data-recipient', '');
+        $('#add-as-friend-message').val('');
     });
 });

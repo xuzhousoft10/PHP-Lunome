@@ -1,5 +1,8 @@
 @CHARSET "UTF-8";
 
+#user-notification-container {width: 250px;}
+.user-notification-container-item {padding:5px}
+
 .lunome-image-60 {width:60px;height:60px}
 .lunome-image-100-150 {width:100px;height:150px}
 .lunome-height-150 {height:150px}

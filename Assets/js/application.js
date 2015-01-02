@@ -18,6 +18,48 @@
  
 })(jQuery);
 
+/* 定时检查新消息 */
+function userNotificationChecker( setTimer ) {
+    $.get('/?module=lunome&action=user/notification/check', {}, function( response ) {
+        var count = response.count*1;
+        if ( 0 == count ) { /* 如果为空， 则隐藏消息图标和消息列表 */
+            $('#user-notification-trigger').popover('hide');
+            $('#user-notification-trigger').hide();
+        } else {
+            $('#user-notification-trigger').show().html('('+count+')');
+            /* 如果消息列表处于显示状态，并且消息数量不同， 则刷新列表 */
+            if ( 0 < $('#user-notification-container').length 
+            && $('#user-notification-trigger').attr('data-counter')*1 != count ) {
+                $('#user-notification-trigger').popover('hide');
+                setTimeout(function() {
+                    $('#user-notification-trigger').popover('show');
+                }, 500);
+            }
+        }
+        $('#user-notification-trigger').attr('data-counter', count);
+    }, 'json');
+    
+    if ( setTimer ) {
+        setTimeout(function() {
+            userNotificationChecker(true);
+        }, 3000);
+    }
+}
+
+function fixNotificationCountValue( diffValue ) {
+    var oldCounter = $('#user-notification-trigger').attr('data-counter')*1;
+    $('#user-notification-trigger').attr('data-counter', oldCounter+diffValue);
+}
+
+function closeNotificationByID( notificationID, handler ) {
+    $.post('/?module=lunome&action=user/notification/close', {
+        id:notificationID,
+    }, function( response ) {
+        fixNotificationCountValue(-1);
+        handler(response);
+    }, 'text');
+}
+
 $(document).ready(function() {
     /* 如果页面不够长， 则强制footer到页面底部。 */
     var top = $('#main-footer')[0].offsetTop;
@@ -46,8 +88,23 @@ $(document).ready(function() {
         $('body,html').animate({ scrollTop: 0 }, 1500);
     });
     
-    /* 用户点击添加按钮时， 需要确认 */
-    $('#toolbar-add-new').click(function() {
-        return confirm("确定添加新电影么？");
+    /* 声明消息框 */
+    $('#user-notification-trigger').popover({
+        container : 'body',
+        content   : '<div id="user-notification-container"></div>',
+        placement : 'bottom',
+        html      : true,
+    }).on('shown.bs.popover', function () {
+        var loadingImg = $('#user-notification-trigger').attr('data-loadding-img');
+        var img = $('<img>').attr('src', loadingImg);
+        $('#user-notification-container').addClass('text-center').append(img);
+        $('#user-notification-container').parent().css('padding','0');
+        $.get('/?module=lunome&action=user/notification/index', {}, function( response ) {
+            $('#user-notification-container').removeClass('text-center').html(response);
+        }, 'text');
     });
+    
+    $('#user-notification-trigger').attr('data-counter', 0);
+    $('#user-notification-trigger').hide();
+    userNotificationChecker(true);
 });

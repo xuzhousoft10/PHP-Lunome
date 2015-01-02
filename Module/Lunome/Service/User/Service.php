@@ -15,6 +15,7 @@ use X\Module\Lunome\Model\Account\AccountLoginHistoryModel;
 use X\Library\XUtil\Network;
 use X\Service\QQ\Service as QQService;
 use X\Service\Sina\Service as SinaService;
+use X\Module\Lunome\Model\Account\AccountNotificationModel;
 
 /**
  * The service class
@@ -339,6 +340,60 @@ class Service extends \X\Core\Service\XService {
             $this->account = new Account();
         }
         return $this->account;
+    }
+    
+    /**
+     * @param unknown $view
+     * @param unknown $sourceModel
+     * @param unknown $sourceId
+     * @param unknown $recipiendId
+     */
+    public function sendNotification( $view, $sourceModel, $sourceId, $recipiendId ) {
+        $notification = new AccountNotificationModel();
+        $notification->created_at   = date('Y-m-d H:i:s');
+        $notification->produced_by  = $this->getCurrentUserId();
+        $notification->view         = $view;
+        $notification->source_model = $sourceModel;
+        $notification->source_id    = $sourceId;
+        $notification->recipient_id = $recipiendId;
+        $notification->save();
+    }
+    
+    /**
+     * @return number
+     */
+    public function countUnclosedNotification() {
+        $condition = array();
+        $condition['status']        = AccountNotificationModel::STATUS_NEW;
+        $condition['produced_by']   = $this->getCurrentUserId();
+        $count = AccountNotificationModel::model()->count($condition);
+        return $count;
+    }
+    
+    /**
+     * @return \X\Module\Lunome\Model\Account\AccountNotificationModel []
+     */
+    public function getUnclosedNotifications() {
+        $condition = array();
+        $condition['status']        = AccountNotificationModel::STATUS_NEW;
+        $condition['produced_by']   = $this->getCurrentUserId();
+        $notifications = AccountNotificationModel::model($condition)->findAll($condition);
+        foreach ( $notifications as $index => $notification ) {
+            $notifications[$index] = $notification->toArray();
+            $sourceModel = $notification->source_model;
+            $sourceModel = $sourceModel::model()->findByPrimaryKey($notification->source_id);
+            $notifications[$index]['sourceData'] = $sourceModel->toArray();
+        }
+        return $notifications;
+    }
+    
+    /**
+     * @param unknown $notificationID
+     */
+    public function closeNotification( $notificationID ) {
+        $notification = AccountNotificationModel::model()->findByPrimaryKey($notificationID);
+        $notification->status = AccountNotificationModel::STATUS_CLOSED;
+        $notification->save();
     }
     
 //     /**

@@ -19,15 +19,15 @@ class Index extends FriendManagement {
      * @return void
      */ 
     public function runAction( ) {
-//         /* Find friends of current user. */
-//         $friends = $this->getUserService()->getFriend()->getAll();
+        /* Find friends of current user. */
+        $friends = $this->getUserService()->getFriend()->getAll();
         
-//         /* Load friend index view. */
-//         $name   = 'FRIEND_INDEX';
-//         $path   = $this->getParticleViewPath('User/Friend/Index');
-//         $option = array();
-//         $data   = array('friends'=>$friends);
-//         $this->getView()->loadParticle($name, $path, $option, $data);
+        /* Load friend index view. */
+        $name   = 'FRIEND_INDEX';
+        $path   = $this->getParticleViewPath('User/Friend/Index');
+        $option = array();
+        $data   = array('friends'=>$friends);
+        $this->getView()->loadParticle($name, $path, $option, $data);
     }
     
     /**

@@ -118,7 +118,7 @@
             <?php $sexualitysMap = array(''=>'保密', '0'=>'保密','1'=>'异性','2'=>'同性','3'=>'双性','4'=>'无性','5'=>'二禁'); ?>
             <?php $emotionStatusMap = array(''=>'保密', '0'=>'保密','1'=>'单身','2'=>'热恋中','3'=>'同居','4'=>'已订婚','5'=>'已婚','6'=>'分居','7'=>'离异','8'=>'很难说','9'=>'其他'); ?>
             <?php foreach ( $informations as $information ) : ?>
-                <div class="col-md-6 well well-sm clearfix">
+                <div class="col-md-5 well well-sm clearfix">
                     <div class="pull-left">
                         <img    class="img-thumbnail"
                                 alt="<?php echo $information['account']['nickname'];?>" 
@@ -137,7 +137,6 @@
                         <p>
                             <span class="glyphicon glyphicon-heart"></span>
                             <?php echo $sexualitysMap[$information['sexuality']];?>
-                            &nbsp;&nbsp;&nbsp;
                             <span class="glyphicon glyphicon-user"></span>
                             <?php echo $emotionStatusMap[$information['emotion_status']];?>
                         </p>
@@ -147,9 +146,37 @@
                             <?php echo $information['living_city'];?>
                         </p>
                     </div>
+                    <div class="text-right">
+                        <a  href            = "#" 
+                            class           = "btn btn-primary btn-xs btn-add-as-friend-open-dialog"
+                            data-recipient  = "<?php echo $information['account_id']; ?>"
+                        >加为好友</a>
+                    </div>
                 </div>
             <?php endforeach; ?>
         </div>
     <?php endif; ?>
 </div>
 </form>
+
+<!-- add friend dialog -->
+<div class="modal fade" id="add-friend-dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">添加好友</h4>
+            </div>
+            <div class="modal-body">
+                <textarea class="width-full" id="add-as-friend-message"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type            = "button" 
+                        class           = "btn btn-primary " 
+                        id              = "btn-add-as-friend" 
+                >发送请求</button>
+            </div>
+        </div>
+    </div>
+</div>

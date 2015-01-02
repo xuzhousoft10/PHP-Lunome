@@ -16,6 +16,8 @@ use X\Module\Lunome\Model\Account\AccountConfigurationModel;
 use X\Module\Lunome\Model\Account\AccountInformation;
 use X\Service\XDatabase\Core\ActiveRecord\Criteria;
 use X\Service\XDatabase\Core\SQL\Condition\Builder as ConditionBuilder;
+use X\Module\Lunome\Model\Account\AccountFriendshipRequestModel;
+use X\Module\Lunome\Model\Account\AccountFriendshipModel;
 
 /**
  * Handle all friend operations.
@@ -276,10 +278,74 @@ class Account {
     }
     
     /**
+     * @param unknown $recipient
+     * @param unknown $message
+     */
+    public function sendToBeFriendRequest( $recipient, $message, $view ) {
+        $request = new AccountFriendshipRequestModel();
+        $request->message = $message;
+        $request->recipient_id = $recipient;
+        $request->request_started_at = date('Y-m-d H:i:s', time());
+        $request->requester_id = $this->getCurrentUserId();
+        $request->validate();
+        $request->save();
+        
+        $sourceModel    = 'X\\Module\\Lunome\\Model\\Account\\AccountFriendshipRequestModel';
+        $sourceId       = $request->id;
+        $recipiendId    = $recipient;
+        $this->getUserService()->sendNotification($view, $sourceModel, $sourceId, $recipiendId);
+    }
+    
+    /**
+     * @param unknown $requestID
+     * @param unknown $isAgreed
+     * @param unknown $message
+     */
+    public function updateToBeFriendRequestAnswer( $requestID, $isAgreed, $message, $view ) {
+        /* @var $request AccountFriendshipRequestModel */
+        $request = AccountFriendshipRequestModel::model()->findByPrimaryKey($requestID);
+        $request->is_agreed         = $isAgreed ? 1 : 0;
+        $request->result_message    = $message;
+        $request->answered_at       = date('Y-m-d H:i:s');
+        $request->save();
+        
+        if ( $isAgreed ) {
+            $friendship = new AccountFriendshipModel();
+            $friendship->started_at     = date('Y-m-d H:i:s');
+            $friendship->account_me     = $request->recipient_id;
+            $friendship->account_friend = $request->requester_id;
+            $friendship->save();
+            
+            $friendship = new AccountFriendshipModel();
+            $friendship->started_at     = date('Y-m-d H:i:s');
+            $friendship->account_me     = $request->requester_id;
+            $friendship->account_friend = $request->recipient_id;
+            $friendship->save();
+        } 
+        
+        $sourceModel    = 'X\\Module\\Lunome\\Model\\Account\\AccountFriendshipRequestModel';
+        $sourceId       = $request->id;
+        $requster       = $request->requester_id;
+        $this->getUserService()->sendNotification($view, $sourceModel, $sourceId, $requster);
+    }
+    
+    private $userService = null;
+    
+    /**
+     * @return \X\Module\Lunome\Service\User\Service
+     */
+    private function getUserService() {
+        if ( null === $this->userService ) {
+            $this->userService = X::system()->getServiceManager()->get(Service::getServiceName());
+        }
+        return $this->userService;
+    }
+    
+    /**
      * @return string
      */
     private function getCurrentUserId() {
-        return X::system()->getServiceManager()->get(Service::getServiceName())->getCurrentUserId();
+        return $this->getUserService()->getCurrentUserId();
     }
     
     /* Account setting types */

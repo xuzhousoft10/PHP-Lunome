@@ -616,7 +616,7 @@ abstract class XActiveRecord extends Basic implements \Iterator {
      * @return array
      */
     public function getErrors( $name=null ) {
-        if ( null === $name ) {
+        if ( null !== $name ) {
             return $this->getAttribute($name)->getErrors();
         }
         
