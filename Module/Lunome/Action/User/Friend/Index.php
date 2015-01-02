@@ -20,11 +20,13 @@ class Index extends FriendManagement {
      * The action handle for index action.
      * @return void
      */ 
-    public function runAction( $position=0 ) {
+    public function runAction( $page=1 ) {
+        $accountManager = $this->getUserService()->getAccount();
+        
         $length = 10;
-        $position = ($position-1)*$length;
+        $position = ($page-1)*$length;
         $position = ( 0 > $position ) ? 0 : $position;
-        $friends = $this->getUserService()->getAccount()->getFriends($position, $length);
+        $friends = $accountManager->getFriends($position, $length);
         
         if ( !empty($friends) ) {
             /* @var $regionService RegionService */
@@ -36,11 +38,19 @@ class Index extends FriendManagement {
             }
         }
         
+        $count = $accountManager->countFriends();
+        $pager = array(
+            'prev'      => ( 1 >= $page*1 ) ? false : $page-1,
+            'next'      => ( ($page-1)*$length >= $count ) ? false : $page+1,
+            'current'   => $page,
+            'pageCount' => ( 0===($count%$length) ) ? $count/$length : intval($count/$length)+1,
+        );
+        
         /* Load friend index view. */
         $name   = 'FRIEND_INDEX';
         $path   = $this->getParticleViewPath('User/Friend/Index');
         $option = array();
-        $data   = array('friends'=>$friends);
+        $data   = array('friends'=>$friends, 'pager'=>$pager);
         $this->getView()->loadParticle($name, $path, $option, $data);
         $this->getView()->title = '我的好友';
     }

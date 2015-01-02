@@ -350,6 +350,15 @@ class Account {
         return $friends;
     }
     
+    /**
+     * @return number
+     */
+    public function countFriends() {
+        $condition  = array('account_me'=>$this->getCurrentUserId());
+        $count = AccountFriendshipModel::model()->count($condition);
+        return $count;
+    }
+    
     private $userService = null;
     
     /**
