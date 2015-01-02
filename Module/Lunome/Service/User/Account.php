@@ -329,6 +329,27 @@ class Account {
         $this->getUserService()->sendNotification($view, $sourceModel, $sourceId, $requster);
     }
     
+    /**
+     * @param unknown $position
+     * @param unknown $length
+     * @return \X\Module\Lunome\Model\Account\AccountInformationModel[]
+     */
+    public function getFriends( $position, $length=0 ) {
+        $criteria = new Criteria();
+        $criteria->condition = array('account_me'=>$this->getCurrentUserId());
+        $criteria->position = $position;
+        $criteria->limit = $length;
+        $friends = AccountFriendshipModel::model()->findAll($criteria);
+        if ( empty($friends) ) {
+            return array();
+        }
+        foreach ( $friends as $index => $friend ) {
+            $friends[$index] = $friend->account_friend;
+        }
+        $friends = AccountInformationModel::model()->findAll(array('account_id'=>$friends));
+        return $friends;
+    }
+    
     private $userService = null;
     
     /**

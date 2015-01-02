@@ -3,55 +3,41 @@
 $vars = get_defined_vars();
 $friends = $vars['friends'];
 ?>
-<div>
-    <nav class="navbar navbar-default navbar-inverse">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">我的好友</a>
+<?php $sexMap = array(''=>'保密', '0'=>'保密','1'=>'♂','2'=>'♀','3'=>'其他'); ?>
+<?php $sexualitysMap = array(''=>'保密', '0'=>'保密','1'=>'异性','2'=>'同性','3'=>'双性','4'=>'无性','5'=>'二禁'); ?>
+<?php $emotionStatusMap = array(''=>'保密', '0'=>'保密','1'=>'单身','2'=>'热恋中','3'=>'同居','4'=>'已订婚','5'=>'已婚','6'=>'分居','7'=>'离异','8'=>'很难说','9'=>'其他'); ?>
+<div class="col-md-9">
+<?php foreach ( $friends as $friend ) :?>
+    <div class="well-sm padding-0 clearfix">
+        <div class="col-md-5 well well-sm clearfix">
+            <div class="pull-left">
+                <img    class="img-thumbnail"
+                        alt="<?php echo $friend->nickname;?>" 
+                        src="<?php echo $friend->photo;?>"
+                        width="80"
+                        height="80"
+                >
+            </div>
+            <div class="pull-left padding-left-5">
+                <p>
+                    <strong>
+                        <span class="text-info"><?php echo $sexMap[$friend->sex];?></span>
+                        <?php echo $friend->nickname;?>
+                    </strong>
+                </p>
+                <p>
+                    <span class="glyphicon glyphicon-heart"></span>
+                    <?php echo $sexualitysMap[$friend->sexuality];?>
+                    <span class="glyphicon glyphicon-user"></span>
+                    <?php echo $emotionStatusMap[$friend->emotion_status];?>
+                </p>
+                <p>
+                    <?php echo $friend->living_country;?>
+                    <?php echo $friend->living_province;?>
+                    <?php echo $friend->living_city;?>
+                </p>
             </div>
         </div>
-    </nav>
-    
-    <ul class="list-group">
-        <?php foreach ( $friends as $index => $friend ) : ?>
-            <li class="list-group-item friend-list-item" style="cursor:pointer">
-                <div class="row">
-                    <div class="pull-left" style="padding-left:5px;padding-right:5px;">
-                        <img class="img-thumbnail" src="<?php echo $friend['photo'];?>" style="height:50px;"/>
-                    </div>
-                    <div class="pull-left">
-                        <div>
-                            <strong><?php echo $friend['nickname']; ?></strong>
-                        </div>
-                        <div style="padding-top:5px">
-                        电影128 | 电视4894 | 动漫549 | 图书467 | 游戏48
-                        </div>
-                    </div>
-                </div>
-            </li>
-        <?php endforeach; ?>
-    </ul>
-    <script type="text/javascript">
-    $('.friend-list-item').on('mouseenter', function() {
-        $(this).addClass('active');
-    });
-    $('.friend-list-item').on('mouseleave', function() {
-        $(this).removeClass('active');
-    });
-    </script>
-    
-
-    <div class="text-right">
-        <ul class="pagination">
-            <li><a href="#">首页</a></li>
-            <li><a href="#">上一页</a></li>
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li><a href="#">下一页</a></li>
-            <li><a href="#">尾页</a></li>
-        </ul>
     </div>
+<?php endforeach; ?>
 </div>
