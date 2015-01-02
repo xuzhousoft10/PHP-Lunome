@@ -18,6 +18,7 @@ use X\Service\XDatabase\Core\ActiveRecord\Criteria;
 use X\Service\XDatabase\Core\SQL\Condition\Builder as ConditionBuilder;
 use X\Module\Lunome\Model\Account\AccountFriendshipRequestModel;
 use X\Module\Lunome\Model\Account\AccountFriendshipModel;
+use X\Service\XDatabase\Core\SQL\Expression as SQLExpression;
 
 /**
  * Handle all friend operations.
@@ -253,7 +254,7 @@ class Account {
      * @param unknown $offset
      * @param unknown $limit
      */
-    public function findInformations( $condition, $offset=0, $limit=0 ) {
+    public function findFriends( $condition, $offset=0, $limit=0 ) {
         $conditionObject = ConditionBuilder::build();
         if ( isset($condition['main']) ) {
             $conditionObject->groupStart()
@@ -269,13 +270,26 @@ class Account {
         }
         $conditionObject->addCondition($condition);
         
+        /* Remove self information while search friends. */
+        $conditionObject->isNot('account_id', $this->getCurrentUserId());
+        
+        /* Remove friends which already been. */
+        $extCondition = array();
+        $extCondition['account_friend'] = new SQLExpression(AccountInformationModel::model()->getTableFullName().'.account_id');
+        $extCondition['account_me'] = $this->getCurrentUserId();
+        $extCondition = AccountFriendshipModel::query()->activeColumns(array('id'))->find($extCondition);
+        $conditionObject->notExists($extCondition);
+        
         $criteria = new Criteria();
         $criteria->position = $offset;
         $criteria->limit = $limit;
         $criteria->condition = $conditionObject;
         $informations = AccountInformationModel::model()->findAll($criteria);
-        return $informations;
+        $count = AccountInformationModel::model()->count($conditionObject);
+        return array('count'=>$count, 'data'=>$informations);
     }
+    
+    
     
     /**
      * @param unknown $recipient

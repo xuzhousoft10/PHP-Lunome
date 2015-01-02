@@ -24,26 +24,33 @@ class Search extends FriendManagement {
         $informations = false;
         $accountManager = $this->getUserService()->getAccount();
         
+        $pager = array('prev'=>false, 'next'=>false);
         if ( !empty($condition) ) {
             /* @var $regionService RegionService */
             $regionService = X::system()->getServiceManager()->get(RegionService::getServiceName());
             
             $pageSize = 10;
             $filteredCondition = $this->filterConditions($condition);
-            $informations = $accountManager->findInformations($filteredCondition, ($page-1)*$pageSize);
-            foreach ( $informations as $index => $information ) {
+            $result = $accountManager->findFriends($filteredCondition, ($page-1)*$pageSize, $pageSize);
+            foreach ( $result['data'] as $index => $information ) {
                 $informations[$index] = $information->toArray();
                 $informations[$index]['living_country'] = $regionService->getNameByID($information->living_country);
                 $informations[$index]['living_province'] = $regionService->getNameByID($information->living_province);
                 $informations[$index]['living_city'] = $regionService->getNameByID($information->living_city);
-                $informations[$index]['account'] = $accountManager->get($information->account_id)->toArray();
             }
+            
+            $pager = array(
+                'prev'      => ( 1 >= $page*1 ) ? false : $page-1,
+                'next'      => ( $result['count']<=$pageSize || ($page-1)*$pageSize >= $result['count'] ) ? false : $page+1,
+                'current'   => $page,
+                'pageCount' => ( 0===($result['count']%$pageSize) ) ? $result['count']/$pageSize : intval($result['count']/$pageSize)+1,
+            );
         }
         
         $name   = 'FRIEND_SEARCH';
         $path   = $this->getParticleViewPath('User/Friend/Search');
         $option = array();
-        $data   = array('informations'=>$informations, 'condition'=>$condition);
+        $data   = array('informations'=>$informations, 'condition'=>$condition, 'pager'=>$pager);
         $this->getView()->loadParticle($name, $path, $option, $data);
         $this->getView()->title = '寻找好友';
     }

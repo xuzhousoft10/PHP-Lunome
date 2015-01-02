@@ -113,38 +113,41 @@
             </div>
         </div>
     <?php else : ?>
-        <div class="clearfix thumbnail">
+        <div class="thumbnail">
+            <div class="clearfix">
             <?php $sexMap = array(''=>'保密', '0'=>'保密','1'=>'♂','2'=>'♀','3'=>'其他'); ?>
             <?php $sexualitysMap = array(''=>'保密', '0'=>'保密','1'=>'异性','2'=>'同性','3'=>'双性','4'=>'无性','5'=>'二禁'); ?>
             <?php $emotionStatusMap = array(''=>'保密', '0'=>'保密','1'=>'单身','2'=>'热恋中','3'=>'同居','4'=>'已订婚','5'=>'已婚','6'=>'分居','7'=>'离异','8'=>'很难说','9'=>'其他'); ?>
-            <?php foreach ( $informations as $information ) : ?>
+            <?php foreach ( $informations as $index => $information ) : ?>
                 <div class="col-md-5 well well-sm clearfix">
-                    <div class="pull-left">
-                        <img    class="img-thumbnail"
-                                alt="<?php echo $information['account']['nickname'];?>" 
-                                src="<?php echo $information['account']['photo'];?>"
-                                width="80"
-                                height="80"
-                        >
-                    </div>
-                    <div class="pull-left padding-left-5">
-                        <p>
-                            <strong>
-                                <span class="text-info"><?php echo $sexMap[$information['sex']];?></span>
-                                <?php echo $information['account']['nickname'];?>
-                            </strong>
-                        </p>
-                        <p>
-                            <span class="glyphicon glyphicon-heart"></span>
-                            <?php echo $sexualitysMap[$information['sexuality']];?>
-                            <span class="glyphicon glyphicon-user"></span>
-                            <?php echo $emotionStatusMap[$information['emotion_status']];?>
-                        </p>
-                        <p>
-                            <?php echo $information['living_country'];?>
-                            <?php echo $information['living_province'];?>
-                            <?php echo $information['living_city'];?>
-                        </p>
+                    <div class="clearfix">
+                        <div class="pull-left">
+                            <img    class="img-thumbnail"
+                                    alt="<?php echo $information['nickname'];?>" 
+                                    src="<?php echo $information['photo'];?>"
+                                    width="80"
+                                    height="80"
+                            >
+                        </div>
+                        <div class="pull-left padding-left-5 user-information-text-area">
+                            <p>
+                                <strong>
+                                    <span class="text-info"><?php echo $sexMap[$information['sex']];?></span>
+                                    <?php echo $information['nickname'];?>
+                                </strong>
+                            </p>
+                            <p>
+                                <span class="glyphicon glyphicon-heart"></span>
+                                <?php echo $sexualitysMap[$information['sexuality']];?>
+                                <span class="glyphicon glyphicon-user"></span>
+                                <?php echo $emotionStatusMap[$information['emotion_status']];?>
+                            </p>
+                            <p>
+                                <?php echo $information['living_country'];?>
+                                <?php echo $information['living_province'];?>
+                                <?php echo $information['living_city'];?>
+                            </p>
+                        </div>
                     </div>
                     <div class="text-right">
                         <a  href            = "#" 
@@ -153,7 +156,31 @@
                         >加为好友</a>
                     </div>
                 </div>
+                <?php if ( 0 === ($index%2) ) : ?>
+                    <div class="col-md-1"></div>
+                <?php endif; ?>
             <?php endforeach; ?>
+        </div>
+        <?php $pager = $vars['pager']; ?>
+        <?php if ( false !== $pager['prev'] || false !== $pager['next'] ) : ?>
+        <div>
+            <nav>
+                <ul class="pager">
+                    <li class="pull-left<?php echo (false === $pager['prev']) ? ' disabled' : ''; ?>">
+                        <?php if (false !== $pager['prev']) :?>
+                            <button name="page" value="<?php echo $pager['prev']?>" type="submit" class="btn btn-default">&larr; 上一页</button>
+                        <?php endif; ?>
+                    </li>
+                    <li><?php echo $pager['current'];?> / <?php echo $pager['pageCount'];?></li>
+                    <li class="pull-right<?php echo (false === $pager['next']) ? ' disabled' : ''; ?>">
+                        <?php if (false !== $pager['next']) :?>
+                            <button name="page" value="<?php echo $pager['next']?>" type="submit" class="btn btn-default">下一页&rarr;</button>
+                        <?php endif; ?>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <?php endif; ?>
         </div>
     <?php endif; ?>
 </div>

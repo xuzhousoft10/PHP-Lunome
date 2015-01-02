@@ -41,7 +41,7 @@ class Index extends FriendManagement {
         $count = $accountManager->countFriends();
         $pager = array(
             'prev'      => ( 1 >= $page*1 ) ? false : $page-1,
-            'next'      => ( ($page-1)*$length >= $count ) ? false : $page+1,
+            'next'      => ( $count<=$length || ($page-1)*$length >= $count ) ? false : $page+1,
             'current'   => $page,
             'pageCount' => ( 0===($count%$length) ) ? $count/$length : intval($count/$length)+1,
         );
