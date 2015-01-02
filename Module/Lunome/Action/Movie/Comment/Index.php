@@ -30,7 +30,7 @@ class Index extends Visual {
         foreach ( $comments as $index => $comment ) {
             $comments[$index] = array();
             $comments[$index]['content'] = $comment->toArray();
-            $comments[$index]['user'] = $account->get($comment->commented_by)->toArray();
+            $comments[$index]['user'] = $account->getInformation($comment->commented_by)->toArray();
         }
         
         $pager = array();

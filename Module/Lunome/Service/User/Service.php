@@ -16,6 +16,7 @@ use X\Library\XUtil\Network;
 use X\Service\QQ\Service as QQService;
 use X\Service\Sina\Service as SinaService;
 use X\Module\Lunome\Model\Account\AccountNotificationModel;
+use X\Module\Lunome\Model\Account\AccountInformationModel;
 
 /**
  * The service class
@@ -225,10 +226,15 @@ class Service extends \X\Core\Service\XService {
         if ( null === $account ) {
             $account = $this->enableRandomAccount();
         }
-        $account->nickname      = $information['nickname'];
-        $account->photo         = $information['photo'];
+        
         $account->oauth20_id    = $oauth->id;
         $account->save();
+        
+        $accountInformation = new AccountInformationModel();
+        $accountInformation->account_id = $account->id;
+        $accountInformation->account_number = $account->account;
+        $accountInformation->nickname = $information['nickname'];
+        $accountInformation->photo = $information['photo'];
         return $account;
     }
     
@@ -284,14 +290,16 @@ class Service extends \X\Core\Service\XService {
      * @param AccountModel $account
      */
     protected function loginAccount( AccountModel $account, $loginedBy ) {
+        $information = AccountInformationModel::model()->find(array('account_id'=>$account->id));
         $_SESSION['LUNOME']['USER']['ID']           = $account->id;
         $_SESSION['LUNOME']['USER']['ACCOUNT']      = $account->account;
-        $_SESSION['LUNOME']['USER']['NICKNAME']     = $account->nickname;
-        $_SESSION['LUNOME']['USER']['PHOTO']        = $account->photo;
+        $_SESSION['LUNOME']['USER']['NICKNAME']     = $information->nickname;
+        $_SESSION['LUNOME']['USER']['PHOTO']        = $information->photo;
         $_SESSION['LUNOME']['USER']['OAUTH20ID']    = $account->oauth20_id;
         $_SESSION['LUNOME']['USER']['IDENTITY']     = self::UI_NORMAL;
         $_SESSION['LUNOME']['USER']['IS_ADMIN']     = $account->is_admin == AccountModel::IS_ADMIN_YES;
         $_SESSION['LUNOME']['USER']['LOGIN_BY']     = $loginedBy;
+        $_SESSION['LUNOMT']['USER']['INFORMATION']  = $information->toArray();
         $this->recordLoginHistory($account, $loginedBy);
     }
     

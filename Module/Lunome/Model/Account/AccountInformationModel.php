@@ -39,8 +39,10 @@ use X\Util\Model\Basic;
  * @property string $birthday
  * @property string $emotion_status
  * @property string $is_lunar_calendar
+ * @property string $photo
+ * @property string $nickname
  */
-class AccountInformation extends Basic {
+class AccountInformationModel extends Basic {
     /**
      * (non-PHPdoc)
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::describe()
@@ -61,6 +63,8 @@ class AccountInformation extends Basic {
         $columns['is_lunar_calendar']   = 'TINYINT';
         $columns['birthday']            = 'DATE';
         $columns['emotion_status']      = 'TINYINT';
+        $columns['nickname']            = 'VARCHAR(64)';
+        $columns['photo']               = 'VARCHAR(256)';
         return $columns;
     }
 

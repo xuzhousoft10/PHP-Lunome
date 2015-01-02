@@ -229,19 +229,19 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                 data-container      = "#movie-short-comment-list-container"
                 data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
         >
-            <div class="media pull-left">
-                <div class="pull-left">
+            <div class="clearfix">
+                <div class="col-md-4 padding-0">
                     <img src="<?php echo (null===$vars['currentUser'])?'':$vars['currentUser']->photo; ?>" width="90" height="90" class="thumbnail margin-bottom-0">
                     <span><?php echo (null===$vars['currentUser'])?'':$vars['currentUser']->nickname; ?></span>
                 </div>
-            </div>
-            <div class="media-body">
-                <form action="/?module=lunome&action=movie/comment/add">
-                    <input type="hidden" name="id" value="<?php echo $media['id']; ?>" >
-                    <textarea name="content" class="width-full" rows="" cols=""></textarea>
-                    <br>
-                    <button class="btn btn-primary" name="save" type="button">发表</button>
-                </form>
+                <div class="col-md-8 padding-0">
+                    <form action="/?module=lunome&action=movie/comment/add">
+                        <input type="hidden" name="id" value="<?php echo $media['id']; ?>" >
+                        <textarea name="content" class="width-full" rows="" cols=""></textarea>
+                        <br>
+                        <button class="btn btn-primary" name="save" type="button">发表</button>
+                    </form>
+                </div>
             </div>
             <hr>
             <div class="clearfix" id="movie-short-comment-list-container"></div>

@@ -13,7 +13,7 @@ use X\Module\Lunome\Model\Oauth20Model;
 use X\Module\Lunome\Model\Account\AccountLoginHistoryModel;
 use X\Module\Lunome\Model\Account\AccountHistoryModel;
 use X\Module\Lunome\Model\Account\AccountConfigurationModel;
-use X\Module\Lunome\Model\Account\AccountInformation;
+use X\Module\Lunome\Model\Account\AccountInformationModel;
 use X\Service\XDatabase\Core\ActiveRecord\Criteria;
 use X\Service\XDatabase\Core\SQL\Condition\Builder as ConditionBuilder;
 use X\Module\Lunome\Model\Account\AccountFriendshipRequestModel;
@@ -224,7 +224,7 @@ class Account {
      */
     public function getInformation( $accountID=null ) {
         $accountID = ( null === $accountID ) ? $this->getCurrentUserId() : $accountID;
-        $info = AccountInformation::model()->find(array('account_id'=>$accountID));
+        $info = AccountInformationModel::model()->find(array('account_id'=>$accountID));
         return $info;
     }
     
@@ -237,9 +237,9 @@ class Account {
         $accountID = ( null === $accountID ) ? $this->getCurrentUserId() : $accountID;
         $account = $this->get($accountID);
         
-        $informationModel = AccountInformation::model()->find(array('account_id'=>$accountID));
+        $informationModel = AccountInformationModel::model()->find(array('account_id'=>$accountID));
         if ( null === $informationModel ) {
-            $informationModel = new AccountInformation();
+            $informationModel = new AccountInformationModel();
         }
         $information['account_number'] = $account->account;
         $information['account_id'] = $accountID;
@@ -273,7 +273,7 @@ class Account {
         $criteria->position = $offset;
         $criteria->limit = $limit;
         $criteria->condition = $conditionObject;
-        $informations = AccountInformation::model()->findAll($criteria);
+        $informations = AccountInformationModel::model()->findAll($criteria);
         return $informations;
     }
     

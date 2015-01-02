@@ -77,7 +77,7 @@ class Detail extends Visual {
         $names  = $service->getMarkNames();
         $styles = $this->getMarkStyles();
     
-        $userData = $this->isGuest ? null : $this->getUserService()->getAccount()->get($this->getUserService()->getCurrentUserId());
+        $userData = $this->isGuest ? null : $this->getUserService()->getAccount()->getInformation($this->getUserService()->getCurrentUserId());
         $name   = 'MEDIA_DETAIL';
         $path   = $this->getParticleViewPath('Movie/Detail');
         $option = array();

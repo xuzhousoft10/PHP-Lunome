@@ -10,10 +10,8 @@ use X\Util\Model\Basic;
  * @property string $id
  * @property string $account
  * @property string $oauth20_id
- * @property string $nickname
  * @property string $status
  * @property string $enabled_at
- * @property string $photo
  * @property string $is_admin
  * 
  * delimiter $$
@@ -40,10 +38,8 @@ class AccountModel extends Basic {
         $columns['id']          = 'PRIMARY VARCHAR(36) NOTNULL';
         $columns['account']     = 'INT NOTNULL';
         $columns['oauth20_id']  = 'VARCHAR(36)';
-        $columns['nickname']    = 'VARCHAR(64)';
         $columns['status']      = 'TINYINT NOTNULL';
         $columns['enabled_at']  = 'DATETIME';
-        $columns['photo']       = 'VARCHAR(256)';
         $columns['is_admin']    = 'TINYINT [0] UNSIGNED';
         return $columns;
     }
