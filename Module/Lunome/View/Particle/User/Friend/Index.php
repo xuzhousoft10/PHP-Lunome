@@ -13,33 +13,39 @@ $friends = $vars['friends'];
 <div class="clearfix">
 <?php foreach ( $friends as $index =>  $friend ) :?>
     <div class="well-sm padding-0 clearfix col-md-5 padding-left-10">
-        <div class="well well-sm clearfix">
-            <div class="pull-left">
-                <img    class="img-thumbnail"
-                        alt="<?php echo $friend->nickname;?>" 
-                        src="<?php echo $friend->photo;?>"
-                        width="80"
-                        height="80"
-                >
+        <div class="well well-sm">
+            <div class="clearfix">
+                <div class="pull-left">
+                    <img    class="img-thumbnail"
+                            alt="<?php echo $friend->nickname;?>" 
+                            src="<?php echo $friend->photo;?>"
+                            width="80"
+                            height="80"
+                    >
+                </div>
+                <div class="pull-left padding-left-5 user-information-text-area">
+                    <p>
+                        <strong>
+                            <span class="text-info" title="性别:<?php echo $sexNameMap[$friend->sex]; ?>"><?php echo $sexMap[$friend->sex];?></span>
+                            <?php echo $friend->nickname;?>
+                        </strong>
+                    </p>
+                    <p>
+                        <span class="glyphicon glyphicon-heart"></span>
+                        <?php echo $sexualitysMap[$friend->sexuality];?>
+                        <span class="glyphicon glyphicon-user"></span>
+                        <?php echo $emotionStatusMap[$friend->emotion_status];?>
+                    </p>
+                    <p>
+                        <?php echo $friend->living_country;?>
+                        <?php echo $friend->living_province;?>
+                        <?php echo $friend->living_city;?>
+                    </p>
+                </div>
             </div>
-            <div class="pull-left padding-left-5 user-information-text-area">
-                <p>
-                    <strong>
-                        <span class="text-info" title="性别:<?php echo $sexNameMap[$friend->sex]; ?>"><?php echo $sexMap[$friend->sex];?></span>
-                        <?php echo $friend->nickname;?>
-                    </strong>
-                </p>
-                <p>
-                    <span class="glyphicon glyphicon-heart"></span>
-                    <?php echo $sexualitysMap[$friend->sexuality];?>
-                    <span class="glyphicon glyphicon-user"></span>
-                    <?php echo $emotionStatusMap[$friend->emotion_status];?>
-                </p>
-                <p>
-                    <?php echo $friend->living_country;?>
-                    <?php echo $friend->living_province;?>
-                    <?php echo $friend->living_city;?>
-                </p>
+            
+            <div class="text-right">
+                <a class="btn btn-primary btn-xs" target="_black" href="/?module=lunome&action=user/home/index&id=<?php echo $friend->account_id;?>">主页</a>
             </div>
         </div>
     </div>

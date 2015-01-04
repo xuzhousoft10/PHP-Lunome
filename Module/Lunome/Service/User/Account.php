@@ -221,7 +221,7 @@ class Account {
     
     /**
      * @param string $accountID
-     * @return \X\Module\Lunome\Model\Account\AccountInformation
+     * @return \X\Module\Lunome\Model\Account\AccountInformationModel
      */
     public function getInformation( $accountID=null ) {
         $accountID = ( null === $accountID ) ? $this->getCurrentUserId() : $accountID;
