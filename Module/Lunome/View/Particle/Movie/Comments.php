@@ -27,23 +27,27 @@
         </div>
     <?php endforeach; ?>
 <?php endif; ?>
+<?php $pager = $vars['pager']; ?>
+<?php if ( false !== $pager['prev'] || false !== $pager['next'] ) : ?>
 <div>
     <nav>
         <ul class="pager">
-            <li class="previous<?php echo (false === $vars['pager']['prev']) ? ' disabled' : ''; ?>">
-                <?php if (false !== $vars['pager']['prev']) :?>
-                    <a  href="/?module=lunome&action=movie/comment/index&id=<?php echo $vars['id']; ?>&page=<?php echo $vars['pager']['prev'];?>"
-                        class="movie-comments-container-pager"
+            <li class="previous<?php echo (false === $pager['prev']) ? ' disabled' : ''; ?>">
+                <?php if (false !== $pager['prev']) :?>
+                    <a  href="/?module=lunome&action=movie/home/index&id=99cbddc4-ac78-40c6-a986-343e438d56afpage=<?php echo $pager['prev'];?>"
+                        class="movie-characters-container-pager"
                     >&larr; 上一页</a>
                 <?php endif; ?>
             </li>
-            <li class="next<?php echo (false === $vars['pager']['next']) ? ' disabled' : ''; ?>">
-                <?php if (false !== $vars['pager']['next']) :?>
-                    <a  href="/?module=lunome&action=movie/comment/index&id=<?php echo $vars['id']; ?>&page=<?php echo $vars['pager']['next'];?>"
-                        class="movie-comments-container-pager"
+            <li><?php echo $pager['current'];?> / <?php echo $pager['pageCount'];?></li>
+            <li class="next<?php echo (false === $pager['next']) ? ' disabled' : ''; ?>">
+                <?php if (false !== $pager['next']) :?>
+                    <a  href="/?module=lunome&action=user/friend/index&page=<?php echo $pager['next'];?>"
+                        class="movie-characters-container-pager"
                     >下一页&rarr;</a>
                 <?php endif; ?>
             </li>
         </ul>
     </nav>
 </div>
+<?php endif; ?>

@@ -104,15 +104,16 @@ abstract class Media extends \X\Core\Service\XService {
     }
     
     /**
-     * 
-     * @param unknown $mark
-     * @param number $length
-     * @param number $position
-     * @return unknown
+     * @param integer $mark
+     * @param mixed $condition, 默认为array()
+     * @param integer $length, 默认为0
+     * @param integer $position, 默认为0
+     * @param string $account, 默认为0
+     * @return array
      */
-    public function getMarked( $mark, $condition=array(), $length=0, $position=0 ) {
+    public function getMarked( $mark, $condition=array(), $length=0, $position=0, $account=0) {
         $mediaModelName = $this->getMediaModelName();
-        $basicCondition = $this->getMarkedMediaCondition($mark);
+        $basicCondition = $this->getMarkedMediaCondition($mark, $account);
         $basicCondition->addCondition($this->getExtenCondition($condition));
         $criteria = new Criteria();
         $criteria->condition = $basicCondition;

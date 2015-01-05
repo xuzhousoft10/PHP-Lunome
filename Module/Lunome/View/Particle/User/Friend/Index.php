@@ -45,7 +45,7 @@ $friends = $vars['friends'];
             </div>
             
             <div class="text-right">
-                <a class="btn btn-primary btn-xs" target="_black" href="/?module=lunome&action=user/home/index&id=<?php echo $friend->account_id;?>">主页</a>
+                <a class="btn btn-primary btn-xs" target="_blank" href="/?module=lunome&action=user/home/index&id=<?php echo $friend->account_id;?>">主页</a>
             </div>
         </div>
     </div>
