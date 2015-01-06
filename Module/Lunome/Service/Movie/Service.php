@@ -288,7 +288,7 @@ class Service extends Media {
     public function getShortComments( $id, $parent=null, $position, $length ) {
         $condition = array();
         $condition['movie_id'] = $id;
-        $condition['parent_id'] = (null===$parent)?'00000000-0000-0000-0000-000000000000':$id;
+        $condition['parent_id'] = (null===$parent)?'00000000-0000-0000-0000-000000000000':$parent;
         
         $criteria = new Criteria();
         $criteria->limit = $length;
@@ -298,6 +298,56 @@ class Service extends Media {
         
         $comments = MovieShortCommentModel::model()->findAll($criteria);
         return $comments;
+    }
+    
+    /**
+     * @param unknown $id
+     * @param string $parent
+     * @return Ambigous <multitype:\X\Service\XDatabase\Core\ActiveRecord\XActiveRecord , multitype:>
+     */
+    public function getShortCommentsFromFriends( $movieID, $parent=null, $position, $length ) {
+        $currentUserID = $this->getCurrentUserId();
+        
+        $condition = ConditionBuilder::build();
+        $condition->is('movie_id', $movieID);
+        $condition->is('parent_id', (null===$parent)?'00000000-0000-0000-0000-000000000000':$parent);
+        
+        $friendCondition = array();
+        $releatedAttrName = MovieShortCommentModel::model()->getAttributeQueryName('commented_by');
+        $friendCondition['account_friend'] = new SQLExpression($releatedAttrName);
+        $friendCondition = AccountFriendshipModel::query()->activeColumns(array('id'))->find($friendCondition);
+        $condition->exists($friendCondition);
+        
+        $criteria = new Criteria();
+        $criteria->limit = $length;
+        $criteria->position = $position;
+        $criteria->condition = $condition;
+        $criteria->addOrder('commented_at', 'DESC');
+        
+        $comments = MovieShortCommentModel::model()->findAll($criteria);
+        return $comments;
+    }
+    
+    /**
+     * @param unknown $id
+     * @param string $parent
+     * @return Ambigous <multitype:\X\Service\XDatabase\Core\ActiveRecord\XActiveRecord , multitype:>
+     */
+    public function countShortCommentsFromFriends( $movieID, $parent=null ) {
+        $currentUserID = $this->getCurrentUserId();
+    
+        $condition = ConditionBuilder::build();
+        $condition->is('movie_id', $movieID);
+        $condition->is('parent_id', (null===$parent)?'00000000-0000-0000-0000-000000000000':$parent);
+    
+        $friendCondition = array();
+        $releatedAttrName = MovieShortCommentModel::model()->getAttributeQueryName('commented_by');
+        $friendCondition['account_friend'] = new SQLExpression($releatedAttrName);
+        $friendCondition = AccountFriendshipModel::query()->activeColumns(array('id'))->find($friendCondition);
+        $condition->exists($friendCondition);
+        
+        $count = MovieShortCommentModel::model()->count($condition);
+        return $count;
     }
     
     /**
