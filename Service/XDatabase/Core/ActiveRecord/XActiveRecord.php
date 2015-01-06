@@ -144,6 +144,18 @@ abstract class XActiveRecord extends Basic implements \Iterator {
     }
     
     /**
+     * @param unknown $attributeName
+     * @return string
+     */
+    public function getAttributeQueryName( $attributeName ) {
+        $tableName= $this->getTableFullName();
+        $DBDriver = $this->getDb();
+        $columnName = $DBDriver->quoteColumnName($attributeName);
+        $tableName = $DBDriver->quoteTableName($tableName);
+        return $tableName.'.'.$columnName;
+    }
+    
+    /**
      * 根据名称设置属性值
      * @param string $name
      * @param mixed $value
@@ -555,7 +567,7 @@ abstract class XActiveRecord extends Basic implements \Iterator {
     }
     
     /**
-     * @return \X\Service\XDB\Core\Database
+     * @return \X\Service\XDatabase\Core\Database
      */
     protected function getDb() {
         return X::system()->getServiceManager()->get(XDatabaseService::getServiceName())->getDatabase();

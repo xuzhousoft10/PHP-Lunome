@@ -54,7 +54,7 @@ class Detail extends Visual {
     public function runAction( $id ) {
         $this->id = $id;
         $mediaType = $this->getMediaType();
-        /* @var $service \X\Module\Lunome\Util\Service\Media */
+        /* @var $service \X\Module\Lunome\Service\Movie\Service */
         $service = $this->getService($mediaType);
     
         /* Load detail view */
@@ -71,7 +71,8 @@ class Detail extends Visual {
         $media = $this->afterFindTheModel($media);
         $markCount = array();
         foreach ( $this->getMediaMarks() as $markValue ) {
-            $markCount[$markValue]  = $service->countMarked($markValue, $id, null);
+            $markCount[$markValue]['all']  = $service->countMarkedUsers($id, $markValue);
+            $markCount[$markValue]['friend'] = $service->countMarkedFriends($id, $markValue);
         }
         $myMark = $this->isGuest ? 0 : $service->getMark($id);
         $names  = $service->getMarkNames();

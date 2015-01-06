@@ -110,9 +110,30 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                 <td colspan="4">&nbsp;</td>
             </tr>
             <tr>
-                <td>想看: <?php echo $markCount[MovieService::MARK_INTERESTED];?></td>
-                <td>已看: <?php echo $markCount[MovieService::MARK_WATCHED];?></td>
-                <td>忽略: <?php echo $markCount[MovieService::MARK_IGNORED];?></td>
+                <td>
+                    想看: &nbsp;&nbsp;
+                    <small>
+                        好友:<?php echo $markCount[MovieService::MARK_INTERESTED]['friend'];?>
+                        /
+                        全网:<?php echo $markCount[MovieService::MARK_INTERESTED]['all'];?>
+                    </small>
+                </td>
+                <td>
+                    已看:  &nbsp;&nbsp;
+                    <small>
+                        好友:<?php echo $markCount[MovieService::MARK_WATCHED]['friend'];?>
+                        /
+                        全网:<?php echo $markCount[MovieService::MARK_WATCHED]['all'];?>
+                    </small>
+                </td>
+                <td>
+                    忽略:  &nbsp;&nbsp;
+                    <small>
+                        好友:<?php echo $markCount[MovieService::MARK_IGNORED]['friend'];?>
+                        /
+                        全网:<?php echo $markCount[MovieService::MARK_IGNORED]['all'];?>
+                    </small>
+                </td>
                 <td></td>
             </tr>
         </table>

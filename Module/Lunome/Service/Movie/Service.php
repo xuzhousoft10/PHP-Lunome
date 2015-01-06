@@ -27,6 +27,8 @@ use X\Module\Lunome\Model\Movie\MovieDirectorMapModel;
 use X\Module\Lunome\Model\People\PeopleModel;
 use X\Module\Lunome\Model\Movie\MovieActorMapModel;
 use X\Module\Lunome\Model\Movie\MovieCharacterModel;
+use X\Module\Lunome\Model\MediaUserMarksModel;
+use X\Module\Lunome\Model\Account\AccountFriendshipModel;
 
 /**
  * The service class
@@ -506,6 +508,45 @@ class Service extends Media {
      */
     public function getCharacterUrlById( $characterId ) {
         return 'http://7te9pc.com1.z0.glb.clouddn.com/'.$characterId;
+    }
+    
+    /**
+     * 统计全网用户对指定电影做指定标记的数量。
+     * @param string $movieID 查询的电影的ID
+     * @param integer $mark 查询的标记代码。标记宏为 Service::MARK_*
+     * @return integer
+     */
+    public function countMarkedUsers( $movieID, $mark ) {
+        $condition = array();
+        $condition['media_type']= 'X\\Module\\Lunome\\Model\\Movie\\MovieModel';
+        $condition['mark']      = $mark;
+        $condition['media_id']  = $movieID;
+        $count = MediaUserMarksModel::model()->count($condition);
+        return $count;
+    }
+    
+    /**
+     * 统计当前用户的好友对指定电影标记的数量。
+     * @param string $movieID 查询的电影的ID
+     * @param string $mark 查询的标记代码。标记宏为 Service::MARK_*
+     * @return integer
+     */
+    public function countMarkedFriends( $movieID, $mark ) {
+        $currentUserID = $this->getCurrentUserId();
+        
+        $condition = ConditionBuilder::build();
+        $condition->is('media_type', 'X\\Module\\Lunome\\Model\\Movie\\MovieModel');
+        $condition->is('mark', $mark);
+        $condition->is('media_id', $movieID);
+        
+        $friendCondition = array();
+        $releatedAttrName = MediaUserMarksModel::model()->getAttributeQueryName('account_id');
+        $friendCondition['account_friend'] = new SQLExpression($releatedAttrName);
+        $friendCondition = AccountFriendshipModel::query()->activeColumns(array('id'))->find($friendCondition);
+        $condition->exists($friendCondition);
+        
+        $count = MediaUserMarksModel::model()->count($condition);
+        return $count;
     }
     
     const MARK_UNMARKED     = 0;
