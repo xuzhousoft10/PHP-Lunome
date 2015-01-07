@@ -352,4 +352,29 @@ $(document).ready(function() {
             container.append(playerContainer);
         }, 'text');
     };
+    
+    /**
+     * 初始化标记帐号列表
+     */
+    var popovers = $('.detail-marked-account-list');
+    for ( var i in popovers ) {
+        popovers.eq(i).attr('attr-target', '#detail-marked-account-list-'+i)
+        .popover({
+            content   : '<div id="detail-marked-account-list-'+i+'" class="text-center" style="width:200px"><img src="'+popovers.eq(i).attr('data-loadding-img')+'"></div>',
+            placement : 'bottom',
+            html      : true,
+        })
+        .on('shown.bs.popover', function () {
+            var $this = $(this);
+            $.get('/?module=lunome&action=movie/markedUserList', {
+                id    : $this.attr('data-id'),
+                mark  : $this.attr('data-mark'),
+                scope : $this.attr('data-scope'),
+            }, function( response ) {
+                var container = $($this.attr('attr-target'));
+                container.removeClass('text-center').html(response);
+                container.parent().css('padding','0');
+            }, 'text');
+        });
+    }
 });

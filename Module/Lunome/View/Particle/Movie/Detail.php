@@ -113,25 +113,61 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                 <td>
                     想看: &nbsp;&nbsp;
                     <small>
-                        好友:<?php echo $markCount[MovieService::MARK_INTERESTED]['friend'];?>
+                        <a  href="#"
+                            class="detail-marked-account-list"
+                            data-id="<?php echo $media['id']; ?>"
+                            data-mark="<?php echo MovieService::MARK_INTERESTED; ?>"
+                            data-scope="friends"
+                            data-loadding-img = "<?php echo $assetsURL.'/image/loadding.gif';?>"
+                        >好友:<?php echo $markCount[MovieService::MARK_INTERESTED]['friend'];?></a>
                         /
-                        全网:<?php echo $markCount[MovieService::MARK_INTERESTED]['all'];?>
+                        <a  href="#"
+                            class="detail-marked-account-list"
+                            data-id="<?php echo $media['id']; ?>"
+                            data-mark="<?php echo MovieService::MARK_INTERESTED; ?>"
+                            data-scope="all"
+                            data-loadding-img = "<?php echo $assetsURL.'/image/loadding.gif';?>"
+                        >全网:<?php echo $markCount[MovieService::MARK_INTERESTED]['all'];?></a>
                     </small>
                 </td>
                 <td>
                     已看:  &nbsp;&nbsp;
                     <small>
-                        好友:<?php echo $markCount[MovieService::MARK_WATCHED]['friend'];?>
+                        <a  href="#"
+                            class="detail-marked-account-list" 
+                            data-id="<?php echo $media['id']; ?>"
+                            data-mark="<?php echo MovieService::MARK_WATCHED; ?>"
+                            data-scope="friends"
+                            data-loadding-img = "<?php echo $assetsURL.'/image/loadding.gif';?>"
+                        >好友:<?php echo $markCount[MovieService::MARK_WATCHED]['friend'];?></a>
                         /
-                        全网:<?php echo $markCount[MovieService::MARK_WATCHED]['all'];?>
+                        <a  href="#"
+                            class="detail-marked-account-list" 
+                            data-id="<?php echo $media['id']; ?>"
+                            data-mark="<?php echo MovieService::MARK_WATCHED; ?>"
+                            data-scope="all"
+                            data-loadding-img = "<?php echo $assetsURL.'/image/loadding.gif';?>"
+                        >全网:<?php echo $markCount[MovieService::MARK_WATCHED]['all'];?></a>
                     </small>
                 </td>
                 <td>
                     忽略:  &nbsp;&nbsp;
                     <small>
-                        好友:<?php echo $markCount[MovieService::MARK_IGNORED]['friend'];?>
+                        <a  href="#"
+                            class="detail-marked-account-list" 
+                            data-id="<?php echo $media['id']; ?>"
+                            data-mark="<?php echo MovieService::MARK_IGNORED; ?>"
+                            data-scope="friends"
+                            data-loadding-img = "<?php echo $assetsURL.'/image/loadding.gif';?>"
+                        >好友:<?php echo $markCount[MovieService::MARK_IGNORED]['friend'];?></a>
                         /
-                        全网:<?php echo $markCount[MovieService::MARK_IGNORED]['all'];?>
+                        <a  href="#"
+                            class="detail-marked-account-list" 
+                            data-id="<?php echo $media['id']; ?>"
+                            data-mark="<?php echo MovieService::MARK_IGNORED; ?>"
+                            data-scope="all"
+                            data-loadding-img = "<?php echo $assetsURL.'/image/loadding.gif';?>"
+                        >全网:<?php echo $markCount[MovieService::MARK_IGNORED]['all'];?></a>
                     </small>
                 </td>
                 <td></td>

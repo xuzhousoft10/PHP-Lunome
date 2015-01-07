@@ -29,6 +29,7 @@ use X\Module\Lunome\Model\Movie\MovieActorMapModel;
 use X\Module\Lunome\Model\Movie\MovieCharacterModel;
 use X\Module\Lunome\Model\MediaUserMarksModel;
 use X\Module\Lunome\Model\Account\AccountFriendshipModel;
+use X\Module\Lunome\Model\Account\AccountInformationModel;
 
 /**
  * The service class
@@ -597,6 +598,71 @@ class Service extends Media {
         
         $count = MediaUserMarksModel::model()->count($condition);
         return $count;
+    }
+    
+    /**
+     * 获取指定标记的电影的账户列表。
+     * @param string $movieId
+     * @param integer $mark
+     * @param integer $position
+     * @param integer $length
+     * @return \X\Module\Lunome\Model\Account\AccountInformationModel[]
+     */
+    public function getMarkedAccounts( $movieId, $mark, $position, $length=10 ) {
+        $condition = ConditionBuilder::build();
+    
+        $releatedAttrName = AccountInformationModel::model()->getAttributeQueryName('account_id');
+        $markConditon = array();
+        $markConditon['media_type'] = 'X\\Module\\Lunome\\Model\\Movie\\MovieModel';
+        $markConditon['media_id'] = $movieId;
+        $markConditon['mark'] = $mark;
+        $markConditon['account_id'] = new SQLExpression($releatedAttrName);;
+        $markConditon = MediaUserMarksModel::query()->activeColumns(array('id'))->findAll($markConditon);
+        $condition->exists($markConditon);
+        
+        $criteria = new Criteria();
+        $criteria->condition = $condition;
+        $criteria->position = $position;
+        $criteria->limit = $length;
+        
+        $accounts = AccountInformationModel::model()->findAll($criteria);
+        return $accounts;
+    }
+    
+    /**
+     * 获取指定标记的电影的当前用户的好友列表。
+     * @param string $movieId
+     * @param integer $mark
+     * @param integer $position
+     * @param integer $length
+     * @return \X\Module\Lunome\Model\Account\AccountInformationModel[]
+     */
+    public function getMarkedFriendAccounts(  $movieId, $mark, $position, $length=10 ) {
+        $condition = ConditionBuilder::build();
+        
+        $releatedAttrName = AccountInformationModel::model()->getAttributeQueryName('account_id');
+        $markConditon = array();
+        $markConditon['media_type'] = 'X\\Module\\Lunome\\Model\\Movie\\MovieModel';
+        $markConditon['media_id'] = $movieId;
+        $markConditon['mark'] = $mark;
+        $markConditon['account_id'] = new SQLExpression($releatedAttrName);;
+        $markConditon = MediaUserMarksModel::query()->activeColumns(array('id'))->findAll($markConditon);
+        $condition->exists($markConditon);
+        
+        $friendCondition = array();
+        $releatedAttrName = AccountInformationModel::model()->getAttributeQueryName('account_id');
+        $friendCondition['account_friend'] = new SQLExpression($releatedAttrName);
+        $friendCondition['account_me'] = $this->getCurrentUserId();
+        $friendCondition = AccountFriendshipModel::query()->activeColumns(array('id'))->find($friendCondition);
+        $condition->exists($friendCondition);
+        
+        $criteria = new Criteria();
+        $criteria->condition = $condition;
+        $criteria->position = $position;
+        $criteria->limit = $length;
+        
+        $accounts = AccountInformationModel::model()->findAll($criteria);
+        return $accounts;
     }
     
     const MARK_UNMARKED     = 0;
