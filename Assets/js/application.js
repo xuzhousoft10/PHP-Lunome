@@ -48,7 +48,13 @@ function userNotificationChecker( setTimer ) {
 
 function fixNotificationCountValue( diffValue ) {
     var oldCounter = $('#user-notification-trigger').attr('data-counter')*1;
-    $('#user-notification-trigger').attr('data-counter', oldCounter+diffValue);
+    var newValue= oldCounter+diffValue;
+    $('#user-notification-trigger').attr('data-counter', newValue);
+    
+    if ( 0 == newValue ) {
+        $('#user-notification-trigger').popover('hide');
+        $('#user-notification-trigger').hide();
+    }
 }
 
 function closeNotificationByID( notificationID, handler ) {

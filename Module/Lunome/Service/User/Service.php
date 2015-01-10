@@ -395,6 +395,15 @@ class Service extends \X\Core\Service\XService {
         return $notifications;
     }
     
+    public function getNotification( $id ) {
+        $notification = AccountNotificationModel::model()->findByPrimaryKey($id);
+        $notification = $notification->toArray();
+        $sourceModel = $notification['source_model'];
+        $sourceModel = $sourceModel::model()->findByPrimaryKey($notification['source_id']);
+        $notification['sourceData'] = $sourceModel->toArray();
+        return $notification;
+    }
+    
     /**
      * @param unknown $notificationID
      */

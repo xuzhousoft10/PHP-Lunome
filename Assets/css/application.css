@@ -1,9 +1,10 @@
 @CHARSET "UTF-8";
 
+#user-chat-container-container {overflow: auto;}
 #user-notification-container {width: 250px;}
 .user-notification-container-item {padding:5px}
 .user-information-text-area {width:165px;white-space:nowrap;}
-
+.user-notification-chat-message {width:150px;height:40px;overflow-y:hidden;}
 .lunome-image-60 {width:60px;height:60px}
 .lunome-image-100-150 {width:100px;height:150px}
 .lunome-height-150 {height:150px}

@@ -19,6 +19,7 @@ use X\Service\XDatabase\Core\SQL\Condition\Builder as ConditionBuilder;
 use X\Module\Lunome\Model\Account\AccountFriendshipRequestModel;
 use X\Module\Lunome\Model\Account\AccountFriendshipModel;
 use X\Service\XDatabase\Core\SQL\Expression as SQLExpression;
+use X\Module\Lunome\Model\Account\AccountChatContentModel;
 
 /**
  * Handle all friend operations.
@@ -372,6 +373,135 @@ class Account {
         $count = AccountFriendshipModel::model()->count($condition);
         return $count;
     }
+    
+    /**
+     * @param unknown $accountID
+     * @param unknown $content
+     */
+    public function sendChatMessage( $accountID, $content, $notificationView ) {
+        $currentUserID = $this->getCurrentUserId();
+        $record = new AccountChatContentModel();
+        $record->content = $content;
+        $record->reader_id = $accountID;
+        $record->writer_id = $currentUserID;
+        $record->wrote_at = date('Y-m-d H:i:s');
+        $record->status = self::CHAT_MESSAGE_UNREAD;
+        $record->save();
+        
+        $condition = array();
+        $condition['account_me'] = $currentUserID;
+        $condition['account_friend'] = $accountID;
+        /* @var $friendShipModel \X\Module\Lunome\Model\Account\AccountFriendshipModel */
+        $friendShipModel = AccountFriendshipModel::model()->find($condition);
+        
+        $isChattingWithThisFriend = self::ACCOUNT_IS_CHATTING_WITH_FRIEND_YES === $friendShipModel->is_chatting*1;
+        $isUnreadNotificationSended = self::CHAT_IS_UNREAD_NOTIFICATION_SENDED_YES === $friendShipModel->is_unread_notification_sended*1;
+        if ( !$isChattingWithThisFriend && !$isUnreadNotificationSended ) {
+            $sourceModel = 'X\\Module\\Lunome\\Model\\Account\\AccountChatContentModel';
+            $sourceId = $record->id;
+            $this->getUserService()->sendNotification($notificationView, $sourceModel, $sourceId, $accountID);
+            $friendShipModel->is_unread_notification_sended = self::CHAT_IS_UNREAD_NOTIFICATION_SENDED_YES;
+            $friendShipModel->save();
+        }
+        
+        return $record;
+    }
+    
+    /**
+     * @param unknown $friendID
+     */
+    public function cleanIsUnreadMotificationSendedMark( $friendID ) {
+        $condition = array();
+        $condition['account_me'] = $this->getCurrentUserId();
+        $condition['account_friend'] = $friendID;
+        /* @var $friendShipModel \X\Module\Lunome\Model\Account\AccountFriendshipModel */
+        $friendShipModel = AccountFriendshipModel::model()->find($condition);
+        $friendShipModel->is_unread_notification_sended = self::CHAT_IS_UNREAD_NOTIFICATION_SENDED_NO;
+        $friendShipModel->save();
+    }
+    
+    const CHAT_IS_UNREAD_NOTIFICATION_SENDED_YES = 1;
+    const CHAT_IS_UNREAD_NOTIFICATION_SENDED_NO = 0;
+    
+    /**
+     * @param string $markAsRead
+     */
+    public function getUnreadChatMessages( $writerId, $markAsRead=true ) {
+        $condition = array();
+        $condition['writer_id'] = $writerId;
+        $condition['status'] = self::CHAT_MESSAGE_UNREAD;
+        $condition['reader_id'] = $this->getCurrentUserId();
+        $messages = AccountChatContentModel::model()->findAll($condition);
+        foreach ( $messages as $message ) {
+            $message->status = self::CHAT_MESSAGE_READ;
+            $message->save();
+        }
+        return $messages;
+    }
+    
+    /**
+     * @param unknown $friendId
+     */
+    public function countUnreadChatMessagesByFriendID( $friendId ) {
+        $condition = array();
+        $condition['writer_id'] = $friendId;
+        $condition['status'] = self::CHAT_MESSAGE_UNREAD;
+        $condition['reader_id'] = $this->getCurrentUserId();
+        $count = AccountChatContentModel::model()->count($condition);
+        return $count;
+    }
+    
+    /**
+     * 标记当前用户正在与指定好友聊天。
+     * @param string $friendID 好友ID
+     */
+    public function markChattingWithFriend( $friendID ) {
+        $condition = array();
+        $condition['account_me'] = $this->getCurrentUserId();
+        $condition['account_friend'] = $friendID;
+        $friendShip = AccountFriendshipModel::model()->find($condition);
+        if ( null !== $friendShip ) {
+            $friendShip->is_chatting = self::ACCOUNT_IS_CHATTING_WITH_FRIEND_YES;
+            $friendShip->save();
+        }
+    }
+    
+    /**
+     * 标记当前用户结束与指定好友聊天。
+     * @param string $friendID 好友ID
+     */
+    public function unmarkChattingWithFriend($friendID) {
+        $condition = array();
+        $condition['account_me'] = $this->getCurrentUserId();
+        $condition['account_friend'] = $friendID;
+        $friendShip = AccountFriendshipModel::model()->find($condition);
+        if ( null !== $friendShip ) {
+            $friendShip->is_chatting = self::ACCOUNT_IS_CHATTING_WITH_FRIEND_NO;
+            $friendShip->save();
+        }
+    }
+    
+    /**
+     * 标记当前用户结束与指定好友聊天。
+     * @param string $friendID 好友ID
+     */
+    public function getIsChattingWithFriend( $friendID, $myId=null ) {
+        $condition = array();
+        $condition['account_me'] = (null===$myId) ? $this->getCurrentUserId() : $myId;
+        $condition['account_friend'] = $friendID;
+        $friendShip = AccountFriendshipModel::model()->find($condition);
+        if ( null !== $friendShip ) {
+            return $friendShip->is_chatting*1 === self::ACCOUNT_IS_CHATTING_WITH_FRIEND_YES;
+        } else {
+            return false;
+        }
+    }
+    
+    const ACCOUNT_IS_CHATTING_WITH_FRIEND_YES = 1;
+    const ACCOUNT_IS_CHATTING_WITH_FRIEND_NO  = 0;
+    
+    const CHAT_MESSAGE_UNREAD = 1;
+    const CHAT_MESSAGE_READ = 2;
     
     private $userService = null;
     
