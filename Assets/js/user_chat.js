@@ -45,4 +45,9 @@ $(document).ready(function() {
             return false;
         }
     });
+    
+    $(window).bind('beforeunload', function() {
+        $.get('/?module=lunome&action=user/chat/stop', {id:friendID}, function( response ) {
+        }, 'text');
+    } );
 });
