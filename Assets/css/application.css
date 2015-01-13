@@ -21,3 +21,15 @@
 .media-index-tool-bar {background-color:#000;color:#fff;line-height:50px;text-align:center;width: 50px;overflow: hidden;position: fixed;top: 200px;right: auto}
 .media-index-tool-bar-item {border-top: 1px solid rgba(89, 83, 83, 1);}
 .media-index-tool-bar-item > a {color: #DDDDDD;text-decoration: none;}
+
+
+
+/* 定义用于显示电影的样式。 */
+.lunome-movie-item {text-align: center;line-height: 3em;width:200px;margin: 0px 10px;}
+.lunome-movie-item a {text-decoration:none;}
+.lunome-movie-poster {background-size: 200px 300px; height: 300px; width:200px;}
+.lunome-movie-desc-no-button {cursor:pointer;height:300px;line-height:1.5em;padding:10px;background-color:rgba(0, 0, 0, 0.5);overflow:hidden;color:#E9E9E9;}
+.lunome-movie-desc-has-button {cursor:pointer;height:264px;line-height:1.5em;padding:10px;background-color:rgba(0, 0, 0, 0.5);overflow:hidden;color:#E9E9E9;}
+.lunome-movie-desc-button-group {}
+.lunome-movie-title-area-short { line-height:1em;margin-bottom: 20px; margin-top: 10px;}
+.lunome-movie-title-area-high {}

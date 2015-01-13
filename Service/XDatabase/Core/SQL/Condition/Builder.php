@@ -54,8 +54,9 @@ class Builder extends \X\Service\XDatabase\Core\Basic {
             || $condition instanceof Builder ) {
             $this->conditions[] = $condition;
             $this->addConnector(Connector::CONNECTOR_AND);
+        } else if ( method_exists($condition, 'toString') ) {
+            $this->addCondition($condition->toString());
         }
-        
         return $this;
     }
     

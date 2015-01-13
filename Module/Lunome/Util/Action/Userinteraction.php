@@ -53,10 +53,10 @@ abstract class Userinteraction extends VisualMain {
         $this->interactionMenu[self::INTERACTION_MENU_ITEM_INDEX]['link'] = '/?module=lunome&action=user/interaction/index';
         
         $this->interactionMenu[self::INTERACTION_MENU_ITEM_INVITE_TO_WATCH_MOVIE]['label'] = '想请TA看场电影';
-        $this->interactionMenu[self::INTERACTION_MENU_ITEM_INVITE_TO_WATCH_MOVIE]['link'] = '/?module=lunome&action=user/interaction/inviteToWatchMovie';
+        $this->interactionMenu[self::INTERACTION_MENU_ITEM_INVITE_TO_WATCH_MOVIE]['link'] = '/?module=lunome&action=movie/interaction/inviteToWatchMovie';
         
         $this->interactionMenu[self::INTERACTION_MENU_ITEM_GET_TOPIC]['label'] = '想与TA找点话题';
-        $this->interactionMenu[self::INTERACTION_MENU_ITEM_GET_TOPIC]['link'] = '/?module=lunome&action=user/interaction/findTopic';
+        $this->interactionMenu[self::INTERACTION_MENU_ITEM_GET_TOPIC]['link'] = '/?module=lunome&action=movie/interaction/findTopic';
         
         $this->setActiveInteractionMenuItem(self::INTERACTION_MENU_ITEM_INDEX);
     }

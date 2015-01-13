@@ -30,6 +30,9 @@ use X\Module\Lunome\Model\Movie\MovieCharacterModel;
 use X\Module\Lunome\Model\MediaUserMarksModel;
 use X\Module\Lunome\Model\Account\AccountFriendshipModel;
 use X\Module\Lunome\Model\Account\AccountInformationModel;
+use X\Service\XDatabase\Core\SQL\Builder as SQLBuilder;
+use X\Module\Lunome\Model\Movie\MovieInvitationModel;
+use X\Service\XDatabase\Core\SQL\Condition\Condition as SQLCondition;
 
 /**
  * The service class
@@ -664,6 +667,129 @@ class Service extends Media {
         $accounts = AccountInformationModel::model()->findAll($criteria);
         return $accounts;
     }
+    
+    /**
+     * @param unknown $accounts
+     */
+    public function getInterestedMovieSetByAccounts ( $accounts, $length=0, $position=0 ) {
+        $marks = SQLBuilder::build()->select()
+            ->addExpression('id')
+            ->addTable(MediaUserMarksModel::model()->getTableFullName(), 'mark_accounts')
+            ->where(ConditionBuilder::build()
+                ->is('mark', self::MARK_INTERESTED)
+                ->in('account_id', $accounts)
+                ->addCondition(new SQLExpression('mark_movies.id=mark_accounts.id'))
+            );
+        
+        $markTable = MediaUserMarksModel::model()->getTableFullName();
+        $sql = SQLBuilder::build()->select()
+            ->addExpression('media_id')
+            ->from(array('mark_movies'=>$markTable))
+            ->groupBy('media_id')
+            ->where(ConditionBuilder::build()
+                ->is('media_type', 'X\\Module\\Lunome\\Model\\Movie\\MovieModel')
+                ->exists($marks)
+            )
+            ->having('COUNT(`media_id`)='.count($accounts));
+        
+        $criteria = new Criteria();
+        $criteria->limit = $length;
+        $criteria->position = $position;
+        $criteria->condition = ConditionBuilder::build()->in('id', $sql);
+        $movies = MovieModel::model()->findAll($criteria);
+        return $movies;
+    }
+    
+    /**
+     * @param unknown $accountID
+     * @param unknown $movieID
+     * @param unknown $comment
+     */
+    public function sendMovieInvitation( $accountID, $movieID, $comment, $view ) {
+        $invitation = new MovieInvitationModel();
+        $invitation->account_id = $accountID;
+        $invitation->invited_at = date('Y-m-d H:i:s');
+        $invitation->inviter_id = $this->getCurrentUserId();
+        $invitation->movie_id = $movieID;
+        $invitation->comment = $comment;
+        $invitation->save();
+        
+        $sourceModel    = 'X\\Module\\Lunome\\Model\\Movie\\MovieInvitationModel';
+        $sourceId       = $invitation->id;
+        $recipiendId    = $accountID;
+        $this->getUserService()->sendNotification($view, $sourceModel, $sourceId, $recipiendId);
+        return $invitation;
+    }
+    
+    /**
+     * @param unknown $invitationID
+     * @param unknown $answer
+     * @param unknown $comment
+     * @param unknown $view
+     */
+    public function answerMovieInvitation( $invitationID, $answer, $comment, $view ) {
+        /* @var $invitation \X\Module\Lunome\Model\Movie\MovieInvitationModel  */
+        $invitation = MovieInvitationModel::model()->findByPrimaryKey($invitationID);
+        $invitation->answer = (self::INVITATION_ANSWER_YES===$answer*1) ? self::INVITATION_ANSWER_YES : self::INVITATION_ANSWER_NO;
+        $invitation->answered_at = date('Y-m-d H:i:s');
+        $invitation->answer_comment = $comment;
+        $invitation->save();
+        
+        $sourceModel    = 'X\\Module\\Lunome\\Model\\Movie\\MovieInvitationModel';
+        $sourceId       = $invitation->id;
+        $recipiendId    = $invitation->inviter_id;
+        $this->getUserService()->sendNotification($view, $sourceModel, $sourceId, $recipiendId);
+        return $invitation;
+    }
+    
+    /**
+     * @param unknown $accounts
+     * @param unknown $score
+     * @param string $operator
+     * @return Ambigous <\X\Service\XDatabase\Core\ActiveRecord\XActiveRecord, NULL>
+     */
+    public function getWatchedMoviesByAccounts( $accounts, $score, $operator='=', $length=0, $position=0 ) {
+        $markAccountsCondition = SQLBuilder::build()->select()
+            ->addExpression('id')
+            ->addTable(MediaUserMarksModel::model()->getTableFullName(), 't2')
+            ->where(ConditionBuilder::build()
+                ->is('t1.id', new SQLExpression('`t2`.`id`'))
+                ->is('t2.media_type', 'X\\Module\\Lunome\\Model\\Movie\\MovieModel')
+                ->is('mark', self::MARK_WATCHED)
+                ->in('t2.account_id', $accounts)
+            );
+        
+        $markCondition = SQLBuilder::build()->select()
+            ->addExpression('media_id')
+            ->addTable(MediaUserMarksModel::model()->getTableFullName(), 't1')
+            ->groupBy('t1.media_id')
+            ->having('COUNT(t1.account_id) = '.count($accounts))
+            ->where(ConditionBuilder::build()->exists($markAccountsCondition));
+        
+        $movieCondition = SQLBuilder::build()->select()
+            ->addExpression('movie_id')
+            ->addTable(MovieUserRateModel::model()->getTableFullName())
+            ->groupBy('movie_id')
+            ->where(ConditionBuilder::build()
+                ->in('account_id', $accounts)
+                ->addSigleCondition('score', $operator, $score)
+                ->in('movie_id', $markCondition)
+            );
+        
+        $criteria = new Criteria();
+        $criteria->limit = $length;
+        $criteria->position = $position;
+        $criteria->condition = ConditionBuilder::build()->in('id', $movieCondition);
+        $movies = MovieModel::model()->findAll($criteria);
+        return $movies;
+    }
+    
+    const SCORE_OPERATOR_EQUAL = SQLCondition::OPERATOR_EQUAL;
+    const SCORE_OPERATOR_GREATER = SQLCondition::OPERATOR_GREATER_THAN;
+    const SCORE_OPERATOR_LESS_OR_EQUAL = SQLCondition::OPERATOR_LESS_OR_EQUAL;
+    
+    const INVITATION_ANSWER_YES = 1;
+    const INVITATION_ANSWER_NO = 2;
     
     const MARK_UNMARKED     = 0;
     const MARK_INTERESTED   = 1;
