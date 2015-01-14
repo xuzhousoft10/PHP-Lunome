@@ -1,5 +1,5 @@
 <?php
-namespace X\Module\Lunome\Model;
+namespace X\Module\Lunome\Model\System;
 
 /**
  * Use statements
@@ -13,7 +13,7 @@ use X\Util\Model\Basic;
  * @property string $updated_at
  * @property string $updated_by
  **/
-class ConfigurationModel extends Basic {
+class SystemConfigurationModel extends Basic {
     /**
      * (non-PHPdoc)
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::describe()
@@ -33,6 +33,6 @@ class ConfigurationModel extends Basic {
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::getTableName()
      */
     protected function getTableName() {
-        return 'configurations';
+        return 'system_configurations';
     }
 }

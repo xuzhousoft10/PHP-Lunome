@@ -47,7 +47,7 @@ class AccountOauth20Model extends Basic {
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::getTableName()
      */
     protected function getTableName() {
-        return 'oauth_20';
+        return 'account_oauth_20';
     }
     
     /* OAuthr services */
