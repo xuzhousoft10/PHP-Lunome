@@ -8,7 +8,7 @@ namespace X\Module\Lunome\Util\Service;
  * 
  */
 use X\Core\X;
-use X\Module\Lunome\Model\MediaUserMarksModel;
+use X\Module\Lunome\Model\Movie\MovieUserMarkModel;
 use X\Service\XDatabase\Core\SQL\Expression as SQLExpression;
 use X\Service\XDatabase\Core\SQL\Condition\Builder as ConditionBuilder;
 use X\Module\Lunome\Service\User\Service as UserService;
@@ -164,18 +164,16 @@ abstract class Media extends \X\Core\Service\XService {
         $mediaModelName = $this->getMediaModelName();
         
         $deleteCondition = array();
-        $deleteCondition['media_type'] = $mediaModelName;
-        $deleteCondition['media_id'] = $id;
+        $deleteCondition['movie_id'] = $id;
         $deleteCondition['account_id'] = $this->getCurrentUserId();
-        MediaUserMarksModel::model()->deleteAll($deleteCondition);
+        MovieUserMarkModel::model()->deleteAll($deleteCondition);
         
         if ( 0 === $mark*1 ) {
             return;
         }
         
-        $markModel = new MediaUserMarksModel();
-        $markModel->media_id = $id;
-        $markModel->media_type = $mediaModelName;
+        $markModel = new MovieUserMarkModel();
+        $markModel->movie_id = $id;
         $markModel->account_id = $this->getCurrentUserId();
         $markModel->mark = $mark;
         $markModel->save();
@@ -191,10 +189,9 @@ abstract class Media extends \X\Core\Service\XService {
         $mediaModelName = $this->getMediaModelName();
         
         $deleteCondition = array();
-        $deleteCondition['media_type'] = $mediaModelName;
-        $deleteCondition['media_id'] = $id;
+        $deleteCondition['movie_id'] = $id;
         $deleteCondition['account_id'] = $this->getCurrentUserId();
-        MediaUserMarksModel::model()->deleteAll($deleteCondition);
+        MovieUserMarkModel::model()->deleteAll($deleteCondition);
         $this->logAction($this->getActionName('unmark'), $id, self::RESULT_CODE_SUCCESS, null, $mark);
     }
     
@@ -206,10 +203,9 @@ abstract class Media extends \X\Core\Service\XService {
      */
     public function getMark( $id, $user=null ) {
         $condition = array();
-        $condition['media_type']    = $this->getMediaModelName();
-        $condition['media_id']      = $id;
+        $condition['movie_id']      = $id;
         $condition['account_id']    = ( null === $user ) ? $this->getCurrentUserId() : $user;
-        $mark = MediaUserMarksModel::model()->find($condition);
+        $mark = MovieUserMarkModel::model()->find($condition);
         return ( null === $mark ) ? 0 : $mark->mark*1;
     }
     
@@ -221,7 +217,7 @@ abstract class Media extends \X\Core\Service\XService {
     public function getTopList( $type, $limit ) {
         $modelName = $this->getMediaModelName();
         $modelTableName = $modelName::model()->getTableFullName();
-        $markTableName = MediaUserMarksModel::model()->getTableFullName();
+        $markTableName = MovieUserMarkModel::model()->getTableFullName();
         
         $query = SQLBuilder::build()->select()
             ->addExpression('medias.id', 'id')
@@ -229,8 +225,8 @@ abstract class Media extends \X\Core\Service\XService {
             ->addExpression(new Count('marks.id'), 'mark_count')
             ->addTable($modelTableName, 'medias')
             ->addTable($markTableName, 'marks')
-            ->where(array('marks.mark'=>$type, 'medias.id'=>new Expression('`marks`.`media_id`')))
-            ->groupBy('marks.media_id')
+            ->where(array('marks.mark'=>$type, 'medias.id'=>new Expression('`marks`.`movie_id`')))
+            ->groupBy('marks.movie_id')
             ->orderBy('mark_count', 'DESC')
             ->toString();
         $result = $this->getDb()->query($query);
@@ -316,10 +312,9 @@ abstract class Media extends \X\Core\Service\XService {
         
         /* Generate basic condition to ignore marked movies. */
         $markedCondition = array();
-        $markedCondition['media_id'] = new SQLExpression($mediaTable.'.id');
-        $markedCondition['media_type'] = $mediaModelName;
+        $markedCondition['movie_id'] = new SQLExpression($mediaTable.'.id');
         $markedCondition['account_id'] = $this->getCurrentUserId();
-        $markedMedias = MediaUserMarksModel::query()->activeColumns(array('media_id'))->find($markedCondition);
+        $markedMedias = MovieUserMarkModel::query()->activeColumns(array('movie_id'))->find($markedCondition);
         $basicCondition = ConditionBuilder::build()->notExists($markedMedias);
         return $basicCondition;
     }
@@ -333,8 +328,7 @@ abstract class Media extends \X\Core\Service\XService {
         $mediaTable = $mediaModelName::model()->getTableFullName();
         
         $markedCondition = array();
-        $markedCondition['media_type'] = $mediaModelName;
-        $markedCondition['media_id'] = new SQLExpression($mediaTable.'.id');
+        $markedCondition['movie_id'] = new SQLExpression($mediaTable.'.id');
         
         if ( 0 === $account ) {
             $markedCondition['account_id'] = $this->getCurrentUserId();
@@ -345,7 +339,7 @@ abstract class Media extends \X\Core\Service\XService {
         }
         $markedCondition['mark'] = $mark;
 
-        $markCondition = MediaUserMarksModel::query()->activeColumns(array('media_id'))->find($markedCondition);
+        $markCondition = MovieUserMarkModel::query()->activeColumns(array('movie_id'))->find($markedCondition);
         $basicCondition = ConditionBuilder::build()->exists($markCondition);
         return $basicCondition;
     }

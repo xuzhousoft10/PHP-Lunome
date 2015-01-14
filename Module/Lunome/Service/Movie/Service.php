@@ -27,7 +27,7 @@ use X\Module\Lunome\Model\Movie\MovieDirectorMapModel;
 use X\Module\Lunome\Model\People\PeopleModel;
 use X\Module\Lunome\Model\Movie\MovieActorMapModel;
 use X\Module\Lunome\Model\Movie\MovieCharacterModel;
-use X\Module\Lunome\Model\MediaUserMarksModel;
+use X\Module\Lunome\Model\Movie\MovieUserMarkModel;
 use X\Module\Lunome\Model\Account\AccountFriendshipModel;
 use X\Module\Lunome\Model\Account\AccountInformationModel;
 use X\Service\XDatabase\Core\SQL\Builder as SQLBuilder;
@@ -572,10 +572,9 @@ class Service extends Media {
      */
     public function countMarkedUsers( $movieID, $mark ) {
         $condition = array();
-        $condition['media_type']= 'X\\Module\\Lunome\\Model\\Movie\\MovieModel';
         $condition['mark']      = $mark;
-        $condition['media_id']  = $movieID;
-        $count = MediaUserMarksModel::model()->count($condition);
+        $condition['movie_id']  = $movieID;
+        $count = MovieUserMarkModel::model()->count($condition);
         return $count;
     }
     
@@ -589,17 +588,16 @@ class Service extends Media {
         $currentUserID = $this->getCurrentUserId();
         
         $condition = ConditionBuilder::build();
-        $condition->is('media_type', 'X\\Module\\Lunome\\Model\\Movie\\MovieModel');
         $condition->is('mark', $mark);
-        $condition->is('media_id', $movieID);
+        $condition->is('movie_id', $movieID);
         
         $friendCondition = array();
-        $releatedAttrName = MediaUserMarksModel::model()->getAttributeQueryName('account_id');
+        $releatedAttrName = MovieUserMarkModel::model()->getAttributeQueryName('account_id');
         $friendCondition['account_friend'] = new SQLExpression($releatedAttrName);
         $friendCondition = AccountFriendshipModel::query()->activeColumns(array('id'))->find($friendCondition);
         $condition->exists($friendCondition);
         
-        $count = MediaUserMarksModel::model()->count($condition);
+        $count = MovieUserMarkModel::model()->count($condition);
         return $count;
     }
     
@@ -616,11 +614,10 @@ class Service extends Media {
     
         $releatedAttrName = AccountInformationModel::model()->getAttributeQueryName('account_id');
         $markConditon = array();
-        $markConditon['media_type'] = 'X\\Module\\Lunome\\Model\\Movie\\MovieModel';
-        $markConditon['media_id'] = $movieId;
+        $markConditon['movie_id'] = $movieId;
         $markConditon['mark'] = $mark;
         $markConditon['account_id'] = new SQLExpression($releatedAttrName);;
-        $markConditon = MediaUserMarksModel::query()->activeColumns(array('id'))->findAll($markConditon);
+        $markConditon = MovieUserMarkModel::query()->activeColumns(array('id'))->findAll($markConditon);
         $condition->exists($markConditon);
         
         $criteria = new Criteria();
@@ -645,11 +642,10 @@ class Service extends Media {
         
         $releatedAttrName = AccountInformationModel::model()->getAttributeQueryName('account_id');
         $markConditon = array();
-        $markConditon['media_type'] = 'X\\Module\\Lunome\\Model\\Movie\\MovieModel';
-        $markConditon['media_id'] = $movieId;
+        $markConditon['movie_id'] = $movieId;
         $markConditon['mark'] = $mark;
         $markConditon['account_id'] = new SQLExpression($releatedAttrName);;
-        $markConditon = MediaUserMarksModel::query()->activeColumns(array('id'))->findAll($markConditon);
+        $markConditon = MovieUserMarkModel::query()->activeColumns(array('id'))->findAll($markConditon);
         $condition->exists($markConditon);
         
         $friendCondition = array();
@@ -674,23 +670,20 @@ class Service extends Media {
     public function getInterestedMovieSetByAccounts ( $accounts, $length=0, $position=0 ) {
         $marks = SQLBuilder::build()->select()
             ->addExpression('id')
-            ->addTable(MediaUserMarksModel::model()->getTableFullName(), 'mark_accounts')
+            ->addTable(MovieUserMarkModel::model()->getTableFullName(), 'mark_accounts')
             ->where(ConditionBuilder::build()
                 ->is('mark', self::MARK_INTERESTED)
                 ->in('account_id', $accounts)
                 ->addCondition(new SQLExpression('mark_movies.id=mark_accounts.id'))
             );
         
-        $markTable = MediaUserMarksModel::model()->getTableFullName();
+        $markTable = MovieUserMarkModel::model()->getTableFullName();
         $sql = SQLBuilder::build()->select()
-            ->addExpression('media_id')
+            ->addExpression('movie_id')
             ->from(array('mark_movies'=>$markTable))
-            ->groupBy('media_id')
-            ->where(ConditionBuilder::build()
-                ->is('media_type', 'X\\Module\\Lunome\\Model\\Movie\\MovieModel')
-                ->exists($marks)
-            )
-            ->having('COUNT(`media_id`)='.count($accounts));
+            ->groupBy('movie_id')
+            ->where(ConditionBuilder::build()->exists($marks))
+            ->having('COUNT(`movie_id`)='.count($accounts));
         
         $criteria = new Criteria();
         $criteria->limit = $length;
@@ -751,18 +744,17 @@ class Service extends Media {
     public function getWatchedMoviesByAccounts( $accounts, $score, $operator='=', $length=0, $position=0 ) {
         $markAccountsCondition = SQLBuilder::build()->select()
             ->addExpression('id')
-            ->addTable(MediaUserMarksModel::model()->getTableFullName(), 't2')
+            ->addTable(MovieUserMarkModel::model()->getTableFullName(), 't2')
             ->where(ConditionBuilder::build()
                 ->is('t1.id', new SQLExpression('`t2`.`id`'))
-                ->is('t2.media_type', 'X\\Module\\Lunome\\Model\\Movie\\MovieModel')
                 ->is('mark', self::MARK_WATCHED)
                 ->in('t2.account_id', $accounts)
             );
         
         $markCondition = SQLBuilder::build()->select()
-            ->addExpression('media_id')
-            ->addTable(MediaUserMarksModel::model()->getTableFullName(), 't1')
-            ->groupBy('t1.media_id')
+            ->addExpression('movie_id')
+            ->addTable(MovieUserMarkModel::model()->getTableFullName(), 't1')
+            ->groupBy('t1.movie_id')
             ->having('COUNT(t1.account_id) = '.count($accounts))
             ->where(ConditionBuilder::build()->exists($markAccountsCondition));
         

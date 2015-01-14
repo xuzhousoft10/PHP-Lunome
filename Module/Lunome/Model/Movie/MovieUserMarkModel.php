@@ -1,5 +1,5 @@
 <?php
-namespace X\Module\Lunome\Model;
+namespace X\Module\Lunome\Model\Movie;
 
 /**
  * Use statements
@@ -8,12 +8,11 @@ use X\Util\Model\Basic;
 
 /**
  * @property string $id
- * @property string $media_type
- * @property string $media_id
+ * @property string $movie_id
  * @property string $account_id
  * @property string $mark
  **/
-class MediaUserMarksModel extends Basic {
+class MovieUserMarkModel extends Basic {
     /**
      * (non-PHPdoc)
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::describe()
@@ -21,8 +20,7 @@ class MediaUserMarksModel extends Basic {
     protected function describe() {
         $columns = array();
         $columns['id']          = 'PRIMARY VARCHAR(36) NOTNULL';
-        $columns['media_type']  = 'VARCHAR(128) NOTNULL';
-        $columns['media_id']    = 'VARCHAR(36) NOTNULL';
+        $columns['movie_id']    = 'VARCHAR(36) NOTNULL';
         $columns['account_id']  = 'VARCHAR(36) NOTNULL';
         $columns['mark']        = 'TINYINT NOTNULL';
         return $columns;
@@ -33,6 +31,6 @@ class MediaUserMarksModel extends Basic {
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::getTableName()
      */
     protected function getTableName() {
-        return 'media_user_marks';
+        return 'movie_user_marks';
     }
 }
