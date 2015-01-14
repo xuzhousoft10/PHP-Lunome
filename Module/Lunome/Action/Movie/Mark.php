@@ -12,7 +12,7 @@ use X\Module\Lunome\Service\User\Account;
 use X\Module\Lunome\Util\Action\Media\Mark as MediaMark;
 use X\Module\Lunome\Service\User\Service as UserService;
 use X\Module\Lunome\Service\Movie\Service as MovieService;
-use X\Module\Lunome\Model\Oauth20Model;
+use X\Module\Lunome\Model\Account\AccountOauth20Model;
 
 /**
  * The action class for movie/ignore action.
@@ -41,13 +41,13 @@ class Mark extends MediaMark {
             }
             
             $oauth = $userService->getAccount()->getOauth();
-            if ( Oauth20Model::SERVER_QQ === $oauth['server'] ) {
+            if ( AccountOauth20Model::SERVER_QQ === $oauth['server'] ) {
                 if ( false === $image ) {
                     $userService->getQQConnect()->Tweet()->add($message);
                 } else {
                     $userService->getQQConnect()->Tweet()->addWithPicture($message, $tmpName);
                 }
-            } else if ( Oauth20Model::SERVER_SINA === $oauth['server'] ) {
+            } else if ( AccountOauth20Model::SERVER_SINA === $oauth['server'] ) {
                 if ( false === $image ) {
                     $userService->getWeiboConnect()->Status()->update($message);
                 } else {

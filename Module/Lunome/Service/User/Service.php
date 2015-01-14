@@ -8,7 +8,7 @@ namespace X\Module\Lunome\Service\User;
  * 
  */
 use X\Core\X;
-use X\Module\Lunome\Model\Oauth20Model;
+use X\Module\Lunome\Model\Account\AccountOauth20Model;
 use X\Module\Lunome\Model\Account\AccountModel;
 use X\Service\XDatabase\Core\SQL\Func\Rand;
 use X\Module\Lunome\Model\Account\AccountLoginHistoryModel;
@@ -104,11 +104,11 @@ class Service extends \X\Core\Service\XService {
         $token = $qqConnect->getTokenInfo();
         
         $openId = $qqConnect->getOpenId();
-        $condition = array('server'=>Oauth20Model::SERVER_QQ, 'openid'=>$openId);
-        $oauth = Oauth20Model::model()->find($condition);
+        $condition = array('server'=>AccountOauth20Model::SERVER_QQ, 'openid'=>$openId);
+        $oauth = AccountOauth20Model::model()->find($condition);
         if ( null === $oauth ) {
-            $oauth = new Oauth20Model();
-            $oauth->server = Oauth20Model::SERVER_QQ;
+            $oauth = new AccountOauth20Model();
+            $oauth->server = AccountOauth20Model::SERVER_QQ;
             $oauth->openid = $qqConnect->getOpenId();
         }
         $oauth->access_token    = $token['access_token'];
@@ -138,11 +138,11 @@ class Service extends \X\Core\Service\XService {
         $token = $connect->accessToken;
         $openId = $connect->uid;
         
-        $condition = array('server'=>Oauth20Model::SERVER_SINA, 'openid'=>$openId);
-        $oauth = Oauth20Model::model()->find($condition);
+        $condition = array('server'=>AccountOauth20Model::SERVER_SINA, 'openid'=>$openId);
+        $oauth = AccountOauth20Model::model()->find($condition);
         if ( null === $oauth ) {
-            $oauth = new Oauth20Model();
-            $oauth->server = Oauth20Model::SERVER_SINA;
+            $oauth = new AccountOauth20Model();
+            $oauth->server = AccountOauth20Model::SERVER_SINA;
             $oauth->openid = $openId;
         }
         $oauth->access_token    = $token;
@@ -207,16 +207,16 @@ class Service extends \X\Core\Service\XService {
      * @param Oauth20Model $oauth
      * @return Ambigous <\X\Module\Lunome\Model\AccountModel, \X\Service\XDatabase\Core\ActiveRecord\ActiveRecord, NULL>
      */
-    protected function getAccountByOAuth( Oauth20Model $oauth ) {
+    protected function getAccountByOAuth( AccountOauth20Model $oauth ) {
         $account = AccountModel::model()->find(array('oauth20_id'=>$oauth->id));
         
         $information = array();
-        if ( Oauth20Model::SERVER_QQ === $oauth->server ) {
+        if ( AccountOauth20Model::SERVER_QQ === $oauth->server ) {
             $connect = $this->getQQConnect();
             $userInfo = $connect->QZone()->getInfo();
             $information['nickname'] = $userInfo['nickname'];
             $information['photo'] = $userInfo['figureurl_qq_2'];
-        } else if ( Oauth20Model::SERVER_SINA === $oauth->server ) {
+        } else if ( AccountOauth20Model::SERVER_SINA === $oauth->server ) {
             $connect = $this->getWeiboConnect();
             $userInfo = $connect->User()->getInfo();
             $information['nickname'] = $userInfo['name'];

@@ -1,5 +1,5 @@
 <?php
-namespace X\Module\Lunome\Model;
+namespace X\Module\Lunome\Model\Account;
 
 /**
  * Use statements
@@ -26,7 +26,7 @@ CREATE TABLE `oauth_20` (
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
  **/
-class Oauth20Model extends Basic {
+class AccountOauth20Model extends Basic {
     /**
      * (non-PHPdoc)
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::describe()

@@ -9,7 +9,7 @@ namespace X\Module\Lunome\Service\User;
  */
 use X\Core\X;
 use X\Module\Lunome\Model\Account\AccountModel;
-use X\Module\Lunome\Model\Oauth20Model;
+use X\Module\Lunome\Model\Account\AccountOauth20Model;
 use X\Module\Lunome\Model\Account\AccountLoginHistoryModel;
 use X\Module\Lunome\Model\Account\AccountHistoryModel;
 use X\Module\Lunome\Model\Account\AccountConfigurationModel;
@@ -64,7 +64,7 @@ class Account {
             $account = AccountModel::model()->findByPrimaryKey($this->getCurrentUserId());
             $id = $account->oauth20_id;
         }
-        $oauth = Oauth20Model::model()->findByPrimaryKey($id);
+        $oauth = AccountOauth20Model::model()->findByPrimaryKey($id);
         return (null === $oauth) ? null : $oauth->toArray();
     }
     
