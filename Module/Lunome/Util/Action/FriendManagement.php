@@ -61,6 +61,11 @@ abstract class FriendManagement extends VisualMain {
         $items[self::FRIEND_MENU_ITEM_SEARCH]['isActive']  = false;
         $items[self::FRIEND_MENU_ITEM_SEARCH]['link']      = '/?module=lunome&action=user/friend/search';
         
+        $items[self::FRIEND_MENU_ITEM_INTERACTION] = array();
+        $items[self::FRIEND_MENU_ITEM_INTERACTION]['label']     = '集体互动';
+        $items[self::FRIEND_MENU_ITEM_INTERACTION]['isActive']  = false;
+        $items[self::FRIEND_MENU_ITEM_INTERACTION]['link']      = '/?module=lunome&action=user/friend/interaction';
+        
         $this->settingItems = $items;
     }
     
@@ -79,6 +84,7 @@ abstract class FriendManagement extends VisualMain {
      */
     const FRIEND_MENU_ITEM_LIST = 'list';
     const FRIEND_MENU_ITEM_SEARCH = 'search';
+    const FRIEND_MENU_ITEM_INTERACTION = 'interaction';
     
     /**
      * 

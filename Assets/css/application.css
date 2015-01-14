@@ -33,3 +33,6 @@
 .lunome-movie-desc-button-group {}
 .lunome-movie-title-area-short { line-height:1em;margin-bottom: 20px; margin-top: 10px;}
 .lunome-movie-title-area-high {}
+
+/* 好友集体互动 */
+.lunome-friends-interaction-friends-container {height: 450px;overflow: auto;}

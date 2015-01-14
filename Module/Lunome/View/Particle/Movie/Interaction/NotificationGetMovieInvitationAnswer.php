@@ -57,7 +57,7 @@
                             target="_blank"
                         >与<?php echo $requester->nickname;?>聊天</a>
                     <?php endif; ?>
-                    <button type="button" class="btn btn-primary button-invite-to-watch-movie-detail-dialog-<?php echo $elemMark; ?>-got-it">答应</button>
+                    <button type="button" class="btn btn-primary button-invite-to-watch-movie-detail-dialog-<?php echo $elemMark; ?>-got-it">知道了</button>
                 </div>
             </div>
         </div>

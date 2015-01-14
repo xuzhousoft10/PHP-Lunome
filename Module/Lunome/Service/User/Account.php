@@ -231,6 +231,15 @@ class Account {
     }
     
     /**
+     * @param unknown $accountIDs
+     * @return Ambigous <\X\Service\XDatabase\Core\ActiveRecord\XActiveRecord, NULL>
+     */
+    public function getInformations ( $accountIDs ) {
+        $informations = AccountInformationModel::model()->findAll(array('account_id'=>$accountIDs));
+        return $informations;
+    }
+    
+    /**
      * @param unknown $information
      * @param string $accountID
      * @return \X\Module\Lunome\Model\Account\AccountInformation
@@ -349,7 +358,7 @@ class Account {
      * @param unknown $length
      * @return \X\Module\Lunome\Model\Account\AccountInformationModel[]
      */
-    public function getFriends( $position, $length=0 ) {
+    public function getFriends( $position=0, $length=0 ) {
         $criteria = new Criteria();
         $criteria->condition = array('account_me'=>$this->getCurrentUserId());
         $criteria->position = $position;
