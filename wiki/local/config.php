@@ -44,7 +44,7 @@ include_once("scripts/xlpage-utf-8.php");
 
 ##  PmWiki comes with graphical user interface buttons for editing;
 ##  to enable these buttons, set $EnableGUIButtons to 1.  
-$EnableGUIButtons = 1;
+#$EnableGUIButtons = 1;
 
 ##  To enable markup syntax from the Creole common wiki markup language
 ##  (http://www.wikicreole.org/), include it here:
@@ -154,3 +154,7 @@ $EnableGUIButtons = 1;
 # $GUIButtons['table'] = array(600,
 #                       '||border=1 width=80%\\n||!Hdr ||!Hdr ||!Hdr ||\\n||     ||     ||     ||\\n||     ||     ||     ||\\n', '', '', 
 #                     '$GUIButtonDirUrlFmt/table.gif"$[Table]"');
+
+## The following values use to setup the home page of wiki system.
+$DefaultGroup = 'Main';
+$DefaultName = '主页';
