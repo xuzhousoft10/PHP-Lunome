@@ -14,7 +14,7 @@ $WikiTitle = 'Lunome 文档&amp;手册';
 ##  it depends on your webserver and PHP configuration.  You might also 
 ##  want to check http://www.pmwiki.org/wiki/Cookbook/CleanUrls more
 ##  details about this setting and other ways to create nicer-looking urls.
-# $EnablePathInfo = 1;
+$EnablePathInfo = 1;
 
 ## $PageLogoUrl is the URL for a logo image -- you can change this
 ## to your own logo if you wish.
@@ -44,11 +44,11 @@ include_once("scripts/xlpage-utf-8.php");
 
 ##  PmWiki comes with graphical user interface buttons for editing;
 ##  to enable these buttons, set $EnableGUIButtons to 1.  
-# $EnableGUIButtons = 1;
+$EnableGUIButtons = 1;
 
 ##  To enable markup syntax from the Creole common wiki markup language
 ##  (http://www.wikicreole.org/), include it here:
-# include_once("scripts/creole.php");
+#include_once("scripts/creole.php");
 
 ##  Some sites may want leading spaces on markup lines to indicate
 ##  "preformatted text blocks", set $EnableWSPre=1 if you want to do
@@ -62,9 +62,9 @@ include_once("scripts/xlpage-utf-8.php");
 ##  You'll also need to set a default upload password, or else set
 ##  passwords on individual groups and pages.  For more information
 ##  see PmWiki.UploadsAdmin.
-# $EnableUpload = 1;
-# $UploadPermAdd = 0;
-# $DefaultPasswords['upload'] = crypt('secret');
+#$EnableUpload = 1;
+#$UploadPermAdd = 0;
+#$DefaultPasswords['upload'] = crypt('lunome');
 
 ##  Setting $EnableDiag turns on the ?action=diag and ?action=phpinfo
 ##  actions, which often helps others to remotely troubleshoot 
