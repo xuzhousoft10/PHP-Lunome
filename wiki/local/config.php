@@ -30,7 +30,7 @@ $Skin = 'bootstrap-fluid';
 ## the "attr" passwords for the PmWiki and Main groups are locked, so
 ## an admin password is a good way to unlock those.  See PmWiki.Passwords
 ## and PmWiki.PasswordsAdmin.
-# $DefaultPasswords['admin'] = crypt('secret');
+$DefaultPasswords['admin'] = crypt('lunome');
 
 ## Unicode (UTF-8) allows the display of all languages and all alphabets.
 ## Highly recommended for new wikis.
