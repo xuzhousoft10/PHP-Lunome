@@ -9,7 +9,9 @@ $user = $vars['user'];
 <nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
     <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand" href="/">Lunome</a>
+            <a class="navbar-brand padding-top-5" href="/">
+                <img alt="Lunome" src="<?php echo $assetsURL.'/image/logo.png'; ?>" width="40" height="40">
+            </a>
         </div>
         
         <div class="collapse navbar-collapse">
