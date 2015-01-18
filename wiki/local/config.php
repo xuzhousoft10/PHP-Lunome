@@ -62,9 +62,9 @@ include_once("scripts/xlpage-utf-8.php");
 ##  You'll also need to set a default upload password, or else set
 ##  passwords on individual groups and pages.  For more information
 ##  see PmWiki.UploadsAdmin.
-#$EnableUpload = 1;
-#$UploadPermAdd = 0;
-#$DefaultPasswords['upload'] = crypt('lunome');
+$EnableUpload = 1;
+$UploadPermAdd = 1;
+$DefaultPasswords['upload'] = crypt('lunome');
 
 ##  Setting $EnableDiag turns on the ?action=diag and ?action=phpinfo
 ##  actions, which often helps others to remotely troubleshoot 
