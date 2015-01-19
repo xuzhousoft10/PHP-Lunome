@@ -1,15 +1,18 @@
 version=pmwiki-2.2.71 ordered=1 urlencoded=1
-agent=Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:30.0) Gecko/20100101 Firefox/30.0
+agent=Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0
 author=
 charset=UTF-8
 csum=
 ctime=1421584985
 host=127.0.0.1
 name=Site.系统规格说明（WEBV1-0）
-rev=5
-targets=Site.公共组件,Site.电影组件,Site.好友组件,Site.设置组件,Site.其他组件,Site.系统首页,Site.登录页面,Site.名词定义
-text=!!!组件%0a* [[公共组件]]%0a* [[电影组件]]%0a* [[好友组件]]%0a* [[设置组件]]%0a* [[其他组件]]%0a%0a!!! 页面%0a* [[系统首页]]%0a* [[登录页面]]%0a%0a!!! 其他%0a* [[名词定义]]
-time=1421644309
+rev=6
+targets=Site.公共组件,Site.电影组件,Site.好友组件,Site.设置组件,Site.其他组件,Site.系统首页,Site.登录页面,Site.名词定义,Site.消息通知
+text=!!!组件%0a* [[公共组件]]%0a* [[电影组件]]%0a* [[好友组件]]%0a* [[设置组件]]%0a* [[其他组件]]%0a%0a!!! 页面%0a* [[系统首页]]%0a* [[登录页面]]%0a%0a!!! 其他%0a* [[名词定义]]%0a* [[消息通知]]
+time=1421676550
+author:1421676550=
+diff:1421676550:1421644309:=13,14c13%0a%3c * [[名词定义]]%0a%3c * [[消息通知]]%0a\ No newline at end of file%0a---%0a> * [[名词定义]]%0a\ No newline at end of file%0a
+host:1421676550=127.0.0.1
 author:1421644309=
 diff:1421644309:1421644156:=10d9%0a%3c * [[登录页面]]%0a
 host:1421644309=127.0.0.1

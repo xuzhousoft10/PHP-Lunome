@@ -1,0 +1,18 @@
+version=pmwiki-2.2.71 ordered=1 urlencoded=1
+agent=Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0
+author=
+charset=UTF-8
+csum=
+ctime=1421680288
+host=127.0.0.1
+name=Site.电影列表组件
+rev=2
+targets=
+text=Attach:2015-01-19-22-30-00.png%0aAttach:2015-01-19-22-32-21.png%0aAttach:2015-01-19-22-31-33.png%0a
+time=1421680550
+author:1421680550=
+diff:1421680550:1421680288:=2,3c2,3%0a%3c Attach:2015-01-19-22-32-21.png%0a%3c Attach:2015-01-19-22-31-33.png%0a---%0a> Attach:2015-01-19-22-30-00.png%0a> Attach:2015-01-19-22-30-00.png%0a
+host:1421680550=127.0.0.1
+author:1421680288=
+diff:1421680288:1421680288:=1,3d0%0a%3c Attach:2015-01-19-22-30-00.png%0a%3c Attach:2015-01-19-22-30-00.png%0a%3c Attach:2015-01-19-22-30-00.png%0a
+host:1421680288=127.0.0.1

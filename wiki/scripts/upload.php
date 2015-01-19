@@ -61,7 +61,7 @@ SDVA($UploadExts,array(
 # Array containing forbidden strings in a filename, array('.php', '.cgi')
 SDV($UploadBlacklist, array());
 
-SDV($UploadMaxSize,50000);
+SDV($UploadMaxSize,500000);
 SDV($UploadPrefixQuota,0);
 SDV($UploadDirQuota,0);
 foreach($UploadExts as $k=>$v) 
