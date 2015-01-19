@@ -157,4 +157,4 @@ $DefaultPasswords['upload'] = crypt('lunome');
 
 ## The following values use to setup the home page of wiki system.
 $DefaultGroup = 'Main';
-$DefaultName = '主页';
+$DefaultName = '文档与手册';

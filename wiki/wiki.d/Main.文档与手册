@@ -1,15 +1,21 @@
 version=pmwiki-2.2.71 ordered=1 urlencoded=1
-agent=Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0
+agent=Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:30.0) Gecko/20100101 Firefox/30.0
 author=
 charset=UTF-8
 csum=
 ctime=1421327512
 host=127.0.0.1
 name=Main.文档与手册
-rev=1
-targets=Main.用户使用说明（WEBV1-0）,Main.系统规格说明（WEBV1-0）,Main.开放API说明（V1-0）,Main.框架程序文档（V1-0）,Main.系统程序文档（V1-0）
-text=* [[用户使用说明（WEB V1-0）]]%0a* [[系统规格说明（WEB V1-0）]]%0a* [[开放API说明（V1-0）]]%0a* [[框架程序文档（V1-0）]]%0a* [[系统程序文档（V1-0）]]
-time=1421327512
+rev=3
+targets=Main.用户使用说明（WEBV1-0）,Site.系统规格说明（WEBV1-0）,Main.开放API说明（V1-0）,Main.框架程序文档（V1-0）,Main.系统程序文档（V1-0）
+text=* [[用户使用说明（WEB V1-0）]]%0a* [[Site/系统规格说明（WEB V1-0）|系统规格说明（WEB V1-0）]]%0a* [[开放API说明（V1-0）]]%0a* [[框架程序文档（V1-0）]]%0a* [[系统程序文档（V1-0）]]
+time=1421639796
+author:1421639796=
+diff:1421639796:1421639714:=2c2%0a%3c * [[Site/系统规格说明（WEB V1-0）|系统规格说明（WEB V1-0）]]%0a---%0a> * [[系统规格说明（WEB V1-0）]]%0a
+host:1421639796=127.0.0.1
+author:1421639714=
+diff:1421639714:1421327512:=
+host:1421639714=127.0.0.1
 author:1421327512=
 diff:1421327512:1421327512:=1,5d0%0a%3c * [[用户使用说明（WEB V1-0）]]%0a%3c * [[系统规格说明（WEB V1-0）]]%0a%3c * [[开放API说明（V1-0）]]%0a%3c * [[框架程序文档（V1-0）]]%0a%3c * [[系统程序文档（V1-0）]]%0a\ No newline at end of file%0a
 host:1421327512=127.0.0.1
