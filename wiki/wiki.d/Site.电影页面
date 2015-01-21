@@ -1,15 +1,21 @@
 version=pmwiki-2.2.71 ordered=1 urlencoded=1
-agent=Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:30.0) Gecko/20100101 Firefox/30.0
+agent=Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0
 author=
 charset=UTF-8
 csum=
 ctime=1421757027
 host=127.0.0.1
 name=Site.电影页面
-rev=3
-targets=Site.电影列表页面,Site.电影排行列表界面,Site.电影详细界面
-text=* [[电影列表页面]]%0a* [[电影排行列表界面]]%0a* [[电影详细界面]]
-time=1421812700
+rev=5
+targets=Site.电影列表页面,Site.电影排行列表界面,Site.电影详情界面,Site.用户电影主页
+text=* [[电影列表页面]]%0a* [[电影排行列表界面]]%0a* [[电影详情界面]]%0a* [[用户电影主页]]
+time=1421857624
+author:1421857624=
+diff:1421857624:1421857421:=3,4c3%0a%3c * [[电影详情界面]]%0a%3c * [[用户电影主页]]%0a\ No newline at end of file%0a---%0a> * [[电影详情界面]]%0a\ No newline at end of file%0a
+host:1421857624=127.0.0.1
+author:1421857421=
+diff:1421857421:1421812700:=3c3%0a%3c * [[电影详情界面]]%0a\ No newline at end of file%0a---%0a> * [[电影详细界面]]%0a\ No newline at end of file%0a
+host:1421857421=127.0.0.1
 author:1421812700=
 diff:1421812700:1421811122:=2,3c2%0a%3c * [[电影排行列表界面]]%0a%3c * [[电影详细界面]]%0a\ No newline at end of file%0a---%0a> * [[电影排行列表界面]]%0a\ No newline at end of file%0a
 host:1421812700=127.0.0.1
