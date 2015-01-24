@@ -38,7 +38,7 @@
         <?php if ( !empty($movies['dislike']) ) : ?>
             <p>你和TA同时不喜欢的电影, 你懂的╮(╯_╰)╭</p>
             <div class="clearfix">
-            <?php foreach ( $movies['like'] as $movie ) : ?>
+            <?php foreach ( $movies['dislike'] as $movie ) : ?>
                 <div class="pull-left lunome-movie-item">
                     <div data-cover-url="<?php echo $movie['cover']; ?>" class="lunome-movie-poster thumbnail padding-0 margin-bottom-0" >
                         <?php printf('<a href="/?module=lunome&action=movie/detail&id=%s" target="_blank">', $movie['id']); ?>
