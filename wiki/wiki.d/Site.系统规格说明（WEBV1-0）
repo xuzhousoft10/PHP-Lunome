@@ -1,15 +1,18 @@
 version=pmwiki-2.2.71 ordered=1 urlencoded=1
-agent=Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:30.0) Gecko/20100101 Firefox/30.0
+agent=Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0
 author=
 charset=UTF-8
 csum=
 ctime=1421584985
 host=127.0.0.1
 name=Site.系统规格说明（WEBV1-0）
-rev=9
-targets=Site.公共组件,Site.电影页面,Site.用户页面,Site.系统首页,Site.登录页面,Site.邀请好友看电影消息,Site.名词定义,Site.消息通知
-text=!!!组件%0a* [[公共组件]]%0a%0a!!! 页面%0a* [[电影页面]]%0a* [[用户页面]]%0a* [[系统首页]]%0a* [[登录页面]]%0a%0a!!! 消息通知%0a* [[邀请好友看电影消息]]%0a%0a!!! 其他%0a* [[名词定义]]%0a* [[消息通知]]
-time=1421919633
+rev=10
+targets=Site.公共组件,Site.电影页面,Site.用户页面,Site.系统首页,Site.登录页面,Site.邀请好友看电影消息,Site.未读聊天信息消息,Site.名词定义,Site.消息通知
+text=!!!组件%0a* [[公共组件]]%0a%0a!!! 页面%0a* [[电影页面]]%0a* [[用户页面]]%0a* [[系统首页]]%0a* [[登录页面]]%0a%0a!!! 消息通知%0a* [[邀请好友看电影消息]]%0a* [[未读聊天信息消息]]%0a%0a!!! 其他%0a* [[名词定义]]%0a* [[消息通知]]
+time=1422177711
+author:1422177711=
+diff:1422177711:1421919633:=12d11%0a%3c * [[未读聊天信息消息]]%0a
+host:1422177711=127.0.0.1
 author:1421919633=
 diff:1421919633:1421857645:=9,11d8%0a%3c %0a%3c !!! 消息通知%0a%3c * [[邀请好友看电影消息]]%0a
 host:1421919633=127.0.0.1

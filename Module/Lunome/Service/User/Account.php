@@ -398,8 +398,8 @@ class Account {
         $record->save();
         
         $condition = array();
-        $condition['account_me'] = $currentUserID;
-        $condition['account_friend'] = $accountID;
+        $condition['account_me'] = $accountID;
+        $condition['account_friend'] = $currentUserID;
         /* @var $friendShipModel \X\Module\Lunome\Model\Account\AccountFriendshipModel */
         $friendShipModel = AccountFriendshipModel::model()->find($condition);
         

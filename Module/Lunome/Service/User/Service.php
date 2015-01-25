@@ -377,7 +377,7 @@ class Service extends \X\Core\Service\XService {
     public function countUnclosedNotification() {
         $condition = array();
         $condition['status']        = AccountNotificationModel::STATUS_NEW;
-        $condition['produced_by']   = $this->getCurrentUserId();
+        $condition['recipient_id']   = $this->getCurrentUserId();
         $count = AccountNotificationModel::model()->count($condition);
         return $count;
     }
@@ -388,7 +388,7 @@ class Service extends \X\Core\Service\XService {
     public function getUnclosedNotifications() {
         $condition = array();
         $condition['status']        = AccountNotificationModel::STATUS_NEW;
-        $condition['produced_by']   = $this->getCurrentUserId();
+        $condition['recipient_id']   = $this->getCurrentUserId();
         $notifications = AccountNotificationModel::model($condition)->findAll($condition);
         foreach ( $notifications as $index => $notification ) {
             $notifications[$index] = $notification->toArray();
