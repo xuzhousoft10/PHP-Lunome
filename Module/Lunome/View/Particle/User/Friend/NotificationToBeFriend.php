@@ -6,7 +6,7 @@
 <?php $vars = get_defined_vars(); ?>
 <?php $notification = $vars['notification']; ?>
 <?php $sourceData = $notification['sourceData']; ?>
-<?php $requester = $userService->getAccount()->get($sourceData['requester_id']); ?>
+<?php $requester = $userService->getAccount()->getInformation($sourceData['requester_id']); ?>
 <?php $elemMark = UUID::generate(); ?>
 <?php $assetsURL = X::system()->getConfiguration()->get('assets-base-url'); ?>
 <?php $loaddingImg = $assetsURL.'/image/loadding.gif'; ?>
