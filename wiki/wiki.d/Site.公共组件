@@ -1,15 +1,21 @@
 version=pmwiki-2.2.71 ordered=1 urlencoded=1
-agent=Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0
+agent=Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:30.0) Gecko/20100101 Firefox/30.0
 author=
 charset=UTF-8
 csum=
 ctime=1421585068
 host=127.0.0.1
 name=Site.公共组件
-rev=4
-targets=Site.顶部导航条,Site.公共页脚,Site.顶部消息列表组件,Site.顶部用户操作菜单组件,Site.主用户信息与菜单
-text=* [[顶部导航条]]%0a* [[公共页脚]]%0a* [[顶部消息列表组件]]%0a* [[顶部用户操作菜单组件]]%0a* [[主用户信息与菜单]]
-time=1421678987
+rev=6
+targets=Site.系统规格说明（WEBV1-0）,Site.顶部导航条,Site.公共页脚,Site.顶部消息列表组件,Site.顶部用户操作菜单组件,Site.主用户信息与菜单
+text=''[[系统规格说明（WEBV1-0）]]''/公共组件%0a----%0a%0a* [[顶部导航条]]%0a* [[公共页脚]]%0a* [[顶部消息列表组件]]%0a* [[顶部用户操作菜单组件]]%0a* [[主用户信息与菜单]]
+time=1422427987
+author:1422427987=
+diff:1422427987:1422427775:=1,2c1,2%0a%3c ''[[系统规格说明（WEBV1-0）]]''/公共组件%0a%3c ----%0a---%0a> [[系统规格说明（WEBV1-0）]]%0a> %0a
+host:1422427987=127.0.0.1
+author:1422427775=
+diff:1422427775:1421678987:=1,3d0%0a%3c [[系统规格说明（WEBV1-0）]]%0a%3c %0a%3c %0a
+host:1422427775=127.0.0.1
 author:1421678987=
 diff:1421678987:1421644629:=4,5c4%0a%3c * [[顶部用户操作菜单组件]]%0a%3c * [[主用户信息与菜单]]%0a\ No newline at end of file%0a---%0a> * [[顶部用户操作菜单组件]]%0a\ No newline at end of file%0a
 host:1421678987=127.0.0.1
