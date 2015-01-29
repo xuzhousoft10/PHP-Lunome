@@ -114,6 +114,7 @@ class Index extends VisualMain {
         $searchConditionData['categories'] = $movieService->getCategories();
         $view->setDataToParticle($viewName, 'searchData', $searchConditionData);
         
+        /* Add tool bar view. */
         $viewName   = 'MEDIA_TOO_BAR';
         $viewPath   = $this->getParticleViewPath('Movie/ToolBar');
         $this->getView()->loadParticle($viewName, $viewPath);
