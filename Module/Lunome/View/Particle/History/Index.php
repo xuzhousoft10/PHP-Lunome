@@ -1,10 +1,11 @@
 <div class="panel panel-default">
-    <div class="panel-heading">-- V1.0.4 发布</div>
+    <div class="panel-heading">2015-01-16 V1.0.4 发布</div>
     <div class="panel-body">
         <ul>
             <li>取消支持新浪微博登录。</li>
             <li>支持在线观看视频。</li>
             <li>支持为电影增加经典台词。</li>
+            <li>支持与好友互动。</li>
         </ul>
     </div>
 </div>
