@@ -8,35 +8,55 @@ namespace X\Module\Lunome\Action\Movie;
  * Use statements
  */
 use X\Core\X;
+use X\Module\Lunome\Util\Action\VisualMain;
 use X\Module\Lunome\Service\Movie\Service as MovieService;
-use X\Module\Lunome\Util\Action\Media\Index as MediaIndex;
+use X\Library\XData\Validator;
 
 /**
  * The action class for movie/index action.
  * @author Unknown
  */
-class Index extends MediaIndex { 
+class Index extends VisualMain { 
     /**
-     * (non-PHPdoc)
-     * @see \X\Module\Lunome\Util\Action\Media\Index::getSearchData()
+     * 处理电影列表页面的请求。
+     * @param integer $mark
+     * @param array $query
      */
-    protected function getSearchData() {
-        /* @var $movieService MovieService */
-        $movieService = $this->getMediaService();
-        $data = array();
-        $data['regions'] = $movieService->getRegions();
-        $data['languages'] = $movieService->getLanguages();
-        $data['categories'] = $movieService->getCategories();
-        return $data;
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see \X\Module\Lunome\Util\Action\Media\Index::getMarkActions()
-     */
-    protected function getMarkActions() {
+    public function runAction( $mark=MovieService::MARK_UNMARKED, $query=null ) {
+        $movieService = $this->getMovieService();
+        $view = $this->getView();
+        $markNames  = $movieService->getMarkNames();
+        $moduleConfig = $this->getModule()->getConfiguration();
+        
+        if ( !Validator::isInteger($mark) && !isset($markNames[$mark]) ) {
+            $this->gotoURL('/?module=lunome&action=movie/index', array('mark'=>MovieService::MARK_UNMARKED));
+        }
+        $mark = intval($mark);
+        
+        $this->setPageTitle($movieService->getMediaName());
+        $this->activeMenuItem(self::MENU_ITEM_MOVIE);
+        
+        /* Load index view */
+        $viewName   = 'MEDIA_INDEX';
+        $viewPath   = $this->getParticleViewPath('Movie/Index');
+        $view->loadParticle($viewName, $viewPath);
+        
+        /* add query data to view. */
+        $query = empty($query) ? array() : $query;
+        $view->setDataToParticle($viewName, 'query', htmlspecialchars(json_encode($query)));
+        
+        /* Add mark data to view. */
+        $markInfo = array();
+        foreach ( $markNames as $key => $markName ) {
+            $markInfo[$key]['name']     = $markName;
+            $markInfo[$key]['count']    = $movieService->getMarkedCount($key);
+            $markInfo[$key]['isActive'] = $mark === $key;
+        }
+        $view->setDataToParticle($viewName, 'marks', $markInfo);
+        
+        /* Add mark actions to view. */
         $actions = array();
-        switch ( $this->currentMark ) {
+        switch ( $mark ) {
         case MovieService::MARK_UNMARKED:
             $actions[MovieService::MARK_INTERESTED]    = array('style'=>'success');
             $actions[MovieService::MARK_WATCHED]       = array('style'=>'info');
@@ -55,6 +75,44 @@ class Index extends MediaIndex {
             break;
         default:break;
         }
-        return $actions;
+        foreach ( $actions as $markKey => $markAction ) {
+            $actions[$markKey]['name'] = $markNames[$markKey];
+        }
+        $view->setDataToParticle($viewName, 'markActions', htmlspecialchars(json_encode($actions)));
+        
+        /* Add current mark to view. */
+        $view->setDataToParticle($viewName, 'currentMark', $mark);
+        
+        /* Add waitting image resource path to view. */
+        $view->setDataToParticle($viewName, 'mediaItemWaitingImage', $moduleConfig->get('media_item_operation_waiting_image'));
+        $view->setDataToParticle($viewName, 'mediaLoaderLoaddingImage', $moduleConfig->get('media_loader_loading_image'));
+        
+        /* Add debug mark to view. */
+        $isDebug = X::system()->getConfiguration()->get('is_debug') ? 'true' : 'false';
+        $view->setDataToParticle($viewName, 'isDebug', $isDebug);
+        
+        /* Add page size to view. */
+        $view->setDataToParticle($viewName, 'pageSize', $moduleConfig->get('media_list_page_size'));
+        
+        /* Add search condition data to view.  */
+        $searchConditionData = array();
+        $searchConditionData['regions'] = $movieService->getRegions();
+        $searchConditionData['languages'] = $movieService->getLanguages();
+        $searchConditionData['categories'] = $movieService->getCategories();
+        $view->setDataToParticle($viewName, 'searchData', $searchConditionData);
+        
+        $viewName   = 'MEDIA_TOO_BAR';
+        $viewPath   = $this->getParticleViewPath('Util/Media/ToolBar');
+        $this->getView()->loadParticle($viewName, $viewPath);
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \X\Util\Action\Visual::beforeDisplay()
+     */
+    protected function beforeDisplay() {
+        $assetsURL = X::system()->getConfiguration()->get('assets-base-url');
+        $this->getView()->addScriptFile('media-index', $assetsURL.'/js/media_index.js');
+        $this->getView()->addScriptFile('cookie', $assetsURL.'/library/jquery/plugin/cookie.js');
     }
 }

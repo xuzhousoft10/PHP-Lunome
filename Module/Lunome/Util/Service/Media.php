@@ -139,6 +139,20 @@ abstract class Media extends \X\Core\Service\XService {
         return $count;
     }
     
+    const MARK_UNMARKED = 0;
+    
+    /**
+     * @param unknown $mark
+     * @return number
+     */
+    public function getMarkedCount( $mark ) {
+        if ( self::MARK_UNMARKED === $mark ) {
+            return $this->countUnmarked();
+        } else {
+            return $this->countMarked($mark);
+        }
+    }
+    
     /**
      * 
      * @param unknown $mark

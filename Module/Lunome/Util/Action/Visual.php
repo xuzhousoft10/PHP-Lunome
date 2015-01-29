@@ -69,7 +69,18 @@ abstract class Visual extends \X\Util\Action\Visual {
     }
     
     /**
-     * 
+     * 设置页面的标题属性。
+     * @param string $title
+     * @return void
+     */
+    public function setPageTitle( $title ) {
+        $systemName = $this->getModule()->getConfiguration()->get('system_name');
+        $this->getView()->title = $title.' | '.$systemName;
+    }
+    
+    /**
+     * 用于输出404错误页面。该方法由视图渲染类使用。
+     * @see \X\Service\XAction\Core\Handler\WebAction::$E404Content
      */
     protected function error404Handler() {
         /* @var $viewService \X\Service\XView\XViewService */

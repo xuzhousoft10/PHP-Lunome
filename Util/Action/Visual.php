@@ -117,8 +117,18 @@ abstract class Visual extends Basic {
         /* 该行代码是为了完成新浪微博网站所有权的验证。 */
         $this->getView()->addOpenGraphData('SINA-WEIBO-VERIFICATION', 'wb:webmaster', '9598c04587327873');
         
-        if ( $this->getView()->hasLayout() ) {
+        if ( $this->getView()->hasLayout() && (false !== $this->beforeDisplay()) ) {
             $this->getView()->display();
         }
+    }
+    
+    /**
+     * 该方法用于在执行显示页面之前调用，你可以重写该方法来进行页面显示前的操作。
+     * 如果该方法返回false， 则不再进行页面显示的操作。
+     * 如果该方法不返回值或者其他非false的值， 则将会执行页面显示的操作。
+     * @return boolean
+     */
+    protected function beforeDisplay() {
+        return true;
     }
 }

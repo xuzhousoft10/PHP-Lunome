@@ -8,6 +8,7 @@ namespace X\Core\Module;
  * 
  */
 use X\Core\Basic;
+use X\Core\Util\Configuration;
 
 /**
  * 
@@ -57,5 +58,20 @@ abstract class XModule extends Basic {
         $modulePath = dirname($module->getFileName());
         $path = (null===$path) ? $modulePath : $modulePath.DIRECTORY_SEPARATOR.str_replace('/', DIRECTORY_SEPARATOR, $path);
         return $path;
+    }
+    
+    private $configurations = array();
+    
+    /**
+     * @param string $name
+     * @return \X\Core\Util\Configuration
+     */
+    public function getConfiguration( $name='main' ) {
+        $name = ucfirst($name);
+        if ( !isset($this->configurations[$name]) ) {
+            $configPath = $this->getPath('Config/'.$name.'.php');
+            $this->configurations[$name] = new Configuration($configPath);
+        }
+        return $this->configurations[$name];
     }
 }
