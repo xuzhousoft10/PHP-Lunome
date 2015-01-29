@@ -1,0 +1,71 @@
+<?php 
+$vars = get_defined_vars();
+$query = $vars['query'];
+$marks = $vars['marks'];
+$isDebug = $vars['isDebug'];
+$pageSize = $vars['pageSize'];
+$searchData = $vars['searchData'];
+$markActions = $vars['markActions'];
+$currentMark = $vars['currentMark'];
+$mediaItemWaitingImage = $vars['mediaItemWaitingImage'];
+$mediaLoaderLoaddingImage = $vars['mediaLoaderLoaddingImage'];
+?>
+<div class="panel panel-default">
+    <!-- Media Index Header Start -->
+    <div class="panel-heading padding-0">
+        <nav class="navbar navbar-default navbar-static-top navbar navbar-inverse margin-bottom-0">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/?module=lunome&action=movie/index">电影</a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                    <?php foreach ( $marks as $markCode => $mark ) :?>
+                        <li class="<?php if ($mark['isActive']) :?>active<?php endif; ?>">
+                            <a href="/?module=lunome&action=movie/index&mark=<?php echo $markCode; ?>">
+                                <?php echo $mark['name'];?>
+                                (<span id="mark-counter-<?php echo $markCode; ?>"><?php echo $mark['count']; ?></span>)
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                    </ul>
+                    <form class="navbar-form navbar-right">
+                        <div class="form-group">
+                            <input id="media-name-search-text" type="text" class="form-control" placeholder="查询名称，导演，演员">
+                        </div>
+                        <button id="media-name-search-button" type="button" class="btn btn-default">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!-- Media Index Header End -->
+    
+    <!-- Media List Start -->
+    <div class="panel-body">
+        <input 
+            id                  = "media-index-parameters" 
+            type                = "hidden"
+            data-init-query     = "<?php echo $query;?>"
+            data-url            = "/?module=lunome&action=movie/find&mark=<?php echo $currentMark; ?>"
+            data-detail-url     = "/?module=lunome&action=movie/detail&id={id}"
+            data-mark-url       = "/?module=lunome&action=movie/mark&mark={mark}&id={id}"
+            data-total          = "<?php echo $marks[$currentMark]['count'];?>"
+            data-container      = ".lnm-media-list-container"
+            data-pagesize       = "<?php echo $pageSize; ?>"
+            data-marks          = "<?php echo $markActions; ?>"
+            data-current-mark   = "<?php echo $currentMark; ?>"
+            data-waiting-image  = "<?php echo $mediaItemWaitingImage; ?>"
+            data-loading-image  = "<?php echo $mediaLoaderLoaddingImage;?>"
+            data-is-debug       = "<?php echo $isDebug; ?>"
+        >
+        <div>
+        <?php require dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'Movie'.DIRECTORY_SEPARATOR.'Search.php'; ?>
+        <hr/>
+        </div>
+        <div class="clearfix lnm-media-list-container"></div>
+    </div>
+    <!-- Media List End -->
+</div>
