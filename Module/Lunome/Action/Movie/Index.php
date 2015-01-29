@@ -55,7 +55,7 @@ class Index extends VisualMain {
         $view->loadParticle($viewName, $viewPath);
         
         /* add query data to view. */
-        $query = empty($query) ? array() : $query;
+        $query = (empty($query) || !is_array($query)) ? array() : $query;
         $view->setDataToParticle($viewName, 'query', htmlspecialchars(json_encode($query)));
         
         /* Add mark data to view. */
@@ -115,7 +115,7 @@ class Index extends VisualMain {
         $view->setDataToParticle($viewName, 'searchData', $searchConditionData);
         
         $viewName   = 'MEDIA_TOO_BAR';
-        $viewPath   = $this->getParticleViewPath('Util/Media/ToolBar');
+        $viewPath   = $this->getParticleViewPath('Movie/ToolBar');
         $this->getView()->loadParticle($viewName, $viewPath);
     }
     
