@@ -41,11 +41,29 @@ class Index extends VisualMain {
         $markNames  = $movieService->getMarkNames();
         $moduleConfig = $this->getModule()->getConfiguration();
         
+        /* Check mark parameter. */
         if ( !Validator::isInteger($mark) && !isset($markNames[$mark]) ) {
             $this->gotoURL('/?module=lunome&action=movie/index', array('mark'=>MovieService::MARK_UNMARKED));
         }
         $mark = intval($mark);
         
+        /* Check query parameter. */
+        $query = (empty($query) || !is_array($query)) ? array() : $query;
+        $queryTemplate = array('region'=>null, 'category'=>null, 'language'=>null, 'name'=>null);
+        $queryTemplate = array_intersect_key($query, $queryTemplate);
+        $queryTemplate = array_keys($queryTemplate);
+        $queryCopy = array();
+        if ( isset($query['name']) ) {
+            $queryCopy['name'] = $query['name'];
+        }
+        foreach ( array('region', 'category', 'language') as $queryItem ) {
+            if ( isset($query[$queryItem]) && Validator::isUUIDString($query[$queryItem]) ) {
+                $queryCopy[$queryItem] = $query[$queryItem];
+            }
+        }
+        $query = $queryCopy;
+        
+        /* Setup page. */
         $this->setPageTitle($movieService->getMediaName());
         $this->activeMenuItem(self::MENU_ITEM_MOVIE);
         
@@ -55,7 +73,6 @@ class Index extends VisualMain {
         $view->loadParticle($viewName, $viewPath);
         
         /* add query data to view. */
-        $query = (empty($query) || !is_array($query)) ? array() : $query;
         $view->setDataToParticle($viewName, 'query', htmlspecialchars(json_encode($query)));
         
         /* Add mark data to view. */
