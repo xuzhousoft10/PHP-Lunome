@@ -42,7 +42,7 @@ class Index extends VisualMain {
         $moduleConfig = $this->getModule()->getConfiguration();
         
         /* Check mark parameter. */
-        if ( !Validator::isInteger($mark) && !isset($markNames[$mark]) ) {
+        if ( !Validator::isInteger($mark) || !isset($markNames[$mark]) ) {
             $this->gotoURL('/?module=lunome&action=movie/index', array('mark'=>MovieService::MARK_UNMARKED));
         }
         $mark = intval($mark);
