@@ -14,7 +14,7 @@ use X\Library\XData\Validator;
 
 /**
  * The action class for movie/index action.
- * @author Unknown
+ * @author Michael Luthor <michaelluthor@163.com>
  */
 class Index extends VisualMain { 
     /**
