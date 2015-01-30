@@ -60,6 +60,8 @@ $mediaLoaderLoaddingImage = $vars['mediaLoaderLoaddingImage'];
             data-waiting-image  = "<?php echo $mediaItemWaitingImage; ?>"
             data-loading-image  = "<?php echo $mediaLoaderLoaddingImage;?>"
             data-is-debug       = "<?php echo $isDebug; ?>"
+            data-prev-result-btn= "<?php echo htmlspecialchars('<div class="alert alert-info pull-left text-center" style="width:100%;cursor:pointer">显示之前的结果</div>');?>"
+            data-load-more-btn  = "<?php echo htmlspecialchars('<div class="alert alert-info pull-left text-center" style="width:100%;cursor:pointer">显示更多</div>'); ?>"
         >
         <div>
         <?php require dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'Movie'.DIRECTORY_SEPARATOR.'Search.php'; ?>

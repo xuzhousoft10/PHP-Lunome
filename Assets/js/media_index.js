@@ -10,22 +10,25 @@
  * @version 0.0.0
  */
 var MediaIndex = {
-    url             : null, /* 列表数据加载使用的URL地址。 */
-    detailURL       : null, /* 项目详细界面的URL地址。 */
-    markURL         : null, /* 用来标记项目的URL地址。 */
-    loadedCount     : 0,    /* 以加载项目的数量。 */
-    totalCount      : 0,    /* 所有项目的数量。 */
-    container       : null, /* 用来放置列表项目的块元素选择符。 */
-    pageSize        : 20,   /* 每次请求加载项目的数量。 */
-    marks           : [],   /* 每个项目的标记动作列表。 */
-    maxAutoLoadCount: 10,   /* 自动加载次数， 当超过时， 需要手动加载一次。 */
-    currentMark     : null, /* 当前该列表里的项目处于的标记状态。 */
-    _isLoading      : false,/* 标记当前时刻是否正在加载数据。 */
-    _autoLoadCount  : 0,    /* 记录当前自动加载的次数。 */
-    _conditions     : {},   /* 保存当前查询的条件。 */
-    waitingImage    : null, /* 当项目出现较长时间的处理时，显示的等待图片。 */
-    loaddingImage   : null, /* 加载项目时显示的图片链接。 */
-    isDebug         : false,/* 是否处于调试模式。 */ 
+    url                    : null, /* 列表数据加载使用的URL地址, 即查询电影的处理地址。 */
+    detailURL              : null, /* 项目详细界面的URL地址。 */
+    markURL                : null, /* 用来标记项目的URL地址。 */
+    loadedCount            : 0,    /* 以加载项目的数量。 */
+    totalCount             : 0,    /* 所有项目的数量。 */
+    container              : null, /* 用来放置列表项目的块元素选择符。 */
+    pageSize               : 20,   /* 每次请求加载项目的数量。 */
+    marks                  : [],   /* 每个项目的标记动作列表。 */
+    maxAutoLoadCount       : 10,   /* 自动加载次数， 当超过时， 需要手动加载一次。 */
+    currentMark            : null, /* 当前该列表里的项目处于的标记状态。 */
+    _isLoading             : false,/* 标记当前时刻是否正在加载数据。 */
+    _autoLoadCount         : 0,    /* 记录当前自动加载的次数。 */
+    _conditions            : {},   /* 保存当前查询的条件。 */
+    _autoLoadTriggerLenght : 200,
+    waitingImage           : null, /* 当项目出现较长时间的处理时，显示的等待图片。 */
+    loaddingImage          : null, /* 加载项目时显示的图片链接。 */
+    isDebug                : false,/* 是否处于调试模式。 */ 
+    loadMoreBtnTemplate    : null, /* 加载更多按钮的显示模板。 */
+    prevResultBtnTemplate  : null, /* 显示之前搜索结果按钮的模板 */
 };
 
 /**
@@ -33,19 +36,22 @@ var MediaIndex = {
  * @returns void
  */
 MediaIndex.init = function() {
-    var parameters      = $('#media-index-parameters');
-    this.url            = parameters.attr('data-url');
-    this.detailURL      = parameters.attr('data-detail-url');
-    this.totalCount     = parameters.attr('data-total');
-    this.container      = parameters.attr('data-container');
-    this.pageSize       = parameters.attr('data-pagesize');
-    this.marks          = $.parseJSON(parameters.attr('data-marks'));
-    this.markURL        = parameters.attr('data-mark-url');
-    this.currentMark    = parameters.attr('data-current-mark');
-    this.waitingImage   = parameters.attr('data-waiting-image');
-    this.loaddingImage  = parameters.attr('data-loading-image');
-    this.isDebug        = parameters.attr('data-is-debug');
+    var parameters             = $('#media-index-parameters');
+    this.url                   = parameters.attr('data-url');
+    this.detailURL             = parameters.attr('data-detail-url');
+    this.totalCount            = parameters.attr('data-total');
+    this.container             = parameters.attr('data-container');
+    this.pageSize              = parameters.attr('data-pagesize');
+    this.marks                 = $.parseJSON(parameters.attr('data-marks'));
+    this.markURL               = parameters.attr('data-mark-url');
+    this.currentMark           = parameters.attr('data-current-mark');
+    this.waitingImage          = parameters.attr('data-waiting-image');
+    this.loaddingImage         = parameters.attr('data-loading-image');
+    this.isDebug               = parameters.attr('data-is-debug');
+    this.loadMoreBtnTemplate   = parameters.attr('data-load-more-btn');
+    this.prevResultBtnTemplate = parameters.attr('data-prev-result-btn');
     
+    /* 检查初始化查询参数。 */
     var initQuery = $.parseJSON(parameters.attr('data-init-query'));
     var conditionInited = false;
     for( var i in initQuery ) {
@@ -53,29 +59,30 @@ MediaIndex.init = function() {
         conditionInited = true;
     }
     
-    if ( !conditionInited ) {
-        var history = MediaIndex._getHistory();
-        if ( null != history ) {
-            this._conditions = history.condition;
-            this.loadedCount = history.loadedCount-20;
-            if ( 0 > this.loadedCount ) {
-                this.loadedCount = 0;
-            }
-            if ( 0 < this.loadedCount ) {
-                $('<div class="alert alert-info pull-left text-center" style="width:100%;cursor:pointer"></div>')
-                .html('显示之前的结果')
-                .click(function() {
-                    MediaIndex.reload();
-                })
-                .appendTo(this.container);
-            }
+    /* 如果没有查询参数， 则尝试使用上次查询的条件。 */
+    if ( !conditionInited && MediaIndex.hasHistory() ) {
+        var history = MediaIndex.getHistory();
+        this._conditions = history.condition;
+        this.loadedCount = history.loadedCount-(this.pageSize/2);
+        if ( 0 > this.loadedCount ) {
+            this.loadedCount = 0;
+        }
+        /* 如果存在历史查询结果， 则显示显示全部结果按钮来显示之前的查询按钮。 */
+        if ( 0 < this.loadedCount ) {
+            $(this.prevResultBtnTemplate).click(function() {
+                MediaIndex.reload();
+            }).appendTo(this.container);
         }
     }
     
+    /* 绑定窗口滚动事件用于实现封面的延迟加载。 */
     $(window).bind('scroll', MediaIndex._windowScrollEventHandler);
+    
+    /* 当搜索按钮点击时，执行查询。 */
     $('#media-name-search-button').click(function() {
         var name = $.trim($('#media-name-search-text').val());
         if ( 0 == name.length ) {
+            /* 如果名称为空， 则清空名称查询条件。 */
             if ( 'undefined' != typeof MediaIndex._conditions.name ) {
                 delete MediaIndex._conditions.name;
             }
@@ -84,25 +91,30 @@ MediaIndex.init = function() {
         }
         MediaIndex.reload();
     });
-    MediaIndex._log('Initialization Done.');
     this.load();
 };
 
 /**
- * 
+ * 检查是否存在查询历史。
+ * @returns boolean
  */
-MediaIndex._getHistory = function() {
+MediaIndex.hasHistory = function() {
     var history = $.cookie('search-condition-'+this.currentMark);
-    if ( 'undefined' == typeof(history) ) {
-        return null;
-    } else {
-        history = $.parseJSON(history);
-        return history;
-    }
+    return 'undefined' != typeof(history);
 };
 
 /**
- * 
+ * 获取查询条件历史。
+ * @returns object|null
+ */
+MediaIndex.getHistory = function() {
+    var history = $.cookie('search-condition-'+this.currentMark);
+    return ('undefined' == typeof(history)) ? null : $.parseJSON(history);
+};
+
+/**
+ * 更新查询历史记录。 保存当前查询条件到历史记录。
+ * @returns void
  */
 MediaIndex._updateHistory = function() {
     var history = {
@@ -118,18 +130,15 @@ MediaIndex._updateHistory = function() {
  * @returns void
  */
 MediaIndex._windowScrollEventHandler = function() {
-    if ( MediaIndex._autoLoadCount >= MediaIndex.maxAutoLoadCount ) {
+    var lengthToEnd = this.scrollMaxY - this.scrollY;
+    
+    if ( (MediaIndex._autoLoadCount>=MediaIndex.maxAutoLoadCount)
+    || (true==MediaIndex._isLoading)
+    || (lengthToEnd>MediaIndex._autoLoadTriggerLenght)
+    ) {
         return true;
     }
     
-    if ( true == MediaIndex._isLoading ) {
-        return true;
-    }
-    
-    var lenthToEnd = this.scrollMaxY - this.scrollY;
-    if ( lenthToEnd > 200 ) {
-        return true;
-    }
     MediaIndex.load();
 };
 
@@ -143,18 +152,22 @@ MediaIndex.reload = function() {
 };
 
 /**
- * 清楚掉搜索历史
+ * 清楚搜索结果和历史。
+ * @returns void
  */
 MediaIndex.clear = function() {
-    $(this.container).empty();
     this.totalCount = 0;
     this.loadedCount = 0;
     this._autoLoadCount = 0;
+    $(this.container).empty();
+    this._updateHistory();
 };
 
 /**
  * 加载更多项目到当前列表中， 如果项目已经全部被加载， 则方法不做任何处理。
  * 该方法不建议在外部调用， 因为他会增加自动加载的次数。
+ * 刷新的原因是在外部改变了加载计数或者以加载数量， 这种情况下可以强制加载。
+ * @param bool refresh 是否强制刷新结果。 默认为false。
  * @returns void
  */
 MediaIndex.load = function( refresh ) {
@@ -162,7 +175,6 @@ MediaIndex.load = function( refresh ) {
     var shouldLoad = $this.totalCount*1 > $this.loadedCount*1;
     shouldLoad = shouldLoad || ( 'undefined'!=refresh && true==refresh );
     if ( !shouldLoad ) {
-        MediaIndex._log('No More Medias.');
         return true;
     }
     
@@ -179,12 +191,15 @@ MediaIndex.load = function( refresh ) {
     }, function( response ) {
         $this.totalCount = response.count;
         MediaIndex._log('Done Loading Medias. ('+response.medias.length+' Loaded)');
+        
         $this._InsertMediasIntoContainer(response.medias);
         MediaIndex._log('Done Render Medias.');
+        
         $this.loadedCount += response.medias.length;
-        $this._isLoading = false;
         loaddingBar.remove();
         MediaIndex._updateHistory();
+        
+        $this._isLoading = false;
     }, 'json');
 };
 
@@ -193,20 +208,17 @@ MediaIndex.load = function( refresh ) {
  * @returns void
  */
 MediaIndex._InsertMediasIntoContainer = function( medias ) {
-    var sign = 'item-'+(new Date()).getTime();
+    var sign = 'item-'+(new Date()).getTime()+(Math.random()+'').replace('.', '');
     for ( var i in medias ) {
         this._InsertMediaIntoContainer(medias[i], sign);
     }
     $('.'+sign).waypoint(MediaIndex._loadMediaCoverOnVisible, {offset:'100%'});
     if ( this._autoLoadCount >= this.maxAutoLoadCount ) {
-        $('<div class="alert alert-info pull-left text-center" style="width:100%;cursor:pointer"></div>')
-        .html('显示更多')
-        .click(function() {
+        $(MediaIndex.loadMoreBtnTemplate).click(function() {
             $(this).remove();
             MediaIndex._autoLoadCount = 0;
             MediaIndex.load();
-        })
-        .appendTo(this.container);
+        }).appendTo(this.container);
     }
 };
 
@@ -215,43 +227,40 @@ MediaIndex._InsertMediasIntoContainer = function( medias ) {
  * @returns void
  */
 MediaIndex._InsertMediaIntoContainer = function( media, sign ) {
-    var itemContainer = $('<div>')
-        .attr('class', 'pull-left lnm-media-list-item-container')
-        .appendTo(this.container);
-    var coverContainer = $('<div>')
-        .addClass('lnm-media-list-item')
-        .addClass(sign)
-        .attr('data-cover-url', media.cover)
+    var itemContainer = $('<div>').attr('class', 'pull-left lnm-media-list-item-container')
+    .append(
+        $('<div>').addClass('lnm-media-list-item').addClass(sign).attr('data-cover-url', media.cover)
         .mouseenter(function() {
             $(this).children().show();
         })
         .mouseleave(function() {
             $(this).children().hide();
         })
-        .appendTo(itemContainer);
-    var introContainer = $('<div>')
-        .addClass('lnm-media-list-item-intro-area')
-        .attr('data-detail-url', this.detailURL.replace('{id}', media.id))
-        .html(media.introduction)
-        .click(function() {
-            window.open($(this).attr('data-detail-url'));
-        })
-        .appendTo(coverContainer);
-    var markContainer = $('<div>')
-        .attr('class', 'btn-group btn-group-justified lnm-media-list-item-mark-container')
-        .appendTo(coverContainer);
-    for ( var markCode in this.marks ) {
-        
-        this._generateMarkButton({
-            code    : markCode,
-            name    : this.marks[markCode].name,
-            style    : this.marks[markCode].style,
-        }, media).appendTo(markContainer);
-    }
-    var nameContainer = $('<div>')
-        .addClass('white-space-nowrap')
-        .html('<strong>'+media.name+'<strong>')
-        .appendTo(itemContainer);
+        .append(
+            $('<div>').addClass('lnm-media-list-item-intro-area')
+            .attr('data-detail-url', this.detailURL.replace('{id}', media.id))
+            .html(media.introduction)
+            .click(function() {
+                window.open($(this).attr('data-detail-url'));
+            })
+        )
+        .append(
+            $('<div>').attr('class', 'btn-group btn-group-justified lnm-media-list-item-mark-container')
+            .append((function(){
+                var buttons = [];
+                for ( var markCode in MediaIndex.marks ) {
+                    buttons.push(MediaIndex._generateMarkButton({
+                        code    : markCode,
+                        name    : MediaIndex.marks[markCode].name,
+                        style   : MediaIndex.marks[markCode].style,
+                    }, media));
+                }
+                return buttons;
+            })())
+        )
+    ).append(
+        $('<div>').addClass('white-space-nowrap').html('<strong>'+media.name+'<strong>')
+    ).appendTo(this.container);
     MediaIndex._log('Render Media Item ['+media.name+'] Done.');
 };
 
@@ -289,7 +298,8 @@ MediaIndex._generateMarkButton = function(mark, media) {
 };
 
 /**
- * 当项目处于可见状态的事件处理方法。
+ * 当项目处于可见状态的事件处理方法。 这里主要是加载电影封面图片。
+ * @param direction
  * @returns void
  */
 MediaIndex._loadMediaCoverOnVisible = function(direction) {
@@ -401,20 +411,18 @@ $(document).ready(function() {
     }
     
     MediaIndex.init();
-    if ( !isConditionInited ) {
-        var history = MediaIndex._getHistory();
-        if ( null != history ) {
-            for ( var i in history.condition ) {
-                if ( 'name' != i ) {
-                    var item = $('.media-search-condition-label[data-value="'+history.condition[i]+'"][data-attr="'+i+'"]');
-                    if ( 0 == item.length ) {
-                        $('.media-search-condition-select[data-attr="'+i+'"]').val(history.condition[i]).trigger('change');
-                    } else {
-                        item.trigger('click');
-                    }
+    if ( !isConditionInited && MediaIndex.hasHistory() ) {
+        var history = MediaIndex.getHistory();
+        for ( var i in history.condition ) {
+            if ( 'name' != i ) {
+                var item = $('.media-search-condition-label[data-value="'+history.condition[i]+'"][data-attr="'+i+'"]');
+                if ( 0 == item.length ) {
+                    $('.media-search-condition-select[data-attr="'+i+'"]').val(history.condition[i]).trigger('change');
                 } else {
-                    $('#media-name-search-text').val(history.condition.name);
+                    item.trigger('click');
                 }
+            } else {
+                $('#media-name-search-text').val(history.condition.name);
             }
         }
     }
