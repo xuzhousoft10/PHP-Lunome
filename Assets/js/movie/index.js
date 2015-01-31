@@ -7,7 +7,7 @@
  * #media-name-search-button ： 当该元素被点击后， 执行查询项目名称的操作。
  * 
  * @author  Michael Luthor
- * @version 0.0.0
+ * @license LGPL http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 var MediaIndex = {
     url                    : null, /* 列表数据加载使用的URL地址, 即查询电影的处理地址。 */

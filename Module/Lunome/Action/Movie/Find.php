@@ -1,32 +1,41 @@
 <?php
 /**
- * The action file for movie/ignore action.
+ * @license LGPL http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 namespace X\Module\Lunome\Action\Movie;
 
 /**
  * Use statements
  */
+use X\Module\Lunome\Service\Movie\Service as MovieService;
 use X\Module\Lunome\Util\Action\Basic;
 
 /**
- * The action class for movie/ignore action.
- * @method \X\Module\Lunome\Service\Movie\Service getMovieService()
- * @author Unknown
+ * The action class for movie/find action.
+ * @author Michael Luthor <michaelluthor@163.com>
  */
 class Find extends Basic {
     /**
-     * 
+     * @param integer $mark
+     * @param array $condition
+     * @param integer $position
+     * @param integer $length
+     * @param boolean $score
      */
     public function runAction( $mark=0, $condition=null, $position=0, $length=20, $score=false ) {
-        $condition = empty($condition) ? array() : $condition;
+        /* 格式化查询条件参数。 */
+        $mark       = intval($mark);
+        $position   = intval($position);
+        $length     = intval($length);
+        $score      = $score ? true : false;
+        $condition  = (empty($condition) || !is_array($condition))? array() : $condition;
         if ( isset($condition['name']) ) {
             $extConditions = explode(';', $condition['name']);
             $fixedExtConditions = array();
             $map = array('导演'=>'director', '演员'=>'actor');
             foreach ( $extConditions as $index => $extCondition ) {
                 $extCondition = explode(':', $extCondition);
-                if ( isset( $map[$extCondition[0]] ) ) {
+                if ( isset($map[$extCondition[0]]) && isset($extCondition[1]) ) {
                     $fixedExtConditions[$map[$extCondition[0]]] = explode(',', $extCondition[1]);
                     unset($extConditions[$index]);
                 }
@@ -38,25 +47,25 @@ class Find extends Basic {
             }
         }
         
-        /* @var $service \X\Module\Lunome\Service\Movie\Service */
-        $service = $this->getService('Movie');
-        if ( 0 === $mark*1 ) {
-            $medias = $service->getUnmarked($condition, $length, $position);
-            $count = $service->countUnmarked($condition);
+        /* get movie data by condition. */
+        $movieService = $this->getMovieService();
+        if ( MovieService::MARK_UNMARKED === $mark ) {
+            $medias = $movieService->getUnmarked($condition, $length, $position);
+            $count = $movieService->countUnmarked($condition);
         } else {
-            $medias = $service->getMarked($mark, $condition, $length, $position);
-            $count = $service->countMarked($mark, null, 0, $condition);
+            $medias = $movieService->getMarked($mark, $condition, $length, $position);
+            $count = $movieService->countMarked($mark, null, 0, $condition);
         }
         
-        /* 填充封面信息 */
+        /* fill extension information for each movie. */
         foreach ( $medias as $index => $media ) {
             if ( 0 === $media['has_cover']*1 ) {
-                $medias[$index]['cover'] = $service->getMediaDefaultCoverURL();
+                $medias[$index]['cover'] = $movieService->getMediaDefaultCoverURL();
             } else {
-                $medias[$index]['cover'] = $service->getCoverURL($media['id']);
+                $medias[$index]['cover'] = $movieService->getCoverURL($media['id']);
             }
             if ( $score ) {
-                $medias[$index]['score'] = $service->getRateScore($media['id']);
+                $medias[$index]['score'] = $movieService->getRateScore($media['id']);
             }
         }
         
