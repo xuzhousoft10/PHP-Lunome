@@ -29,6 +29,7 @@ var MediaIndex = {
     isDebug                : false,/* 是否处于调试模式。 */ 
     loadMoreBtnTemplate    : null, /* 加载更多按钮的显示模板。 */
     prevResultBtnTemplate  : null, /* 显示之前搜索结果按钮的模板 */
+    watchedMark            : null, /* 已看标记的标记码。 */
 };
 
 /**
@@ -50,6 +51,7 @@ MediaIndex.init = function() {
     this.isDebug               = parameters.attr('data-is-debug');
     this.loadMoreBtnTemplate   = parameters.attr('data-load-more-btn');
     this.prevResultBtnTemplate = parameters.attr('data-prev-result-btn');
+    this.watchedMark           = parameters.attr('data-watched-mark');
     
     /* 检查初始化查询参数。 */
     var initQuery = $.parseJSON(parameters.attr('data-init-query'));
@@ -210,7 +212,11 @@ MediaIndex.load = function( refresh ) {
 MediaIndex._InsertMediasIntoContainer = function( medias ) {
     var sign = 'item-'+(new Date()).getTime()+(Math.random()+'').replace('.', '');
     for ( var i in medias ) {
-        this._InsertMediaIntoContainer(medias[i], sign);
+        if ( this.currentMark*1 == this.watchedMark*1 ) {
+            this._InsertWatchedMediaIntoContainer(medias[i], sign);
+        } else {
+            this._InsertUnwatchedMediaIntoContainer(medias[i], sign);
+        }
     }
     $('.'+sign).waypoint(MediaIndex._loadMediaCoverOnVisible, {offset:'100%'});
     if ( this._autoLoadCount >= this.maxAutoLoadCount ) {
@@ -223,11 +229,11 @@ MediaIndex._InsertMediasIntoContainer = function( medias ) {
 };
 
 /**
- * 将单个项目插入到列表中。
+ * 将单个未看项目插入到列表中。
  * @returns void
  */
-MediaIndex._InsertMediaIntoContainer = function( media, sign ) {
-    var itemContainer = $('<div>').attr('class', 'pull-left lnm-media-list-item-container')
+MediaIndex._InsertUnwatchedMediaIntoContainer = function( media, sign ) {
+    $('<div>').attr('class', 'pull-left lnm-media-list-item-container')
     .append(
         $('<div>').addClass('lnm-media-list-item').addClass(sign).attr('data-cover-url', media.cover)
         .mouseenter(function() {
@@ -261,6 +267,65 @@ MediaIndex._InsertMediaIntoContainer = function( media, sign ) {
     ).append(
         $('<div>').addClass('white-space-nowrap').html('<strong>'+media.name+'<strong>')
     ).appendTo(this.container);
+    MediaIndex._log('Render Media Item ['+media.name+'] Done.');
+};
+
+/**
+ * 插入以看项目到列表中。
+ * @returns void
+ */
+MediaIndex._InsertWatchedMediaIntoContainer = function( media, sign ) {
+    $('<div>').attr('class', 'pull-left lnm-media-list-item-container')
+    .append(
+        $('<div>').addClass('lnm-media-list-item').addClass(sign).attr('data-cover-url', media.cover)
+        .mouseenter(function() {
+            $(this).children().show();
+        })
+        .mouseleave(function() {
+            $(this).children().hide();
+        })
+        .append(
+            $('<div>').addClass('lnm-media-list-item-intro-area')
+            .attr('data-detail-url', this.detailURL.replace('{id}', media.id))
+            .html(media.introduction)
+            .click(function() {
+                window.open($(this).attr('data-detail-url'));
+            })
+        )
+        .append(
+            $('<div>').attr('class', 'btn-group btn-group-justified lnm-media-list-item-mark-container')
+            .append(
+                $('<div>').append($('<div>')
+                        .attr('class', 'rate-it-container-'+sign)
+                        .attr('data-media-id', media.id)
+                        .attr('id', 'rate-it-container-'+media.id)
+                )
+            )
+        )
+    ).append(
+        $('<div>').addClass('white-space-nowrap').html('<strong>'+media.name+'<strong>')
+    ).appendTo(this.container);
+    MediaIndex._log('Render Media Item ['+media.name+'] Done.');
+    
+    $('#rate-it-container-'+media.id)
+    .rateit({max:10,step:1,resetable:false, value:media.score})
+    .bind('over', function (event, value) {
+        value = parseInt(value);
+        if ( 0 >= value ) {
+            value = 1;
+        }
+        var titles = ['没救了','太差','很差','差','还行','很棒','非常棒','棒级了','超级棒','极品'];
+        $(this).attr('title', titles[value-1]); 
+    })
+    .bind('rated', function (e) {
+        var ri = $(this);
+        $.get('/?module=lunome&action=movie/rate', {
+            id:ri.attr('data-media-id'),
+            score:ri.rateit('value'),
+        }, function( response ) {
+            
+        }, 'json');
+    });
     MediaIndex._log('Render Media Item ['+media.name+'] Done.');
 };
 

@@ -1,7 +1,9 @@
 <?php 
+use X\Module\Lunome\Service\Movie\Service;
 $vars = get_defined_vars();
 $query = $vars['query'];
 $marks = $vars['marks'];
+$dataURL = $vars['dataURL'];
 $isDebug = $vars['isDebug'];
 $pageSize = $vars['pageSize'];
 $searchData = $vars['searchData'];
@@ -49,7 +51,7 @@ $mediaLoaderLoaddingImage = $vars['mediaLoaderLoaddingImage'];
             id                  = "media-index-parameters" 
             type                = "hidden"
             data-init-query     = "<?php echo $query;?>"
-            data-url            = "/?module=lunome&action=movie/find&mark=<?php echo $currentMark; ?>"
+            data-url            = "<?php echo $dataURL;?>"
             data-detail-url     = "/?module=lunome&action=movie/detail&id={id}"
             data-mark-url       = "/?module=lunome&action=movie/mark&mark={mark}&id={id}"
             data-total          = "<?php echo $marks[$currentMark]['count'];?>"
@@ -62,6 +64,7 @@ $mediaLoaderLoaddingImage = $vars['mediaLoaderLoaddingImage'];
             data-is-debug       = "<?php echo $isDebug; ?>"
             data-prev-result-btn= "<?php echo htmlspecialchars('<div class="alert alert-info pull-left text-center" style="width:100%;cursor:pointer">显示之前的结果</div>');?>"
             data-load-more-btn  = "<?php echo htmlspecialchars('<div class="alert alert-info pull-left text-center" style="width:100%;cursor:pointer">显示更多</div>'); ?>"
+            data-watched-mark   = "<?php echo Service::MARK_WATCHED;?>"
         >
         <div>
         <?php require dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'Movie'.DIRECTORY_SEPARATOR.'Search.php'; ?>

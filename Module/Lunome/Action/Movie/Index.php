@@ -8,15 +8,21 @@ namespace X\Module\Lunome\Action\Movie;
  * Use statements
  */
 use X\Core\X;
+use X\Library\XData\Validator;
 use X\Module\Lunome\Util\Action\VisualMain;
 use X\Module\Lunome\Service\Movie\Service as MovieService;
-use X\Library\XData\Validator;
 
 /**
  * The action class for movie/index action.
  * @author Michael Luthor <michaelluthor@163.com>
  */
 class Index extends VisualMain { 
+    /**
+     * 当前标记码
+     * @var integer
+     */
+    private $currentMark = MovieService::MARK_UNMARKED;
+    
     /**
      * 处理电影列表页面的请求。
      * 如果标记不存在，则视为未标记处理。
@@ -46,6 +52,7 @@ class Index extends VisualMain {
             $this->gotoURL('/?module=lunome&action=movie/index', array('mark'=>MovieService::MARK_UNMARKED));
         }
         $mark = intval($mark);
+        $this->currentMark = $mark;
         
         /* Check query parameter. */
         $query = (empty($query) || !is_array($query)) ? array() : $query;
@@ -124,6 +131,14 @@ class Index extends VisualMain {
         /* Add page size to view. */
         $view->setDataToParticle($viewName, 'pageSize', $moduleConfig->get('media_list_page_size'));
         
+        /* Add handler url for loadding movies. */
+        $dataURL = array('mark'=>$mark);
+        if ( MovieService::MARK_WATCHED === $mark ) {
+            $dataURL['score'] = true;
+        }
+        $dataURL = $this->createURL('/?module=lunome&action=movie/find', $dataURL);
+        $view->setDataToParticle($viewName, 'dataURL', $dataURL);
+        
         /* Add search condition data to view.  */
         $searchConditionData = array();
         $searchConditionData['regions'] = $movieService->getRegions();
@@ -143,7 +158,12 @@ class Index extends VisualMain {
      */
     protected function beforeDisplay() {
         $assetsURL = X::system()->getConfiguration()->get('assets-base-url');
-        $this->getView()->addScriptFile('media-index', $assetsURL.'/js/media_index.js');
+        $this->getView()->addScriptFile('media-index', $assetsURL.'/js/movie/index.js');
         $this->getView()->addScriptFile('cookie', $assetsURL.'/library/jquery/plugin/cookie.js');
+        
+        if ( MovieService::MARK_WATCHED === $this->currentMark ) {
+            $this->getView()->addScriptFile('rate-it', $assetsURL.'/library/jquery/plugin/rate/rateit.js');
+            $this->getView()->addCssLink('rate-it', $assetsURL.'/library/jquery/plugin/rate/rateit.css');
+        }
     }
 }

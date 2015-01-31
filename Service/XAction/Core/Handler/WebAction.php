@@ -13,18 +13,26 @@ namespace X\Service\XAction\Core\Handler;
  */
 abstract class WebAction extends \X\Service\XAction\Core\Action {
     /**
+     * @param unknown $path
+     * @param unknown $params
+     */
+    public function createURL( $path, $params=null ) {
+        $urlInfo = parse_url($path);
+        if ( null !== $params ) {
+            $parmConnector = (isset($urlInfo['query'])) ? '&' : '?';
+            $path = $path.$parmConnector.http_build_query($params);
+        }
+        return $path;
+    }
+    
+    /**
      * Jump to target url and exit the script.
      * 
      * @param string $url The target url to jump to.
      * @param array  $parms The parameters to that url
      */
     public function gotoURL( $url, $parms=null ) {
-        $urlInfo = parse_url($url);
-        if ( null !== $parms ) {
-            $parmConnector = (isset($urlInfo['query'])) ? '&' : '?';
-            $url = $url.$parmConnector.http_build_query($parms);
-        }
-        
+        $url = $this->createURL($url, $parms);
         header("Location: $url");
         exit();
     }
