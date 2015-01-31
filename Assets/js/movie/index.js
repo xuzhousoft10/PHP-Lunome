@@ -295,7 +295,7 @@ MediaIndex._InsertWatchedMediaIntoContainer = function( media, sign ) {
         .append(
             $('<div>').attr('class', 'btn-group btn-group-justified lnm-media-list-item-mark-container')
             .append(
-                $('<div>').append($('<div>')
+                $('<div>').css('background-color', '#FFFFFF').append($('<div>')
                         .attr('class', 'rate-it-container-'+sign)
                         .attr('data-media-id', media.id)
                         .attr('id', 'rate-it-container-'+media.id)
