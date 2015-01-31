@@ -9,6 +9,7 @@ $pageSize = $vars['pageSize'];
 $searchData = $vars['searchData'];
 $markActions = $vars['markActions'];
 $currentMark = $vars['currentMark'];
+$searchMaxLength = $vars['searchMaxLength'];
 $mediaItemWaitingImage = $vars['mediaItemWaitingImage'];
 $mediaLoaderLoaddingImage = $vars['mediaLoaderLoaddingImage'];
 ?>
@@ -33,7 +34,12 @@ $mediaLoaderLoaddingImage = $vars['mediaLoaderLoaddingImage'];
                     </ul>
                     <form class="navbar-form navbar-right">
                         <div class="form-group">
-                            <input id="media-name-search-text" type="text" class="form-control" placeholder="查询名称，导演，演员">
+                            <input  id="media-name-search-text" 
+                                    type="text" 
+                                    class="form-control" 
+                                    placeholder="查询名称，导演，演员"
+                                    maxlength="<?php echo $searchMaxLength;?>"
+                            >
                         </div>
                         <button id="media-name-search-button" type="button" class="btn btn-default">
                             <span class="glyphicon glyphicon-search"></span>
