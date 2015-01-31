@@ -1,6 +1,6 @@
 <?php
 /**
- * The action file for movie/index action.
+ * @license LGPL http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 namespace X\Module\Lunome\Action\Movie;
 
