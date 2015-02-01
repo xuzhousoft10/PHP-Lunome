@@ -6,4 +6,5 @@ return array(
 'media_loader_loading_image' => 'http://7sbnm1.com1.z0.glb.clouddn.com/image/loadding.gif',
 'media_list_page_size' => 20,
 'max_auto_load_time_count' => 10,
+'top_list_limitation' => 10,
 );

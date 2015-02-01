@@ -240,6 +240,7 @@ abstract class Media extends \X\Core\Service\XService {
             ->addTable($modelTableName, 'medias')
             ->addTable($markTableName, 'marks')
             ->where(array('marks.mark'=>$type, 'medias.id'=>new Expression('`marks`.`movie_id`')))
+            ->limit($limit)
             ->groupBy('marks.movie_id')
             ->orderBy('mark_count', 'DESC')
             ->toString();
