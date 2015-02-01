@@ -1,6 +1,6 @@
 <?php
 /**
- * The action file for movie/ignore action.
+ * @license LGPL http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 namespace X\Module\Lunome\Action\Movie;
 
@@ -9,185 +9,129 @@ namespace X\Module\Lunome\Action\Movie;
  */
 use X\Core\X;
 use X\Module\Lunome\Util\Action\Visual;
-use X\Module\Lunome\Service\Movie\Service;
-use X\Module\Lunome\Util\Exception as LunomeException;
-use X\Module\Lunome\Service\User\Service as UserService;
+use X\Module\Lunome\Service\Movie\Service as MovieService;
 
 /**
- * The action class for movie/ignore action.
- * @method \X\Module\Lunome\Service\Movie\Service getMovieService()
- * @author Unknown
+ * The action class for movie/detail action.
+ * @author Michael Luthor <michaelluthor@163.com>
  */
 class Detail extends Visual {
     /**
-     * @var boolean
-     */
-    protected $isGuest = false;
-    
-    /**
-     * (non-PHPdoc)
-     * @see \X\Module\Lunome\Util\Action\Visual::beforeRunAction()
-     */
-    protected function beforeRunAction() {
-        $this->isGuest = $this->getService(UserService::getServiceName())->getIsGuest();
-        parent::beforeRunAction();
-        $this->getView()->loadLayout($this->getLayoutViewPath('BlankThin'));
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see \X\Module\Lunome\Util\Action\Visual::afterRunAction()
-     */
-    protected function afterRunAction() {
-        parent::afterRunAction();
-    }
-    
-    /**
-     * @var unknown
-     */
-    protected $id = null;
-    
-    /**
-     * @param unknown $mark
-     * @param number $page
+     * @param string $id The id of the movie.
      */
     public function runAction( $id ) {
-        $this->id = $id;
-        $mediaType = $this->getMediaType();
-        /* @var $service \X\Module\Lunome\Service\Movie\Service */
-        $service = $this->getService($mediaType);
-    
-        /* Load detail view */
-        try {
-            $media = $service->get($id);
-        } catch ( LunomeException $e ) {
+        /* setup env values. */
+        $movieService = $this->getMovieService();
+        $view = $this->getView();
+        $isGuest = $this->getUserService()->getIsGuest();
+        $moduleConfig = $this->getModule()->getConfiguration();
+        
+        /* check parameters. */
+        if ( !$movieService->has($id) ) {
             $this->throw404();
+            return;
         }
-        if ( 0 === $media['has_cover']*1 ) {
-            $media['cover'] = $service->getMediaDefaultCoverURL();
+        
+        /* setup view. */
+        $view->loadLayout($this->getLayoutViewPath('BlankThin'));
+        $viewName   = 'MEDIA_DETAIL';
+        $path       = $this->getParticleViewPath('Movie/Detail');
+        $view->loadParticle($viewName, $path);
+        
+        /* add movie data to view. */
+        $movie = $movieService->get($id);
+        if ( 0 === $movie['has_cover']*1 ) {
+            $movie['cover'] = $movieService->getMediaDefaultCoverURL();
         } else {
-            $media['cover'] = $service->getCoverURL($media['id']);
+            $movie['cover'] = $movieService->getCoverURL($movie['id']);
         }
-        $media = $this->afterFindTheModel($media);
+        $movie['region']    = $movieService->getRegionById($movie['region_id']);
+        $movie['language']  = $movieService->getLanguageById($movie['language_id']);
+        $movie['category']  = $movieService->getCategoriesByMovieId($movie['id']);
+        $movie['directors'] = $movieService->getDirectors($movie['id']);
+        $movie['actors']    = $movieService->getActors($movie['id']);
+        $view->setDataToParticle($viewName, 'movie', $movie);
+                
+        /* add mark count info to view. */
         $markCount = array();
-        foreach ( $this->getMediaMarks() as $markValue ) {
-            $markCount[$markValue]['all']  = $service->countMarkedUsers($id, $markValue);
-            $markCount[$markValue]['friend'] = $service->countMarkedFriends($id, $markValue);
-        }
-        $myMark = $this->isGuest ? 0 : $service->getMark($id);
-        $names  = $service->getMarkNames();
-        $styles = $this->getMarkStyles();
-    
-        $userData = $this->isGuest ? null : $this->getUserService()->getAccount()->getInformation($this->getUserService()->getCurrentUserId());
-        $name   = 'MEDIA_DETAIL';
-        $path   = $this->getParticleViewPath('Movie/Detail');
-        $option = array();
-        $data   = array(
-            'media'         => $media,
-            'markCount'     => $markCount,
-            'myMark'        => $myMark,
-            'markStyles'    => $styles,
-            'markNames'     => $names,
-            'mediaType'     => $mediaType,
-            'mediaName'     => $service->getMediaName(),
-            'shareMessage'  => $this->getShareMessage($media['id'], $myMark),
-            'isGuestUser'   => $this->isGuest,
-            'currentUser'   => $userData,
-        );
-        $this->getView()->loadParticle($name, $path, $option, $data);
-    
-        $this->getView()->title = $media['name'];
-    }
-    
-    /**
-     * @return string
-     */
-    protected function getMediaType() {
-        $class = explode('\\', get_class($this));
-        array_pop($class);
-        $media = array_pop($class);
-        return $media;
-    }
-    
-    /**
-     * @return array
-     */
-    protected function getMediaMarks() {
-        $class = new \ReflectionClass($this->getService($this->getMediaType()));
+        $class = new \ReflectionClass($movieService);
         $consts = $class->getConstants();
         $marks = array();
         foreach ( $consts as $name => $value ) {
-            if ( 'MARK_' === substr($name, 0, 5) ) {
+            if ( 'MARK_' === substr($name, 0, 5) && MovieService::MARK_UNMARKED !== $value ) {
                 $marks[] = $value;
             }
         }
-        return $marks;
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see \X\Module\Lunome\Util\Action\Media\Detail::afterFindTheModel()
-     */
-    protected function afterFindTheModel($media) {
-        $media['region'] = $this->getMovieService()->getRegionById($media['region_id']);
-        $media['language'] = $this->getMovieService()->getLanguageById($media['language_id']);
-        $media['category'] = $this->getMovieService()->getCategoriesByMovieId($media['id']);
-        $media['directors'] = $this->getMovieService()->getDirectors($media['id']);
-        $media['actors'] = $this->getMovieService()->getActors($media['id']);
+        foreach ( $marks as $markValue ) {
+            $markCount[$markValue]['all']  = $movieService->countMarkedUsers($id, $markValue);
+            $markCount[$markValue]['friend'] = $movieService->countMarkedFriends($id, $markValue);
+        }
+        $view->setDataToParticle($viewName, 'markCount', $markCount);
         
-        return $media;
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see \X\Module\Lunome\Util\Action\Media\Detail::getShareMessage()
-     */
-    protected function getShareMessage($mediaId, $myMark) {
+        /* add my mark of this movie to view. */
+        $myMark = $isGuest ? MovieService::MARK_UNMARKED : $movieService->getMark($id);
+        $view->setDataToParticle($viewName, 'myMark', $myMark);
+        
+        /* add mark styles. */
+        $styles = array(
+            MovieService::MARK_UNMARKED      => 'warning',
+            MovieService::MARK_INTERESTED    => 'success',
+            MovieService::MARK_WATCHED       => 'info',
+            MovieService::MARK_IGNORED       => 'default'
+        );
+        $view->setDataToParticle($viewName, 'markStyles', $styles);
+        
+        /* add share message to view. */
         $message = '';
-        $categories = $this->getMovieService()->getCategoriesByMovieId($mediaId);
+        /* try to use share message from category, or use the default share message. */
+        $categories = $movieService->getCategoriesByMovieId($id);
         if ( 0 < count($categories) ) {
             $index = rand(0, count($categories)-1);
             /* @var $category \X\Module\Lunome\Model\Movie\MovieCategoryModel */
             $category = $categories[$index];
             switch ( $myMark ) {
-            case Service::MARK_INTERESTED :
-                $message = $category->beg_message;
-                break;
-            case Service::MARK_WATCHED :
-                $message = $category->recommend_message;
-                break;
-            default:
-                $message = $category->share_message;
-                break;
+            case MovieService::MARK_INTERESTED  : $message=$category->beg_message;break;
+            case MovieService::MARK_WATCHED     : $message=$category->recommend_message;break;
+            default                             : $message=$category->share_message;break;
             }
         }
-        
         if ( empty($message) ) {
             switch ( $myMark ) {
-            case Service::MARK_INTERESTED :
-                $message = "怀着各种复杂与激动的心情， 我来到了这里， 我抬头， 望了望天，想起了你，此时此刻， 我的心情不是别人所能理解的，土豪，请我看场《{name}》呗？";
-                break;
-            case Service::MARK_WATCHED :
-                $message = "看完《{name}》， 我和我的小伙伴们都惊呆了！ GO！ GO! GO! ";
-                break;
-            default:
-                $message = "";
-                break;
+            case MovieService::MARK_INTERESTED :$message='怀着各种复杂与激动的心情， 我来到了这里， 我抬头， 望了望天，想起了你，此时此刻， 我的心情不是别人所能理解的，土豪，请我看场《'.$movie['name'].'》呗？';break;
+            case MovieService::MARK_WATCHED    :$message='看完《'.$movie['name'].'》， 我和我的小伙伴们都惊呆了！ GO！ GO! GO! ';break;
+            default:$message='';break;
             }
         }
-        return $message;
+        $view->setDataToParticle($viewName, 'shareMessage', $message);
+        
+        /* add share message title to view. */
+        $shareMessageTitle = '分享';
+        if ( MovieService::MARK_INTERESTED === $myMark ) {
+            $shareMessageTitle = '求包养';
+        } else if ( MovieService::MARK_WATCHED === $myMark ) {
+            $shareMessageTitle = '推荐给好友';
+        } else {
+            $shareMessageTitle = '分享';
+        }
+        $view->setDataToParticle($viewName, 'shareMessageTitle', $shareMessageTitle);
+        
+        /* add other data to view. */
+        $view->setDataToParticle($viewName, 'markNames', $movieService->getMarkNames());
+        $view->setDataToParticle($viewName, 'isGuestUser', $isGuest);
+        $userData = $isGuest ? null : $this->getUserService()->getAccount()->getInformation($this->getUserService()->getCurrentUserId());
+        $view->setDataToParticle($viewName, 'currentUser', $userData);
+        $view->setDataToParticle($viewName, 'assetsURL', X::system()->getConfiguration()->get('assets-base-url'));
+        
+        $view->title = $movie['name'];
     }
     
     /**
      * (non-PHPdoc)
-     * @see \X\Module\Lunome\Util\Action\Media\Detail::getMarkStyles()
+     * @see \X\Util\Action\Visual::beforeDisplay()
      */
-    protected function getMarkStyles() {
-        return array(
-            Service::MARK_UNMARKED      => 'warning',
-            Service::MARK_INTERESTED    => 'success',
-            Service::MARK_WATCHED       => 'info',
-            Service::MARK_IGNORED       => 'default'
-        );
+    protected function beforeDisplay() {
+        $assetsURL = X::system()->getConfiguration()->get('assets-base-url');
+        $this->getView()->addScriptFile('ajaxfileupload', $assetsURL.'/library/jquery/plugin/ajaxfileupload.js');
+        $this->getView()->addScriptFile('detail-detail', $assetsURL.'/js/movie/detail.js');
     }
 }

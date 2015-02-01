@@ -1,44 +1,30 @@
+<?php use X\Module\Lunome\Service\Movie\Service as MovieService; ?>
 <?php 
-use X\Core\X;
-use X\Module\Lunome\Service\Movie\Service as MovieService;
-
-$assetsURL = X::system()->getConfiguration()->get('assets-base-url');
-$this->addScriptFile('ajaxfileupload', $assetsURL.'/library/jquery/plugin/ajaxfileupload.js');
-$this->addScriptFile('detail-detail', $assetsURL.'/js/media_detail.js');
-
 $vars = get_defined_vars();
-$media = $vars['media'];
-$mediaType = $vars['mediaType'];
-$mediaName = $vars['mediaName'];
-$markCount = $vars['markCount'];
+$movie = $vars['movie'];
 $myMark = $vars['myMark'];
+$markCount = $vars['markCount'];
 $markStyles = $vars['markStyles'];
 $markNames = $vars['markNames'];
-$markUrlFormat = sprintf('/?module=lunome&action=%s/mark&mark=%%s&id=%%s&redirect=true', strtolower($mediaType));
-$shareMessageContent = str_replace('{name}', $media['name'], $vars['shareMessage']);
-if ( MovieService::MARK_INTERESTED == $myMark ) {
-    $shareMessageTitle = '求包养';
-} else if ( MovieService::MARK_WATCHED == $myMark ) {
-    $shareMessageTitle = '推荐给好友';
-} else {
-    $shareMessageTitle = '分享';
-}
+$assetsURL = $vars['assetsURL'];
+$shareMessageTitle = $vars['shareMessageTitle'];
+$shareMessageContent = $vars['shareMessage'];
 ?>
 <div class="row margin-top-5">
     <ol class="breadcrumb">
-        <li><a href="/?module=lunome&action=<?php echo strtolower($mediaType)?>/index"><?php echo $mediaName;?></a></li>
-        <li class="active"><?php echo $media['name'];?></li>
+        <li><a href="/?module=lunome&action=movie/index">电影</a></li>
+        <li class="active"><?php echo $movie['name'];?></li>
     </ol>
     
     <div class="col-md-2 padding-0">
-        <a class="thumbnail" href="http://v.baidu.com/v?word=<?php echo urlencode(mb_convert_encoding($media['name'],'gb2312','utf-8' )); ?>" target="_black">
-            <img src="<?php echo $media['cover'];?>" width="200" height="300">
+        <a class="thumbnail" href="http://v.baidu.com/v?word=<?php echo urlencode(mb_convert_encoding($movie['name'],'gb2312','utf-8' )); ?>" target="_black">
+            <img src="<?php echo $movie['cover'];?>" width="200" height="300">
         </a>
     </div>
     <div class="col-md-10">
         <div class="clearfix">
             <h4 class="pull-left">
-                <?php echo $media['name'];?>
+                <?php echo $movie['name'];?>
                 <small>
                      --
                      <span class="label label-<?php echo $markStyles[$myMark];?>">
@@ -51,23 +37,23 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
         <br>
         <table class="table table-bordered">
             <tr>
-                <td>时长: <?php echo intval($media['length']/60);?>分钟</td>
+                <td>时长: <?php echo intval($movie['length']/60);?>分钟</td>
                 <td>
                     地区: 
-                    <?php if ( null === $media['region'] ): ?>
+                    <?php if ( null === $movie['region'] ): ?>
                         其他
                     <?php else :?>
-                        <a href="/?module=lunome&action=movie/index&query[region]=<?php echo $media['region']->id;?>">
-                            <?php echo $media['region']->name;?>
+                        <a href="/?module=lunome&action=movie/index&query[region]=<?php echo $movie['region']->id;?>">
+                            <?php echo $movie['region']->name;?>
                         </a>
                     <?php endif; ?>
                 </td>
                 <td>
                     类型: 
-                    <?php if ( null === $media['category'] ) : ?>
+                    <?php if ( null === $movie['category'] ) : ?>
                         其他
                     <?php else: ?>
-                        <?php foreach ( $media['category'] as $category ) : ?>
+                        <?php foreach ( $movie['category'] as $category ) : ?>
                             <a href="/?module=lunome&action=movie/index&query[category]=<?php echo $category->id;?>">
                                 <?php echo $category->name;?>
                             </a>
@@ -76,11 +62,11 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                 </td>
                 <td>
                     语言: 
-                    <?php if ( null === $media['language'] ) : ?>
+                    <?php if ( null === $movie['language'] ) : ?>
                         其他
                     <?php else: ?>
-                        <a href="/?module=lunome&action=movie/index&query[language]=<?php echo $media['language']->id;?>">
-                            <?php echo $media['language']->name;?>
+                        <a href="/?module=lunome&action=movie/index&query[language]=<?php echo $movie['language']->id;?>">
+                            <?php echo $movie['language']->name;?>
                         </a>
                     <?php endif; ?>
                 </td>
@@ -88,7 +74,7 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
             <tr>
                 <td>
                     导演: 
-                    <?php foreach ( $media['directors'] as $director ) : ?>
+                    <?php foreach ( $movie['directors'] as $director ) : ?>
                         <a href="/?module=lunome&action=movie/index&query[name]=<?php echo urlencode('导演:'.$director->name);?>">
                             <?php echo $director->name; ?>
                         </a>
@@ -96,7 +82,7 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                 </td>
                 <td colspan="3">
                     主演： 
-                    <?php foreach ( $media['actors'] as $actor ) : ?>
+                    <?php foreach ( $movie['actors'] as $actor ) : ?>
                         <a href="/?module=lunome&action=movie/index&query[name]=<?php echo urlencode('演员:'.$actor->name);?>">
                             <?php echo $actor->name; ?>
                         </a>
@@ -115,7 +101,7 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                     <small>
                         <a  href="#"
                             class="detail-marked-account-list"
-                            data-id="<?php echo $media['id']; ?>"
+                            data-id="<?php echo $movie['id']; ?>"
                             data-mark="<?php echo MovieService::MARK_INTERESTED; ?>"
                             data-scope="friends"
                             data-loadding-img = "<?php echo $assetsURL.'/image/loadding.gif';?>"
@@ -123,7 +109,7 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                         /
                         <a  href="#"
                             class="detail-marked-account-list"
-                            data-id="<?php echo $media['id']; ?>"
+                            data-id="<?php echo $movie['id']; ?>"
                             data-mark="<?php echo MovieService::MARK_INTERESTED; ?>"
                             data-scope="all"
                             data-loadding-img = "<?php echo $assetsURL.'/image/loadding.gif';?>"
@@ -135,7 +121,7 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                     <small>
                         <a  href="#"
                             class="detail-marked-account-list" 
-                            data-id="<?php echo $media['id']; ?>"
+                            data-id="<?php echo $movie['id']; ?>"
                             data-mark="<?php echo MovieService::MARK_WATCHED; ?>"
                             data-scope="friends"
                             data-loadding-img = "<?php echo $assetsURL.'/image/loadding.gif';?>"
@@ -143,7 +129,7 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                         /
                         <a  href="#"
                             class="detail-marked-account-list" 
-                            data-id="<?php echo $media['id']; ?>"
+                            data-id="<?php echo $movie['id']; ?>"
                             data-mark="<?php echo MovieService::MARK_WATCHED; ?>"
                             data-scope="all"
                             data-loadding-img = "<?php echo $assetsURL.'/image/loadding.gif';?>"
@@ -155,7 +141,7 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                     <small>
                         <a  href="#"
                             class="detail-marked-account-list" 
-                            data-id="<?php echo $media['id']; ?>"
+                            data-id="<?php echo $movie['id']; ?>"
                             data-mark="<?php echo MovieService::MARK_IGNORED; ?>"
                             data-scope="friends"
                             data-loadding-img = "<?php echo $assetsURL.'/image/loadding.gif';?>"
@@ -163,7 +149,7 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                         /
                         <a  href="#"
                             class="detail-marked-account-list" 
-                            data-id="<?php echo $media['id']; ?>"
+                            data-id="<?php echo $movie['id']; ?>"
                             data-mark="<?php echo MovieService::MARK_IGNORED; ?>"
                             data-scope="all"
                             data-loadding-img = "<?php echo $assetsURL.'/image/loadding.gif';?>"
@@ -180,7 +166,7 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                         <?php continue; ?>
                     <?php endif; ?>
                     <a  class="btn btn-<?php echo $markStyles[$markKey];?>" 
-                        href="<?php printf($markUrlFormat, $markKey, $media['id']); ?>"
+                        href="/?module=lunome&action=movie/mark&mark=<?php echo $markKey; ?>s&id=<?php $movie['id']; ?>&redirect=true');"
                     ><?php echo $markName;?></a>
                 <?php endforeach; ?>
             </div>
@@ -189,12 +175,12 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                 <button class                       = "btn btn-default"
                         data-online-play-trigger    = "true"
                         data-player-container       = "#movie-online-play-container"
-                        data-movie-name             = "<?php echo $media['name'];?>"
+                        data-movie-name             = "<?php echo $movie['name'];?>"
                         data-loadding-img           = "<?php echo $assetsURL.'/image/loadding.gif';?>"
                         data-assets-path            = "<?php echo $assetsURL;?>"
                         data-global-search-url      = "http://lunome.kupoy.com/?module=lunome&action=movie/globalSearch"
                 >在线观看</button>
-                <a href="https://www.baidu.com/s?wd=<?php echo urlencode($media['name']);?>" target="_black" class="btn btn-default">百度一下</a>
+                <a href="https://www.baidu.com/s?wd=<?php echo urlencode($movie['name']);?>" target="_black" class="btn btn-default">百度一下</a>
             </div>
             
             <div class="pull-right text-right">
@@ -206,10 +192,10 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                         url         : location.href,
                         showcount   : '0',
                         desc        : '<?php echo $shareMessageContent;?>',
-                        summary     : <?php echo json_encode(array('message'=>$media['introduction']));?>.message,
-                        title       : '<?php echo $media['name'];?>',
+                        summary     : <?php echo json_encode(array('message'=>$movie['introduction']));?>.message,
+                        title       : '<?php echo $movie['name'];?>',
                         site        : 'Lunome',
-                        pics        : '<?php echo $media['cover'];?>',
+                        pics        : '<?php echo $movie['cover'];?>',
                         style       : '202',
                         width       : 24,
                         height      : 24
@@ -233,7 +219,7 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
 <div id="movie-online-play-container"></div>
 
 <div class="margin-top-5">
-    <p><?php echo $media['introduction'];?></p>
+    <p><?php echo $movie['introduction'];?></p>
 </div>
 <hr>
 
@@ -251,27 +237,27 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
             <div    class               = "tab-pane active" 
                     id                  = "movie-classic-dialogues-container"
                     data-resource-type  = "dialogue"
-                    data-index-url      = "/?module=lunome&action=movie/classicDialogue/index&id=<?php echo $media['id']; ?>"
+                    data-index-url      = "/?module=lunome&action=movie/classicDialogue/index&id=<?php echo $movie['id']; ?>"
                     data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
-                    data-movie-id       = "<?php echo $media['id']; ?>"
+                    data-movie-id       = "<?php echo $movie['id']; ?>"
             ></div>
             
             <!-- poster Tab -->
             <div    class               = "tab-pane" 
                     id                  = "movie-posters-container"
                     data-resource-type  = "poster"
-                    data-index-url      = "/?module=lunome&action=movie/poster/index&id=<?php echo $media['id']; ?>"
+                    data-index-url      = "/?module=lunome&action=movie/poster/index&id=<?php echo $movie['id']; ?>"
                     data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
-                    data-movie-id       = "<?php echo $media['id']; ?>"
+                    data-movie-id       = "<?php echo $movie['id']; ?>"
             ></div>
             
             <!-- character Tab -->
             <div    class               = "tab-pane"
                     id                  = "movie-characters-container"
                     data-resource-type  = "character"
-                    data-index-url      = "/?module=lunome&action=movie/character/index&id=<?php echo $media['id']; ?>"
+                    data-index-url      = "/?module=lunome&action=movie/character/index&id=<?php echo $movie['id']; ?>"
                     data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
-                    data-movie-id       = "<?php echo $media['id']; ?>"
+                    data-movie-id       = "<?php echo $movie['id']; ?>"
             ></div>
         </div>
     </div>
@@ -281,8 +267,8 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                 data-is-guest-user  = "<?php echo (null===$vars['currentUser'])?'true':'false'; ?>"
                 data-user-nickname  = "<?php echo (null===$vars['currentUser'])?'':$vars['currentUser']->nickname; ?>"
                 data-user-photo     = "<?php echo (null===$vars['currentUser'])?'':$vars['currentUser']->photo; ?>"
-                data-media-id       = "<?php echo $media['id']; ?>"
-                data-index-url      = "/?module=lunome&action=movie/comment/index&id=<?php echo $media['id']; ?>"
+                data-media-id       = "<?php echo $movie['id']; ?>"
+                data-index-url      = "/?module=lunome&action=movie/comment/index&id=<?php echo $movie['id']; ?>"
                 data-container      = "#movie-short-comment-list-container"
                 data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
         >
@@ -293,7 +279,7 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                 </div>
                 <div class="col-md-8 padding-0">
                     <form action="/?module=lunome&action=movie/comment/add">
-                        <input type="hidden" name="id" value="<?php echo $media['id']; ?>" >
+                        <input type="hidden" name="id" value="<?php echo $movie['id']; ?>" >
                         <textarea name="content" class="width-full" rows="" cols=""></textarea>
                         <br>
                         <button class="btn btn-primary" name="save" type="button">发表</button>
@@ -315,7 +301,7 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                     data-resource-type="dialogue"
                     data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
             >
-                <input type="hidden" name="id" value="<?php echo $media['id']; ?>">
+                <input type="hidden" name="id" value="<?php echo $movie['id']; ?>">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title" id="myModalLabel">添加经典台词</h4>
@@ -341,7 +327,7 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                     data-resource-type="poster"
                     data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
             >
-                <input type="hidden" name="id" value="<?php echo $media['id']; ?>">
+                <input type="hidden" name="id" value="<?php echo $movie['id']; ?>">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title" id="myModalLabel">添加海报</h4>
@@ -367,7 +353,7 @@ if ( MovieService::MARK_INTERESTED == $myMark ) {
                     data-resource-type="character"
                     data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
             >
-                <input type="hidden" name="movie" value="<?php echo $media['id']; ?>">
+                <input type="hidden" name="movie" value="<?php echo $movie['id']; ?>">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title" id="myModalLabel">增加人物角色</h4>

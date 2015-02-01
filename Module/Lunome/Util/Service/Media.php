@@ -80,6 +80,14 @@ abstract class Media extends \X\Core\Service\XService {
     }
     
     /**
+     * @param unknown $id
+     */
+    public function has( $id ) {
+        $mediaModelName = $this->getMediaModelName();
+        return $mediaModelName::model()->exists(array('id'=>$id));
+    }
+    
+    /**
      * Get unmarked medias.
      * 
      * @param unknown $condition
