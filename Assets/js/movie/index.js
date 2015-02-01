@@ -50,6 +50,7 @@ MediaIndex.init = function() {
     this.loadMoreBtnTemplate   = parameters.attr('data-load-more-btn');
     this.prevResultBtnTemplate = parameters.attr('data-prev-result-btn');
     this.watchedMark           = parameters.attr('data-watched-mark');
+    this.maxAutoLoadCount      = parameters.attr('data-max-auto-load-count');
     
     /* 检查初始化查询参数。 */
     var initQuery = $.parseJSON(parameters.attr('data-init-query'));

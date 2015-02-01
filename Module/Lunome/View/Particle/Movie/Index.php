@@ -9,6 +9,7 @@ $pageSize = $vars['pageSize'];
 $searchData = $vars['searchData'];
 $currentMark = $vars['currentMark'];
 $searchMaxLength = $vars['searchMaxLength'];
+$maxAutoLoadTimeCount = $vars['maxAutoLoadTimeCount'];
 $mediaItemWaitingImage = $vars['mediaItemWaitingImage'];
 $mediaLoaderLoaddingImage = $vars['mediaLoaderLoaddingImage'];
 ?>
@@ -69,6 +70,7 @@ $mediaLoaderLoaddingImage = $vars['mediaLoaderLoaddingImage'];
             data-prev-result-btn= "<?php echo htmlspecialchars('<div class="alert alert-info pull-left text-center" style="width:100%;cursor:pointer">显示之前的结果</div>');?>"
             data-load-more-btn  = "<?php echo htmlspecialchars('<div class="alert alert-info pull-left text-center" style="width:100%;cursor:pointer">显示更多</div>'); ?>"
             data-watched-mark   = "<?php echo Service::MARK_WATCHED;?>"
+            data-max-auto-load-count="<?php echo $maxAutoLoadTimeCount; ?>"
         >
         <div>
         <?php require dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'Movie'.DIRECTORY_SEPARATOR.'Search.php'; ?>

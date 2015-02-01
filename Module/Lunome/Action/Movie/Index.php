@@ -113,8 +113,9 @@ class Index extends VisualMain {
         $dataURL = $this->createURL('/?module=lunome&action=movie/find', $dataURL);
         $view->setDataToParticle($viewName, 'dataURL', $dataURL);
         
-        /* Add search max length to view. */
+        /* Add configuration to view. */
         $view->setDataToParticle($viewName, 'searchMaxLength', $moduleConfig->get('movie_search_max_length'));
+        $view->setDataToParticle($viewName, 'maxAutoLoadTimeCount', $moduleConfig->get('max_auto_load_time_count'));
         
         /* Add search condition data to view.  */
         $searchConditionData = array();
