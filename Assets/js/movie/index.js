@@ -294,7 +294,7 @@ MediaIndex._generateMarkButton = function(mark, media) {
 MediaIndex._loadMediaCoverOnVisible = function(direction) {
     var isLoaded = $(this).attr('data-cover-loaded');
     if ( 'undefined' == typeof(isLoaded) ) {
-        MediaIndex._log('Load Cover For ['+$(this).next().text()+']'); 
+        MediaIndex._log('Load Cover For ['+$.trim($(this).next().text())+']'); 
         var cover = $(this).attr('data-cover-url');
         $(this).css('background-image', 'url("'+cover+'")');
         $(this).attr('data-cover-loaded', true);
@@ -373,7 +373,7 @@ $(document).ready(function() {
         }
         
         if ( '' == value ) {
-            $('.media-search-condition-label[data-value=""]').addClass('label').addClass('label-primary');
+            $('.media-search-condition-label[data-value=""][data-attr="'+attr+'"]').addClass('label').addClass('label-primary');
             MediaIndex.deleteCondition(attr, value);
         } else {
             MediaIndex.addCondition(attr, value);
