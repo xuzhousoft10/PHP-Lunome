@@ -7,14 +7,14 @@ namespace X\Module\Lunome\Action\Movie;
 /**
  * Use statements
  */
+use X\Module\Lunome\Util\Action\Visual;
 use X\Module\Lunome\Service\Movie\Service as MovieService;
-use X\Module\Lunome\Util\Action\Basic;
 
 /**
  * The action class for movie/find action.
  * @author Michael Luthor <michaelluthor@163.com>
  */
-class Find extends Basic {
+class Find extends Visual {
     /**
      * @param integer $mark
      * @param array $condition
@@ -69,7 +69,50 @@ class Find extends Basic {
             }
         }
         
+        /* Add mark actions to view. */
+        $markNames = $movieService->getMarkNames();
+        $actions = array();
+        switch ( $mark ) {
+        case MovieService::MARK_UNMARKED:
+            $actions[MovieService::MARK_INTERESTED]    = array('style'=>'success');
+            $actions[MovieService::MARK_WATCHED]       = array('style'=>'info');
+            $actions[MovieService::MARK_IGNORED]       = array('style'=>'default');
+            break;
+        case MovieService::MARK_INTERESTED:
+            $actions[MovieService::MARK_WATCHED]       = array('style'=>'info');
+            $actions[MovieService::MARK_IGNORED]       = array('style'=>'default');
+            break;
+        case MovieService::MARK_WATCHED:
+            $actions[MovieService::MARK_IGNORED]       = array('style'=>'default');
+            break;
+        case MovieService::MARK_IGNORED:
+            $actions[MovieService::MARK_INTERESTED]    = array('style'=>'success');
+            $actions[MovieService::MARK_WATCHED]       = array('style'=>'info');
+            break;
+        default:break;
+        }
+        foreach ( $actions as $markKey => $markAction ) {
+            $actions[$markKey]['name'] = $markNames[$markKey];
+        }
+        
+        /* Setup view */
+        $resultGroupSign = 'item-'.uniqid();
+        $view = $this->getView();
+        $viewName = 'MOVIE_FIND_RESULT';
+        $view->loadParticle($viewName, $this->getParticleViewPath('Movie/FindResult'));
+        
+        /* add view data. */
+        $view->setDataToParticle($viewName, 'movies', $medias);
+        $view->setDataToParticle($viewName, 'marks', $actions);
+        $view->setDataToParticle($viewName, 'isWatched', MovieService::MARK_WATCHED===$mark);
+        $view->setDataToParticle($viewName, 'sign', $resultGroupSign);
+        
         /* 返回media列表 */
-        echo json_encode(array('count'=>$count, 'medias'=>$medias));
+        $jsonResult = array();
+        $jsonResult['count'] = $count;
+        $jsonResult['mediaCount'] = count($medias);
+        $jsonResult['medias'] = $view->getParticleContent($viewName);
+        $jsonResult['sign'] = $resultGroupSign;
+        echo json_encode($jsonResult);
     }
 }

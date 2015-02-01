@@ -17,8 +17,7 @@ var MediaIndex = {
     totalCount             : 0,    /* 所有项目的数量。 */
     container              : null, /* 用来放置列表项目的块元素选择符。 */
     pageSize               : 20,   /* 每次请求加载项目的数量。 */
-    marks                  : [],   /* 每个项目的标记动作列表。 */
-    maxAutoLoadCount       : 10,   /* 自动加载次数， 当超过时， 需要手动加载一次。 */
+    maxAutoLoadCount       : 3,   /* 自动加载次数， 当超过时， 需要手动加载一次。 */
     currentMark            : null, /* 当前该列表里的项目处于的标记状态。 */
     _isLoading             : false,/* 标记当前时刻是否正在加载数据。 */
     _autoLoadCount         : 0,    /* 记录当前自动加载的次数。 */
@@ -43,7 +42,6 @@ MediaIndex.init = function() {
     this.totalCount            = parameters.attr('data-total');
     this.container             = parameters.attr('data-container');
     this.pageSize              = parameters.attr('data-pagesize');
-    this.marks                 = $.parseJSON(parameters.attr('data-marks'));
     this.markURL               = parameters.attr('data-mark-url');
     this.currentMark           = parameters.attr('data-current-mark');
     this.waitingImage          = parameters.attr('data-waiting-image');
@@ -194,139 +192,81 @@ MediaIndex.load = function( refresh ) {
         $this.totalCount = response.count;
         MediaIndex._log('Done Loading Medias. ('+response.medias.length+' Loaded)');
         
-        $this._InsertMediasIntoContainer(response.medias);
+        $($this.container).append(response.medias);
         MediaIndex._log('Done Render Medias.');
         
-        $this.loadedCount += response.medias.length;
+        $('.'+response.sign)
+        .mouseenter(function() {
+            $(this).children().show();
+        })
+        .mouseleave(function() {
+            $(this).children().hide();
+        })
+        .waypoint(MediaIndex._loadMediaCoverOnVisible, {offset:'100%'});
+        
+        $('.'+response.sign).children('.lnm-media-list-item-intro-area').click(function() {
+            window.open($(this).attr('data-detail-url'));
+        });
+        
+        /* 绑定标记按钮。 */
+        $('.btn-mark-action-'+response.sign).click(function() {
+            var button = $(this);
+            var markCode = button.attr('data-mark-code');
+            var mediaId  = button.attr('data-media-id');
+            var url = MediaIndex.markURL.replace('{id}', mediaId).replace('{mark}', markCode);
+            var container = button.parent().parent().parent().empty();
+            container.append($('<img>').attr('src', MediaIndex.waitingImage).height(300).width(200));
+            $.get(url, {}, function() {
+                container.fadeOut(500, function() {
+                    $('#mark-counter-'+markCode).html($('#mark-counter-'+markCode).text()*1+1);
+                    $('#mark-counter-'+MediaIndex.currentMark).html($('#mark-counter-'+MediaIndex.currentMark).text()*1-1);
+                    /* 如果剩余的项目过少， 则加载更多项目。 */
+                    $(window).trigger('scroll');
+                    /* 刷新waypoints以解决原本不在显示区，在用户标记一个项目后，因位置提前而应该加载封面的问题。 */
+                    $.waypoints('refresh');
+                });
+            }, 'text');
+            return false;
+        });
+        
+        /* 绑定评分 */
+        $('.rate-it-container-'+response.sign).each(function() {
+            $(this)
+            .rateit({max:10,step:1,resetable:false, value:$(this).attr('data-score')})
+            .bind('over', function (event, value) {
+                value = parseInt(value);
+                if ( 0 >= value ) {
+                    value = 1;
+                }
+                var titles = ['没救了','太差','很差','差','还行','很棒','非常棒','棒级了','超级棒','极品'];
+                $(this).attr('title', titles[value-1]); 
+            })
+            .bind('rated', function (e) {
+                var ri = $(this);
+                $.get('/?module=lunome&action=movie/rate', {
+                    id:ri.attr('data-media-id'),
+                    score:ri.rateit('value'),
+                }, function( response ) {
+                    
+                }, 'json');
+            });
+        });
+        
+        /* 当到达最大自动加载次数时， 显示手动加载按钮。 */
+        if ( $this._autoLoadCount >= $this.maxAutoLoadCount ) {
+            $(MediaIndex.loadMoreBtnTemplate).click(function() {
+                $(this).remove();
+                MediaIndex._autoLoadCount = 0;
+                MediaIndex.load();
+            }).appendTo($this.container);
+        }
+        
+        $this.loadedCount += response.mediaCount;
         loaddingBar.remove();
         MediaIndex._updateHistory();
         
         $this._isLoading = false;
     }, 'json');
-};
-
-/**
- * 将请求过来的项目列表加载到当前列表中。如果自动加载次数超过指定数目， 将会显示手动加载按钮。
- * @returns void
- */
-MediaIndex._InsertMediasIntoContainer = function( medias ) {
-    var sign = 'item-'+(new Date()).getTime()+(Math.random()+'').replace('.', '');
-    for ( var i in medias ) {
-        if ( this.currentMark*1 == this.watchedMark*1 ) {
-            this._InsertWatchedMediaIntoContainer(medias[i], sign);
-        } else {
-            this._InsertUnwatchedMediaIntoContainer(medias[i], sign);
-        }
-    }
-    $('.'+sign).waypoint(MediaIndex._loadMediaCoverOnVisible, {offset:'100%'});
-    if ( this._autoLoadCount >= this.maxAutoLoadCount ) {
-        $(MediaIndex.loadMoreBtnTemplate).click(function() {
-            $(this).remove();
-            MediaIndex._autoLoadCount = 0;
-            MediaIndex.load();
-        }).appendTo(this.container);
-    }
-};
-
-/**
- * 将单个未看项目插入到列表中。
- * @returns void
- */
-MediaIndex._InsertUnwatchedMediaIntoContainer = function( media, sign ) {
-    $('<div>').attr('class', 'pull-left lnm-media-list-item-container')
-    .append(
-        $('<div>').addClass('lnm-media-list-item').addClass(sign).attr('data-cover-url', media.cover)
-        .mouseenter(function() {
-            $(this).children().show();
-        })
-        .mouseleave(function() {
-            $(this).children().hide();
-        })
-        .append(
-            $('<div>').addClass('lnm-media-list-item-intro-area')
-            .attr('data-detail-url', this.detailURL.replace('{id}', media.id))
-            .html(media.introduction)
-            .click(function() {
-                window.open($(this).attr('data-detail-url'));
-            })
-        )
-        .append(
-            $('<div>').attr('class', 'btn-group btn-group-justified lnm-media-list-item-mark-container')
-            .append((function(){
-                var buttons = [];
-                for ( var markCode in MediaIndex.marks ) {
-                    buttons.push(MediaIndex._generateMarkButton({
-                        code    : markCode,
-                        name    : MediaIndex.marks[markCode].name,
-                        style   : MediaIndex.marks[markCode].style,
-                    }, media));
-                }
-                return buttons;
-            })())
-        )
-    ).append(
-        $('<div>').addClass('white-space-nowrap').html('<strong>'+media.name+'<strong>')
-    ).appendTo(this.container);
-    MediaIndex._log('Render Media Item ['+media.name+'] Done.');
-};
-
-/**
- * 插入以看项目到列表中。
- * @returns void
- */
-MediaIndex._InsertWatchedMediaIntoContainer = function( media, sign ) {
-    $('<div>').attr('class', 'pull-left lnm-media-list-item-container')
-    .append(
-        $('<div>').addClass('lnm-media-list-item').addClass(sign).attr('data-cover-url', media.cover)
-        .mouseenter(function() {
-            $(this).children().show();
-        })
-        .mouseleave(function() {
-            $(this).children().hide();
-        })
-        .append(
-            $('<div>').addClass('lnm-media-list-item-intro-area')
-            .attr('data-detail-url', this.detailURL.replace('{id}', media.id))
-            .html(media.introduction)
-            .click(function() {
-                window.open($(this).attr('data-detail-url'));
-            })
-        )
-        .append(
-            $('<div>').attr('class', 'btn-group btn-group-justified lnm-media-list-item-mark-container')
-            .append(
-                $('<div>').css('background-color', '#FFFFFF').append($('<div>')
-                        .attr('class', 'rate-it-container-'+sign)
-                        .attr('data-media-id', media.id)
-                        .attr('id', 'rate-it-container-'+media.id)
-                )
-            )
-        )
-    ).append(
-        $('<div>').addClass('white-space-nowrap').html('<strong>'+media.name+'<strong>')
-    ).appendTo(this.container);
-    MediaIndex._log('Render Media Item ['+media.name+'] Done.');
-    
-    $('#rate-it-container-'+media.id)
-    .rateit({max:10,step:1,resetable:false, value:media.score})
-    .bind('over', function (event, value) {
-        value = parseInt(value);
-        if ( 0 >= value ) {
-            value = 1;
-        }
-        var titles = ['没救了','太差','很差','差','还行','很棒','非常棒','棒级了','超级棒','极品'];
-        $(this).attr('title', titles[value-1]); 
-    })
-    .bind('rated', function (e) {
-        var ri = $(this);
-        $.get('/?module=lunome&action=movie/rate', {
-            id:ri.attr('data-media-id'),
-            score:ri.rateit('value'),
-        }, function( response ) {
-            
-        }, 'json');
-    });
-    MediaIndex._log('Render Media Item ['+media.name+'] Done.');
 };
 
 /**
@@ -342,23 +282,7 @@ MediaIndex._generateMarkButton = function(mark, media) {
     .attr('data-mark-code', mark.code)
     .attr('href', '#')
     .click(function() {
-        var button = $(this);
-        var markCode = button.attr('data-mark-code');
-        var mediaId  = button.attr('data-media-id');
-        var url = MediaIndex.markURL.replace('{id}', mediaId).replace('{mark}', markCode);
-        var container = button.parent().parent().parent().empty();
-        container.append($('<img>').attr('src', MediaIndex.waitingImage).height(300).width(200));
-        $.get(url, {}, function() {
-            container.fadeOut(500, function() {
-                $('#mark-counter-'+markCode).html($('#mark-counter-'+markCode).text()*1+1);
-                $('#mark-counter-'+MediaIndex.currentMark).html($('#mark-counter-'+MediaIndex.currentMark).text()*1-1);
-                /* 如果剩余的项目过少， 则加载更多项目。 */
-                $(window).trigger('scroll');
-                /* 刷新waypoints以解决原本不在显示区，在用户标记一个项目后，因位置提前而应该加载封面的问题。 */
-                $.waypoints('refresh');
-            });
-        }, 'text');
-        return false;
+        
     });
 };
 
@@ -399,7 +323,7 @@ MediaIndex.deleteCondition = function (attr, value) {
  * 记录日志到控制台。 该方法仅在调试模式下起作用。
  * @returns void
  */
-MediaIndex._log            = function ( message ) {
+MediaIndex._log = function ( message ) {
     if ( 'true' != this.isDebug ) {
         return;
     }

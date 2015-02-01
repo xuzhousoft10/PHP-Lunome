@@ -91,32 +91,6 @@ class Index extends VisualMain {
         }
         $view->setDataToParticle($viewName, 'marks', $markInfo);
         
-        /* Add mark actions to view. */
-        $actions = array();
-        switch ( $mark ) {
-        case MovieService::MARK_UNMARKED:
-            $actions[MovieService::MARK_INTERESTED]    = array('style'=>'success');
-            $actions[MovieService::MARK_WATCHED]       = array('style'=>'info');
-            $actions[MovieService::MARK_IGNORED]       = array('style'=>'default');
-            break;
-        case MovieService::MARK_INTERESTED:
-            $actions[MovieService::MARK_WATCHED]       = array('style'=>'info');
-            $actions[MovieService::MARK_IGNORED]       = array('style'=>'default');
-            break;
-        case MovieService::MARK_WATCHED:
-            $actions[MovieService::MARK_IGNORED]       = array('style'=>'default');
-            break;
-        case MovieService::MARK_IGNORED:
-            $actions[MovieService::MARK_INTERESTED]    = array('style'=>'success');
-            $actions[MovieService::MARK_WATCHED]       = array('style'=>'info');
-            break;
-        default:break;
-        }
-        foreach ( $actions as $markKey => $markAction ) {
-            $actions[$markKey]['name'] = $markNames[$markKey];
-        }
-        $view->setDataToParticle($viewName, 'markActions', htmlspecialchars(json_encode($actions)));
-        
         /* Add current mark to view. */
         $view->setDataToParticle($viewName, 'currentMark', $mark);
         
