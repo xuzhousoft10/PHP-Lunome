@@ -7,7 +7,6 @@ namespace X\Module\Lunome\Action\Movie;
 /**
  * Use statements
  */
-
 use X\Module\Lunome\Util\Action\Visual;
 use X\Module\Lunome\Service\Movie\Service as MovieService;
 
