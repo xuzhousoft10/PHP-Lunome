@@ -1,6 +1,6 @@
 <?php
 /**
- * The action file for movie/ignore action.
+ * @license LGPL http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 namespace X\Module\Lunome\Action\Movie;
 
@@ -12,9 +12,8 @@ use X\Library\Html\Parser;
 use X\Module\Lunome\Util\Action\Visual;
 
 /**
- * The action class for movie/ignore action.
- * @method \X\Module\Lunome\Service\Movie\Service getMovieService()
- * @author Unknown
+ * The action class for movie/globalSearch action.
+ * @author Michael Luthor <michaelluthor@163.com>
  */
 class GlobalSearch extends Visual {
     /**
