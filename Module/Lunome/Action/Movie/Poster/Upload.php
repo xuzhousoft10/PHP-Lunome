@@ -1,6 +1,6 @@
 <?php
 /**
- * The action file for movie/ignore action.
+ * @license LGPL http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 namespace X\Module\Lunome\Action\Movie\Poster;
 
@@ -9,25 +9,28 @@ namespace X\Module\Lunome\Action\Movie\Poster;
  */
 use X\Core\X;
 use X\Module\Lunome\Util\Action\Basic;
-use X\Module\Lunome\Service\Movie\Service as MovieService;
 
 /**
- * The action class for movie/ignore action.
- * @author Unknown
+ * The action class for movie/poster/upload action.
+ * @author Michael Luthor <michaelluthor@163.com>
  */
 class Upload extends Basic { 
     /**
-     * @param unknown $id
-     * @param unknown $content
+     * @param string $id The id of the movie.
      */
     public function runAction( $id ) {
-        /* @var $movieService MovieService */
-        $movieService = $this->getService(MovieService::getServiceName());
+        $movieService = $this->getMovieService();
+        $moduleConfig = $this->getModule()->getConfiguration();
+        
+        if ( !$movieService->has($id) ) {
+            $this->responseError('电影不存在。');
+        }
+        
         if ( !isset($_FILES['poster']) ) {
             $this->responseError('上传文件不存在');
         }
         
-        $allowedPosterType = array('image/png', 'image/jpeg');
+        $allowedPosterType = $moduleConfig->get('movie_poster_file_type');
         if ( !in_array($_FILES['poster']['type'], $allowedPosterType) ) {
             $this->responseError('海报文件格式不正确。');
         }

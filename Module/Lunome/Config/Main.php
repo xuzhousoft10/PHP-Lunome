@@ -9,4 +9,6 @@ return array(
 'top_list_limitation' => 10,
 'movie_detail_marked_user_list_page_size' => 10,
 'movie_rate_max_score' => 10,
+'movie_poster_file_type'=>array('image/png', 'image/jpeg'),
+'movie_detail_poster_page_size' => 12,
 );

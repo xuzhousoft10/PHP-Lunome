@@ -1,7 +1,10 @@
-<?php use X\Core\X; ?>
-<?php $vars = get_defined_vars(); ?>
-<?php $assetsURL = X::system()->getConfiguration()->get('assets-base-url'); ?>
-<?php $posters = $vars['posters']; ?>
+<?php 
+$vars = get_defined_vars();
+$assetsURL = $vars['assetsURL'];
+$posters = $vars['posters'];
+$pager = $vars['pager'];
+$id = $vars['id'];
+?>
 <?php if (empty($posters)) : ?>
     <div class="clearfix">
         <div class="pull-left">
