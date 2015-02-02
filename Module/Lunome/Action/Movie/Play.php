@@ -50,7 +50,7 @@ class Play extends Basic {
         preg_match('/data-shareplattrigger-videoid="(.*?)"/', $page, $matches);
         $videoId = $matches[1];
         
-        preg_match('/data-shareplattrigger-tvid="(.*?)"/', $page, $matches);
+        preg_match('/data-player-tvid="(.*?)"/', $page, $matches);
         $tvId = $matches[1];
         
         $urlInfo = parse_url($link);
