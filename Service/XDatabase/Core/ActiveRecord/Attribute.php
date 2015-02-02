@@ -321,7 +321,10 @@ class Attribute extends TableColumn {
      * @return boolean
      */
     protected function validateDataTypeVarchar( $value ) {
-        $validate = is_string($value) || ( is_object($value) && method_exists($value, '__toString') );
+        $validate = is_numeric($value) 
+        || is_string($value) 
+        || ( is_object($value) && method_exists($value, '__toString') );
+        
         if ( !$validate ) {
             $this->addError(sprintf('The value of "%s" is not a validated string.', $this->name));
             return false;

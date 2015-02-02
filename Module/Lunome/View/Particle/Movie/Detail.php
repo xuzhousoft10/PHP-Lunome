@@ -166,7 +166,7 @@ $shareMessageContent = $vars['shareMessage'];
                         <?php continue; ?>
                     <?php endif; ?>
                     <a  class="btn btn-<?php echo $markStyles[$markKey];?>" 
-                        href="/?module=lunome&action=movie/mark&mark=<?php echo $markKey; ?>s&id=<?php $movie['id']; ?>&redirect=true');"
+                        href="/?module=lunome&action=movie/mark&mark=<?php echo $markKey; ?>&id=<?php echo $movie['id']; ?>&redirect=true"
                     ><?php echo $markName;?></a>
                 <?php endforeach; ?>
             </div>
