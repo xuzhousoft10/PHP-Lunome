@@ -593,6 +593,7 @@ class Service extends Media {
         
         $friendCondition = array();
         $releatedAttrName = MovieUserMarkModel::model()->getAttributeQueryName('account_id');
+        $friendCondition['account_me'] = $currentUserID;
         $friendCondition['account_friend'] = new SQLExpression($releatedAttrName);
         $friendCondition = AccountFriendshipModel::query()->activeColumns(array('id'))->find($friendCondition);
         $condition->exists($friendCondition);

@@ -7,4 +7,5 @@ return array(
 'media_list_page_size' => 20,
 'max_auto_load_time_count' => 10,
 'top_list_limitation' => 10,
+'movie_detail_marked_user_list_page_size' => 10,
 );

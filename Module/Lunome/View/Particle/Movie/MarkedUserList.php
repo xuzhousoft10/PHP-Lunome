@@ -1,19 +1,23 @@
-<?php use X\Core\X; ?>
-<?php $vars = get_defined_vars(); ?>
-<?php $assetsURL = X::system()->getConfiguration()->get('assets-base-url'); ?>
-<?php $accounts = $vars['accounts']; ?>
-<?php $sexMap = array(''=>'＊', '0'=>'＊','1'=>'♂','2'=>'♀','3'=>'？'); ?>
-<?php $sexNameMap = array(''=>'保密', '0'=>'保密','1'=>'男','2'=>'女','3'=>'其他'); ?>
-<?php $sexualitysMap = array(''=>'保密', '0'=>'保密','1'=>'异性','2'=>'同性','3'=>'双性','4'=>'无性','5'=>'二禁'); ?>
-<?php $emotionStatusMap = array(''=>'保密', '0'=>'保密','1'=>'单身','2'=>'热恋中','3'=>'同居','4'=>'已订婚','5'=>'已婚','6'=>'分居','7'=>'离异','8'=>'很难说','9'=>'其他'); ?>
-<?php $listID = 'marked-user-list-'.uniqid(); ?>
+<?php 
+$vars = get_defined_vars();
+$pager = $vars['pager'];
+$assetsURL = $vars['assetsURL'];
+$accounts = $vars['accounts'];
+$pagerParms = array('id'=>$vars['id'], 'mark'=>$vars['mark'], 'scope'=>$vars['scope']);
+$pagerParms = http_build_query($pagerParms);
+$listID = 'marked-user-list-'.uniqid();
+$sexNames = $vars['sexNames'];
+$sexMarks = $vars['sexMarks'];
+$sexualityNames = $vars['sexualityNames'];
+$emotionStatuNames = $vars['emotionStatuNames'];
+?>
 <?php if ( empty($accounts) ): ?>
     <div class="clearfix">
         <div class="pull-left">
             <img src="<?php echo $assetsURL;?>/image/nothing.gif" width="100" height="100">
         </div>
         <div class="margin-top-70 text-muted">
-            <small>还被标记过～～～</small>
+            <small>还没有被标记过～～～</small>
         </div>
     </div>
 <?php else : ?>
@@ -25,22 +29,19 @@
                 <img class="thumbnail padding-0" src="<?php echo $account->photo; ?>" width="60" height="60">
             </div>
             <div class="pull-left padding-left-10">
-                <span class="text-info" title="性别:<?php echo $sexNameMap[$account->sex]; ?>"><?php echo $sexMap[$account->sex];?></span>
+                <span class="text-info" title="性别:<?php echo $sexNames[intval($account->sex)]; ?>"><?php echo $sexMarks[intval($account->sex)];?></span>
                 <strong><?php echo $account->nickname; ?></strong><br><br>
                 <small>
                     <span class="glyphicon glyphicon-heart"></span>
-                    <?php echo $sexualitysMap[$account->sexuality];?>
+                    <?php echo $sexualityNames[intval($account->sexuality)];?>
                     <span class="glyphicon glyphicon-user"></span>
-                    <?php echo $emotionStatusMap[$account->emotion_status];?>
+                    <?php echo $emotionStatuNames[intval($account->emotion_status)];?>
                 </small>
             </div>
         </div>
         <?php echo '</a>'; ?>
     <?php endforeach; ?>
     
-    <?php $pager = $vars['pager']; ?>
-    <?php $pagerParms = array('id'=>$vars['id'], 'mark'=>$vars['mark'], 'scope'=>$vars['scope']); ?>
-    <?php $pagerParms = http_build_query($pagerParms);?>
     <?php if ( false !== $pager['prev'] || false !== $pager['next'] ) : ?>
     <div>
         <nav>
