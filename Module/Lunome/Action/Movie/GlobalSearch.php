@@ -10,6 +10,7 @@ namespace X\Module\Lunome\Action\Movie;
 use X\Core\X;
 use X\Library\Html\Parser;
 use X\Module\Lunome\Util\Action\Visual;
+use X\Service\XSession\Service as SessionService;
 
 /**
  * The action class for movie/globalSearch action.
@@ -22,6 +23,7 @@ class GlobalSearch extends Visual {
     public function runAction( $name ) {
         $movieData = array();
         $assetsURL = X::system()->getConfiguration()->get('assets-base-url');
+        X::system()->getServiceManager()->get(SessionService::getServiceName())->close();
         
         /* search movies from youku. */
         $url = 'http://www.soku.com/search_video/q_'.urlencode($name);

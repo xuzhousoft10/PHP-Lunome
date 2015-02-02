@@ -58,5 +58,9 @@ class Service extends \X\Core\Service\XService {
         $sessionHandler = new $handler($config);
         return $sessionHandler;
     }
+    
+    public function close() {
+        session_write_close();
+    }
 }
 return __NAMESPACE__;
