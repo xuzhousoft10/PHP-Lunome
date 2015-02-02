@@ -1,9 +1,10 @@
-<?php use X\Core\X; ?>
-<?php $assetsURL = X::system()->getConfiguration()->get('assets-base-url'); ?>
-<?php $vars = get_defined_vars(); ?>
-<?php $movies = $vars['movies']; ?>
+<?php 
+$vars = get_defined_vars();
+$assetsURL = $vars['assetsURL'];
+$movies = $vars['movies']; 
+?>
 <?php if ( empty($movies) ) : ?>
-    <p>找不到相关视频~~~</p>
+    <p class="margin-top-100">找不到相关视频~~~</p>
 <?php else :?>
     <?php foreach ( $movies as $movie ) : ?>
         <<?php echo 'a'?>  

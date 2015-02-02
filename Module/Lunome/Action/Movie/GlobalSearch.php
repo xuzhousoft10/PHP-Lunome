@@ -7,6 +7,7 @@ namespace X\Module\Lunome\Action\Movie;
 /**
  * Use statements
  */
+use X\Core\X;
 use X\Library\Html\Parser;
 use X\Module\Lunome\Util\Action\Visual;
 
@@ -17,34 +18,21 @@ use X\Module\Lunome\Util\Action\Visual;
  */
 class GlobalSearch extends Visual {
     /**
-     * 
+     * @param unknown $name
      */
     public function runAction( $name ) {
-        $movies = array_merge(array(),$this->searchMovieOnYouKu($name));
-        $movies = array_merge($movies, $this->searchMovieOnIQiYi($name));
-        $movies = array_merge($movies, $this->searchMovieOnTuDou($name));
-        $movies = array_merge($movies, $this->searchMovieOnSohu($name));
+        $movieData = array();
+        $assetsURL = X::system()->getConfiguration()->get('assets-base-url');
         
-        $name   = 'GLOBAL_SEARCH_RESULT_INDEX';
-        $path   = $this->getParticleViewPath('Movie/GlobalSearchResult');
-        $option = array();
-        $data   = array('movies'=>$movies);
-        $this->getView()->loadParticle($name, $path, $option, $data);
-        $this->getView()->displayParticle($name);
-    }
-    
-    /**
-     * @param unknown $name
-     * @return multitype:mixed unknown
-     */
-    private function searchMovieOnYouKu( $name ) {
+        /* search movies from youku. */
         $url = 'http://www.soku.com/search_video/q_'.urlencode($name);
         $html = new Parser($url);
-        
         $movies = $html->find('.movie');
-        $results = array();
         foreach ( $movies as $movie ) {
             $link = $movie->find('.playarea ');
+            if ( empty($link) ) {
+                continue;
+            }
             $link = $link[0];
             $link = $link->find('.s_btn');
             $link = $link[0];
@@ -52,32 +40,24 @@ class GlobalSearch extends Visual {
             if ( false === strpos($link, 'http://v.youku.com') ) {
                 continue;
             }
-            
+        
             $thumb = $movie->find('.p_thumb');
             $thumb = $thumb[0];
             $thumb = $thumb->find('img');
             $thumb = $thumb[0];
             $thumb = $thumb->getAttribute('src');
-            
+        
             $name = $movie->find('.base_name');
             $name = $name[0];
             $name = str_replace(' ', '', trim($name->text()));
-            
-            $results[] = array('source'=>'youku','name'=>$name, 'link'=>$link, 'thumb'=>$thumb);
+        
+            $movieData[] = array('source'=>'youku','name'=>$name, 'link'=>$link, 'thumb'=>$thumb);
         }
         
-        return $results;
-    }
-    
-    /**
-     * @param unknown $name
-     * @return multitype:multitype:string mixed unknown
-     */
-    private function searchMovieOnIQiYi( $name ) {
+        /* search movie from IQiYi. */
         $url = 'http://so.iqiyi.com/so/q_'.urlencode($name);
         $html = new Parser($url);
         $items = $html->find('.list_item');
-        $results = array();
         foreach ( $items as $item ) {
             $category = $item->getAttribute('data-widget-searchlist-catageory');
             if ( '电影' !== $category ) {
@@ -109,16 +89,10 @@ class GlobalSearch extends Visual {
             $link = $link[0];
             $link = $link->getAttribute('href');
         
-            $results[] = array('source'=>'iqiyi','name'=>$name, 'link'=>$link, 'thumb'=>$thumb);
+            $movieData[] = array('source'=>'iqiyi','name'=>$name, 'link'=>$link, 'thumb'=>$thumb);
         }
-        return $results;
-    }
-    
-    /**
-     * @param unknown $name
-     * @return multitype:multitype:string mixed unknown
-     */
-    private function searchMovieOnTuDou( $name ) {
+        
+        /* search movie from tudou. */
         $url = 'http://www.soku.com/t/nisearch/'.urlencode($name);
         $html = new Parser($url);
         $movies = $html->find('.movie');
@@ -146,19 +120,12 @@ class GlobalSearch extends Visual {
             $thumb = $thumb[0];
             $thumb = $thumb->getAttribute('src');
         
-            $results[] = array('source'=>'tudou','name'=>$name, 'thumb'=>$thumb, 'link'=>$link);
+            $movieData[] = array('source'=>'tudou','name'=>$name, 'thumb'=>$thumb, 'link'=>$link);
         }
-        return $results;
-    }
-    
-    /**
-     * @param unknown $name
-     * @return multitype:multitype:mixed unknown
-     */
-    private function searchMovieOnSohu( $name ) {
+        
+        /* search movie from sohu. */
         $url = 'http://so.tv.sohu.com/mts?wd='.urlencode($name);
         $html = new Parser($url);
-        
         $movies = $html->find('.special');
         $resules = array();
         foreach ( $movies as $movie ) {
@@ -189,8 +156,15 @@ class GlobalSearch extends Visual {
             $name = $name[0];
             $name = str_replace(' ', '', trim($name->text()));
         
-            $resules[] = array('source'=>'sohu','name'=>$name, 'link'=>$link, 'thumb'=>$thumb);
+            $movieData[] = array('source'=>'sohu','name'=>$name, 'link'=>$link, 'thumb'=>$thumb);
         }
-        return $resules;
+        
+        /* setup global search view. */
+        $name   = 'GLOBAL_SEARCH_RESULT_INDEX';
+        $path   = $this->getParticleViewPath('Movie/GlobalSearchResult');
+        $option = array();
+        $data   = array('movies'=>$movieData, 'assetsURL'=>$assetsURL);
+        $this->getView()->loadParticle($name, $path, $option, $data);
+        $this->getView()->displayParticle($name);
     }
 }
