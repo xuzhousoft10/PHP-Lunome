@@ -299,6 +299,17 @@ class Account {
         return array('count'=>$count, 'data'=>$informations);
     }
     
+    /**
+     * @param unknown $friendAccountId
+     * @return boolean
+     */
+    public function hasFriend( $friendAccountId ) {
+        $condition = array();
+        $condition['account_friend'] = $friendAccountId;
+        $condition['account_me'] = $this->getCurrentUserId();
+        return AccountFriendshipModel::model()->exists($condition);
+    }
+    
     
     
     /**

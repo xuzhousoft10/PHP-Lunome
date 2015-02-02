@@ -2,8 +2,7 @@
 <?php $vars = get_defined_vars(); ?>
 <?php $movies = $vars['movies']; ?>
 <?php $friendInformation = $vars['friendInformation']; ?>
-<?php $assetsURL = X::system()->getConfiguration()->get('assets-base-url'); ?>
-<?php $this->addScriptFile('user-home-movie-index', $assetsURL.'/js/user_interaction_movie_find_topic.js'); ?>
+<?php $assetsURL = $vars['assetsURL']; ?>
 <div class="col-md-9">
     <?php if (empty($movies['like']) && empty($movies['dislike'])) : ?>
         <p>

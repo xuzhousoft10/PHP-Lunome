@@ -73,8 +73,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default button-invite-to-watch-movie-detail-dialog-<?php echo $elemMark; ?>-answer" data-value="1">没兴趣</button>
-        <button type="button" class="btn btn-primary button-invite-to-watch-movie-detail-dialog-<?php echo $elemMark; ?>-answer" data-value="2">答应</button>
+        <button type="button" class="btn btn-default button-invite-to-watch-movie-detail-dialog-<?php echo $elemMark; ?>-answer" data-value="<?php echo MovieService::INVITATION_ANSWER_NO; ?>">没兴趣</button>
+        <button type="button" class="btn btn-primary button-invite-to-watch-movie-detail-dialog-<?php echo $elemMark; ?>-answer" data-value="<?php echo MovieService::INVITATION_ANSWER_YES; ?>">答应</button>
       </div>
     </div>
   </div>

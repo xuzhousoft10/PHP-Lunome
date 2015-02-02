@@ -1,21 +1,21 @@
 <?php
 /**
- * 
+ * @license LGPL http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 namespace X\Module\Lunome\Action\Movie\Interaction;
 
 /**
- * 
+ * use statements
  */
 use X\Module\Lunome\Util\Action\FriendManagement;
 
 /**
- * 
+ * Friends
+ * @author Michael Luthor <michaelluthor@163.com>
  */
 class Friends extends FriendManagement {
-    
     /**
-     * @param unknown $id
+     * @param array $friends
      */
     public function runAction( $friends ) {
         $userService = $this->getUserService();
@@ -24,8 +24,7 @@ class Friends extends FriendManagement {
         $accounts = array();
         $accounts[] = $userService->getCurrentUserId();
         $accounts = array_merge($accounts, $friends);
-        $movies = $this->getMovieService()->getInterestedMovieSetByAccounts($accounts);
-        
+        $movies = $movieService->getInterestedMovieSetByAccounts($accounts);
         $friends = $userService->getAccount()->getInformations($friends);
         
         /* 填充封面信息和评分信息 */

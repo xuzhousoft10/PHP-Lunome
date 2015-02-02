@@ -1,26 +1,24 @@
 <?php
 /**
- * 
+ * @license LGPL http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 namespace X\Module\Lunome\Action\Movie\Interaction;
 
 /**
- * 
+ * use statement
  */
 use X\Module\Lunome\Util\Action\Userinteraction;
 
 /**
- * 
+ * InviteToWatchMovie
+ * @author Michael Luthor <michaelluthor@163.com>
  */
 class InviteToWatchMovie extends Userinteraction {
     /**
-     * @param unknown $id
+     * @param string $id
      */
     public function runAction( $id ) {
-        $this->setActiveInteractionMenuItem(self::INTERACTION_MENU_ITEM_INVITE_TO_WATCH_MOVIE);
-        $this->interactionMenuParams = array('id'=>$id);
         $friendInformation = $this->userService->getAccount()->getInformation($id);
-        
         $movieService = $this->getMovieService();
         $myAccount = $this->userService->getCurrentUserId();
         $accounts = array($myAccount, $id);
@@ -42,5 +40,8 @@ class InviteToWatchMovie extends Userinteraction {
         $data   = array('movies'=>$movies, 'friendInformation'=>$friendInformation);
         $this->getView()->loadParticle($name, $path, $option, $data);
         $this->getView()->title = '想请TA看场电影';
+        
+        $this->setActiveInteractionMenuItem(self::INTERACTION_MENU_ITEM_INVITE_TO_WATCH_MOVIE);
+        $this->interactionMenuParams = array('id'=>$id);
     }
 }

@@ -11,4 +11,5 @@ return array(
 'movie_rate_max_score' => 10,
 'movie_poster_file_type'=>array('image/png', 'image/jpeg'),
 'movie_detail_poster_page_size' => 12,
+'movie_topic_suggested_size' => 10,
 );

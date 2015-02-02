@@ -34,6 +34,8 @@
         <div class="text-right">
             <?php if ($hasComment) : ?>
                 <button id="message-btn-<?php echo $elemMark;?>" class="btn btn-primary btn-xs">查看</button>
+            <?php else : ?>
+                <button id="message-btn-<?php echo $elemMark;?>-close" class="btn btn-primary btn-xs">关闭</button>
             <?php endif; ?>
         </div>
     </div>
@@ -72,6 +74,11 @@ $(document).ready(function() {
             $('#message-<?php echo $elemMark; ?>').parent().remove();
             closeNotificationByID('<?php echo $notification['id']; ?>', function() {});
         });
+    });
+    
+    $('#message-btn-<?php echo $elemMark;?>-close').click(function() {
+        $('#message-<?php echo $elemMark; ?>').parent().remove();
+        closeNotificationByID('<?php echo $notification['id']; ?>', function() {});
     });
 });
 </script>
