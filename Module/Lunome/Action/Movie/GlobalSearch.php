@@ -26,7 +26,7 @@ class GlobalSearch extends Visual {
         /* search movies from youku. */
         $url = 'http://www.soku.com/search_video/q_'.urlencode($name);
         $html = new Parser($url);
-        $movies = $html->find('.movie');
+        $movies = (null===$html) ? array() : $html->find('.movie');
         foreach ( $movies as $movie ) {
             $link = $movie->find('.playarea ');
             if ( empty($link) ) {
@@ -56,7 +56,7 @@ class GlobalSearch extends Visual {
         /* search movie from IQiYi. */
         $url = 'http://so.iqiyi.com/so/q_'.urlencode($name);
         $html = new Parser($url);
-        $items = $html->find('.list_item');
+        $items = (null===$html) ? array() : $html->find('.list_item');
         foreach ( $items as $item ) {
             $category = $item->getAttribute('data-widget-searchlist-catageory');
             if ( '电影' !== $category ) {
@@ -94,7 +94,7 @@ class GlobalSearch extends Visual {
         /* search movie from tudou. */
         $url = 'http://www.soku.com/t/nisearch/'.urlencode($name);
         $html = new Parser($url);
-        $movies = $html->find('.movie');
+        $movies = (null===$html) ? array() : $html->find('.movie');
         $results = array();
         foreach ( $movies as $movie ) {
             $link = $movie->find('.playarea');
@@ -125,7 +125,7 @@ class GlobalSearch extends Visual {
         /* search movie from sohu. */
         $url = 'http://so.tv.sohu.com/mts?wd='.urlencode($name);
         $html = new Parser($url);
-        $movies = $html->find('.special');
+        $movies = (null===$html) ? array() : $html->find('.special');
         $resules = array();
         foreach ( $movies as $movie ) {
             $link = $movie->find('.center');
