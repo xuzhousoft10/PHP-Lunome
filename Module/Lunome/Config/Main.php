@@ -8,4 +8,5 @@ return array(
 'max_auto_load_time_count' => 10,
 'top_list_limitation' => 10,
 'movie_detail_marked_user_list_page_size' => 10,
+'movie_rate_max_score' => 10,
 );
