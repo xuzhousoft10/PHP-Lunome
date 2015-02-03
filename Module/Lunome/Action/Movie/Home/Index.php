@@ -1,40 +1,47 @@
 <?php
 /**
- * 
+ * @license LGPL http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 namespace X\Module\Lunome\Action\Movie\Home;
 
 /**
- * 
+ * use statements
  */
 use X\Module\Lunome\Util\Action\VisualUserHome;
 use X\Module\Lunome\Service\Movie\Service as MovieService;
 
 /**
- * 
+ * Index
+ * @author Michael Luthor <michaelluthor@163.com>
  */
 class Index extends VisualUserHome {
     /**
-     * @param unknown $id
+     * @param string $id
+     * @param integer $mark
+     * @param integer $page
      */
     public function runAction( $id, $mark=null, $page=1 ) {
-        $this->homeUserAccountID = $id;
         $movieService = $this->getMovieService();
+        $userService = $this->getUserService();
+        $moduleConfig = $this->getModule()->getConfiguration();
+        $pageSize = $moduleConfig->get('movie_user_home_page_size');
         
-        /* Setup marks. */
-        $mark *= 1;
-        if ( empty($mark) ) {
+        if ( !$userService->getAccount()->has($id) ) {
+            $this->throw404();
+        }
+        
+        $mark = intval($mark);
+        if ( MovieService::MARK_UNMARKED === $mark ) {
             $mark = MovieService::MARK_INTERESTED;
         }
         $marks = $movieService->getMarkNames();
         unset($marks[MovieService::MARK_UNMARKED]);
         $marks = array('data'=>$marks, 'actived'=>$mark);
         
-        /* Setup movies. */
-        $pageSize = 15;
-        $page *= 1;
+        $page = intval($page);
         $page = ( 0 >= $page ) ? 1 : $page;
         $position = ($page-1)*$pageSize;
+        
         $movies = $movieService->getMarked($mark, array(), $pageSize, $position, $id);
         /* 填充封面信息和评分信息 */
         foreach ( $movies as $index => $movie ) {
@@ -67,5 +74,7 @@ class Index extends VisualUserHome {
             'pager'     => $pager
         );
         $this->getView()->loadParticle($name, $path, $option, $data);
+        
+        $this->homeUserAccountID = $id;
     }
 }

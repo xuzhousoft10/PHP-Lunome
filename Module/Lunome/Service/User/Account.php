@@ -35,6 +35,14 @@ class Account {
     }
     
     /**
+     * @param unknown $id
+     * @return boolean
+     */
+    public function has( $id ) {
+        return AccountModel::model()->exists(array('id'=>$id));
+    }
+    
+    /**
      * @return array
      */
     public function findAll( $condition=null, $position=0, $limit=0 ) {
