@@ -18,6 +18,13 @@ class Write extends Visual {
      */
     public function runAction( $friend, $content ) {
         $userService = $this->getUserService();
+        $accountManager = $userService->getAccount();
+        $content = trim($content);
+        
+        if ( empty($content) || !$accountManager->hasFriend($friend) ) {
+            return;
+        }
+        
         $notificationView = 'User/Chat/NotificationUnread';
         $record = $userService->getAccount()->sendChatMessage($friend, $content, $notificationView);
         $myInformation = $userService->getAccount()->getInformation();

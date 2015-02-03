@@ -20,6 +20,11 @@ class Index extends Visual {
      */
     public function runAction( $friend ) {
         $userService = $this->getUserService();
+        
+        if ( !$userService->getAccount()->hasFriend($friend) ) {
+            $this->throw404();
+        }
+        
         /* @var $regionService RegionService */
         $regionService = X::system()->getServiceManager()->get(RegionService::getServiceName());
         $friendInformation = $userService->getAccount()->getInformation($friend);

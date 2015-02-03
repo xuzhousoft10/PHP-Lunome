@@ -19,6 +19,10 @@ class StartByNotification extends Basic {
      */
     public function runAction( $id ) {
         $userService = $this->getUserService();
+        if ( !$userService->hasNotification($id) ) {
+            $this->throw404();
+        }
+        
         $notification = $userService->getNotification($id);
         $userService->closeNotification($id);
         $message = $notification['sourceData'];

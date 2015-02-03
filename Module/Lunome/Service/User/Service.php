@@ -409,6 +409,14 @@ class Service extends \X\Core\Service\XService {
     }
     
     /**
+     * @param unknown $id
+     * @return boolean
+     */
+    public function hasNotification( $id ) {
+        return AccountNotificationModel::model()->exists(array('id'=>$id));
+    }
+    
+    /**
      * @param unknown $notificationID
      */
     public function closeNotification( $notificationID ) {

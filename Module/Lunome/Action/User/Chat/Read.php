@@ -18,6 +18,10 @@ class Read extends Visual {
      */
     public function runAction( $friend ) {
         $userService = $this->getUserService();
+        if ( !$userService->getAccount()->hasFriend($friend) ) {
+            return;
+        }
+        
         $messages = $userService->getAccount()->getUnreadChatMessages($friend);
         $friendInformation = $userService->getAccount()->getInformation($friend);
         
