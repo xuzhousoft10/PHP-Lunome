@@ -24,7 +24,7 @@ class Sns extends UserSetting {
         $configurations = array();
         $configurations['auto_share'] = $account->getConfiguration(Account::SETTING_TYPE_SNS, 'auto_share', '1');
         
-        if ( !empty($config) ) {
+        if ( !empty($config) && is_array($config)) {
             $configurations = array_merge($configurations, $config);
             $account->setConfigurations(Account::SETTING_TYPE_SNS, $configurations);
         }

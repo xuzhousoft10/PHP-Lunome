@@ -18,7 +18,7 @@ class Check extends Basic {
      * The action handle for index action.
      * @return void
      */ 
-    public function runAction( $recipient, $message ) {
+    public function runAction() {
         $userService = $this->getUserService();
         $count = $userService->countUnclosedNotification();
         echo json_encode(array('count'=>$count));

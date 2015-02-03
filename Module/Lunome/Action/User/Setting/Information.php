@@ -22,7 +22,7 @@ class Information extends UserSetting {
         $accountManager = $this->getUserService()->getAccount();
         $account = $accountManager->getInformation();
         
-        if ( !empty($information) ) {
+        if ( !empty($information) && is_array($information)) {
             $account = $accountManager->updateInformation($information);
         }
         

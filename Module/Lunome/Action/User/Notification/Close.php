@@ -20,6 +20,10 @@ class Close extends Basic {
      */ 
     public function runAction( $id ) {
         $userService = $this->getUserService();
+        if ( !$userService->hasNotification($id) ) {
+            return;
+        }
+        
         $count = $userService->closeNotification($id);
         echo json_encode(array('status'=>1));
     }

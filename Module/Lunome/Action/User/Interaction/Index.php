@@ -17,7 +17,12 @@ class Index extends Userinteraction {
      * @param unknown $id
      */
     public function runAction( $id ) {
-        $friendInformation = $this->userService->getAccount()->getInformation($id);
+        $accountManager = $this->getUserService()->getAccount();
+        if ( !$accountManager->has($id) ) {
+            $this->throw404();
+        }
+        
+        $friendInformation = $accountManager->getInformation($id);
         $this->interactionMenuParams = array('id'=>$id);
         
         /* Main */
