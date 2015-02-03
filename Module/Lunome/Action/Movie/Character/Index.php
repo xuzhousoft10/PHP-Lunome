@@ -1,6 +1,6 @@
 <?php
 /**
- * The action file for movie/ignore action.
+ * @license LGPL http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 namespace X\Module\Lunome\Action\Movie\Character;
 
@@ -11,24 +11,23 @@ use X\Module\Lunome\Util\Action\Visual;
 use X\Module\Lunome\Service\Movie\Service as MovieService;
 
 /**
- * The action class for movie/ignore action.
- * @author Unknown
+ * The action class for movie/character/index action.
+ * @author Michael Luthor <michaelluthor@163.com>
  */
 class Index extends Visual { 
     /**
-     * @param unknown $id
-     * @param unknown $content
+     * @param string $id
+     * @param integer $page
      */
     public function runAction( $id, $page=1 ) {
-        $page *= 1;
+        $movieService = $this->getMovieService();
+        $moduleConfig = $this->getModule()->getConfiguration();
+        $pageSize = $moduleConfig->get('movie_detail_character_page_size');
+        
+        $page = intval($page);
         if ( 0 >= $page ) {
             $page = 1;
         }
-        
-        $pageSize = 5;
-        
-        /* @var $movieService MovieService */
-        $movieService = $this->getService(MovieService::getServiceName());
         $characters = $movieService->getCharacters($id, ($page-1)*$pageSize, $pageSize);
         foreach ( $characters as $index => $character ) {
             $characters[$index] = $character->toArray();

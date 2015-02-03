@@ -1,6 +1,6 @@
 <?php
 /**
- * The action file for movie/ignore action.
+ * @license LGPL http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 namespace X\Module\Lunome\Action\Movie\Character;
 
@@ -8,20 +8,22 @@ namespace X\Module\Lunome\Action\Movie\Character;
  * Use statements
  */
 use X\Module\Lunome\Util\Action\Basic;
-use X\Module\Lunome\Service\Movie\Service as MovieService;
 
 /**
- * The action class for movie/ignore action.
- * @author Unknown
+ * The action class for movie/character/edit action.
+ * @author Michael Luthor <michaelluthor@163.com>
  */
 class Edit extends Basic { 
     /**
-     * @param unknown $id
-     * @param unknown $content
+     * @param string $movie
+     * @param array $character
      */
     public function runAction( $movie, $character ) {
-        /* @var $movieService MovieService */
-        $movieService = $this->getService(MovieService::getServiceName());
+        $movieService = $this->getMovieService();
+        
+        if ( !$movieService->has($movie) ) {
+            return;
+        }
         
         $image = null;
         if ( isset($_FILES['image']) && 0===$_FILES['image']['error'] ) {

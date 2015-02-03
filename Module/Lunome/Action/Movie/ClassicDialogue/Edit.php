@@ -1,6 +1,6 @@
 <?php
 /**
- * The action file for movie/ignore action.
+ * @license LGPL http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 namespace X\Module\Lunome\Action\Movie\ClassicDialogue;
 
@@ -8,20 +8,22 @@ namespace X\Module\Lunome\Action\Movie\ClassicDialogue;
  * Use statements
  */
 use X\Module\Lunome\Util\Action\Basic;
-use X\Module\Lunome\Service\Movie\Service as MovieService;
 
 /**
- * The action class for movie/ignore action.
- * @author Unknown
+ * The action class for movie/classicDialogue/edit action.
+ * @author Michael Luthor <michaelluthor@163.com>
  */
 class Edit extends Basic { 
     /**
-     * @param unknown $id
-     * @param unknown $content
+     * @param string $id
+     * @param string $content
      */
     public function runAction( $id, $content ) {
-        /* @var $movieService MovieService */
-        $movieService = $this->getService(MovieService::getServiceName());
+        $movieService = $this->getMovieService();
+        
+        if ( $movieService->has($id) ) {
+            return;
+        }
         $movieService->addClassicDialogues($id, $content);
         echo json_encode(array('status'=>'success'));
     }

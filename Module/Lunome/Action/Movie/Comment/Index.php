@@ -1,6 +1,6 @@
 <?php
 /**
- * The action file for movie/ignore action.
+ * @license LGPL http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 namespace X\Module\Lunome\Action\Movie\Comment;
 
@@ -8,29 +8,35 @@ namespace X\Module\Lunome\Action\Movie\Comment;
  * Use statements
  */
 use X\Module\Lunome\Util\Action\Visual;
-use X\Module\Lunome\Service\Movie\Service as MovieService;
 
 /**
- * The action class for movie/ignore action.
- * @author Unknown
+ * The action class for movie/comment/index action.
+ * @author Michael Luthor <michaelluthor@163.com>
  */
 class Index extends Visual { 
     /**
-     * @param unknown $id
-     * @param unknown $content
+     * @param string $id
+     * @param integer $page
+     * @param string $scope
      */
     public function runAction( $id, $page=1, $scope='friends' ) {
-        /* @var $movieService MovieService */
-        $movieService = $this->getService(MovieService::getServiceName());
+        $movieService = $this->getMovieService();
         $account = $this->getUserService()->getAccount();
+        $moduleConfig = $this->getModule()->getConfiguration();
+        $pageSize = $moduleConfig->get('movie_detail_comment_page_size');
         
-        $length     = 5;
-        $position   = ($page-1)*$length;
+        if ( !$movieService->has($id) ) {
+            return;
+        }
+        
+        $page = intval($page);
+        
+        $position   = ($page-1)*$pageSize;
         if ( 'friends' === $scope ) {
-            $comments = $movieService->getShortCommentsFromFriends($id, null, $position, $length);
+            $comments = $movieService->getShortCommentsFromFriends($id, null, $position, $pageSize);
             $commentCount = $movieService->countShortCommentsFromFriends($id);
         } else {
-            $comments = $movieService->getShortComments($id, null, $position, $length);
+            $comments = $movieService->getShortComments($id, null, $position, $pageSize);
             $commentCount = $movieService->countShortComments($id);
         }
         foreach ( $comments as $index => $comment ) {
@@ -41,9 +47,9 @@ class Index extends Visual {
         
         $pager = array();
         $pager['current'] = $page;
-        $pager['pageCount'] = (0===($commentCount%$length)) ? $commentCount/$length : (intval($commentCount/$length)+1);
+        $pager['pageCount'] = (0===($commentCount%$pageSize)) ? $commentCount/$pageSize : (intval($commentCount/$pageSize)+1);
         $pager['prev'] = (1 >= $page) ? false : $page-1;
-        $pager['next'] = (($page)*$length >= $commentCount) ? false : $page+1;
+        $pager['next'] = (($page)*$pageSize >= $commentCount) ? false : $page+1;
         
         $name   = 'COMMENTS_INDEX';
         $path   = $this->getParticleViewPath('Movie/Comments');
