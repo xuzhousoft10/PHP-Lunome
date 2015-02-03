@@ -7,8 +7,9 @@ namespace X\Module\Lunome\Action;
 /**
  * 
  */
+use X\Core\X;
 use X\Module\Lunome\Util\Action\Visual;
-use X\Library\Redmine\Client;
+use X\Service\XMail\Service as MailService;
 
 /**
  * The action class for advise action.
@@ -30,23 +31,11 @@ class Advise extends Visual {
             $data   = array();
         } else {
             if ( 0 !== strlen(trim($content)) ) {
-                $redmine = new Client('http://114.215.148.203:8001', 'michaelluthor', 'ginhappy@1215');
+                $recipients = $this->getModule()->getConfiguration()->get('web_master_email');
+                /* @var $mailService MailService */
+                $mailService = X::system()->getServiceManager()->get(MailService::getServiceName());
                 $subject = sprintf('%s : 来自用户的建议或意见', date('Y-m-d H:i:s', time()));
-                $projectId = $redmine->project()->getIdByName('Lunome');
-                $trackerId = $redmine->tracker()->getIdByName('意见建议');
-                $userId = $redmine->user()->getIdByUsername('michaelluthor');
-                if ( 0 !== strlen(trim($content)) ) {
-                    $content .= "\n";
-                    $content .= "\n";
-                    $content .= sprintf('反馈者邮箱：%s', $email);
-                }
-                $redmine->issue()->create(array(
-                    'subject'          => $subject,
-                    'description'      => $content,
-                    'project_id'       => $projectId,
-                    'tracker_id'       => $trackerId,
-                    'assigned_to_id'   => $userId,
-                ));
+                $mailService->send($subject, $content, $recipients);
             }
             
             $name   = 'ADVISE_SENDED';

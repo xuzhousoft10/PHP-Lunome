@@ -35,6 +35,7 @@ class Service extends \X\Core\Service\XService {
         $mailer->setupByConfig($this->getConfiguration()->getAll());
         $mailer->Subject = $subject;
         $mailer->Body = $content;
+        $mailer->CharSet = 'UTF-8';
         $recipients = is_array($recipients) ? $recipients : explode(';', $recipients);
         foreach ( $recipients as $recipient ) {
             $mailer->addAddress($recipient);

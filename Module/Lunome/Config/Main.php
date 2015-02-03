@@ -18,4 +18,5 @@ return array(
 'movie_user_home_page_size' => 15,
 'user_friend_index_page_size'=>10,
 'user_friend_search_result_page_size'=>10,
+'web_master_email'=>'michaelluthor@163.com',
 );
