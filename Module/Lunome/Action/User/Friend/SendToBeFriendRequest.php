@@ -19,8 +19,13 @@ class SendToBeFriendRequest extends Basic {
      * @return void
      */ 
     public function runAction( $recipient, $message ) {
-        $view = 'User/Friend/NotificationToBeFriend';
         $accountManager = $this->getUserService()->getAccount();
+        
+        if ( $accountManager->hasFriend($recipient) || !$accountManager->has($recipient) ) {
+            return;
+        }
+        
+        $view = 'User/Friend/NotificationToBeFriend';
         $accountManager->sendToBeFriendRequest($recipient, $message, $view);
         echo json_encode(array('status'=>true));
     }

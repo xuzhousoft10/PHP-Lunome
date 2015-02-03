@@ -19,11 +19,20 @@ class AnswerToBeFriendRequest extends Basic {
      * @return void
      */ 
     public function runAction( $request, $notification, $result,  $message ) {
-        $accountManager = $this->getUserService()->getAccount();
+        $userService = $this->getUserService();
+        $accountManager = $userService->getAccount();
+        
+        if ( !$accountManager->hasToBeFriendRequest($request) ) {
+            return;
+        }
+        
+        if ( !$userService->hasNotification($notification) ) {
+            return;
+        }
         
         $isAgreed = (1===$result*1);
         $view = 'User/Friend/NotificationToBeFriend'.($isAgreed ? 'Yes' : 'No');
         $accountManager->updateToBeFriendRequestAnswer($request, $isAgreed, $message, $view);
-        $this->getUserService()->closeNotification($notification);
+        $userService->closeNotification($notification);
     }
 }

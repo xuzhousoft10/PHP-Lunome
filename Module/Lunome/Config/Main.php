@@ -16,4 +16,6 @@ return array(
 'movie_detail_character_page_size'=>5,
 'movie_topic_suggested_size' => 10,
 'movie_user_home_page_size' => 15,
+'user_friend_index_page_size'=>10,
+'user_friend_search_result_page_size'=>10,
 );

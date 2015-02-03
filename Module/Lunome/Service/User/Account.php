@@ -373,6 +373,13 @@ class Account {
     }
     
     /**
+     * @param string $requestId
+     */
+    public function hasToBeFriendRequest( $requestId ) {
+        return AccountFriendshipRequestModel::model()->exists(array('id'=>$requestId));
+    }
+    
+    /**
      * @param unknown $position
      * @param unknown $length
      * @return \X\Module\Lunome\Model\Account\AccountInformationModel[]

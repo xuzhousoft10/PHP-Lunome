@@ -21,15 +21,17 @@ class Search extends FriendManagement {
      * @return void
      */ 
     public function runAction( $condition=null, $page=1 ) {
-        $informations = false;
         $accountManager = $this->getUserService()->getAccount();
+        $moduleConfig = $this->getModule()->getConfiguration();
+        $page = intval($page);
         
+        $informations = false;
         $pager = array('prev'=>false, 'next'=>false);
-        if ( !empty($condition) ) {
+        if ( !empty($condition) && is_array($condition) ) {
             /* @var $regionService RegionService */
             $regionService = X::system()->getServiceManager()->get(RegionService::getServiceName());
             
-            $pageSize = 10;
+            $pageSize = $moduleConfig->get('user_friend_search_result_page_size');
             $filteredCondition = $this->filterConditions($condition);
             $result = $accountManager->findFriends($filteredCondition, ($page-1)*$pageSize, $pageSize);
             foreach ( $result['data'] as $index => $information ) {

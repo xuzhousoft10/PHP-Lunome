@@ -21,12 +21,14 @@ class Index extends FriendManagement {
      * @return void
      */ 
     public function runAction( $page=1 ) {
+        $moduleConfig = $this->getModule()->getConfiguration();
         $accountManager = $this->getUserService()->getAccount();
+        $pageSize = $moduleConfig->get('user_friend_index_page_size');
+        $page = intval($page);
         
-        $length = 10;
-        $position = ($page-1)*$length;
+        $position = ($page-1)*$pageSize;
         $position = ( 0 > $position ) ? 0 : $position;
-        $friends = $accountManager->getFriends($position, $length);
+        $friends = $accountManager->getFriends($position, $pageSize);
         
         if ( !empty($friends) ) {
             /* @var $regionService RegionService */
@@ -41,9 +43,9 @@ class Index extends FriendManagement {
         $count = $accountManager->countFriends();
         $pager = array(
             'prev'      => ( 1 >= $page*1 ) ? false : $page-1,
-            'next'      => ( $count<=$length || ($page-1)*$length >= $count ) ? false : $page+1,
+            'next'      => ( $count<=$pageSize || ($page-1)*$pageSize >= $count ) ? false : $page+1,
             'current'   => $page,
-            'pageCount' => ( 0===($count%$length) ) ? $count/$length : intval($count/$length)+1,
+            'pageCount' => ( 0===($count%$pageSize) ) ? $count/$pageSize : intval($count/$pageSize)+1,
         );
         
         /* Load friend index view. */
