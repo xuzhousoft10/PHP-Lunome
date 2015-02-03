@@ -1,24 +1,24 @@
 <?php
 /**
- * The action file for connectus action.
+ * @license LGPL http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 namespace X\Module\Lunome\Action\Region;
 
 /**
- * 
+ * use statements
  */
 use X\Util\Action\Visual;
 use X\Module\Lunome\Service\Region\Service as RegionService;
 
 /**
- * The action class for connectus action.
- * @author Unknown
+ * GetOption
+ * @author Michael Luthor <michaelluthor@163.com>
  */
 class GetOption extends Visual { 
-    /** 
-     * The action handle for index action.
-     * @return void
-     */ 
+    /**
+     * @param string $parent
+     * @param string $selected
+     */
     public function runAction( $parent, $selected='' ) {
         /* @var $servie RegionService */
         $servie = $this->getService(RegionService::getServiceName());
