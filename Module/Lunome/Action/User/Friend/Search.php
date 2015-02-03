@@ -24,6 +24,7 @@ class Search extends FriendManagement {
         $accountManager = $this->getUserService()->getAccount();
         $moduleConfig = $this->getModule()->getConfiguration();
         $page = intval($page);
+        $view = $this->getView();
         
         $informations = false;
         $pager = array('prev'=>false, 'next'=>false);
@@ -36,9 +37,13 @@ class Search extends FriendManagement {
             $result = $accountManager->findFriends($filteredCondition, ($page-1)*$pageSize, $pageSize);
             foreach ( $result['data'] as $index => $information ) {
                 $informations[$index] = $information->toArray();
-                $informations[$index]['living_country'] = $regionService->getNameByID($information->living_country);
-                $informations[$index]['living_province'] = $regionService->getNameByID($information->living_province);
-                $informations[$index]['living_city'] = $regionService->getNameByID($information->living_city);
+                $informations[$index]['living_country']     = $regionService->getNameByID($information->living_country);
+                $informations[$index]['living_province']    = $regionService->getNameByID($information->living_province);
+                $informations[$index]['living_city']        = $regionService->getNameByID($information->living_city);
+                $informations[$index]['sexSign']                 = $accountManager->getSexMark($information->sex);
+                $informations[$index]['sex']                     = $accountManager->getSexName($information->sex);
+                $informations[$index]['sexuality']               = $accountManager->getSexualityName($information->sexuality);
+                $informations[$index]['emotion_status']          = $accountManager->getEmotionStatuName($information->emotion_status);
             }
             
             $pager = array(
@@ -53,8 +58,12 @@ class Search extends FriendManagement {
         $path   = $this->getParticleViewPath('User/Friend/Search');
         $option = array();
         $data   = array('informations'=>$informations, 'condition'=>$condition, 'pager'=>$pager);
-        $this->getView()->loadParticle($name, $path, $option, $data);
-        $this->getView()->title = '寻找好友';
+        $view->loadParticle($name, $path, $option, $data);
+        $view->title = '寻找好友';
+        
+        $view->setDataToParticle($name, 'sexMap', $accountManager->getSexNames());
+        $view->setDataToParticle($name, 'sexualityMap', $accountManager->getSexualityNames());
+        $view->setDataToParticle($name, 'emotionMap', $accountManager->getEmotionStatuNames());
     }
     
     /**
@@ -80,5 +89,14 @@ class Search extends FriendManagement {
      */
     protected function getActiveSettingItem() {
         return self::FRIEND_MENU_ITEM_SEARCH;
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \X\Util\Action\Visual::beforeDisplay()
+     */
+    protected function beforeDisplay() {
+        $assetsURL = $this->getAssetsURL();
+        $this->getView()->addScriptFile('User-Setting-Information', $assetsURL.'/js/user/search.js');
     }
 }

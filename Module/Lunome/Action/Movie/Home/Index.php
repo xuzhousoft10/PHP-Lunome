@@ -16,6 +16,11 @@ use X\Module\Lunome\Service\Movie\Service as MovieService;
  */
 class Index extends VisualUserHome {
     /**
+     * @var unknown
+     */
+    private $currentMark = null;
+    
+    /**
      * @param string $id
      * @param integer $mark
      * @param integer $page
@@ -31,6 +36,7 @@ class Index extends VisualUserHome {
         }
         
         $mark = intval($mark);
+        $this->currentMark = $mark;
         if ( MovieService::MARK_UNMARKED === $mark ) {
             $mark = MovieService::MARK_INTERESTED;
         }
@@ -76,5 +82,19 @@ class Index extends VisualUserHome {
         $this->getView()->loadParticle($name, $path, $option, $data);
         
         $this->homeUserAccountID = $id;
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \X\Util\Action\Visual::beforeDisplay()
+     */
+    protected function beforeDisplay() {
+        $assetsURL = $this->getAssetsURL();
+        $this->getView()->addScriptFile('movie-index', $assetsURL.'/js/movie/home.js');
+        
+        if (MovieService::MARK_WATCHED === $this->currentMark) {
+            $this->getView()->addScriptFile('rate-it', $assetsURL.'/library/jquery/plugin/rate/rateit.js');
+            $this->getView()->addCssLink('rate-it', $assetsURL.'/library/jquery/plugin/rate/rateit.css');
+        }
     }
 }

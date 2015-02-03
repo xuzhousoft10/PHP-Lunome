@@ -34,9 +34,14 @@ class Index extends FriendManagement {
             /* @var $regionService RegionService */
             $regionService = X::system()->getServiceManager()->get(RegionService::getServiceName());
             foreach ( $friends as $index => $friend ) {
-                $friends[$index]->living_country    = $regionService->getNameByID($friend->living_country);
-                $friends[$index]->living_province   = $regionService->getNameByID($friend->living_province);
-                $friends[$index]->living_city       = $regionService->getNameByID($friend->living_city);
+                $friends[$index] = $friend->toArray();
+                $friends[$index]['living_country']    = $regionService->getNameByID($friend->living_country);
+                $friends[$index]['living_province']   = $regionService->getNameByID($friend->living_province);
+                $friends[$index]['living_city']       = $regionService->getNameByID($friend->living_city);
+                $friends[$index]['sexSign']           = $accountManager->getSexMark($friend->sex);
+                $friends[$index]['sex']               = $accountManager->getSexName($friend->sex);
+                $friends[$index]['sexuality']         = $accountManager->getSexualityName($friend->sexuality);
+                $friends[$index]['emotion_status']    = $accountManager->getEmotionStatuName($friend->emotion_status);
             }
         }
         

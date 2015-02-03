@@ -1,16 +1,11 @@
-<?php use X\Core\X; ?>
 <?php use X\Module\Lunome\Service\Movie\Service as MovieService; ?>
-<?php $vars = get_defined_vars(); ?>
-<?php $assetsURL = X::system()->getConfiguration()->get('assets-base-url'); ?>
-<?php $this->addScriptFile('user-home-movie-index', $assetsURL.'/js/user_home_movie_index.js'); ?>
-<?php $marks = $vars['marks']; ?>
-<?php $accountID = $vars['accountID']; ?>
-<?php $movies = $vars['movies']; ?>
-<?php if (MovieService::MARK_WATCHED === $marks['actived']) : ?>
-    <?php $this->addScriptFile('rate-it', $assetsURL.'/library/jquery/plugin/rate/rateit.js'); ?>
-    <?php $this->addCssLink('rate-it', $assetsURL.'/library/jquery/plugin/rate/rateit.css'); ?>
-<?php endif; ?>
-
+<?php 
+$vars = get_defined_vars();
+$assetsURL = $vars['assetsURL']; 
+$marks = $vars['marks']; 
+$accountID = $vars['accountID'];
+$movies = $vars['movies']; 
+?>
 <div class="btn-group btn-group-justified">
     <?php foreach ( $marks['data'] as $key => $value ) : ?>
         <?php $buttonStatus = ($key*1 === $marks['actived']) ? 'btn-primary' : '';?>

@@ -3,10 +3,6 @@
 $vars = get_defined_vars();
 $friends = $vars['friends'];
 ?>
-<?php $sexMap = array(''=>'＊', '0'=>'＊','1'=>'♂','2'=>'♀','3'=>'？'); ?>
-<?php $sexNameMap = array(''=>'保密', '0'=>'保密','1'=>'男','2'=>'女','3'=>'其他'); ?>
-<?php $sexualitysMap = array(''=>'保密', '0'=>'保密','1'=>'异性','2'=>'同性','3'=>'双性','4'=>'无性','5'=>'二禁'); ?>
-<?php $emotionStatusMap = array(''=>'保密', '0'=>'保密','1'=>'单身','2'=>'热恋中','3'=>'同居','4'=>'已订婚','5'=>'已婚','6'=>'分居','7'=>'离异','8'=>'很难说','9'=>'其他'); ?>
 <div class="col-md-9">
 <strong>我的好友</strong>
 <hr class="margin-top-10">
@@ -17,8 +13,8 @@ $friends = $vars['friends'];
             <div class="clearfix">
                 <div class="pull-left">
                     <img    class="img-thumbnail"
-                            alt="<?php echo $friend->nickname;?>" 
-                            src="<?php echo $friend->photo;?>"
+                            alt="<?php echo $friend['nickname'];?>" 
+                            src="<?php echo $friend['photo'];?>"
                             width="80"
                             height="80"
                     >
@@ -26,28 +22,28 @@ $friends = $vars['friends'];
                 <div class="pull-left padding-left-5 user-information-text-area">
                     <p>
                         <strong>
-                            <span class="text-info" title="性别:<?php echo $sexNameMap[$friend->sex]; ?>"><?php echo $sexMap[$friend->sex];?></span>
-                            <?php echo $friend->nickname;?>
+                            <span class="text-info" title="性别:<?php echo $friend['sex']; ?>"><?php echo $friend['sexSign'];?></span>
+                            <?php echo $friend['nickname'];?>
                         </strong>
                     </p>
                     <p>
                         <span class="glyphicon glyphicon-heart"></span>
-                        <?php echo $sexualitysMap[$friend->sexuality];?>
+                        <?php echo $friend['sexuality'];?>
                         <span class="glyphicon glyphicon-user"></span>
-                        <?php echo $emotionStatusMap[$friend->emotion_status];?>
+                        <?php echo $friend['emotion_status'];?>
                     </p>
                     <p>
-                        <?php echo $friend->living_country;?>
-                        <?php echo $friend->living_province;?>
-                        <?php echo $friend->living_city;?>
+                        <?php echo $friend['living_country'];?>
+                        <?php echo $friend['living_province'];?>
+                        <?php echo $friend['living_city'];?>
                     </p>
                 </div>
             </div>
             
             <div class="text-right">
-                <a class="btn btn-primary btn-xs" target="_blank" href="/?module=lunome&action=user/interaction/index&id=<?php echo $friend->account_id;?>">互动</a>
-                <a class="btn btn-primary btn-xs" target="_blank" href="/?module=lunome&action=user/chat/index&friend=<?php echo $friend->account_id;?>">聊天</a>
-                <a class="btn btn-primary btn-xs" target="_blank" href="/?module=lunome&action=user/home/index&id=<?php echo $friend->account_id;?>">主页</a>
+                <a class="btn btn-primary btn-xs" target="_blank" href="/?module=lunome&action=user/interaction/index&id=<?php echo $friend['account_id'];?>">互动</a>
+                <a class="btn btn-primary btn-xs" target="_blank" href="/?module=lunome&action=user/chat/index&friend=<?php echo $friend['account_id'];?>">聊天</a>
+                <a class="btn btn-primary btn-xs" target="_blank" href="/?module=lunome&action=user/home/index&id=<?php echo $friend['account_id'];?>">主页</a>
             </div>
         </div>
     </div>

@@ -57,7 +57,6 @@ class MarkedUserList extends Visual {
         $view->setDataToParticle($viewName, 'id', $id);
         $view->setDataToParticle($viewName, 'mark', $mark);
         $view->setDataToParticle($viewName, 'scope', $scope);
-        $view->setDataToParticle($viewName, 'assetsURL', X::system()->getConfiguration()->get('assets-base-url'));
         $view->setDataToParticle($viewName, 'sexNames', $accountManager->getSexNames());
         $view->setDataToParticle($viewName, 'sexMarks', $accountManager->getSexMarks());
         $view->setDataToParticle($viewName, 'sexualityNames', $accountManager->getSexualityNames());

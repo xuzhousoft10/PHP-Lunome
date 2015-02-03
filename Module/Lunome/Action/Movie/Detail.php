@@ -120,7 +120,6 @@ class Detail extends Visual {
         $view->setDataToParticle($viewName, 'isGuestUser', $isGuest);
         $userData = $isGuest ? null : $this->getUserService()->getAccount()->getInformation($this->getUserService()->getCurrentUserId());
         $view->setDataToParticle($viewName, 'currentUser', $userData);
-        $view->setDataToParticle($viewName, 'assetsURL', X::system()->getConfiguration()->get('assets-base-url'));
         
         $view->title = $movie['name'];
     }
@@ -130,7 +129,7 @@ class Detail extends Visual {
      * @see \X\Util\Action\Visual::beforeDisplay()
      */
     protected function beforeDisplay() {
-        $assetsURL = X::system()->getConfiguration()->get('assets-base-url');
+        $assetsURL = $this->getAssetsURL();
         $this->getView()->addScriptFile('ajaxfileupload', $assetsURL.'/library/jquery/plugin/ajaxfileupload.js');
         $this->getView()->addScriptFile('detail-detail', $assetsURL.'/js/movie/detail.js');
     }

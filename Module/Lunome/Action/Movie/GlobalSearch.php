@@ -22,7 +22,6 @@ class GlobalSearch extends Visual {
      */
     public function runAction( $name ) {
         $movieData = array();
-        $assetsURL = X::system()->getConfiguration()->get('assets-base-url');
         X::system()->getServiceManager()->get(SessionService::getServiceName())->close();
         
         /* search movies from youku. */
@@ -164,7 +163,7 @@ class GlobalSearch extends Visual {
         $name   = 'GLOBAL_SEARCH_RESULT_INDEX';
         $path   = $this->getParticleViewPath('Movie/GlobalSearchResult');
         $option = array();
-        $data   = array('movies'=>$movieData, 'assetsURL'=>$assetsURL);
+        $data   = array('movies'=>$movieData);
         $this->getView()->loadParticle($name, $path, $option, $data);
         $this->getView()->displayParticle($name);
     }

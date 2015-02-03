@@ -21,6 +21,7 @@ class Information extends UserSetting {
     public function runAction( $information=array() ) {
         $accountManager = $this->getUserService()->getAccount();
         $account = $accountManager->getInformation();
+        $view = $this->getView();
         
         if ( !empty($information) && is_array($information)) {
             $account = $accountManager->updateInformation($information);
@@ -30,9 +31,11 @@ class Information extends UserSetting {
         $path   = $this->getParticleViewPath('User/Setting/Information');
         $option = array();
         $data   = array('account'=>$account);
-        $this->getView()->loadParticle($name, $path, $option, $data);
-        
-        $this->getView()->title = '个人信息';
+        $view->loadParticle($name, $path, $option, $data);
+        $view->setDataToParticle($name, 'sexMap', $accountManager->getSexNames());
+        $view->setDataToParticle($name, 'sexualityMap', $accountManager->getSexualityNames());
+        $view->setDataToParticle($name, 'emotionMap', $accountManager->getEmotionStatuNames());
+        $view->title = '个人信息';
     }
     
     /**
@@ -41,5 +44,18 @@ class Information extends UserSetting {
      */
     protected function getActiveSettingItem() {
         return self::SETTING_ITEM_INFO;
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \X\Util\Action\Visual::beforeDisplay()
+     */
+    protected function beforeDisplay() {
+        $assetsURL = $this->getAssetsURL();
+        $view = $this->getView();
+        $view->addCssLink('Bootstrap-Date-Picker', $assetsURL.'/library/bootstrap/plugin/bootstrap-datepicker/css/datepicker3.css'); 
+        $view->addScriptFile('Bootstrap-Date-Picker', $assetsURL.'/library/bootstrap/plugin/bootstrap-datepicker/js/bootstrap-datepicker.js'); 
+        $view->addScriptFile('Bootstrap-Date-Picker-Language', $assetsURL.'/library/bootstrap/plugin/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js'); 
+        $view->addScriptFile('User-Setting-Information', $assetsURL.'/js/user_setting_information.js'); 
     }
 }

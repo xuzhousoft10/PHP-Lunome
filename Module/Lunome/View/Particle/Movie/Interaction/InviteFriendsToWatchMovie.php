@@ -1,11 +1,10 @@
-<?php use X\Core\X; ?>
-<?php $vars = get_defined_vars(); ?>
-<?php $movies = $vars['movies']; ?>
-<?php $assetsURL = X::system()->getConfiguration()->get('assets-base-url'); ?>
-<?php $friends = $vars['friends']; ?>
-<?php $selectedFriendIDs = array(); ?>
-<?php $selectedFriendNames = array(); ?>
-<?php $this->addScriptFile('user-home-movie-index', $assetsURL.'/js/user_interaction_movie_invite_friends_to_watch_movie.js'); ?>
+<?php 
+$vars = get_defined_vars();
+$movies = $vars['movies'];
+$assetsURL = $vars['assetsURL'];
+$selectedFriendIDs = $vars['selectedFriendIDs'];
+$selectedFriendNames = $vars['selectedFriendNames'];
+?>
 <div class="col-md-9">
     <?php foreach ( $movies as $movie ) : ?>
         <div class="pull-left lunome-movie-item">
@@ -31,14 +30,10 @@
     <?php endforeach; ?>
 </div>
 
-<?php foreach ( $friends as $friend ) : ?>
-    <?php $selectedFriendIDs[] = $friend->account_id; ?>
-    <?php $selectedFriendNames[] = $friend->nickname; ?>
-<?php endforeach; ?>
 <div    class="modal fade" 
         id="invite-to-watch-movie-dialog" 
-        data-id-list="<?php echo implode(',', $selectedFriendIDs);?>"
-        data-name-list="<?php echo implode(',', $selectedFriendNames); ?>"
+        data-id-list="<?php echo $selectedFriendIDs;?>"
+        data-name-list="<?php echo $selectedFriendNames; ?>"
 >
   <div class="modal-dialog">
     <div class="modal-content">

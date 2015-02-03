@@ -1,14 +1,6 @@
 <?php 
-use X\Core\X;
-$assetsURL = X::system()->getConfiguration()->get('assets-base-url');
-$this->addCssLink('Bootstrap-Switch', $assetsURL.'/library/bootstrap/plugin/bootstrap-switch/css/bootstrap3/bootstrap-switch.min.css');
-$this->addScriptFile('Bootstrap-Switch', $assetsURL.'/library/bootstrap/plugin/bootstrap-switch/js/bootstrap-switch.min.js');
-
-/* @var $this X\Service\XView\Core\Handler\Html */
 $vars = get_defined_vars();
 $config = $vars['configurations'];
-$switchOption = json_encode(array('size'=>'mini', 'onText'=>'已开启', 'offText'=>'已关闭'));
-$this->addScriptString('Bootstrap-Switch-Enable', '$(document).ready(function(){$("#sns-auto-share").bootstrapSwitch('.$switchOption.');});');
 ?>
 <form action="/?module=lunome&action=user/setting/sns" method="post">
 <div class="col-md-9 thumbnail">

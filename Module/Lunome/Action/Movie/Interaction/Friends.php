@@ -7,6 +7,7 @@ namespace X\Module\Lunome\Action\Movie\Interaction;
 /**
  * use statements
  */
+use X\Core\X;
 use X\Module\Lunome\Util\Action\FriendManagement;
 
 /**
@@ -20,12 +21,23 @@ class Friends extends FriendManagement {
     public function runAction( $friends ) {
         $userService = $this->getUserService();
         $movieService = $this->getMovieService();
+        $view = $this->getView();
+        
+        if ( empty($friends) || !is_array($friends) ) {
+            $this->goBack();
+        }
         
         $accounts = array();
         $accounts[] = $userService->getCurrentUserId();
         $accounts = array_merge($accounts, $friends);
         $movies = $movieService->getInterestedMovieSetByAccounts($accounts);
         $friends = $userService->getAccount()->getInformations($friends);
+        $selectedFriendIDs = array();
+        $selectedFriendNames = array();
+        foreach ( $friends as $friend ) {
+            $selectedFriendIDs[] = $friend->account_id;
+            $selectedFriendNames[] = $friend->nickname;
+        }
         
         /* 填充封面信息和评分信息 */
         foreach ( $movies as $index => $movie ) {
@@ -37,13 +49,14 @@ class Friends extends FriendManagement {
             }
         }
         
-        $name   = 'USER_FRIENDS_INTERACTION';
+        $viewName   = 'USER_FRIENDS_INTERACTION';
         $path   = $this->getParticleViewPath('Movie/Interaction/InviteFriendsToWatchMovie');
-        $option = array();
-        $data   = array('movies'=>$movies, 'friends'=>$friends);
-        $this->getView()->loadParticle($name, $path, $option, $data);
+        $view->loadParticle($viewName, $path);
+        $view->setDataToParticle($viewName, 'movies', $movies);
+        $view->setDataToParticle($viewName, 'selectedFriendIDs', implode(',', $selectedFriendIDs));
+        $view->setDataToParticle($viewName, 'selectedFriendNames', implode(',', $selectedFriendNames));
         
-        $this->getView()->title = '邀请好友一起去看电影';
+        $view->title = '邀请好友一起去看电影';
     }
     
     /**
@@ -52,5 +65,14 @@ class Friends extends FriendManagement {
      */
     protected function getActiveSettingItem() {
         return self::FRIEND_MENU_ITEM_INTERACTION;
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \X\Util\Action\Visual::beforeDisplay()
+     */
+    protected function beforeDisplay() {
+        $assetsURL = $this->getAssetsURL();
+        $this->getView()->addScriptFile('invite', $assetsURL.'/js/movie/invite_friends.js');
     }
 }

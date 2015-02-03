@@ -95,6 +95,7 @@ abstract class Visual extends Basic {
         $this->view['name'] = $viewType;
         
         $this->view['object']->setCharset('UTF-8');
+        $this->view['object']->addData('assetsURL', $this->getAssetsURL());
         parent::beforeRunAction();
     }
     

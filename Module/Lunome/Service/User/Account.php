@@ -243,6 +243,10 @@ class Account {
      * @return Ambigous <\X\Service\XDatabase\Core\ActiveRecord\XActiveRecord, NULL>
      */
     public function getInformations ( $accountIDs ) {
+        if ( empty($accountIDs) || !is_array($accountIDs) ) {
+            return array();
+        }
+        
         $informations = AccountInformationModel::model()->findAll(array('account_id'=>$accountIDs));
         return $informations;
     }
@@ -554,16 +558,40 @@ class Account {
         return array(0=>'保密',1=>'男',2=>'女',3=>'其他');
     }
     
+    public function getSexName( $sex ) {
+        $sex = intval($sex);
+        $codes = $this->getSexNames();
+        return isset($codes[$sex]) ? $codes[0] : $codes[$sex];
+    }
+    
     public function getSexMarks() {
         return array(0=>'＊',1=>'♂',2=>'♀',3=>'？');
+    }
+    
+    public function getSexMark( $sex ) {
+        $sex = intval($sex);
+        $codes = $this->getSexMarks();
+        return isset($codes[$sex]) ? $codes[0] : $codes[$sex];
     }
     
     public function getSexualityNames() {
         return array(0=>'保密',1=>'异性',2=>'同性',3=>'双性',4=>'无性',5=>'二禁');
     }
     
+    public function getSexualityName( $code ) {
+        $code = intval($code);
+        $codes = $this->getSexualityNames();
+        return isset($codes[$code]) ? $codes[0] : $codes[$code];
+    }
+    
     public function getEmotionStatuNames() {
         return array(0=>'保密',1=>'单身',2=>'热恋中',3=>'同居',4=>'已订婚',5=>'已婚',6=>'分居',7=>'离异',8=>'很难说',9=>'其他');
+    }
+    
+    public function getEmotionStatuName( $code ) {
+        $code = intval($code);
+        $codes = $this->getEmotionStatuNames();
+        return isset($codes[$code]) ? $codes[0] : $codes[$code];
     }
     
     /**

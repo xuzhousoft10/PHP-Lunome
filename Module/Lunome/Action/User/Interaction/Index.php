@@ -31,7 +31,7 @@ class Index extends Userinteraction {
         $option = array();
         $data   = array(
             'items'         => $this->interactionMenu, 
-            'parameters'    => $this->interactionMenuParams,
+            'parameters'    => empty($this->interactionMenuParams) ? '' : '&'.http_build_query($this->interactionMenuParams),
         );
         $this->getView()->loadParticle($name, $path, $option, $data);
         $this->getView()->title = '与'.$friendInformation->nickname.'互动';

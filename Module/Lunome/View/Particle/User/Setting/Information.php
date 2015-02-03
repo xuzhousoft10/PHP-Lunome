@@ -1,13 +1,10 @@
-<?php use X\Core\X; ?>
-<?php $assetsURL = X::system()->getConfiguration()->get('assets-base-url'); ?>
-<?php $this->addCssLink('Bootstrap-Date-Picker', $assetsURL.'/library/bootstrap/plugin/bootstrap-datepicker/css/datepicker3.css'); ?>
-<?php $this->addScriptFile('Bootstrap-Date-Picker', $assetsURL.'/library/bootstrap/plugin/bootstrap-datepicker/js/bootstrap-datepicker.js'); ?>
-<?php $this->addScriptFile('Bootstrap-Date-Picker-Language', $assetsURL.'/library/bootstrap/plugin/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js'); ?>
-<?php $this->addScriptFile('User-Setting-Information', $assetsURL.'/js/user_setting_information.js'); ?>
-
-<?php $vars = get_defined_vars(); ?>
-<?php /* @var $account \X\Module\Lunome\Model\Account\AccountInformation */ ?>
-<?php $account = $vars['account']; ?>
+<?php 
+$vars = get_defined_vars();
+$account = $vars['account']; 
+$sexMap = $vars['sexMap'];
+$sexualityMap = $vars['sexualityMap'];
+$emotionMap = $vars['emotionMap'];
+?>
 <form action="/?module=lunome&action=user/setting/information" method="post" class="form-horizontal">
 <div class="col-md-9 thumbnail">
     <h5>个人信息更新</h5>
@@ -73,9 +70,9 @@
                     data-value  = "<?php echo empty($account) ? 0 : $account->sex; ?>"
             >
                 <option value="0"></option>
-                <option value="1">男</option>
-                <option value="2">女</option>
-                <option value="3">其他</option>
+                <?php foreach ( $sexMap as $key => $value ) : ?>
+                    <option value="<?php echo $key;?>"><?php echo $value; ?></option>
+                <?php endforeach; ?>
             </select>
         </div>
     </div>
@@ -88,11 +85,9 @@
                     data-value  = "<?php echo empty($account) ? 0 : $account->sexuality; ?>"
             >
                 <option value="0"></option>
-                <option value="1">异性</option>
-                <option value="2">同性</option>
-                <option value="3">双性</option>
-                <option value="4">无性</option>
-                <option value="5">二禁</option>
+                <?php foreach ( $sexualityMap as $key => $value ) : ?>
+                    <option value="<?php echo $key;?>"><?php echo $value; ?></option>
+                <?php endforeach; ?>
             </select>
         </div>
     </div>
@@ -105,15 +100,9 @@
                     data-value  = "<?php echo empty($account) ? 0 : $account->emotion_status; ?>"
             >
                 <option value="0"></option>
-                <option value="1">单身</option>
-                <option value="2">热恋中</option>
-                <option value="3">同居</option>
-                <option value="4">已订婚</option>
-                <option value="5">已婚</option>
-                <option value="6">分居</option>
-                <option value="7">离异</option>
-                <option value="8">很难说</option>
-                <option value="9">其他</option>
+                <?php foreach ( $emotionMap as $key => $value ) : ?>
+                    <option value="<?php echo $key;?>"><?php echo $value; ?></option>
+                <?php endforeach; ?>
             </select>
         </div>
     </div>

@@ -49,7 +49,6 @@ class Index extends Visual {
             'id'=>$id, 
             'pager'=>$pager, 
             'isWatched'=>$isWatched,
-            'assetsURL' => X::system()->getConfiguration()->get('assets-base-url'),
         );
         $this->getView()->loadParticle($name, $path, $option, $data);
         $this->getView()->displayParticle($name);

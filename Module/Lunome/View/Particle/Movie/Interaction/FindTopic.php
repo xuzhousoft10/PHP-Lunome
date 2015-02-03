@@ -1,8 +1,9 @@
-<?php use X\Core\X; ?>
-<?php $vars = get_defined_vars(); ?>
-<?php $movies = $vars['movies']; ?>
-<?php $friendInformation = $vars['friendInformation']; ?>
-<?php $assetsURL = $vars['assetsURL']; ?>
+<?php 
+$vars = get_defined_vars();
+$movies = $vars['movies'];
+$friendInformation = $vars['friendInformation'];
+$assetsURL = $vars['assetsURL']; 
+?>
 <div class="col-md-9">
     <?php if (empty($movies['like']) && empty($movies['dislike'])) : ?>
         <p>

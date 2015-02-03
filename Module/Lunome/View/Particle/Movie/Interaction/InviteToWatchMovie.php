@@ -1,9 +1,9 @@
-<?php use X\Core\X; ?>
-<?php $vars = get_defined_vars(); ?>
-<?php $movies = $vars['movies']; ?>
-<?php $assetsURL = X::system()->getConfiguration()->get('assets-base-url'); ?>
-<?php $this->addScriptFile('user-home-movie-index', $assetsURL.'/js/user_interaction_movie_invite_to_watch_movie.js'); ?>
-<?php $friendInformation = $vars['friendInformation']; ?>
+<?php 
+$vars = get_defined_vars();
+$movies = $vars['movies'];
+$assetsURL = $vars['assetsURL'];
+$friendInformation = $vars['friendInformation'];
+?>
 <div class="col-md-9">
     <?php if (empty($movies)) : ?>
         <p>

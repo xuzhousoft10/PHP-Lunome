@@ -1,7 +1,8 @@
-<?php use X\Core\X; ?>
-<?php $vars = get_defined_vars(); ?>
-<?php $assetsURL = X::system()->getConfiguration()->get('assets-base-url'); ?>
-<?php $dialogues = $vars['dialogues']; ?>
+<?php 
+$vars = get_defined_vars();
+$assetsURL = $vars['assetsURL'];
+$dialogues = $vars['dialogues']; 
+?>
 <?php if ( empty( $dialogues ) ) : ?>
     <div class="clearfix">
         <div class="pull-left">

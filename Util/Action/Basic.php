@@ -34,6 +34,13 @@ abstract class Basic extends \X\Service\XAction\Core\Handler\WebAction {
         return $this->module;
     }
     
+    /**
+     * @return string
+     */
+    public function getAssetsURL () {
+        return X::system()->getConfiguration()->get('assets-base-url');
+    }
+    
     public function __call( $name, $parms ) {
         if ( 'get' === substr($name, 0, 3) && 'Service' === substr($name, strlen($name)-7)){
             $serviceName = substr($name, 3);

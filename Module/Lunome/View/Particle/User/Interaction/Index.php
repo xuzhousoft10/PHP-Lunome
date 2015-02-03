@@ -1,8 +1,9 @@
 <?php use X\Module\Lunome\Util\Action\Userinteraction; ?>
-<?php $vars = get_defined_vars(); ?>
-<?php $items = $vars['items']; ?>
-<?php $parameters = $vars['parameters']; ?>
-<?php $parameters = empty($parameters) ? '' : '&'.http_build_query($parameters); ?>
+<?php 
+$vars = get_defined_vars();
+$items = $vars['items'];
+$parameters = $vars['parameters'];
+?>
 <div class="col-md-9 text-center">
     <?php foreach ( $items as $itemName => $item ) : ?>
         <?php if (Userinteraction::INTERACTION_MENU_ITEM_INDEX === $itemName): ?>

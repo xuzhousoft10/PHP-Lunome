@@ -1,7 +1,9 @@
-<?php use X\Core\X; ?>
-<?php $vars = get_defined_vars(); ?>
-<?php $assetsURL = X::system()->getConfiguration()->get('assets-base-url'); ?>
-<?php $comments = $vars['comments']; ?>
+<?php 
+$vars = get_defined_vars();
+$assetsURL = $vars['assetsURL'];
+$comments = $vars['comments']; 
+$pager = $vars['pager'];
+?>
 <div>
     <ul class="nav nav-tabs nav-justified">
         <li class="<?php if('friends'===$vars['scope']):?>active<?php endif;?>">
@@ -44,7 +46,6 @@
     <?php endforeach; ?>
     </div>
 <?php endif; ?>
-<?php $pager = $vars['pager']; ?>
 <?php if ( false !== $pager['prev'] || false !== $pager['next'] ) : ?>
 <div>
     <nav>

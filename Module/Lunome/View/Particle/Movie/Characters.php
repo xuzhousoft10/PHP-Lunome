@@ -10,7 +10,7 @@
         <div class="margin-top-70 text-muted">
             <small>角色空空的~~~</small>
         </div>
-    </div>
+    </div> 
 <?php else : ?>
     <?php foreach ( $characters as $character ) :?>
         <div class="thumbnail clearfix">

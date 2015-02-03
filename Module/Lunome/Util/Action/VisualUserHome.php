@@ -46,13 +46,18 @@ class VisualUserHome extends Visual {
     protected function afterRunAction() {
         /* @var $regionService \X\Module\Lunome\Service\Region\Service */
         $regionService = X::system()->getServiceManager()->get(RegionService::getServiceName());
-        $userData = $this->getUserService()->getAccount()->getInformation($this->homeUserAccountID);
-        $userData->living_country = $regionService->getNameByID($userData->living_country);
-        $userData->living_province = $regionService->getNameByID($userData->living_province);
-        $userData->living_city = $regionService->getNameByID($userData->living_city);
+        $accountManager = $this->getUserService()->getAccount();
+        $userData = $this->getUserService()->getAccount()->getInformation($this->homeUserAccountID)->toArray();
+        $userData['living_country']     = $regionService->getNameByID($userData['living_country']);
+        $userData['living_province']    = $regionService->getNameByID($userData['living_province']);
+        $userData['living_city']        = $regionService->getNameByID($userData['living_city']);
+        $userData['sexSign']            = $accountManager->getSexMark($userData['sex']);
+        $userData['sex']                = $accountManager->getSexName($userData['sex']);
+        $userData['sexuality']          = $accountManager->getSexualityName($userData['sexuality']);
+        $userData['emotion_status']     = $accountManager->getEmotionStatuName($userData['emotion_status']);
         $this->getView()->setDataToParticle('USER_TOP_BOARD', 'homeUser', $userData);
         
-        $this->getView()->title = $userData->nickname."的主页";
+        $this->getView()->title = $userData['nickname']."的主页";
         
         parent::afterRunAction();
     }

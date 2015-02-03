@@ -79,7 +79,7 @@ abstract class Userinteraction extends VisualMain {
         $data   = array(
             'items'         => $this->interactionMenu, 
             'activeItem'    => $this->activeInteractionMenuItem, 
-            'parameters'    => $this->interactionMenuParams,
+            'parameters'    => empty($this->interactionMenuParams) ? '' : '&'.http_build_query($this->interactionMenuParams),
         );
         $this->getView()->loadParticle($name, $path, $option, $data);
         parent::afterRunAction();

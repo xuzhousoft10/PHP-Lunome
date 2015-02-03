@@ -1,8 +1,7 @@
-<?php use X\Core\X; ?>
-<?php $vars = get_defined_vars(); ?>
-<?php $assetsURL = X::system()->getConfiguration()->get('assets-base-url'); ?>
-<?php $this->addScriptFile('User-Friend-Interaction', $assetsURL.'/js/user_friend_interaction.js'); ?>
-<?php $friends = $vars['friends']; ?>
+<?php 
+$vars = get_defined_vars();
+$friends = $vars['friends']; 
+?>
 <div class="col-md-9">
     <form action="/?module=lunome" method="post">
         <div class="thumbnail clearfix lunome-friends-interaction-friends-container">

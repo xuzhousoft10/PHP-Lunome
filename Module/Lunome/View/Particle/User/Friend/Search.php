@@ -1,9 +1,13 @@
-<?php use X\Core\X; ?>
-<?php $assetsURL = X::system()->getConfiguration()->get('assets-base-url'); ?>
-<?php $this->addScriptFile('User-Setting-Information', $assetsURL.'/js/user_friend_search.js'); ?>
-<?php $vars = get_defined_vars(); ?>
-<?php $informations = $vars['informations']; ?>
-<?php $condition = $vars['condition']; ?>
+<?php 
+$vars = get_defined_vars();
+$informations = $vars['informations'];
+$condition = $vars['condition']; 
+$assetsURL = $vars['assetsURL'];
+$pager = $vars['pager'];
+$sexMap = $vars['sexMap'];
+$sexualityMap = $vars['sexualityMap'];
+$emotionMap = $vars['emotionMap'];
+?>
 <form action="/?module=lunome&action=user/friend/search" method="post" class="form-horizontal">
 <div class="col-md-9 clearfix">
     <div class="clearfix thumbnail">
@@ -57,9 +61,9 @@
                             data-value  = "<?php echo empty($condition) ? '' : $condition['sex'];?>"
                     >
                         <option value="0"></option>
-                        <option value="1">男</option>
-                        <option value="2">女</option>
-                        <option value="3">其他</option>
+                        <?php foreach ( $sexMap as $key => $value ) : ?>
+                            <option value="<?php echo $key;?>"><?php echo $value; ?></option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
             </div>
@@ -71,11 +75,9 @@
                             data-value  = "<?php echo empty($condition) ? '' : $condition['sexuality'];?>"
                     >
                         <option value="0"></option>
-                        <option value="1">异性</option>
-                        <option value="2">同性</option>
-                        <option value="3">双性</option>
-                        <option value="4">无性</option>
-                        <option value="5">二禁</option>
+                        <?php foreach ( $sexualityMap as $key => $value ) : ?>
+                            <option value="<?php echo $key;?>"><?php echo $value; ?></option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
             </div>
@@ -87,15 +89,9 @@
                             data-value  = "<?php echo empty($condition) ? '' : $condition['emotion_status'];?>"
                     >
                         <option value="0"></option>
-                        <option value="1">单身</option>
-                        <option value="2">热恋中</option>
-                        <option value="3">同居</option>
-                        <option value="4">已订婚</option>
-                        <option value="5">已婚</option>
-                        <option value="6">分居</option>
-                        <option value="7">离异</option>
-                        <option value="8">很难说</option>
-                        <option value="9">其他</option>
+                        <?php foreach ( $emotionMap as $key => $value ) : ?>
+                            <option value="<?php echo $key;?>"><?php echo $value; ?></option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
             </div>
@@ -115,9 +111,6 @@
     <?php else : ?>
         <div class="thumbnail">
             <div class="clearfix">
-            <?php $sexMap = array(''=>'保密', '0'=>'保密','1'=>'♂','2'=>'♀','3'=>'其他'); ?>
-            <?php $sexualitysMap = array(''=>'保密', '0'=>'保密','1'=>'异性','2'=>'同性','3'=>'双性','4'=>'无性','5'=>'二禁'); ?>
-            <?php $emotionStatusMap = array(''=>'保密', '0'=>'保密','1'=>'单身','2'=>'热恋中','3'=>'同居','4'=>'已订婚','5'=>'已婚','6'=>'分居','7'=>'离异','8'=>'很难说','9'=>'其他'); ?>
             <?php foreach ( $informations as $index => $information ) : ?>
                 <div class="col-md-5 well well-sm clearfix">
                     <div class="clearfix">
@@ -132,15 +125,15 @@
                         <div class="pull-left padding-left-5 user-information-text-area">
                             <p>
                                 <strong>
-                                    <span class="text-info"><?php echo $sexMap[$information['sex']];?></span>
+                                    <span class="text-info"><?php echo $information['sexSign'];?></span>
                                     <?php echo $information['nickname'];?>
                                 </strong>
                             </p>
                             <p>
                                 <span class="glyphicon glyphicon-heart"></span>
-                                <?php echo $sexualitysMap[$information['sexuality']];?>
+                                <?php echo $information['sexuality'];?>
                                 <span class="glyphicon glyphicon-user"></span>
-                                <?php echo $emotionStatusMap[$information['emotion_status']];?>
+                                <?php echo $information['emotion_status'];?>
                             </p>
                             <p>
                                 <?php echo $information['living_country'];?>
@@ -161,7 +154,6 @@
                 <?php endif; ?>
             <?php endforeach; ?>
         </div>
-        <?php $pager = $vars['pager']; ?>
         <?php if ( false !== $pager['prev'] || false !== $pager['next'] ) : ?>
         <div>
             <nav>
