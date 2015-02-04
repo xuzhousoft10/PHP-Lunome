@@ -9,6 +9,7 @@ namespace X\Module\Lunome\Action\Movie\Interaction;
  */
 use X\Core\X;
 use X\Module\Lunome\Util\Action\FriendManagement;
+use X\Module\Lunome\Model\Movie\MovieInvitationModel;
 
 /**
  * Friends
@@ -19,11 +20,17 @@ class Friends extends FriendManagement {
      * @param array $friends
      */
     public function runAction( $friends ) {
+        $moduleConfig = $this->getModule()->getConfiguration();
         $userService = $this->getUserService();
         $movieService = $this->getMovieService();
         $view = $this->getView();
         
         if ( empty($friends) || !is_array($friends) ) {
+            $this->goBack();
+        }
+        
+        $peopleCount = intval($moduleConfig->get('user_interaction_max_friend_count'));
+        if ( count($friends) > $peopleCount ) {
             $this->goBack();
         }
         
@@ -55,6 +62,8 @@ class Friends extends FriendManagement {
         $view->setDataToParticle($viewName, 'movies', $movies);
         $view->setDataToParticle($viewName, 'selectedFriendIDs', implode(',', $selectedFriendIDs));
         $view->setDataToParticle($viewName, 'selectedFriendNames', implode(',', $selectedFriendNames));
+        $commentLength = MovieInvitationModel::model()->getAttribute('comment')->getLength();
+        $view->setDataToParticle($viewName, 'commentLength', $commentLength);
         
         $view->title = '邀请好友一起去看电影';
     }

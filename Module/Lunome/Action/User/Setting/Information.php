@@ -56,6 +56,6 @@ class Information extends UserSetting {
         $view->addCssLink('Bootstrap-Date-Picker', $assetsURL.'/library/bootstrap/plugin/bootstrap-datepicker/css/datepicker3.css'); 
         $view->addScriptFile('Bootstrap-Date-Picker', $assetsURL.'/library/bootstrap/plugin/bootstrap-datepicker/js/bootstrap-datepicker.js'); 
         $view->addScriptFile('Bootstrap-Date-Picker-Language', $assetsURL.'/library/bootstrap/plugin/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js'); 
-        $view->addScriptFile('User-Setting-Information', $assetsURL.'/js/user_setting_information.js'); 
+        $view->addScriptFile('User-Setting-Information', $assetsURL.'/js/user/information.js'); 
     }
 }

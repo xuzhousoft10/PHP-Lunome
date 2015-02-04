@@ -216,7 +216,7 @@ class Account {
      */
     public function setConfigurations( $type, $values ) {
         $currentUserId = $this->getCurrentUserId();
-        AccountConfigurationModel::model()->deleteAllByAttributes(array('type'=>$type, 'account_id'=>$currentUserId));
+        AccountConfigurationModel::model()->deleteAll(array('type'=>$type, 'account_id'=>$currentUserId));
         $this->configurations[$type] = $values;
         foreach ( $values as $name => $value ) {
             $configuration = new AccountConfigurationModel();
@@ -322,6 +322,12 @@ class Account {
         return AccountFriendshipModel::model()->exists($condition);
     }
     
+    public function countFriends() {
+        $condition = array();
+        $condition['account_me'] = $this->getCurrentUserId();
+        return AccountFriendshipModel::model()->count($condition);
+    }
+    
     
     
     /**
@@ -402,15 +408,6 @@ class Account {
         }
         $friends = AccountInformationModel::model()->findAll(array('account_id'=>$friends));
         return $friends;
-    }
-    
-    /**
-     * @return number
-     */
-    public function countFriends() {
-        $condition  = array('account_me'=>$this->getCurrentUserId());
-        $count = AccountFriendshipModel::model()->count($condition);
-        return $count;
     }
     
     /**

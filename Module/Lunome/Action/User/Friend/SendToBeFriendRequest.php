@@ -20,8 +20,12 @@ class SendToBeFriendRequest extends Basic {
      */ 
     public function runAction( $recipient, $message ) {
         $accountManager = $this->getUserService()->getAccount();
+        $moduleConfig = $this->getModule()->getConfiguration();
+        $friendMaxCount = intval($moduleConfig->get('user_friend_max_count'));
         
-        if ( $accountManager->hasFriend($recipient) || !$accountManager->has($recipient) ) {
+        if ( $accountManager->countFriends() > $friendMaxCount 
+        || $accountManager->hasFriend($recipient) 
+        || !$accountManager->has($recipient) ) {
             return;
         }
         

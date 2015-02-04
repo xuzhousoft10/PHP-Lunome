@@ -19,4 +19,6 @@ return array(
 'user_friend_index_page_size'=>10,
 'user_friend_search_result_page_size'=>10,
 'web_master_email'=>'michaelluthor@163.com',
+'user_interaction_max_friend_count' => 10,
+'user_friend_max_count' => 100,
 );

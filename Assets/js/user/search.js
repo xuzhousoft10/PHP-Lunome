@@ -52,6 +52,10 @@ $(document).ready(function() {
     
     /* 点击添加好友时， 打开对话框。 */
     $('.btn-add-as-friend-open-dialog').click(function() {
+        if ( 1 > $('#result-container').attr('data-people-left')*1 ) {
+            alert('已达到好友上限， 无法添加好友~~~');
+            return false;
+        }
         $('#add-friend-dialog').modal('show');
         $('#btn-add-as-friend').attr('data-recipient', $(this).attr('data-recipient'));
         return false;

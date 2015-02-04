@@ -36,10 +36,6 @@ class Sns extends UserSetting {
         $data   = array('configurations'=>$configurations);
         $view->loadParticle($name, $path, $option, $data);
         
-        $switchOption = json_encode(array('size'=>'mini', 'onText'=>'已开启', 'offText'=>'已关闭'));
-        $view->addScriptString('Bootstrap-Switch-Enable', '$(document).ready(function(){$("#sns-auto-share").bootstrapSwitch('.$switchOption.');});');
-        
-        
         $view->title = '社交平台设置';
     }
     
@@ -61,5 +57,8 @@ class Sns extends UserSetting {
         
         $view->addCssLink('Bootstrap-Switch', $assetsURL.'/library/bootstrap/plugin/bootstrap-switch/css/bootstrap3/bootstrap-switch.min.css');
         $view->addScriptFile('Bootstrap-Switch', $assetsURL.'/library/bootstrap/plugin/bootstrap-switch/js/bootstrap-switch.min.js');
+        
+        $switchOption = json_encode(array('size'=>'mini', 'onText'=>'已开启', 'offText'=>'已关闭'));
+        $view->addScriptString('Bootstrap-Switch-Enable', '$(document).ready(function(){$("#sns-auto-share").bootstrapSwitch('.$switchOption.');});');
     }
 }

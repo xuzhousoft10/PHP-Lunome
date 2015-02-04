@@ -7,6 +7,7 @@ $pager = $vars['pager'];
 $sexMap = $vars['sexMap'];
 $sexualityMap = $vars['sexualityMap'];
 $emotionMap = $vars['emotionMap'];
+$peopleLeft = $vars['peopleLeft'];
 $toBeFriendMessageLength = $vars['toBeFriendMessageLength'];
 ?>
 <form action="/?module=lunome&action=user/friend/search" method="post" class="form-horizontal">
@@ -17,7 +18,7 @@ $toBeFriendMessageLength = $vars['toBeFriendMessageLength'];
                     type        = "text" 
                     class       = "form-control" 
                     placeholder = "支持帐号，邮箱，手机，QQ查找" 
-                    value       = "<?php echo empty($condition) ? '' : $condition['main'];?>"
+                    value       = "<?php echo empty($condition)||!isset($condition['main']) ? '' : $condition['main'];?>"
             >
             <span class="input-group-btn">
                 <button class="btn btn-default" type="button" id="advance-search-trigger">
@@ -36,21 +37,21 @@ $toBeFriendMessageLength = $vars['toBeFriendMessageLength'];
                     <select class       = "form-control advance-search-item" 
                             id          = "user-friend-search-living-country"
                             name        = "condition[living_country]"
-                            data-value  = "<?php echo empty($condition) ? '' : $condition['living_country'];?>"
+                            data-value  = "<?php echo empty($condition)||!isset($condition['living_country']) ? '' : $condition['living_country'];?>"
                     ></select>
                 </div>
                 <div class="col-sm-3">
                     <select class       = "form-control advance-search-item" 
                             id          = "user-friend-search-living-province"
                             name        = "condition[living_province]"
-                            data-value  = "<?php echo empty($condition) ? '' : $condition['living_province'];?>"
+                            data-value  = "<?php echo empty($condition)||!isset($condition['living_province']) ? '' : $condition['living_province'];?>"
                     ></select>
                 </div>
                 <div class="col-sm-3">
                     <select class       = "form-control advance-search-item" 
                             id          = "user-friend-search-living-city"
                             name        = "condition[living_city]"
-                            data-value  = "<?php echo empty($condition) ? '' : $condition['living_city'];?>"
+                            data-value  = "<?php echo empty($condition)||!isset($condition['living_city']) ? '' : $condition['living_city'];?>"
                     ></select>
                 </div>
             </div>
@@ -59,7 +60,7 @@ $toBeFriendMessageLength = $vars['toBeFriendMessageLength'];
                 <div class="col-sm-9">
                     <select class       = "form-control value-init-required advance-search-item"
                             name        = "condition[sex]"
-                            data-value  = "<?php echo empty($condition) ? '' : $condition['sex'];?>"
+                            data-value  = "<?php echo empty($condition)||!isset($condition['sex']) ? '' : $condition['sex'];?>"
                     >
                         <option value="0"></option>
                         <?php foreach ( $sexMap as $key => $value ) : ?>
@@ -73,7 +74,7 @@ $toBeFriendMessageLength = $vars['toBeFriendMessageLength'];
                 <div class="col-sm-9">
                     <select class       = "form-control value-init-required advance-search-item"
                             name        = "condition[sexuality]"
-                            data-value  = "<?php echo empty($condition) ? '' : $condition['sexuality'];?>"
+                            data-value  = "<?php echo empty($condition)||!isset($condition['sexuality']) ? '' : $condition['sexuality'];?>"
                     >
                         <option value="0"></option>
                         <?php foreach ( $sexualityMap as $key => $value ) : ?>
@@ -87,7 +88,7 @@ $toBeFriendMessageLength = $vars['toBeFriendMessageLength'];
                 <div class="col-sm-9">
                     <select class       = "form-control value-init-required advance-search-item"
                             name        = "condition[emotion_status]"
-                            data-value  = "<?php echo empty($condition) ? '' : $condition['emotion_status'];?>"
+                            data-value  = "<?php echo empty($condition)||!isset($condition['emotion_status']) ? '' : $condition['emotion_status'];?>"
                     >
                         <option value="0"></option>
                         <?php foreach ( $emotionMap as $key => $value ) : ?>
@@ -111,7 +112,7 @@ $toBeFriendMessageLength = $vars['toBeFriendMessageLength'];
         </div>
     <?php else : ?>
         <div class="thumbnail">
-            <div class="clearfix">
+            <div class="clearfix" id="result-container" data-people-left="<?php echo $peopleLeft;?>">
             <?php foreach ( $informations as $index => $information ) : ?>
                 <div class="col-md-5 well well-sm clearfix">
                     <div class="clearfix">

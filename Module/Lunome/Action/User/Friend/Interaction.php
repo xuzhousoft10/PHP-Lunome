@@ -20,12 +20,13 @@ class Interaction extends FriendManagement {
      * @return void
      */ 
     public function runAction( ) {
+        $moduleConfig = $this->getModule()->getConfiguration();
         $friends = $this->getUserService()->getAccount()->getFriends();
                 
         $name   = 'INTERACTION_WITH_FRIENDS';
         $path   = $this->getParticleViewPath('User/Friend/Interaction');
         $option = array();
-        $data   = array('friends'=>$friends);
+        $data   = array('friends'=>$friends, 'peopleCount'=>$moduleConfig->get('user_interaction_max_friend_count'));
         $this->getView()->loadParticle($name, $path, $option, $data);
         
         $this->getView()->title = '集体互动';

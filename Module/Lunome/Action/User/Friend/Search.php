@@ -67,6 +67,8 @@ class Search extends FriendManagement {
         $view->setDataToParticle($name, 'emotionMap', $accountManager->getEmotionStatuNames());
         $length = AccountFriendshipRequestModel::model()->getAttribute('message')->getLength();
         $view->setDataToParticle($name, 'toBeFriendMessageLength', $length);
+        $peopleLeft = $moduleConfig->get('user_friend_max_count')-$accountManager->countFriends();
+        $view->setDataToParticle($name, 'peopleLeft', $peopleLeft);
     }
     
     /**
