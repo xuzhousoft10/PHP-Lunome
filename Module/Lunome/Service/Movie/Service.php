@@ -109,7 +109,7 @@ class Service extends Media {
             }
             $actorCondition = array();
             $actorCondition['movie_id'] = new SQLExpression(MovieModel::model()->getTableFullName().'.id');
-            $actorCondition['actor_id'] = $directors;
+            $actorCondition['actor_id'] = $actors;
             $actorCondition = MovieActorMapModel::query()->activeColumns(array('movie_id'))->find($actorCondition);
             $con->exists($actorCondition);
         }
