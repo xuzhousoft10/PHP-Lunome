@@ -36,7 +36,7 @@ class AccountFriendshipModel extends Basic {
         $columns = array();
         $columns['id']                                  = 'PRIMARY VARCHAR(36) NN';
         $columns['account_me']                          = 'VARCHAR(36) NN';
-        $columns['account_friend']                      = 'VARCHAR(32)';
+        $columns['account_friend']                      = 'VARCHAR(36)';
         $columns['started_at']                          = 'DATETIME';
         $columns['is_chatting']                         = 'TINYINT [0]';
         $columns['is_unread_notification_sended']       = 'TINYINT [0]';

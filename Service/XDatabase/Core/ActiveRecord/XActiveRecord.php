@@ -199,7 +199,7 @@ abstract class XActiveRecord extends Basic implements \Iterator {
      * @param string $name
      * @return \X\Service\XDatabase\Core\ActiveRecord\Attribute
      */
-    protected function getAttribute( $name ) {
+    public function getAttribute( $name ) {
         return $this->attributes[$name];
     }
     

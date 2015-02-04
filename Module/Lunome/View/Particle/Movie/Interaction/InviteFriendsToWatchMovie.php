@@ -4,6 +4,7 @@ $movies = $vars['movies'];
 $assetsURL = $vars['assetsURL'];
 $selectedFriendIDs = $vars['selectedFriendIDs'];
 $selectedFriendNames = $vars['selectedFriendNames'];
+$commentLength = $vars['commentLength'];
 ?>
 <div class="col-md-9">
     <?php foreach ( $movies as $movie ) : ?>
@@ -45,7 +46,12 @@ $selectedFriendNames = $vars['selectedFriendNames'];
         <p id="invite-to-watch-movie-dialog-message"></p>
         <div>
             备注：<br>
-            <textarea id="invite-to-watch-movie-dialog-comment" rows="" cols="" class="width-full"></textarea>
+            <textarea   id="invite-to-watch-movie-dialog-comment" 
+                        rows="" 
+                        cols="" 
+                        class="width-full"
+                        maxlength="<?php echo $commentLength; ?>"
+            ></textarea>
         </div>
       </div>
       <div class="modal-footer">

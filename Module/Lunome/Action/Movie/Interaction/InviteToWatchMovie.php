@@ -9,6 +9,7 @@ namespace X\Module\Lunome\Action\Movie\Interaction;
  */
 use X\Core\X;
 use X\Module\Lunome\Util\Action\Userinteraction;
+use X\Module\Lunome\Model\Movie\MovieInvitationModel;
 
 /**
  * InviteToWatchMovie
@@ -41,6 +42,8 @@ class InviteToWatchMovie extends Userinteraction {
         $view->loadParticle($viewName, $path);
         $view->setDataToParticle($viewName, 'movies', $movies);
         $view->setDataToParticle($viewName, 'friendInformation', $friendInformation);
+        $commentLength = MovieInvitationModel::model()->getAttribute('comment')->getLength();
+        $view->setDataToParticle($viewName, 'commentLength', $commentLength);
         
         $view->title = '想请TA看场电影';
         $this->setActiveInteractionMenuItem(self::INTERACTION_MENU_ITEM_INVITE_TO_WATCH_MOVIE);

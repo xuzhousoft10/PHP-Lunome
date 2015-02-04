@@ -2,6 +2,7 @@
 <?php use X\Util\UUID; ?>
 <?php use X\Module\Lunome\Service\User\Service as UserService; ?>
 <?php use X\Module\Lunome\Service\Movie\Service as MovieService; ?>
+<?php use X\Module\Lunome\Model\Movie\MovieInvitationModel;?>
 <?php /* @var $userService \X\Module\Lunome\Service\User\Service */ ?>
 <?php $userService = X::system()->getServiceManager()->get(UserService::getServiceName()); ?>
 <?php /*@var $movieService \X\Module\Lunome\Service\Movie\Service */ ?>
@@ -15,6 +16,7 @@
 <?php $elemMark = UUID::generate(); ?>
 <?php $assetsURL = X::system()->getConfiguration()->get('assets-base-url'); ?>
 <?php $loaddingImg = $assetsURL.'/image/loadding.gif'; ?>
+<?php $commentLength = MovieInvitationModel::model()->getAttribute('answer_comment')->getLength();?>
 <div id="message-<?php echo $elemMark; ?>" class="clearfix">
     <div class="pull-left">
         <img class="thumbnail margin-0 padding-0" width="80" height="80" alt="<?php echo $requester->nickname; ?>" src="<?php echo $requester->photo; ?>">
@@ -69,6 +71,7 @@
             <textarea   id="invite-to-watch-movie-detail-dialog-<?php echo $elemMark; ?>-answer-comment"
                         class="width-full" 
                         placeholder="拒绝？ 总得有个理由吧～～～ 同意， 说个时间，地点啥的呗～～～"
+                        maxlength="<?php echo $commentLength; ?>"
             ></textarea>
         </div>
       </div>

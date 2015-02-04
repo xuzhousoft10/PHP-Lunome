@@ -10,6 +10,7 @@ namespace X\Module\Lunome\Action\User\Friend;
 use X\Core\X;
 use X\Module\Lunome\Util\Action\FriendManagement;
 use X\Module\Lunome\Service\Region\Service as RegionService;
+use X\Module\Lunome\Model\Account\AccountFriendshipRequestModel;
 
 /**
  * The action class for user/friend/index action.
@@ -64,6 +65,8 @@ class Search extends FriendManagement {
         $view->setDataToParticle($name, 'sexMap', $accountManager->getSexNames());
         $view->setDataToParticle($name, 'sexualityMap', $accountManager->getSexualityNames());
         $view->setDataToParticle($name, 'emotionMap', $accountManager->getEmotionStatuNames());
+        $length = AccountFriendshipRequestModel::model()->getAttribute('message')->getLength();
+        $view->setDataToParticle($name, 'toBeFriendMessageLength', $length);
     }
     
     /**

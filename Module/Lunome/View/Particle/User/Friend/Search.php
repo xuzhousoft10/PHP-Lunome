@@ -7,6 +7,7 @@ $pager = $vars['pager'];
 $sexMap = $vars['sexMap'];
 $sexualityMap = $vars['sexualityMap'];
 $emotionMap = $vars['emotionMap'];
+$toBeFriendMessageLength = $vars['toBeFriendMessageLength'];
 ?>
 <form action="/?module=lunome&action=user/friend/search" method="post" class="form-horizontal">
 <div class="col-md-9 clearfix">
@@ -187,7 +188,7 @@ $emotionMap = $vars['emotionMap'];
                 <h4 class="modal-title" id="myModalLabel">添加好友</h4>
             </div>
             <div class="modal-body">
-                <textarea class="width-full" id="add-as-friend-message"></textarea>
+                <textarea class="width-full" id="add-as-friend-message" maxlength="<?php echo $toBeFriendMessageLength;?>"></textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
