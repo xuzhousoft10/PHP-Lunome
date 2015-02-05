@@ -12,6 +12,8 @@ $this->addStyle('#footer', array('border-top'=>'1px solid #E5E5E5'));
         <a href="/index.php?module=lunome&action=history">更新历史</a>
         |
         <a href="/wiki">说明文档</a>
+        | 
+        <a href="/project">项目管理</a>
     </P>
     <div class="hidden">
         <script src="http://s6.cnzz.com/z_stat.php?id=1253474507&web_id=1253474507"></script>
