@@ -51,6 +51,7 @@ class Information extends UserSetting {
      * @see \X\Util\Action\Visual::beforeDisplay()
      */
     protected function beforeDisplay() {
+        parent::beforeDisplay();
         $assetsURL = $this->getAssetsURL();
         $view = $this->getView();
         $view->addCssLink('Bootstrap-Date-Picker', $assetsURL.'/library/bootstrap/plugin/bootstrap-datepicker/css/datepicker3.css'); 

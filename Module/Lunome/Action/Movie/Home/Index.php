@@ -89,6 +89,7 @@ class Index extends VisualUserHome {
      * @see \X\Util\Action\Visual::beforeDisplay()
      */
     protected function beforeDisplay() {
+        parent::beforeDisplay();
         $assetsURL = $this->getAssetsURL();
         $this->getView()->addScriptFile('movie-index', $assetsURL.'/js/movie/home.js');
         

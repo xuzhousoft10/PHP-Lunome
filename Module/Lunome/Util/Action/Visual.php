@@ -38,6 +38,24 @@ abstract class Visual extends \X\Util\Action\Visual {
     
     /**
      * (non-PHPdoc)
+     * @see \X\Util\Action\Visual::beforeDisplay()
+     */
+    protected function beforeDisplay() {
+        parent::beforeDisplay();
+        $assetsURL = $this->getAssetsURL();
+        $this->getView()->addCssLink('bootstrap',       $assetsURL.'/library/bootstrap/css/bootstrap.min.css');
+        $this->getView()->addCssLink('bootstrap-theme', $assetsURL.'/library/bootstrap/css/bootstrap-theme.min.css');
+        $this->getView()->addCssLink('application',     $assetsURL.'/css/application.css');
+        $this->getView()->addCssLink('bootstrap-ext',   $assetsURL.'/css/bootstrap-ext.css');
+        
+        $this->getView()->addScriptFile('jquery',           $assetsURL.'/library/jquery/jquery-1.11.1.min.js');
+        $this->getView()->addScriptFile('bootstrap',        $assetsURL.'/library/bootstrap/js/bootstrap.min.js');
+        $this->getView()->addScriptFile('jquery-waypoints', $assetsURL.'/library/jquery/plugin/waypoints.js');
+        $this->getView()->addScriptFile('application',      $assetsURL.'/js/application.js');
+    }
+    
+    /**
+     * (non-PHPdoc)
      * @see \X\Util\Action\Visual::afterRunAction()
      */
     protected function afterRunAction() {

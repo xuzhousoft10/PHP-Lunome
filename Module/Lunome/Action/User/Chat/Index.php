@@ -53,6 +53,7 @@ class Index extends Visual {
      * @see \X\Util\Action\Visual::beforeDisplay()
      */
     protected function beforeDisplay() {
+        parent::beforeDisplay();
         $assetsURL = $this->getAssetsURL();
         $this->getView()->addScriptFile('user-chat', $assetsURL.'/js/user/chat.js');
     }

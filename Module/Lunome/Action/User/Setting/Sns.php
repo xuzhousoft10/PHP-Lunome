@@ -52,6 +52,7 @@ class Sns extends UserSetting {
      * @see \X\Util\Action\Visual::beforeDisplay()
      */
     protected function beforeDisplay() {
+        parent::beforeDisplay();
         $assetsURL = $this->getAssetsURL();
         $view = $this->getView();
         

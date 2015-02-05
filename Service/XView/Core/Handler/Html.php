@@ -316,6 +316,13 @@ class Html extends \X\Service\XView\Core\View {
     }
     
     /**
+     * @param unknown $identifier
+     */
+    public function removeCssLink( $identifier ) {
+        unset($this->links[$identifier]);
+    }
+    
+    /**
      * Set the favicon for current page by given path.
      * 
      * @param string $path The page where the icon stored.

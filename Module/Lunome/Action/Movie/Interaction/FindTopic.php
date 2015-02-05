@@ -75,6 +75,7 @@ class FindTopic extends Userinteraction {
      * @see \X\Util\Action\Visual::beforeDisplay()
      */
     protected function beforeDisplay() {
+        parent::beforeDisplay();
         $assetsURL = $this->getAssetsURL();
         $this->getView()->addScriptFile('user-home-movie-index', $assetsURL.'/js/movie/topic.js');
     }

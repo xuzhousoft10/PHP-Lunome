@@ -81,6 +81,7 @@ class Friends extends FriendManagement {
      * @see \X\Util\Action\Visual::beforeDisplay()
      */
     protected function beforeDisplay() {
+        parent::beforeDisplay();
         $assetsURL = $this->getAssetsURL();
         $this->getView()->addScriptFile('invite', $assetsURL.'/js/movie/invite_friends.js');
     }

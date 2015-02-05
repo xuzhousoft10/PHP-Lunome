@@ -37,6 +37,7 @@ class Interaction extends FriendManagement {
      * @see \X\Util\Action\Visual::beforeDisplay()
      */
     protected function beforeDisplay() {
+        parent::beforeDisplay();
         $assetsURL = $this->getAssetsURL();
         $this->getView()->addScriptFile('User-Friend-Interaction', $assetsURL.'/js/user/interaction.js');
     }

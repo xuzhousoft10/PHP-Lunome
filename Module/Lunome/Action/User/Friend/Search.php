@@ -101,6 +101,7 @@ class Search extends FriendManagement {
      * @see \X\Util\Action\Visual::beforeDisplay()
      */
     protected function beforeDisplay() {
+        parent::beforeDisplay();
         $assetsURL = $this->getAssetsURL();
         $this->getView()->addScriptFile('User-Setting-Information', $assetsURL.'/js/user/search.js');
     }

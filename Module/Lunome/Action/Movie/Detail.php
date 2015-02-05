@@ -129,6 +129,7 @@ class Detail extends Visual {
      * @see \X\Util\Action\Visual::beforeDisplay()
      */
     protected function beforeDisplay() {
+        parent::beforeDisplay();
         $assetsURL = $this->getAssetsURL();
         $this->getView()->addScriptFile('ajaxfileupload', $assetsURL.'/library/jquery/plugin/ajaxfileupload.js');
         $this->getView()->addScriptFile('detail-detail', $assetsURL.'/js/movie/detail.js');

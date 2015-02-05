@@ -135,6 +135,7 @@ class Index extends VisualMain {
      * @see \X\Util\Action\Visual::beforeDisplay()
      */
     protected function beforeDisplay() {
+        parent::beforeDisplay();
         $assetsURL = $this->getAssetsURL();
         $this->getView()->addScriptFile('media-index', $assetsURL.'/js/movie/index.js');
         $this->getView()->addScriptFile('cookie', $assetsURL.'/library/jquery/plugin/cookie.js');

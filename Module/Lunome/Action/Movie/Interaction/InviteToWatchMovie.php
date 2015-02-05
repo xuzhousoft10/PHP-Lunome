@@ -55,6 +55,7 @@ class InviteToWatchMovie extends Userinteraction {
      * @see \X\Util\Action\Visual::beforeDisplay()
      */
     protected function beforeDisplay() {
+        parent::beforeDisplay();
         $assetsURL = $this->getAssetsURL();
         $this->getView()->addScriptFile('invite', $assetsURL.'/js/movie/invite.js');
     }

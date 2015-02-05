@@ -24,7 +24,7 @@ class Module extends \X\Core\Module\XModule {
         
         $group = $this->getName();
         $actionService->addGroup($group, __NAMESPACE__);
-        $actionService->setGroupDefaultAction($group, 'account/index');
+        $actionService->setGroupDefaultAction($group, 'index');
         $actionService->getParameter()->setValues($parameters);
         $actionService->runGroup($group);
     }
