@@ -239,6 +239,7 @@ class Service extends \X\Core\Service\XService {
         $accountInformation->account_number = $account->account;
         $accountInformation->nickname = $information['nickname'];
         $accountInformation->photo = $information['photo'];
+        $accountInformation->save();
         return $account;
     }
     
