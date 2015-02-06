@@ -276,7 +276,11 @@ class Service extends \X\Core\Service\XService {
                 }
             }
             $account = $randomAccount;
-            $account->is_admin = AccountModel::IS_ADMIN_YES;
+            if ( $isFirstTime ) {
+                $account->role = AccountModel::RL_MANAGEMENT_ACCOUNT
+                | AccountModel::RL_EDITOR_ACCOUNT
+                | AccountModel::RL_NORMAL_ACCOUNT;
+            }
         } else {
             $account = $accounts[0];
         }
@@ -291,6 +295,24 @@ class Service extends \X\Core\Service\XService {
     }
     
     /**
+     * @param unknown $roleCode
+     * @return boolean
+     */
+    public function isEditor( $roleCode ) {
+        $roleCode = (int)$roleCode;
+        return 0 !== ($roleCode & AccountModel::RL_EDITOR_ACCOUNT);
+    }
+    
+    /**
+     * @param unknown $roleCode
+     * @return boolean
+     */
+    public function isManager( $roleCode ) {
+        $roleCode = (int)$roleCode;
+        return 0 !== ($roleCode & AccountModel::RL_MANAGEMENT_ACCOUNT);
+    }
+    
+    /**
      * 
      * @param AccountModel $account
      */
@@ -302,7 +324,8 @@ class Service extends \X\Core\Service\XService {
         $_SESSION['LUNOME']['USER']['PHOTO']        = $information->photo;
         $_SESSION['LUNOME']['USER']['OAUTH20ID']    = $account->oauth20_id;
         $_SESSION['LUNOME']['USER']['IDENTITY']     = self::UI_NORMAL;
-        $_SESSION['LUNOME']['USER']['IS_ADMIN']     = $account->is_admin == AccountModel::IS_ADMIN_YES;
+        $_SESSION['LUNOME']['USER']['IS_EDITOR']    = $this->isEditor($account->role);
+        $_SESSION['LUNOME']['USER']['IS_MANAGER']   = $this->isManager($account->role);
         $_SESSION['LUNOME']['USER']['LOGIN_BY']     = $loginedBy;
         $_SESSION['LUNOMT']['USER']['INFORMATION']  = $information->toArray();
         $this->recordLoginHistory($account, $loginedBy);

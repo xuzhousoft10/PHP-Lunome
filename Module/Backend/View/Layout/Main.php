@@ -2,9 +2,7 @@
 /* @var $this X\Service\XView\Core\Handler\Html */
 $vars = get_defined_vars();
 $mainMenu = $vars['mainMenu'];
-$activeMenuItem = null;
-// $menu = $vars['menu'];
-//$activeMenuItem = $vars['activeMenuItem'];
+$mainMenuActived = $vars['mainMenuActived'];
 ?>
 <nav class="navbar navbar-default navbar-fixed-top ">
     <div class="container-fluid">
@@ -24,9 +22,10 @@ $activeMenuItem = null;
             <div class="list-group">
                 <div class="btn-group-vertical full-width">
                     <?php foreach ( $mainMenu as $mainMenuKey => $mainMenuItem ) : ?>
+                        <?php $itemStatus = ($mainMenuActived===$mainMenuKey) ? 'primary' : 'default'; ?>
                         <?php if (isset($mainMenuItem['subitem'])): ?>
                         <div class="btn-group">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <button type="button" class="btn btn-<?php echo $itemStatus;?> dropdown-toggle" data-toggle="dropdown">
                                 <?php echo $mainMenuItem['name']; ?>
                                 <span class="caret"></span>
                             </button>
@@ -40,7 +39,7 @@ $activeMenuItem = null;
                             </ul>
                         </div>
                         <?php else: ?>
-                            <a href="<?php echo $mainMenuItem['link']; ?>" class="btn btn-default"
+                            <a href="<?php echo $mainMenuItem['link']; ?>" class="btn btn-<?php echo $itemStatus;?>"
                             ><?php echo $mainMenuItem['name']; ?></a>
                         <?php endif; ?>
                     <?php endforeach; ?>

@@ -45,7 +45,16 @@ $user = $vars['user'];
                             </a>
                             </li>
                             -->
-                            <?php if ($user['isAdmin']) : ?>
+                            <?php if ($user['isEditor']) : ?>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="/?module=backend">
+                                        <span class="glyphicon glyphicon-tower"></span>
+                                        后台编辑
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                            <?php if ($user['isManager']) : ?>
                                 <li class="divider"></li>
                                 <li>
                                     <a href="/?module=backend">

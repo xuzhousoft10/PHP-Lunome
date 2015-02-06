@@ -12,21 +12,7 @@ use X\Util\Model\Basic;
  * @property string $oauth20_id
  * @property string $status
  * @property string $enabled_at
- * @property string $is_admin
- * 
- * delimiter $$
-
-CREATE TABLE `accounts` (
-  `id` varchar(36) NOT NULL,
-  `account` int(11) NOT NULL,
-  `oauth20_id` varchar(36) DEFAULT NULL,
-  `nickname` varchar(64) DEFAULT NULL,
-  `status` tinyint(4) NOT NULL,
-  `enabled_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
-
-
+ * @property string $role
  **/
 class AccountModel extends Basic {
     /**
@@ -40,10 +26,10 @@ class AccountModel extends Basic {
         $columns['oauth20_id']  = 'VARCHAR(36)';
         $columns['status']      = 'TINYINT NOTNULL';
         $columns['enabled_at']  = 'DATETIME';
-        $columns['is_admin']    = 'TINYINT [0] UNSIGNED';
+        $columns['role']        = 'TINYINT [1] UNSIGNED';
         return $columns;
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::getTableName()
@@ -52,8 +38,9 @@ class AccountModel extends Basic {
         return 'accounts';
     }
     
-    const IS_ADMIN_YES = 1;
-    const IS_ADMIN_NO  = 0;
+    const RL_NORMAL_ACCOUNT     = 1;
+    const RL_EDITOR_ACCOUNT     = 2;
+    const RL_MANAGEMENT_ACCOUNT = 4;
     
     const ST_NOT_USED   = 1;
     const ST_IN_USE     = 2;

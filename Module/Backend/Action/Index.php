@@ -22,7 +22,7 @@ class Index extends Visual {
         $viewName = 'BACKEND_INDEX';
         $viewPath = $this->getParticleViewPath('Index');
         $view->loadParticle($viewName, $viewPath);
-        
-        $view->title = 'Lunome系统管理';
+        $this->setPageTitle('首页');
+        $this->setMenuItemActived(self::MENU_ITEM_DEFAULT);
     }
 }

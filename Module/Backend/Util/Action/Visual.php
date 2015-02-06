@@ -23,6 +23,11 @@ abstract class Visual extends \X\Util\Action\Visual {
     protected $menuItems = array();
     
     /**
+     * @var unknown
+     */
+    protected $menuItemActived = null;
+    
+    /**
      * (non-PHPdoc)
      * @see \X\Util\Action\Visual::beforeRunAction()
      */
@@ -35,11 +40,7 @@ abstract class Visual extends \X\Util\Action\Visual {
         $this->menuItems[self::MENU_ITEM_ACCOUNT]   = array(
             'name' => '用户管理',
             'subitem' => array(
-                array('name'=>'用户','link'=>'#'),
-                array('name'=>'普通用户','link'=>'#'),
-                array('name'=>'运营用户','link'=>'#'),
-                array('name'=>'维护用户','link'=>'#'),
-                array('name'=>'保留帐号','link'=>'#'),
+                array('name'=>'所有用户','link'=>'/?module=backend&action=account/index'),
             ),
         );
         $this->menuItems[self::MENU_ITEM_MOVIE]     = array(
@@ -85,6 +86,13 @@ abstract class Visual extends \X\Util\Action\Visual {
     }
     
     /**
+     * @param unknown $item
+     */
+    public function setMenuItemActived( $item ) {
+        $this->menuItemActived = $item;
+    }
+    
+    /**
      * (non-PHPdoc)
      * @see \X\Util\Action\Visual::beforeDisplay()
      */
@@ -93,6 +101,7 @@ abstract class Visual extends \X\Util\Action\Visual {
         $assetsURL = $this->getAssetsURL();
         $backendAssetsURL = $this->getBackendAssetsURL();
         $view->addData('backendAssetsURL', $backendAssetsURL);
+        $view->setData('mainMenuActived', $this->menuItemActived);
         
         $assetsURL = $this->getAssetsURL();
         $this->getView()->addCssLink('bootstrap',       $assetsURL.'/library/bootstrap/css/bootstrap.min.css');
@@ -102,6 +111,13 @@ abstract class Visual extends \X\Util\Action\Visual {
         $this->getView()->addScriptFile('bootstrap',    $assetsURL.'/library/bootstrap/js/bootstrap.min.js');
         
         parent::beforeDisplay();
+    }
+    
+    /**
+     * @param unknown $title
+     */
+    public function setPageTitle( $title ) {
+        $this->getView()->title = $title.' | Lunome后台编辑';
     }
     
     /**

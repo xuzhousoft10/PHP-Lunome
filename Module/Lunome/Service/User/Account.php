@@ -46,7 +46,12 @@ class Account {
      * @return array
      */
     public function findAll( $condition=null, $position=0, $limit=0 ) {
-        $accounts = AccountModel::model()->findAll($condition, $limit, $position, array('account'=>'ASC'));
+        $criteria = new Criteria();
+        $criteria->condition = $condition;
+        $criteria->position = $position;
+        $criteria->limit = $limit;
+        $criteria->addOrder('account', 'ASC');
+        $accounts = AccountModel::model()->findAll($criteria);
         foreach ( $accounts as $index => $account ) {
             $accounts[$index] = $account->toArray();
         }
@@ -122,28 +127,6 @@ class Account {
      */
     public function getLoginHistoryCount( $id ) {
         return AccountLoginHistoryModel::model()->count(array('account_id'=>$id));
-    }
-    
-    /**
-     * 
-     * @param unknown $id
-     */
-    public function addAdmin( $id ) {
-        $account = AccountModel::model()->findByPrimaryKey($id);
-        $account->is_admin = AccountModel::IS_ADMIN_YES;
-        $account->save();
-        $this->logAction('ACCOUNT_ADMIN_ADD', $id);
-    }
-    
-    /**
-     * 
-     * @param unknown $id
-     */
-    public function deleteAdmin( $id ) {
-        $account = AccountModel::model()->findByPrimaryKey($id);
-        $account->is_admin = AccountModel::IS_ADMIN_NO;
-        $account->save();
-        $this->logAction('ACCOUNT_ADMIN_DELETE', $id);
     }
     
     /**
