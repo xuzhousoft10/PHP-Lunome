@@ -26,6 +26,28 @@ use X\Module\Lunome\Model\Account\AccountChatContentModel;
  */
 class Account {
     /**
+     * @param unknown $accountId
+     * @param unknown $role
+     */
+    public function addRole( $accountId, $role ) {
+        $role = (int)$role;
+        $account = $this->get($accountId);
+        $account->role = (int)$account->role | $role;
+        $account->save();
+    }
+    
+    /**
+     * @param unknown $accountId
+     * @param unknown $role
+     */
+    public function removeRole( $accountId, $role ) {
+        $role = (int)$role;
+        $account = $this->get($accountId);
+        $account->role = (int)$account->role & ~$role;
+        $account->save();
+    }
+    
+    /**
      * @param unknown $id
      * @return AccountModel
      */
@@ -93,6 +115,16 @@ class Account {
     }
     
     /**
+     * @param unknown $accountId
+     * @param unknown $status
+     */
+    public function updateStatus($accountId, $status) {
+        $account = $this->get($accountId);
+        $account->status = $status;
+        $account->save();
+    }
+    
+    /**
      * @param unknown $id
      */
     public function unfreeze( $id ) {
@@ -155,6 +187,17 @@ class Account {
         $history->message = $message;
         $history->comment = $comment;
         $history->save();
+    }
+    
+    /**
+     * @param unknown $account
+     */
+    public function getConfigurationsByAccountId( $account ) {
+        $condition = array(
+            'account_id' => $account,
+        );
+        $configurations = AccountConfigurationModel::model()->findAll($condition);
+        return $configurations;
     }
     
     /**

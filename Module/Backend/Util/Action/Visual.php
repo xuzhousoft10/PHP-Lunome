@@ -32,6 +32,12 @@ abstract class Visual extends \X\Util\Action\Visual {
      * @see \X\Util\Action\Visual::beforeRunAction()
      */
     public function beforeRunAction() {
+        $isGuest = $this->getUserService()->getIsGuest();
+        if ( $isGuest ) {
+            $this->gotoURL('/index.php?module=lunome&action=user/login/index');
+            X::system()->stop();
+        }
+        
         parent::beforeRunAction();
         $this->menuItems[self::MENU_ITEM_DEFAULT]   = array(
             'name' => 'Home',
