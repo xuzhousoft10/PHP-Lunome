@@ -52,10 +52,10 @@ abstract class Visual extends \X\Util\Action\Visual {
         $this->menuItems[self::MENU_ITEM_MOVIE]     = array(
             'name' => '电影管理',
             'subitem' => array(
-                array('name'=>'电影','link'=>'#'),
-                array('name'=>'添加电影','link'=>'#'),
-                array('name'=>'分类','link'=>'#'),
-                array('name'=>'添加分类','link'=>'#'),
+                array('name'=>'电影','link'=>'/?module=backend&action=movie/index'),
+                array('name'=>'添加电影','link'=>'/?module=backend&action=movie/edit'),
+                array('name'=>'分类','link'=>'/?module=backend&action=movie/category/index'),
+                array('name'=>'添加分类','link'=>'/?module=backend&action=movie/category/edit'),
             ),
         );
         $this->menuItems[self::MENU_ITEM_REGION]    = array(
