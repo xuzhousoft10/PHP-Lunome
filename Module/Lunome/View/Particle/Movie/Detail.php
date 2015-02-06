@@ -178,7 +178,7 @@ $shareMessageContent = $vars['shareMessage'];
                         data-movie-name             = "<?php echo $movie['name'];?>"
                         data-loadding-img           = "<?php echo $assetsURL.'/image/loadding.gif';?>"
                         data-assets-path            = "<?php echo $assetsURL;?>"
-                        data-global-search-url      = "http://lunome.kupoy.com/?module=lunome&action=movie/globalSearch"
+                        data-global-search-url      = "/?module=lunome&action=movie/globalSearch"
                 >在线观看</button>
                 <a href="https://www.baidu.com/s?wd=<?php echo urlencode($movie['name']);?>" target="_black" class="btn btn-default">百度一下</a>
             </div>

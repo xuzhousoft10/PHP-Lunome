@@ -316,7 +316,7 @@ $(document).ready(function() {
      */
     var globalSearchResultItem = function( trigger, container ) {
         var $this = trigger;
-        $.get('http://lunome.kupoy.com/?module=lunome&action=movie/play', {
+        $.get('/?module=lunome&action=movie/play', {
             source : $(trigger).attr('data-source'),
             link   : $(trigger).attr('data-link')
         }, function( response ) {
