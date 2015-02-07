@@ -102,7 +102,7 @@ abstract class Visual extends \X\Util\Action\Visual {
      * (non-PHPdoc)
      * @see \X\Util\Action\Visual::beforeDisplay()
      */
-    public function beforeDisplay() {
+    protected function beforeDisplay() {
         $view = $this->getView();
         $assetsURL = $this->getAssetsURL();
         $backendAssetsURL = $this->getBackendAssetsURL();

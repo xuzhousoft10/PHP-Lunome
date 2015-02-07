@@ -288,12 +288,13 @@ class Service extends \X\Core\Service\XService {
     
         /* @var $qiniuService QiniuService */
         $qiniuService = X::system()->getServiceManager()->get(QiniuService::getServiceName());
-        $qiniuService->putFile($tempPath, "covers/{$type}s", "$id.png");
+        $qiniuService->putFile($tempPath, null, "$id.jpg");
         unlink($tempPath);
     
         $model = $mediaModelName::model()->findByPrimaryKey($id);
         $model->has_cover = 1;
         $model->save();
+        return $model;
     }
     
     /**
@@ -305,7 +306,7 @@ class Service extends \X\Core\Service\XService {
     
         /* @var $qiniuService QiniuService */
         $qiniuService = X::system()->getServiceManager()->get(QiniuService::getServiceName());
-        $qiniuService->delete("covers/{$type}s/$id.png");
+        $qiniuService->delete("$id.jpg");
     
         $model = $mediaModelName::model()->findByPrimaryKey($id);
         $model->has_cover = 0;
@@ -436,8 +437,17 @@ class Service extends \X\Core\Service\XService {
      * @param unknown $id
      * @return string
      */
-    public function getCoverURL( $id ) {
-        $path = 'http://7sbycx.com1.z0.glb.clouddn.com/'.$id.'.jpg';
+    public function getCoverURL( $id, $refresh=false ) {
+        $isDebug = X::system()->getConfiguration()->get('is_debug');
+        if ( $isDebug ) {
+            $url = '7vijk1.com1.z0.glb.clouddn.com';
+        } else {
+            $url = '7sbycx.com1.z0.glb.clouddn.com';
+        }
+        $path = 'http://'.$url.'/'.$id.'.jpg';
+        if ( $refresh ) {
+            $path .= '?rand='.uniqid();
+        }
         return $path;
     }
     
