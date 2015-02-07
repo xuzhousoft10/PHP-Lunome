@@ -9,7 +9,6 @@ namespace X\Module\Backend\Action\Movie;
  */
 use X\Core\X;
 use X\Module\Backend\Util\Action\Visual;
-use X\Module\Lunome\Service\Region\Service as RegionService;
 
 /**
  * 
@@ -21,8 +20,6 @@ class Detail extends Visual {
     public function runAction($id) {
         $view = $this->getView();
         $movieService = $this->getMovieService();
-        /* @var $regionService RegionService */
-        $regionService = X::system()->getServiceManager()->get(RegionService::getServiceName());
         
         if ( !$movieService->has($id) ) {
             $this->throw404();
