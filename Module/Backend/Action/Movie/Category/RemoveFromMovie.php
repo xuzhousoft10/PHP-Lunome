@@ -12,7 +12,7 @@ use X\Module\Backend\Util\Action\Basic;
 /**
  * 
  */
-class Remove extends Basic {
+class RemoveFromMovie extends Basic {
     /**
      * 
      */

@@ -12,7 +12,7 @@ use X\Module\Backend\Util\Action\Basic;
 /**
  * 
  */
-class Add extends Basic {
+class AddToMovie extends Basic {
     /**
      * 
      */

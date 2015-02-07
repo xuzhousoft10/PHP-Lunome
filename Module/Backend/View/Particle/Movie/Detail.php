@@ -45,12 +45,12 @@ $unselectedCategories = $vars['unselectedCategories'];
         </button>
         <ul class="dropdown-menu">
             <li class="divider"></li>
-            <li><a href="/?module=backend&action=movie/category/remove&movie=<?php echo $movie['id'];?>&category=<?php echo $category->id; ?>">删除</a></li>
+            <li><a href="/?module=backend&action=movie/category/removeFromMovie&movie=<?php echo $movie['id'];?>&category=<?php echo $category->id; ?>">删除</a></li>
          </ul>
     </div>
     <?php endforeach; ?>
     <br><br>
-    <form class="form-inline" method="post" action="/?module=backend&action=movie/category/add&movie=<?php echo $movie['id'];?>">
+    <form class="form-inline" method="post" action="/?module=backend&action=movie/category/addToMovie&movie=<?php echo $movie['id'];?>">
         <div class="form-group">
             <select name="category" class="form-control">
             <?php foreach ( $unselectedCategories as $unselectedCategory ) : ?>

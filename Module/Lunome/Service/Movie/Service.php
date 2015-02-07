@@ -561,11 +561,17 @@ class Service extends \X\Core\Service\XService {
     /**
      * @return \X\Module\Lunome\Model\Movie\MovieCategoryModel[]
      */
-    public function getCategories() {
+    public function getCategories($position=0, $limit=0) {
         $criteria = new Criteria();
         $criteria->addOrder('count', 'DESC');
+        $criteria->position = $position;
+        $criteria->limit = $limit;
         $languages = MovieCategoryModel::model()->findAll($criteria);
         return $languages;
+    }
+    
+    public function countCategory() {
+        return MovieCategoryModel::model()->count();
     }
     
     public function addCategoryToMovie( $movieId, $categoryId ) {
