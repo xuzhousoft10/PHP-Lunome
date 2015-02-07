@@ -36,13 +36,26 @@ class Detail extends Visual {
         $movie['region'] = $movieService->getRegionById($movie['region_id'])->name;
         $movie['length'] = ((int)($movie['length']/3600)).'小时'.((int)($movie['length']%60)).'分钟';
         
+        $categories = $movieService->getCategoriesByMovieId($movie['id']);
+        $selectedCategories = array();
+        foreach ( $categories as $category ) {
+            $selectedCategories[] = $category->id;
+        }
+        $unselectedCategories = $movieService->getCategories();
+        foreach ( $unselectedCategories as $index => $category ) {
+            if ( in_array($category->id, $selectedCategories) ) {
+                unset($unselectedCategories[$index]);
+            }
+        }
+        
         $viewName = 'BACKEND_MVOIE_DETAIL';
         $viewPath = $this->getParticleViewPath('Movie/Detail');
         $view->loadParticle($viewName, $viewPath);
         $view->setDataToParticle($viewName, 'movie', $movie);
         $view->setDataToParticle($viewName, 'actors', $movieService->getActors($movie['id']));
-        $view->setDataToParticle($viewName, 'categories', $movieService->getCategoriesByMovieId($movie['id']));
+        $view->setDataToParticle($viewName, 'categories', $categories);
         $view->setDataToParticle($viewName, 'directors', $movieService->getDirectors($movie['id']));
+        $view->setDataToParticle($viewName, 'unselectedCategories', $unselectedCategories);
         
         $this->setPageTitle($movie['name']);
         $this->setMenuItemActived(self::MENU_ITEM_MOVIE);

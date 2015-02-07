@@ -568,6 +568,41 @@ class Service extends \X\Core\Service\XService {
         return $languages;
     }
     
+    public function addCategoryToMovie( $movieId, $categoryId ) {
+        if ( MovieCategoryMapModel::model()->exists(array('movie_id'=>$movieId, 'category_id'=>$categoryId)) ) {
+            return false;
+        }
+        
+        $category = MovieCategoryModel::model()->findByPrimaryKey($categoryId);
+        if ( null === $category ) {
+            return false;
+        }
+        $category->count ++;
+        $category->save();
+        
+        $map = new MovieCategoryMapModel();
+        $map->movie_id = $movieId;
+        $map->category_id = $categoryId;
+        $map->save();
+        return true;
+    }
+    
+    public function removeCategoryFromMovie( $movieId, $categoryId ) {
+        $map = MovieCategoryMapModel::model()->find(array('movie_id'=>$movieId, 'category_id'=>$categoryId));
+        if ( null === $map ) {
+            return false;
+        }
+        $map->delete();
+        
+        $category = MovieCategoryModel::model()->findByPrimaryKey($categoryId);
+        if ( null === $category ) {
+            return false;
+        }
+        $category->count --;
+        $category->save();
+        return true;
+    }
+    
     /**
      * @param unknown $id
      * @param unknown $categories
@@ -878,6 +913,40 @@ class Service extends \X\Core\Service\XService {
         return $directors;
     }
     
+    public function addDirectorToMovie( $movieId, $name ) {
+        $name = trim($name);
+        if ( empty($name) ) {
+            return false;
+        }
+        
+        $people = PeopleModel::model()->find(array('name'=>$name));
+        if ( null === $people ) {
+            $people = new PeopleModel();
+            $people->name = $name;
+            $people->save();
+        }
+        
+        $condition = array('movie_id'=>$movieId, 'director_id'=>$people->id);
+        if ( MovieDirectorMapModel::model()->exists($condition) ) {
+            return false;
+        }
+        
+        $map = new MovieDirectorMapModel();
+        $map->movie_id = $movieId;
+        $map->director_id = $people->id;
+        $map->save();
+    }
+    
+    public function removeDirectorFromMovie( $movieId, $directorId ) {
+        $condition = array('movie_id'=>$movieId, 'director_id'=>$directorId);
+        $map = MovieDirectorMapModel::model()->find($condition);
+        if ( null === $map ) {
+            return false;
+        }
+        $map->delete();
+        return true;
+    }
+    
     /**
      * @param unknown $id
      */
@@ -892,6 +961,40 @@ class Service extends \X\Core\Service\XService {
         }
         $directors = PeopleModel::model()->findAll(array('id'=>$actors));
         return $directors;
+    }
+    
+    public function addActorToMovie( $movieId, $name ) {
+        $name = trim($name);
+        if ( empty($name) ) {
+            return false;
+        }
+    
+        $people = PeopleModel::model()->find(array('name'=>$name));
+        if ( null === $people ) {
+            $people = new PeopleModel();
+            $people->name = $name;
+            $people->save();
+        }
+    
+        $condition = array('movie_id'=>$movieId, 'actor_id'=>$people->id);
+        if ( MovieActorMapModel::model()->exists($condition) ) {
+            return false;
+        }
+    
+        $map = new MovieActorMapModel();
+        $map->movie_id = $movieId;
+        $map->actor_id = $people->id;
+        $map->save();
+    }
+    
+    public function removeActorFromMovie( $movieId, $actorId ) {
+        $condition = array('movie_id'=>$movieId, 'actor_id'=>$actorId);
+        $map = MovieActorMapModel::model()->find($condition);
+        if ( null === $map ) {
+            return false;
+        }
+        $map->delete();
+        return true;
     }
     
     /**

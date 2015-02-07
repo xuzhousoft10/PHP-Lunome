@@ -4,6 +4,7 @@ $movie = $vars['movie'];
 $actors = $vars['actors'];
 $categories = $vars['categories'];
 $directors = $vars['directors'];
+$unselectedCategories = $vars['unselectedCategories'];
 ?>
 <div class="clearfix">
     <div class="col-md-10 padding-0">
@@ -44,14 +45,18 @@ $directors = $vars['directors'];
         </button>
         <ul class="dropdown-menu">
             <li class="divider"></li>
-            <li><a href="/?module=backend&action=movie/deleteCategory&movie=<?php echo $movie['id'];?>&category=<?php echo $category->id; ?>">删除</a></li>
+            <li><a href="/?module=backend&action=movie/category/remove&movie=<?php echo $movie['id'];?>&category=<?php echo $category->id; ?>">删除</a></li>
          </ul>
     </div>
     <?php endforeach; ?>
     <br><br>
-    <form class="form-inline">
+    <form class="form-inline" method="post" action="/?module=backend&action=movie/category/add&movie=<?php echo $movie['id'];?>">
         <div class="form-group">
-            <input type="text" class="form-control">
+            <select name="category" class="form-control">
+            <?php foreach ( $unselectedCategories as $unselectedCategory ) : ?>
+                <option value="<?php echo $unselectedCategory->id; ?>"><?php echo $unselectedCategory->name; ?></option>
+            <?php endforeach; ?>
+            </select>
         </div>
         <button type="submit" class="btn btn-default">增加</button>
     </form>
@@ -69,14 +74,14 @@ $directors = $vars['directors'];
         </button>
         <ul class="dropdown-menu">
             <li class="divider"></li>
-            <li><a href="/?module=backend&action=movie/deleteDirector&movie=<?php echo $movie['id'];?>&director=<?php echo $director->id; ?>">删除</a></li>
+            <li><a href="/?module=backend&action=movie/director/remove&movie=<?php echo $movie['id'];?>&director=<?php echo $director->id; ?>">删除</a></li>
          </ul>
     </div>
     <?php endforeach; ?>
     <br><br>
-    <form class="form-inline">
+    <form class="form-inline" method="post" action="/?module=backend&action=movie/director/add&movie=<?php echo $movie['id'];?>">
         <div class="form-group">
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" name="name">
         </div>
         <button type="submit" class="btn btn-default">增加</button>
     </form>
@@ -94,14 +99,14 @@ $directors = $vars['directors'];
         </button>
         <ul class="dropdown-menu">
             <li class="divider"></li>
-            <li><a href="/?module=backend&action=movie/deleteActor&movie=<?php echo $movie['id'];?>&actor=<?php echo $actor->id; ?>">删除</a></li>
+            <li><a href="/?module=backend&action=movie/actor/remove&movie=<?php echo $movie['id'];?>&actor=<?php echo $actor->id; ?>">删除</a></li>
          </ul>
     </div>
     <?php endforeach; ?>
     <br><br>
-    <form class="form-inline">
+    <form class="form-inline" method="post" action="/?module=backend&action=movie/actor/add&movie=<?php echo $movie['id'];?>">
         <div class="form-group">
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" name="name">
         </div>
         <button type="submit" class="btn btn-default">增加</button>
     </form>
