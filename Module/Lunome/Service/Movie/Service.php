@@ -671,7 +671,7 @@ class Service extends \X\Core\Service\XService {
      * @param string $parent
      * @return Ambigous <multitype:\X\Service\XDatabase\Core\ActiveRecord\XActiveRecord , multitype:>
      */
-    public function getShortComments( $id, $parent=null, $position, $length ) {
+    public function getShortComments( $id, $parent=null, $position=null, $length=null ) {
         $condition = array();
         $condition['movie_id'] = $id;
         $condition['parent_id'] = (null===$parent)?'00000000-0000-0000-0000-000000000000':$parent;
