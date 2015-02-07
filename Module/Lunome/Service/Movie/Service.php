@@ -911,7 +911,7 @@ class Service extends \X\Core\Service\XService {
      * @param unknown $length
      * @return \X\Module\Lunome\Model\Movie\MovieCharacterModel[]
      */
-    public function getCharacters( $movieId, $offset, $length ) {
+    public function getCharacters( $movieId, $offset=0, $length=0 ) {
         $criteria = new Criteria();
         $criteria->condition = array('movie_id'=>$movieId);
         $criteria->position = $offset;

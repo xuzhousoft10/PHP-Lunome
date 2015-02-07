@@ -44,7 +44,8 @@ class Detail extends Visual {
         $view->loadParticle($viewName, $viewPath);
         $view->setDataToParticle($viewName, 'movie', $movie);
         $view->setDataToParticle($viewName, 'actors', $movieService->getActors($movie['id']));
-        
+        $view->setDataToParticle($viewName, 'categories', $movieService->getCategoriesByMovieId($movie['id']));
+        $view->setDataToParticle($viewName, 'directors', $movieService->getDirectors($movie['id']));
         
         $this->setPageTitle($movie['name']);
         $this->setMenuItemActived(self::MENU_ITEM_MOVIE);
