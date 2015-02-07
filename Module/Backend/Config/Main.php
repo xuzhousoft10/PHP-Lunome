@@ -4,4 +4,5 @@ return array(
 'movie_index_page_size' => 10,
 'movie_character_index_page_size'=>10,
 'movie_dialogue_index_page_size'=>10,
+'movie_poster_index_page_size'=>10,
 );
