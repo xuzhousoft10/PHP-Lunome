@@ -21,7 +21,7 @@ class Edit extends Basic {
     public function runAction( $id, $content ) {
         $movieService = $this->getMovieService();
         
-        if ( $movieService->has($id) ) {
+        if ( !$movieService->has($id) ) {
             return;
         }
         $movieService->addClassicDialogues($id, $content);

@@ -2,7 +2,7 @@
 /**
  * 
  */
-namespace X\Module\Backend\Action\Movie\Character;
+namespace X\Module\Backend\Action\Movie\Dialogue;
 
 /**
  * 
@@ -21,33 +21,32 @@ class Index extends Visual {
         $movieService = $this->getMovieService();
         $view = $this->getView();
         $page = (int)$page;
-        $pageSize = $moduleConfig->get('movie_character_index_page_size');
+        $pageSize = $moduleConfig->get('movie_dialogue_index_page_size');
         
         if ( !$movieService->has($id) ) {
             $this->throw404();
         }
         
         $movie = $movieService->get($id);
-        $characters = $movieService->getCharacters($id, ($page-1)*$pageSize, $pageSize);
-        foreach ( $characters as $characterIndex => $character ) {
-            $characters[$characterIndex] = $character->toArray();
-            $characters[$characterIndex]['image'] = $movieService->getCharacterUrlById($character->id);
+        $dialogues = $movieService->getClassicDialogues($id, ($page-1)*$pageSize, $pageSize);
+        foreach ( $dialogues as $index => $dialogue ) {
+            $dialogues[$index] = $dialogue->toArray();
         }
         
-        $viewName = 'BACKEND_MOVIE_CHARACTER_INDEX';
-        $viewPath = $this->getParticleViewPath('Movie/Characters');
+        $viewName = 'BACKEND_MOVIE_DIALOGUE_INDEX';
+        $viewPath = $this->getParticleViewPath('Movie/Dialogues');
         $view->loadParticle($viewName, $viewPath);
-        $view->setDataToParticle($viewName, 'characters', $characters);
+        $view->setDataToParticle($viewName, 'dialogues', $dialogues);
         $view->setDataToParticle($viewName, 'movie', $movie);
         
-        $viewName = 'BACKEND_MOVIE_CHARACTER_INDEX_PAGER';
+        $viewName = 'BACKEND_MOVIE_DIALOGUE_INDEX_PAGER';
         $viewPath = $this->getParticleViewPath('Util/Pager');
         $view->loadParticle($viewName, $viewPath);
-        $totalCount = $movieService->countCharacters($id);
+        $totalCount = $movieService->countClasicDialogues($id);
         $view->setDataToParticle($viewName, 'totalCount', $totalCount);
         $view->setDataToParticle($viewName, 'pageSize', $pageSize);
         $view->setDataToParticle($viewName, 'currentPage', $page);
-        $pagerParams = array_merge(array('module'=>'backend', 'action'=>'movie/character/index'), array('id'=>$id));
+        $pagerParams = array_merge(array('module'=>'backend', 'action'=>'movie/dialogue/index'), array('id'=>$id));
         $view->setDataToParticle($viewName, 'parameters', http_build_query($pagerParams));
         
         $this->setMenuItemActived(self::MENU_ITEM_MOVIE);
