@@ -23,6 +23,7 @@ $categories = $vars['categories'];
             <td><?php echo $category->share_message;?></td>
             <td>
                 <a class="btn btn-xs" href="/?module=backend&action=movie/category/edit&id=<?php echo $category->id; ?>">编辑</a>
+                <a class="btn btn-xs" href="/?module=backend&action=movie/category/operate&id=<?php echo $category->id; ?>">操作</a>
             </td>
         </tr>
         <?php endforeach; ?>

@@ -559,6 +559,71 @@ class Service extends \X\Core\Service\XService {
     }
     
     /**
+     * @param unknown $id
+     * @return MovieCategoryModel
+     */
+    public function getCategoryById( $id ) {
+        $category = MovieCategoryModel::model()->findByPrimaryKey($id);
+        return $category;
+    }
+    
+    public function addCategory( $data ) {
+        $category = new MovieCategoryModel();
+        $category->setAttributeValues($data);
+        $category->save();
+        return $category;
+    }
+    
+    public function updateCategory( $id, $newData ) {
+        $category = MovieCategoryModel::model()->findByPrimaryKey($id);
+        $category->setAttributeValues($newData);
+        $category->save();
+        return $category;
+    }
+    
+    public function deleteCategory( $categoryId ) {
+        MovieCategoryModel::model()->deleteAll(array('id'=>$categoryId));
+        MovieCategoryMapModel::model()->deleteAll(array('category_id'=>$categoryId));
+        return true;
+    }
+    
+    public function moveMoviesFromACategoryToAnotherCategory( $sourceCategoryId, $targetCategoryId ) {
+        if ( $sourceCategoryId === $targetCategoryId ) {
+            return false;
+        }
+        
+        $sourceCategory = MovieCategoryModel::model()->findByPrimaryKey($sourceCategoryId);
+        if ( null === $sourceCategory ) {
+            return false;
+        }
+        
+        $targetCategory = MovieCategoryModel::model()->findByPrimaryKey($targetCategoryId);
+        if ( null === $targetCategory ) {
+            return false;
+        }
+        
+        $maps = MovieCategoryMapModel::model()->findAll(array('category_id'=>$sourceCategoryId));
+        foreach ( $maps as $map ) {
+            $sourceCategory->count --;
+            
+            $condition = array('movie_id'=>$map->movie_id, 'category_id'=>$map->category_id);
+            if ( MovieCategoryMapModel::model()->exists($condition) ) {
+                $map->delete();
+            } else {
+                $map->category_id = $targetCategory->id;
+                $map->save();
+                
+                $targetCategory->count ++;
+            }
+        }
+        
+        $targetCategory->save();
+        $sourceCategory->save();
+        
+        return true;
+    }
+    
+    /**
      * @return \X\Module\Lunome\Model\Movie\MovieCategoryModel[]
      */
     public function getCategories($position=0, $limit=0) {
