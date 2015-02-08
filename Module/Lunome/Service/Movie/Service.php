@@ -551,11 +551,61 @@ class Service extends \X\Core\Service\XService {
     /**
      * @return \X\Module\Lunome\Model\Movie\MovieLanguageModel[]
      */
-    public function getLanguages() {
+    public function getLanguages($position=0, $limit=0) {
         $criteria = new Criteria();
         $criteria->addOrder('count', 'DESC');
+        $criteria->position = $position;
+        $criteria->limit = $limit;
         $languages = MovieLanguageModel::model()->findAll($criteria);
         return $languages;
+    }
+    
+    public function countLanguage() {
+        return MovieLanguageModel::model()->count();
+    }
+    
+    public function addLanguage( $data ) {
+        $language = new MovieLanguageModel();
+        $language->setAttributeValues($data);
+        $language->save();
+        return $language;
+    }
+    
+    public function updateLanguage( $id, $newData ) {
+        $language = MovieLanguageModel::model()->findByPrimaryKey($id);
+        $language->setAttributeValues($newData);
+        $language->save();
+        return $language;
+    }
+    
+    public function moveMoviesFromALanguageToAnother( $sourceLanguageId, $targetLanguageId ) {
+        $sourceLanguage = MovieLanguageModel::model()->findByPrimaryKey($sourceLanguageId);
+        $targetLanguage = MovieLanguageModel::model()->findByPrimaryKey($targetLanguageId);
+        
+        if ( null===$sourceLanguage || null===$targetLanguage ) {
+            return false;
+        }
+        
+        $condition = array('language_id'=>$sourceLanguageId);
+        $sourceLanguageCount = MovieModel::model()->count($condition);
+        MovieModel::model()->updateAll(array('language_id'=>$targetLanguageId), $condition);
+        $sourceLanguage->count = 0;
+        $sourceLanguage->save();
+        
+        $targetLanguage->count += $sourceLanguageCount;
+        $targetLanguage->save();
+        return true;
+    }
+    
+    public function deleteLanguage( $languageId ) {
+        $language = MovieLanguageModel::model()->findByPrimaryKey($languageId);
+        if ( null === $language) {
+            return false;
+        }
+        
+        $condition = array('language_id'=>$languageId);
+        MovieModel::model()->updateAll(array('language_id'=>''), $condition);
+        $language->delete();
     }
     
     /**

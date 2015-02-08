@@ -56,6 +56,8 @@ abstract class Visual extends \X\Util\Action\Visual {
                 array('name'=>'添加电影','link'=>'/?module=backend&action=movie/edit'),
                 array('name'=>'分类','link'=>'/?module=backend&action=movie/category/index'),
                 array('name'=>'添加分类','link'=>'/?module=backend&action=movie/category/edit'),
+                array('name'=>'语言','link'=>'/?module=backend&action=movie/language/index'),
+                array('name'=>'添加语言','link'=>'/?module=backend&action=movie/language/edit'),
             ),
         );
         $this->menuItems[self::MENU_ITEM_REGION]    = array(

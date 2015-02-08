@@ -30,7 +30,7 @@ class Operate extends Visual {
         $view->setDataToParticle($viewName, 'category', $category);
         $view->setDataToParticle($viewName, 'allCategories', $movieService->getCategories());
         
-        $this->setPageTitle('电影类型编辑');
+        $this->setPageTitle('电影类型操作');
         $this->setMenuItemActived(self::MENU_ITEM_MOVIE);
     }
 }

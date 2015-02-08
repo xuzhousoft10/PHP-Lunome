@@ -32,8 +32,10 @@ class Detail extends Visual {
             $movie['cover'] = $movieService->getMediaDefaultCoverURL();
         }
         
-        $movie['language'] = $movieService->getLanguageById($movie['language_id'])->name;
-        $movie['region'] = $movieService->getRegionById($movie['region_id'])->name;
+        $movie['language'] = $movieService->getLanguageById($movie['language_id']);
+        $movie['language'] = empty($movie['language']) ? '' : $movie['language']->name;
+        $movie['region'] = $movieService->getRegionById($movie['region_id']);
+        $movie['region'] = empty($movie['region']) ? '' : $movie['region']->name;
         $movie['length'] = ((int)($movie['length']/3600)).'小时'.((int)($movie['length']%60)).'分钟';
         
         $categories = $movieService->getCategoriesByMovieId($movie['id']);

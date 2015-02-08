@@ -449,7 +449,7 @@ abstract class XActiveRecord extends Basic implements \Iterator {
         $criteria->limit = $limit;
         $results = $this->doFind($criteria);
         foreach ( $results as $result ) {
-            $result->setAttributes($values);
+            $result->setAttributeValues($values);
             $result->save();
         }
         return count($results);
