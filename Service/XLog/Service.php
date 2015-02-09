@@ -31,4 +31,27 @@ class Service extends \X\Core\Service\XService {
     public function getLogger( $name ) {
         return $this->logger->getLogger($name);
     }
+    
+    public function getLogs($position, $limit) {
+        $logs = array();
+        $config = $this->getConfiguration()->get('log4php');
+        $appander = $config['appenders']['default'];
+        switch ( $appander['class'] ) {
+        case 'LoggerAppenderPDO':
+            $logs = $this->readFromFromPDO($appander['params'], $position, $limit);
+            break;
+        default:break;
+        }
+        return $logs;
+    }
+    
+    private function readFromFromPDO( $params, $position, $limit ) {
+        $position = (int)$position;
+        $limit = (int)$limit;
+        $pdo = new \PDO($params['dsn'], $params['user'], $params['password']);
+        $query = 'SELECT * FROM '.$params['table'].' ORDER BY time DESC LIMIT '.$limit.' OFFSET '.$position;
+        $result = $pdo->query($query);
+        $result = $result->fetchAll(\PDO::FETCH_ASSOC);
+        return $result;
+    }
 }

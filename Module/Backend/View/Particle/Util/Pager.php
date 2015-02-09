@@ -6,9 +6,14 @@ $pageSize = $vars['pageSize'];
 $parameters = $vars['parameters'];
 ?>
 <?php 
-$totalPage = (0===$totalCount%$pageSize) ? $totalCount/$pageSize : ((int)($totalCount/$pageSize))+1;
+if ( false === $totalCount ) {
+    $totalPage = '?';
+    $nextPage = $currentPage+1;
+} else {
+    $totalPage = (0===$totalCount%$pageSize) ? $totalCount/$pageSize : ((int)($totalCount/$pageSize))+1;
+    $nextPage = ($currentPage>=$totalPage) ? false : $currentPage+1;
+}
 $prevPage = (1 >= $currentPage) ? false : $currentPage-1;
-$nextPage = ($currentPage>=$totalPage) ? false : $currentPage+1;
 ?>
 <nav>
     <ul class="pager">
