@@ -75,6 +75,12 @@ return array (
     'delay' => true,
     'class' => 'X\\Module\\Lunome\\Service\\Region\\Service',
   ),
+  'People' =>
+  array (
+    'enable' => true,
+    'delay' => true,
+    'class' => 'X\\Module\\Lunome\\Service\\People\\Service',
+  ),
   'QQ' => 
   array (
     'enable' => true,
