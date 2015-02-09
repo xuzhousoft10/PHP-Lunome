@@ -65,25 +65,22 @@ abstract class Visual extends \X\Util\Action\Visual {
         $this->menuItems[self::MENU_ITEM_REGION]    = array(
             'name' => '区域管理',
             'subitem' => array(
-                array('name'=>'区域','link'=>'#'),
-                array('name'=>'添加区域','link'=>'#'),
+                array('name'=>'区域','link'=>'/?module=backend&action=region/index'),
+                array('name'=>'添加区域','link'=>'/?module=backend&action=region/edit'),
             ),
         );
         $this->menuItems[self::MENU_ITEM_PEOPLE]    = array(
             'name' => '人物管理',
             'subitem' => array(
-                array('name'=>'人物','link'=>'#'),
-                array('name'=>'添加人物','link'=>'#'),
+                array('name'=>'人物','link'=>'/?module=backend&action=people/index'),
+                array('name'=>'添加人物','link'=>'/?module=backend&action=people/edit'),
             ),
         );
         $this->menuItems[self::MENU_ITEM_SYSTEM]    = array(
             'name' => '系统管理',
             'subitem' => array(
-                array('name'=>'状态','link'=>'#'),
-                array('name'=>'配置','link'=>'#'),
-                array('name'=>'日志','link'=>'#'),
-                array('name'=>'备份','link'=>'#'),
-                array('name'=>'更新','link'=>'#'),
+                array('name'=>'配置','link'=>'/?module=backend&action=system/config'),
+                array('name'=>'日志','link'=>'/?module=backend&action=system/log'),
             ),
         );
          
