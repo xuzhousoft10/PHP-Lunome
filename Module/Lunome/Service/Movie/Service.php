@@ -511,11 +511,61 @@ class Service extends \X\Core\Service\XService {
     /**
      * @return \X\Module\Lunome\Model\Movie\MovieRegionModel[]
      */
-    public function getRegions() {
+    public function getRegions($position=0, $limit=0) {
         $criteria = new Criteria();
         $criteria->addOrder('count', 'DESC');
+        $criteria->position = $position;
+        $criteria->limit = $limit;
         $regions = MovieRegionModel::model()->findAll($criteria);
         return $regions;
+    }
+    
+    public function countRegions() {
+        return MovieRegionModel::model()->count();
+    }
+    
+    public function addRegion( $data ) {
+        $region = new MovieRegionModel();
+        $region->setAttributeValues($data);
+        $region->save();
+        return $region;
+    }
+    
+    public function updateRegion( $id, $data ) {
+        $region = MovieRegionModel::model()->findByPrimaryKey($id);
+        $region->setAttributeValues($data);
+        $region->save();
+        return $region;
+    }
+    
+    public function moveMoviesFromARegionToAnother( $sourceRegionId, $targetRegionId ) {
+        $sourceRegion = MovieRegionModel::model()->findByPrimaryKey($sourceRegionId);
+        $targetRegion = MovieRegionModel::model()->findByPrimaryKey($targetRegionId);
+    
+        if ( null===$sourceRegion || null===$targetRegion ) {
+            return false;
+        }
+    
+        $condition = array('region_id'=>$sourceRegionId);
+        $sourceRegionCount = MovieModel::model()->count($condition);
+        MovieModel::model()->updateAll(array('region_id'=>$targetRegionId), $condition);
+        $sourceRegion->count = 0;
+        $sourceRegion->save();
+    
+        $targetRegion->count += $sourceRegionCount;
+        $targetRegion->save();
+        return true;
+    }
+    
+    public function deleteRegion( $regionId ) {
+        $region = MovieRegionModel::model()->findByPrimaryKey($regionId);
+        if ( null === $region) {
+            return false;
+        }
+    
+        $condition = array('region_id'=>$regionId);
+        MovieModel::model()->updateAll(array('region_id'=>''), $condition);
+        $region->delete();
     }
     
     /**
