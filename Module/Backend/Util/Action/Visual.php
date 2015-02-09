@@ -79,7 +79,7 @@ abstract class Visual extends \X\Util\Action\Visual {
         $this->menuItems[self::MENU_ITEM_SYSTEM]    = array(
             'name' => '系统管理',
             'subitem' => array(
-                array('name'=>'配置','link'=>'/?module=backend&action=system/config'),
+                array('name'=>'配置','link'=>'/?module=backend&action=system/setting'),
                 array('name'=>'日志','link'=>'/?module=backend&action=system/log'),
             ),
         );

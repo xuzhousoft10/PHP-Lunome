@@ -29,4 +29,19 @@ class Service extends \X\Core\Service\XService {
         }
         return $configurations[$name]->value;
     }
+    
+    public function getAll() {
+        return SystemConfigurationModel::model()->findAll();
+    }
+    
+    public function update( $settings ) {
+        foreach ( $settings as $key => $value ) {
+            $config = SystemConfigurationModel::model()->find(array('name'=>$key));
+            if ( null === $config ) {
+                continue;
+            }
+            $config->value = $value;
+            $config->save();
+        }
+    }
 }
