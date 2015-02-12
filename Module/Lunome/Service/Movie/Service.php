@@ -39,6 +39,7 @@ use X\Module\Lunome\Service\Configuration\Service as ConfigService;
 use X\Service\XDatabase\Core\SQL\Expression;
 use X\Util\ImageResize;
 use X\Module\Lunome\Util\Exception as LunomeException;
+use X\Module\Lunome\Model\Movie\MovieUserVisited;
 
 /**
  * The service class
@@ -439,6 +440,7 @@ class Service extends \X\Core\Service\XService {
      */
     public function getCoverURL( $id, $refresh=false ) {
         $isDebug = X::system()->getConfiguration()->get('is_debug');
+        $isDebug = false;
         if ( $isDebug ) {
             $url = '7vijk1.com1.z0.glb.clouddn.com';
         } else {
@@ -1434,7 +1436,35 @@ class Service extends \X\Core\Service\XService {
     }
     
     public function getUnvisitedAndUnmarkedMovie( $condition, $position=0, $limit=0 ) {
-        return $this->getUnmarked($condition, $limit, $position);
+        $basicCondition = $this->getUnmarkedMediaCondition();
+        $basicCondition->addCondition($this->getExtenCondition($condition));
+        
+        $mediaTable = MovieModel::model()->getTableFullName();
+        /* Generate basic condition to ignore marked movies. */
+        $visitedCondition = array();
+        $visitedCondition['movie_id'] = new SQLExpression($mediaTable.'.id');
+        $visitedCondition['account_id'] = $this->getCurrentUserId();
+        $visitedCondition = MovieUserVisited::query()->activeColumns(array('movie_id'))->find($visitedCondition);
+        $visitedCondition = ConditionBuilder::build()->notExists($visitedCondition);
+        $basicCondition->addCondition($visitedCondition);
+        
+        $criteria = new Criteria();
+        $criteria->condition = $basicCondition;
+        $criteria->limit = $limit;
+        $criteria->position = $position;
+        $criteria->addOrder('date', 'DESC');
+        $medias = MovieModel::model()->findAll($criteria);
+        foreach ( $medias as $index => $media ) {
+            $medias[$index] = $media->toArray();
+        }
+        return $medias;
+    }
+    
+    public function markMovieAsVisited( $movieId ) {
+        $mark = new MovieUserVisited();
+        $mark->account_id = $this->getCurrentUserId();
+        $mark->movie_id = $movieId;
+        $mark->save();
     }
     
     const SCORE_OPERATOR_EQUAL = SQLCondition::OPERATOR_EQUAL;

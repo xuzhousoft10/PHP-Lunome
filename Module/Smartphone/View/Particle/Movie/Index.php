@@ -1,13 +1,24 @@
 <?php
 $vars = get_defined_vars();
 $movie = $vars['movie'];
+$markActions = $vars['markActions'];
 ?>
 <div style="text-align:center">
-    <img alt="<?php echo $movie['name']; ?>" src="<?php echo $movie['cover'];?>">
+    <img id="movie-cover" alt="<?php echo $movie['name']; ?>" src="<?php echo $movie['cover'];?>">
     
     <div style="text-align:center">
-        <a href="#" class="ui-btn ui-btn-inline">想看</a>
-        <a href="#" class="ui-btn ui-btn-inline">已看</a>
-        <a href="#" class="ui-btn ui-btn-inline">忽略</a>
+        <?php foreach ( $markActions as $markCode => $markName ):?>
+            <a  href="/?module=smartphone&action=movie/mark&mark=<?php echo $markCode ?>" 
+                class="ui-btn ui-btn-inline"
+            ><?php echo $markName; ?></a>
+        <?php endforeach; ?>
     </div>
 </div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#movie-cover').click(function(){
+        location.reload(true);
+    });
+});
+</script>
