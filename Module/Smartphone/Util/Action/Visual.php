@@ -32,6 +32,8 @@ abstract class Visual extends \X\Util\Action\Visual {
         $view = $this->getView();
         $view->addMetaData('viewport', 'viewport', 'width=device-width, initial-scale=1');
         $view->loadLayout($this->getLayoutViewPath('Main'));
+        $view->addData('navMenu', $this->getNavItems());
+        $view->addData('activeNavMenuItem', $this->getActiveNavItem());
     }
     
     /**
@@ -49,4 +51,24 @@ abstract class Visual extends \X\Util\Action\Visual {
         $view->addScriptFile('jquery', $assets.'/library/jquery/jquery-1.11.1.js');
         $view->addScriptFile('jquery.mobile', $assets.'/library/jquery.mobile/jquery.mobile-1.4.5.js');
     }
+    
+    protected function getNavItems() {
+        $menu = array();
+        $menu[self::NAV_MENU_SYSTEM] = array('link'=>'/?module=smartphone&action=system/menu/index', 'icon'=>'bullets');
+        $menu[self::NAV_MENU_RELATED] = array('link'=>$this->getRelatedMenuLink(), 'icon'=>'bars');
+        $menu[self::NAV_MENU_USER] = array('link'=>'/?module=smartphone&action=user/menu', 'icon'=>'user');
+        return $menu;
+    }
+    
+    protected function getRelatedMenuLink() {
+        return '#';
+    }
+    
+    protected function getActiveNavItem() {
+        return null;
+    }
+    
+    const NAV_MENU_SYSTEM = 'system';
+    const NAV_MENU_RELATED = 'related';
+    const NAV_MENU_USER = 'user';
 }

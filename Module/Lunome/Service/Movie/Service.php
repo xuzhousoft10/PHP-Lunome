@@ -1433,6 +1433,10 @@ class Service extends \X\Core\Service\XService {
         return $movies;
     }
     
+    public function getUnvisitedAndUnmarkedMovie( $condition, $position=0, $limit=0 ) {
+        return $this->getUnmarked($condition, $limit, $position);
+    }
+    
     const SCORE_OPERATOR_EQUAL = SQLCondition::OPERATOR_EQUAL;
     const SCORE_OPERATOR_GREATER = SQLCondition::OPERATOR_GREATER_THAN;
     const SCORE_OPERATOR_LESS_OR_EQUAL = SQLCondition::OPERATOR_LESS_OR_EQUAL;
