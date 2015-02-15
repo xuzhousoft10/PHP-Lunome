@@ -160,4 +160,11 @@ abstract class ConfigurationArray implements \ArrayAccess, \Iterator {
     public function getLength() {
         return count($this->data);
     }
+    
+    /**
+     * @return array
+     */
+    public function toArray() {
+        return $this->data;
+    }
 }

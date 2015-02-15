@@ -205,4 +205,10 @@ class ConfigurationArrayTest extends TestCase {
         $this->arrayExt->remove('k1');
         $this->assertFalse($this->arrayExt->has('k1'));
     }
+    
+    public function test_toArray() {
+        $this->assertSame(array(), $this->arrayExt->toArray());
+        $this->arrayExt['k1']='value1';
+        $this->assertSame(array('k1'=>'value1'), $this->arrayExt->toArray());
+    }
 }
