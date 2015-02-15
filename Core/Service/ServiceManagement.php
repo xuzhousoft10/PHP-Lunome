@@ -9,7 +9,7 @@ namespace X\Core\Service;
  */
 use X\Core\X;
 use X\Core\Util\Management;
-use X\Core\Util\Configuration;
+use X\Core\Util\ConfigurationFile;
 use X\Core\Util\XUtil;
 
 /**
@@ -21,7 +21,7 @@ class ServiceManagement extends Management {
      * @see \X\Core\Util\Management::init()
      */
     protected function init() {
-        $this->configuration = new Configuration(X::system()->getPath('Config/services.php'));
+        $this->configuration = new ConfigurationFile(X::system()->getPath('Config/services.php'));
     }
     
     /**

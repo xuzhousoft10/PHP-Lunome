@@ -225,7 +225,7 @@ class X {
         }
         spl_autoload_register(array($this, '_autoloader'));
         
-        $this->configuration = new \X\Core\Util\Configuration($this->getPath('Config/main.php'));
+        $this->configuration = new \X\Core\Util\ConfigurationFile($this->getPath('Config/main.php'));
         $this->loadParameters();
     }
     

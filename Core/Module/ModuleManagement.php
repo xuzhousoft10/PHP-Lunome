@@ -9,7 +9,7 @@ namespace X\Core\Module;
  */
 use X\Core\X;
 use X\Core\Util\XUtil;
-use X\Core\Util\Configuration;
+use X\Core\Util\ConfigurationFile;
 use X\Core\Util\Management;
 
 /**
@@ -22,7 +22,7 @@ class ModuleManagement extends Management {
      */
     protected function init() {
         $path = X::system()->getPath('Config/modules.php');
-        $this->configuration = new Configuration($path);
+        $this->configuration = new ConfigurationFile($path);
     }
     
     /**
