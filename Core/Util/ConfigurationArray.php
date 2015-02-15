@@ -133,6 +133,9 @@ abstract class ConfigurationArray implements \ArrayAccess, \Iterator {
      * @param boolean $recursive
      */
     public function merge( $value ) {
+        if ( !is_array($value) ) {
+            throw new Exception('Unable to merge a non array value to configuration array.');
+        }
         $this->data = array_merge_recursive($this->data, $value);
     }
     

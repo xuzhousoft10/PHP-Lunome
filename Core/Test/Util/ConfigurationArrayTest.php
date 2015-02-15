@@ -5,6 +5,7 @@ namespace X\Core\Test\Util;
  * 
  */
 use X\Core\Util\TestCase;
+use X\Core\Util\Exception;
 use X\Core\Test\Fixture\Util\ConfigurationArray;
 
 /**
@@ -172,6 +173,11 @@ class ConfigurationArrayTest extends TestCase {
         $this->arrayExt['k1'] = 'value1';
         $this->arrayExt->merge(array('k1'=>'value2'));
         $this->assertSame(array('value1', 'value2'), $this->arrayExt['k1']);
+        
+        try {
+            $this->arrayExt->merge('non-array-value');
+            $this->fail('Exception should be throwed when try to merge a non array value to ConfigurationArray.');
+        } catch ( Exception $e ) {}
     }
     
     /**
