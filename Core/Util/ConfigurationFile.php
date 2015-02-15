@@ -12,7 +12,7 @@ use X\Core\Basic;
 /**
  * 
  */
-class Configuration extends Basic implements \ArrayAccess, \Iterator  {
+class ConfigurationFile extends Basic implements \ArrayAccess, \Iterator  {
     /**
      * 初始化该配置类
      * @param string $path 配置文件的存储位置。
