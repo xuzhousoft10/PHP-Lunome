@@ -19,10 +19,16 @@ class ConfigurationFile extends ConfigurationArray  {
      * @param string $path 配置文件的存储位置。
      */
     public function __construct( $path ) {
-        if ( is_file($path) && is_readable($path) ) {
-            $this->merge(require $path);
+        if ( !file_exists($path) ) {
+            $this->merge(array());
+        } else if (!is_file($path)) {
+            throw new Exception('Configuration file "'.$path.'" is not a regular file.');
         } else {
-            throw new Exception('Configuration file "'.$path.'" is not readable.');
+            $configuration = require $path;
+            if ( !is_array($configuration) ) {
+                throw new Exception('Invalid configuration file ："'.$path.'".');
+            }
+            $this->merge($configuration);
         }
         $this->path = $path;
     }
@@ -32,10 +38,6 @@ class ConfigurationFile extends ConfigurationArray  {
      * @return void
      */
     public function save() {
-        if ( is_writable($this->path) ) {
-            XUtil::storeArrayToPHPFile($this->path, $this->config);
-        } else {
-            throw new Exception('Unable to save configuration file to "'.$this->path.'", it\'s unwritable.');
-        }
+        XUtil::storeArrayToPHPFile($this->path, $this->toArray());
     }
 }

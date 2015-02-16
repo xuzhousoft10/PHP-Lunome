@@ -8,7 +8,7 @@ namespace X\Core\Util;
  * 
  */
 use X\Core\Basic;
-use X\Core\Exception;
+use X\Core\Util\Exception;
 
 /**
  * 
@@ -26,7 +26,13 @@ class XUtil extends Basic {
         $content[] = '<?php';
         $content[] = "return $var;";
         $content = implode("\n", $content);
-        file_put_contents($path, $content);
+        
+        if ( (file_exists($path)&&is_writable($path))
+        ||   (!file_exists($path)&&is_writable(dirname($path)))) {
+            file_put_contents($path, $content);
+        } else {
+            throw new Exception('Unable to save file to "'.$path.'", it\'s unwritable.');
+        }
     }
     
     /**
