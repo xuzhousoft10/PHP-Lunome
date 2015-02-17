@@ -254,7 +254,9 @@ class X {
         }
         
         $this->getServiceManager()->stop();
+        $this->getServiceManager()->destroy();
         $this->getModuleManager()->stop();
+        $this->getModuleManager()->destroy();
         self::$system = null;
         spl_autoload_unregister(array($this, '_autoloader'));
     }
