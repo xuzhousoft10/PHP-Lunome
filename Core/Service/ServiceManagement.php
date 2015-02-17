@@ -8,14 +8,14 @@ namespace X\Core\Service;
  * 
  */
 use X\Core\X;
-use X\Core\Util\Management;
-use X\Core\Util\ConfigurationFile;
 use X\Core\Util\XUtil;
+use X\Core\Util\Manager;
+use X\Core\Util\ConfigurationFile;
 
 /**
  * 
  */
-class ServiceManagement extends Management {
+class ServiceManagement extends Manager {
     /**
      * (non-PHPdoc)
      * @see \X\Core\Util\Management::init()

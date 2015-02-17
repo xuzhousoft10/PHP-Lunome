@@ -9,13 +9,13 @@ namespace X\Core\Module;
  */
 use X\Core\X;
 use X\Core\Util\XUtil;
+use X\Core\Util\Manager;
 use X\Core\Util\ConfigurationFile;
-use X\Core\Util\Management;
 
 /**
  * 
  */
-class ModuleManagement extends Management {
+class ModuleManagement extends Manager {
     /**
      * (non-PHPdoc)
      * @see \X\Core\Util\Management::init()
