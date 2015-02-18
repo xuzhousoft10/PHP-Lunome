@@ -67,13 +67,17 @@ abstract class Manager {
      * 启动该管理器
      * @return void
      */
-    public function start() {}
+    public function start() {
+        $this->status = self::STATUS_RUNNING;
+    }
     
     /**
      * 结束该管理器
      * @return void
      */
-    public function stop() { }
+    public function stop() {
+        $this->status = self::STATUS_STOPED;
+    }
     
     /**
      * 销毁当前管理器
