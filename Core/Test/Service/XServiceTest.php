@@ -45,7 +45,7 @@ class XServiceTest extends TestCase {
      */
     public function test_Service() {
         /* setup */
-        $manager = Manager::getManager();
+        $manager = X::system()->getServiceManager();
         $oldConfiguration = $manager->getConfiguration()->toArray();
         $this->cleanTheConfiguration($manager);
         

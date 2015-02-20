@@ -69,13 +69,13 @@ return array (
     'delay' => true,
     'class' => 'X\\Module\\Lunome\\Service\\Configuration\\Service',
   ),
-  'Region' =>
+  'Region' => 
   array (
     'enable' => true,
     'delay' => true,
     'class' => 'X\\Module\\Lunome\\Service\\Region\\Service',
   ),
-  'People' =>
+  'People' => 
   array (
     'enable' => true,
     'delay' => true,
@@ -99,7 +99,7 @@ return array (
     'delay' => true,
     'class' => 'X\\Service\\XMail\\Service',
   ),
-  'XError' =>
+  'XError' => 
   array (
     'enable' => true,
     'delay' => false,
