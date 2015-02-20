@@ -158,18 +158,18 @@ class X {
     /**
      * 该值保存一个service manager的实例。
      *
-     * @var \X\Core\Service\ServiceManagement
+     * @var \X\Core\Service\Manager
      */
     protected $serviceManager = null;
      
     /**
      * 获取当前框架种的service manager的实例。
      *
-     * @return \X\Core\Service\ServiceManagement
+     * @return \X\Core\Service\Manager
      */
     public function getServiceManager() {
         if ( null === $this->serviceManager ) {
-            $this->serviceManager = \X\Core\Service\ServiceManagement::getManager();
+            $this->serviceManager = \X\Core\Service\Manager::getManager();
         }
         return $this->serviceManager;
     }

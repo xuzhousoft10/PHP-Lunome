@@ -7,12 +7,14 @@ namespace X\Core\Service;
 /**
  * 
  */
-use X\Core\Util\Configuration;
+use X\Core\X;
+use X\Core\Util\ConfigurationFile;
+use X\Core\Util\Exception;
 
 /**
  *
  */
-abstract class XService extends \X\Core\Basic {
+abstract class XService {
     /**
      * 该变量保存着所有已经启动的服务的实例。
      * @var \X\Core\Service\XService[]
@@ -33,14 +35,17 @@ abstract class XService extends \X\Core\Basic {
     }
     
     /**
+     * @var string
+     */
+    protected static $serviceName = null;
+    
+    /**
      * 从服务的类名中获取服务名称。
      * @param string $className 要获取服务名称的类名
      * @return string
      */
     private static function getServiceNameFromClassName( $className ) {
-        $className = explode('\\', $className);
-        array_pop($className);
-        return str_replace('Service', '', array_pop($className));
+        return static::$serviceName;
     }
     
     /**
@@ -70,42 +75,24 @@ abstract class XService extends \X\Core\Basic {
      * @return void
      */
     public function start(){
-        $this->beforeStart();
-        $this->afterStart();
+        $this->status = self::STATUS_RUNNING;
     }
-    
-    /**
-     * 该方法将在服务启动前执行， 当你在新建一个服务时， 可以重写该方法以便在服务启动前处理。
-     * @return void
-     */
-    protected function beforeStart(){}
-    
-    /**
-     * 该方法将在服务启动后执行， 当你在新建一个服务时， 可以重写该方法以便在服务启动后处理。
-     * @return void
-     */
-    protected function afterStart(){}
     
     /**
      * 结束服务，该方法由管理器结束， 不建议在其他地方调用该方法。
      *  @return void
      */
-    public function stop(){
-        $this->beforeStop();
-        $this->afterStop();
+    public function stop(){ 
+        $this->status = self::STATUS_STOPPED;
     }
     
     /**
-     * 该方法将在服务结束前执行， 当你在新建一个服务时， 可以重写该方法以便在服务结束前处理。
-     * @return void
+     * 
      */
-    protected function beforeStop(){}
-    
-    /**
-     * 该方法将在服务结束后执行， 当你在新建一个服务时， 可以重写该方法以便在服务结束后处理。
-     * @return void
-     */
-    protected function afterStop(){}
+    public function destroy() {
+        $className = get_called_class();
+        unset(self::$services[$className]);
+    }
     
     /**
      * 获取当前服务下的文件或目录的绝对路径。
@@ -120,19 +107,165 @@ abstract class XService extends \X\Core\Basic {
     
     /**
      * 该变量保存着当前服务的配置信息。
-     * @var \X\Core\Util\Configuration
+     * @var \X\Core\Util\ConfigurationFile
      */
     private $configuration = null;
     
     /**
      * 获取当前服务的配置信息。
-     * @return \X\Core\Util\Configuration
+     * @return \X\Core\Util\ConfigurationFile
      */
     public function getConfiguration() {
         if ( null === $this->configuration ) {
-            $servicePath = $this->getPath('Config/Main.php');
-            $this->configuration = new Configuration($servicePath);
+            $this->configuration = new ConfigurationFile($this->getConfigurationFilePath());
         }
         return $this->configuration;
+    }
+    
+    /**
+     * @return string
+     */
+    protected function getConfigurationFilePath() {
+        return $this->getPath('Configuration/Main.php');
+    }
+    
+    /**
+     * @var integer
+     */
+    const STATUS_STOPPED = 0;
+    
+    /**
+     * @var integer
+     */
+    const STATUS_RUNNING = 1;
+    
+    /**
+     * @var status
+     */
+    private $status = self::STATUS_STOPPED;
+    
+    /**
+     * @return integer
+     */
+    public function getStatus() {
+        return $this->status;
+    }
+    
+    /**
+     * @return \X\Core\Util\ConfigurationFile
+     */
+    private function getManagerConfiguration() {
+        return X::system()->getServiceManager()->getConfiguration();
+    }
+    
+    /**
+     * @return void
+     */
+    public function enable(){
+        $this->checkInstallationRequirement();
+        $configuration = $this->getManagerConfiguration();
+        $configuration[$this->getName()]['enable'] = true;
+        $configuration->save();
+    }
+    
+    /**
+     * @return void
+     */
+    public function disable(){
+        $this->checkInstallationRequirement();
+        $configuration = $this->getManagerConfiguration();
+        $configuration[$this->getName()]['enable'] = false;
+        $configuration->save();
+    }
+    
+    /**
+     * @return boolean
+     */
+    public function isEnabled(){
+        $configuration = $this->getManagerConfiguration();
+        return $configuration[$this->getName()]['enable'];
+    }
+    
+    /**
+     * @return void
+     */
+    public function enableLazyLoad(){
+        $this->checkInstallationRequirement();
+        $configuration = $this->getManagerConfiguration();
+        $configuration[$this->getName()]['delay'] = true;
+        $configuration->save();
+    }
+    
+    /**
+     * @return void
+     */
+    public function disableLazyLoad(){
+        $this->checkInstallationRequirement();
+        $configuration = $this->getManagerConfiguration();
+        $configuration[$this->getName()]['delay'] = false;
+        $configuration->save();
+    }
+    
+    /**
+     * @return boolean
+     */
+    public function isLazyLoadEnabled(){
+        $configuration = $this->getManagerConfiguration();
+        return true === $configuration[$this->getName()]['delay'];
+    }
+    
+    /**
+     * @return void
+     */
+    public function install(){
+        $configuration = $this->getManagerConfiguration();
+        $name = $this->getName();
+        $configuration[$name]['installed']=true;
+        $configuration->save();
+    }
+    
+    /**
+     * @return void
+     */
+    public function uninstall(){
+        $configuration = $this->getManagerConfiguration();
+        $name = $this->getName();
+        $configuration[$name]['installed']=false;
+        $configuration->save();
+    }
+    
+    /**
+     * @return boolean
+     */
+    public function isInstalled() {
+        $configuration = $this->getManagerConfiguration();
+        $name = $this->getName();
+        $isInstalled = isset($configuration[$name]);
+        $isInstalled = $isInstalled && isset($configuration[$name]['installed']);
+        $isInstalled = $isInstalled && true === $configuration[$name]['installed'];
+        return $isInstalled;
+    }
+    
+    /**
+     * @throws Exception
+     */
+    protected function checkInstallationRequirement() {
+        if ( !$this->isInstalled() ) {
+            throw new Exception('"'.$this->getPettyName().'" has not been installed.');
+        }
+    }
+    
+    /**
+     * @return string
+     */
+    public function getPettyName(){
+        return $this->getName();
+    }
+    
+    /**
+     * @return string
+     */
+    public function getDescription(){
+        return '';
     }
 }

@@ -5,7 +5,7 @@
 namespace X\Core\Util;
 
 /**
- * 
+ * @property \X\Core\Util\ConfigurationFile $configuration
  */
 abstract class Manager {
     /**
@@ -103,6 +103,18 @@ abstract class Manager {
             }
         }
         return $this->configuration;
+    }
+    
+    /**
+     * @param string $name
+     * @throws Exception
+     * @return \X\Core\Util\ConfigurationFile
+     */
+    public function __get( $name ) {
+        if ( 'configuration' === $name ) {
+            return $this->getConfiguration();
+        }
+        throw new Exception('Unable to access prototype "'.$name.'"');
     }
     
     /**
