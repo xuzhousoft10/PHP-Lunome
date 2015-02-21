@@ -6,6 +6,7 @@ namespace X\Core\Test\Util;
  */
 use X\Core\X;
 use X\Core\Util\TestCase;
+use X\Core\Util\Exception;
 use X\Core\Test\Fixture\Util\Manager;
 
 /**
@@ -43,6 +44,14 @@ class ManagerTest extends TestCase {
         $configuration = $manager->getConfiguration();
         $this->assertInstanceOf('\\X\\Core\\Util\\ConfigurationFile', $configuration);
         $this->assertSame('value1', $configuration['k1']);
+    }
+    
+    public function test___get() {
+        $manager = Manager::getManager();
+        try {
+            $value = $manager->non_exists_attribute;
+            $this->fail('An exception should be throwed if try to get non exists attribute of manager.');
+        } catch ( Exception $e ) {}
     }
 }
 

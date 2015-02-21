@@ -10,6 +10,7 @@ namespace X\Core\Service;
 use X\Core\X;
 use X\Core\Util\ConfigurationFile;
 use X\Core\Util\Exception;
+use X\Core\Util\XUtil;
 
 /**
  *
@@ -99,10 +100,7 @@ abstract class XService {
      * @return string
      */
     public function getPath( $path=null ) {
-        $service = new \ReflectionClass(get_class($this));
-        $servicePath = dirname($service->getFileName());
-        $path = (null===$path) ? $servicePath : $servicePath.DIRECTORY_SEPARATOR.str_replace('/', DIRECTORY_SEPARATOR, $path);
-        return $path;
+        return XUtil::getPathRelatedClass($this, $path);
     }
     
     /**
@@ -159,13 +157,30 @@ abstract class XService {
     }
     
     /**
+     * @param unknown $item
+     * @param unknown $value
+     */
+    private function updateManagerConfiguration( $item, $value ){
+        $configuration = $this->getManagerConfiguration();
+        $configuration[$this->getName()][$item] = $value;
+        $configuration->save();
+    }
+    
+    /**
+     * @param unknown $item
+     * @param mixed $default
+     */
+    private function getManagerConfigurationValue($item, $default=null) {
+        $configuration = $this->getManagerConfiguration();
+        return isset($configuration[$this->getName()][$item]) ? $configuration[$this->getName()][$item] : $default;
+    }
+    
+    /**
      * @return void
      */
     public function enable(){
         $this->checkInstallationRequirement();
-        $configuration = $this->getManagerConfiguration();
-        $configuration[$this->getName()]['enable'] = true;
-        $configuration->save();
+        $this->updateManagerConfiguration('enable', true);
     }
     
     /**
@@ -173,17 +188,14 @@ abstract class XService {
      */
     public function disable(){
         $this->checkInstallationRequirement();
-        $configuration = $this->getManagerConfiguration();
-        $configuration[$this->getName()]['enable'] = false;
-        $configuration->save();
+        $this->updateManagerConfiguration('enable', false);
     }
     
     /**
      * @return boolean
      */
     public function isEnabled(){
-        $configuration = $this->getManagerConfiguration();
-        return $configuration[$this->getName()]['enable'];
+        return $this->getManagerConfigurationValue('enable');
     }
     
     /**
@@ -191,9 +203,7 @@ abstract class XService {
      */
     public function enableLazyLoad(){
         $this->checkInstallationRequirement();
-        $configuration = $this->getManagerConfiguration();
-        $configuration[$this->getName()]['delay'] = true;
-        $configuration->save();
+        $this->updateManagerConfiguration('delay', true);
     }
     
     /**
@@ -201,49 +211,35 @@ abstract class XService {
      */
     public function disableLazyLoad(){
         $this->checkInstallationRequirement();
-        $configuration = $this->getManagerConfiguration();
-        $configuration[$this->getName()]['delay'] = false;
-        $configuration->save();
+        $this->updateManagerConfiguration('delay', false);
     }
     
     /**
      * @return boolean
      */
     public function isLazyLoadEnabled(){
-        $configuration = $this->getManagerConfiguration();
-        return true === $configuration[$this->getName()]['delay'];
+        return $this->getManagerConfigurationValue('delay', true);
     }
     
     /**
      * @return void
      */
     public function install(){
-        $configuration = $this->getManagerConfiguration();
-        $name = $this->getName();
-        $configuration[$name]['installed']=true;
-        $configuration->save();
+        $this->updateManagerConfiguration('installed', true);
     }
     
     /**
      * @return void
      */
     public function uninstall(){
-        $configuration = $this->getManagerConfiguration();
-        $name = $this->getName();
-        $configuration[$name]['installed']=false;
-        $configuration->save();
+        $this->updateManagerConfiguration('installed', false);
     }
     
     /**
      * @return boolean
      */
     public function isInstalled() {
-        $configuration = $this->getManagerConfiguration();
-        $name = $this->getName();
-        $isInstalled = isset($configuration[$name]);
-        $isInstalled = $isInstalled && isset($configuration[$name]['installed']);
-        $isInstalled = $isInstalled && true === $configuration[$name]['installed'];
-        return $isInstalled;
+        return $this->getManagerConfigurationValue('installed', false);
     }
     
     /**

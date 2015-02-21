@@ -55,4 +55,16 @@ class XUtil extends Basic {
             rmdir($path);
         }
     }
+    
+    /**
+     * @param unknown $class
+     * @param unknown $path
+     * @return string
+     */
+    public static function getPathRelatedClass( $class, $path ){
+        $classInfo = new \ReflectionClass(is_string($class) ? $class : get_class($class));
+        $classPath = dirname($classInfo->getFileName());
+        $path = (null===$path) ? $classPath : $classPath.DIRECTORY_SEPARATOR.str_replace('/', DIRECTORY_SEPARATOR, $path);
+        return $path;
+    }
 }

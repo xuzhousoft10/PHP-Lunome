@@ -7,71 +7,118 @@ namespace X\Core\Module;
 /**
  * 
  */
-use X\Core\Basic;
-use X\Core\Util\Configuration;
+use X\Core\X;
+use X\Core\Util\XUtil;
+use X\Core\Util\ConfigurationFile;
 
 /**
  * 
  */
-abstract class XModule extends Basic {
+abstract class XModule {
     /**
-     * 该变量保存当前模块的名称。
-     * @var string
-     */
-    protected $name = null;
-    
-    /**
-     * 获取当前模块的名称。
-     * @return string
-     */
-    public function getName() {
-        return $this->name;
-    }
-    
-    /**
-     * 构造当前模块。
-     * @param string $name 模块名称
-     */
-    public function __construct( $name ) {
-        $this->init();
-        $this->name = $name;
-    }
-    
-    /**
-     * 初始化当前模块， 当你自定义一个新的模块时，你可以重写该方法
-     * 以初始化新定义的模块。
-     */
-    protected function init() {}
-    
-    /**
-     * 运行该模块， 当你自定义一个新模块时， 你比需实现该方法。
-     * @param string $parameters
+     * @param array $parameters
      */
     abstract public function run($parameters=array());
     
     /**
-     * 快捷当时获取当前模块下的文件或者目录的路径。
+     * @return string
+     */
+    public function getName() {
+        $className = get_class($this);
+        $className = explode('\\', $className);
+        return $className[count($className)-2];
+    }
+    
+    /**
+     * @param string $path
      * @return string
      */
     public function getPath( $path=null ) {
-        $module = new \ReflectionClass(get_class($this));
-        $modulePath = dirname($module->getFileName());
-        $path = (null===$path) ? $modulePath : $modulePath.DIRECTORY_SEPARATOR.str_replace('/', DIRECTORY_SEPARATOR, $path);
-        return $path;
+        return XUtil::getPathRelatedClass($this, $path);
     }
     
-    private $configurations = array();
+    /**
+     * @var unknown
+     */
+    private $configuration = null;
     
     /**
-     * @param string $name
-     * @return \X\Core\Util\Configuration
+     * @return \X\Core\Util\ConfigurationFile
      */
-    public function getConfiguration( $name='main' ) {
-        $name = ucfirst($name);
-        if ( !isset($this->configurations[$name]) ) {
-            $configPath = $this->getPath('Config/'.$name.'.php');
-            $this->configurations[$name] = new Configuration($configPath);
+    public function getConfiguration() {
+        if ( null === $this->configuration ) {
+            $configPath = $this->getPath('Configuration/Main.php');
+            $this->configuration = new ConfigurationFile($configPath);
         }
-        return $this->configurations[$name];
+        return $this->configuration;
+    }
+    
+    /**
+     * @return \X\Core\Util\ConfigurationFile
+     */
+    private function getManagerConfiguration() {
+        return X::system()->getModuleManager()->getConfiguration();
+    }
+    
+    /**
+     * @param unknown $item
+     * @param unknown $value
+     */
+    private function updateManagerConfiguration( $item, $value ){
+        $configuration = $this->getManagerConfiguration();
+        $configuration[$this->getName()][$item] = $value;
+        $configuration->save();
+    }
+    
+    /**
+     * @param unknown $item
+     * @param mixed $default
+     */
+    private function getManagerConfigurationValue($item, $default=null) {
+        $configuration = $this->getManagerConfiguration();
+        return isset($configuration[$this->getName()][$item]) ? $configuration[$this->getName()][$item] : $default;
+    }
+    
+    /**
+     * @return void
+     */
+    public function setAsDefault(){
+        $this->updateManagerConfiguration('default', true);
+    }
+    
+    /**
+     * @return void
+     */
+    public function unsetAsDefault(){
+        $this->updateManagerConfiguration('default', false);
+    }
+    
+    
+    /**
+     * @return boolean
+     */
+    public function isDefaultModule(){
+        return true===$this->getManagerConfigurationValue('default', false);
+    }
+    
+    /**
+     * @return void
+     */
+    public function enable() {
+        $this->updateManagerConfiguration('enable', true);
+    }
+    
+    /**
+     * @return void
+     */
+    public function disable(){
+        $this->updateManagerConfiguration('enable', false);
+    }
+    
+    /**
+     * @return mixed
+     */
+    public function isEnabled(){
+        return $this->getManagerConfigurationValue('enable');
     }
 }

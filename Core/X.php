@@ -185,11 +185,11 @@ class X {
     /**
      * 返回当前框架中的实例。
      *
-     * @return \X\Core\Module\ModuleManagement
+     * @return \X\Core\Module\Manager
      */
     public function getModuleManager() {
         if ( null === $this->moduleManager ) {
-            $this->moduleManager = \X\Core\Module\ModuleManagement::getManager();
+            $this->moduleManager = \X\Core\Module\Manager::getManager();
         }
         return $this->moduleManager;
     }

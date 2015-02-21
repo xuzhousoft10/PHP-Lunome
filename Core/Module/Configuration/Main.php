@@ -9,7 +9,7 @@ return array (
   array (
     'enable' => true,
   ),
-  'Smartphone' =>
+  'Smartphone' => 
   array (
     'enable' => true,
   ),
