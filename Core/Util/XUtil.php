@@ -7,13 +7,12 @@ namespace X\Core\Util;
 /**
  * 
  */
-use X\Core\Basic;
 use X\Core\Util\Exception;
 
 /**
  * 
  */
-class XUtil extends Basic {
+class XUtil {
     /**
      * 将php数组保存到指定文件中。
      * 

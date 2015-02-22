@@ -7,11 +7,6 @@ namespace X\Core;
 /**
  * 
  */
-require dirname(__FILE__).DIRECTORY_SEPARATOR.'Exception.php';
-
-/**
- * 
- */
 class X {
     /**
      * 该变量保存该框架在运行时的一个实例。
