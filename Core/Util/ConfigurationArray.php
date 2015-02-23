@@ -5,7 +5,7 @@ namespace X\Core\Util;
  * @author Michael Luthor <michaelluthor@163.com> 
  * @version 0.0.0
  */
-abstract class ConfigurationArray implements \ArrayAccess, \Iterator {
+class ConfigurationArray implements \ArrayAccess, \Iterator {
     /**
      * This value contains the real array values.
      * @var array

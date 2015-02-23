@@ -57,7 +57,7 @@ class Manager extends UtilManager {
      * @throws Exception
      */
     public function run( $name=null ) {
-        $parameters = X::system()->getParameters();
+        $parameters = X::system()->getParameter();
         $moduleName = isset($parameters['module']) ? $parameters['module'] : $this->defaultModuleName;
         $moduleName = (null === $name) ? $moduleName : $name;
         if ( null === $moduleName ) {

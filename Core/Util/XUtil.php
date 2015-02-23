@@ -40,7 +40,7 @@ class XUtil {
      */
     public static function deleteFile( $path ) {
         if ( !is_file($path) && !is_dir($path) ) {
-            throw new Exception(sprintf('(%s): no such file or directory.', $path));
+            throw new Exception('('.$path.'): no such file or directory.');
         }
         
         if ( !is_dir($path) ) {
