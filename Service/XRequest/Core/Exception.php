@@ -11,6 +11,4 @@ namespace X\Service\XRequest\Core;
  * @version 0.0.0
  * @since   Version 0.0.0
  */
-class Exception extends \Exception {
-    
-}
+class Exception extends \Exception {}

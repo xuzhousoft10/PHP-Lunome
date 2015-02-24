@@ -5,32 +5,15 @@
 namespace X\Service\XRequest\Core;
 
 /**
- * Use statements
- */
-use X\Core\Basic;
-
-/**
- * Store the informations about current request.
  * 
- * @author  Michael Luthor <michaelluthor@163.com>
- * @version 0.0.0
- * @since   Version 0.0.0
- * 
- * @property stirng $URI
- * @property string $clienIP
- * @property string $scheme
- * @property string $host
- * @property array  $parameters
  */
-class Request extends Basic {
+class Request {
     /**
-     * 
      * @var \DateTime
      */
     protected $startAt = null;
     
     /**
-     * 
      * @return number
      */
     public function getTimeSpend() {
@@ -40,7 +23,6 @@ class Request extends Basic {
     
     /**
      * Initiate the request of current request.
-     * 
      * @return void
      */
     public function __construct() {
@@ -49,7 +31,6 @@ class Request extends Basic {
     
     /**
      * Get the requested uri.
-     * 
      * @return string
      */
     public function getURI(){
@@ -58,7 +39,6 @@ class Request extends Basic {
     
     /**
      * Get the IP address of client
-     * 
      * @return string
      */
     public function getClientIP() {
@@ -68,7 +48,6 @@ class Request extends Basic {
     /**
      * Get request scheme of current request.
      * It would be 'http' or 'https'
-     * 
      * @see http://php.net/manual/en/reserved.variables.server.php
      * @return string
      */
@@ -78,7 +57,6 @@ class Request extends Basic {
     
     /**
      * Get host name of current request.
-     * 
      * @return string
      */
     public function getHost() {
@@ -87,7 +65,6 @@ class Request extends Basic {
     
     /**
      * Get parameters from current request.
-     * 
      * @return array
      */
     public function getParameters() {
