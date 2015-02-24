@@ -41,6 +41,10 @@ class Service extends \X\Core\Service\XService {
      */
     public function start() {
         parent::start();
+        
+        $this->routerManager = new RouterManager($this);
+        X::system()->getShortcutManager()->register('createURL', array($this, 'createURL'));
+        
         $isCliMode = 'cli' === X::system()->getEnvironment()->getName();
         $isTestMode = true === $this->getConfiguration()->get('testing', false);
         if ( $isCliMode && !$isTestMode ) {
@@ -48,10 +52,16 @@ class Service extends \X\Core\Service\XService {
         }
         
         $this->request = new Request();
-        $this->routerManager = new RouterManager($this);
-        X::system()->getShortcutManager()->register('createURL', array($this, 'createUrl'));
-        
         $this->routeCurrentRequest();
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \X\Core\Service\XService::stop()
+     */
+    public function stop() {
+        X::system()->getShortcutManager()->unregister('createURL');
+        parent::stop();
     }
     
     /**
@@ -73,7 +83,8 @@ class Service extends \X\Core\Service\XService {
      * @return void
      */
     protected function routeCurrentRequest() {
-        $url = ('/' == $this->request->URI) ? '' : substr($this->request->URI, 1);
+        $uri = $this->getRequest()->getURI();
+        $url = ('/' == $uri) ? '' : substr($uri, 1);
         $parameters = $this->routeURL($url);
         parse_str($parameters, $parameters);
         $_GET = $parameters;

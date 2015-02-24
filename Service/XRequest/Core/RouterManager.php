@@ -61,14 +61,18 @@ class RouterManager {
     public function route($url) {
         foreach ( $this->serviceConfiguration['rules'] as $name => $rule ) {
             $requestPattern = $rule['source'];
-            preg_match_all('/\\{\\$(.*?):(.*?)\\}/', $rule['destination'], $parameters);
+            preg_match_all('/\\{\\$(.*?):(.*?)\\}/', $requestPattern, $parameters);
             foreach ( $parameters[0] as $index => $matchedParameter ) {
-                $paramPattern = $parameters[2][$index];
-                $paramPattern = sprintf('(%s)', substr($paramPattern, 1, strlen($paramPattern)-2));
-                $requestPattern = str_replace($matchedParameter, $paramPattern, $requestPattern);
+                $requestPattern = str_replace($matchedParameter, '{'.$index.'}', $requestPattern);
+            }
+            $requestPattern = preg_quote($requestPattern, '/');
+            
+            foreach ( $parameters[2] as $index => $matchedParameter ) {
+                $paramPattern = substr($matchedParameter, 1, strlen($matchedParameter)-2);
+                $requestPattern = str_replace('\\{'.$index.'\\}', '('.$paramPattern.')', $requestPattern);
             }
         
-            $requestPattern = sprintf('/^%s$/', $requestPattern);
+            $requestPattern = '/^'.$requestPattern.'$/';
             if ( 0 == preg_match($requestPattern, $url, $matchedParametersFromUrl) ) {
                 continue;
             }
@@ -76,7 +80,7 @@ class RouterManager {
             $targetUrl = $rule['destination'];
             array_shift($matchedParametersFromUrl);
             foreach ( $parameters[1] as $index => $paramName ) {
-                $paramName = sprintf('{$%s}', $paramName);
+                $paramName = '{$'.$paramName.'}';
                 $targetUrl = str_replace($paramName, $matchedParametersFromUrl[$index], $targetUrl);
             }
             
@@ -101,13 +105,9 @@ class RouterManager {
         $query = str_replace('\\', '', $query);
         preg_match_all('/\\{\\$(.*?):(.*?)\\}/', $query, $urlParameters);
         foreach ( $urlParameters[0] as $index => $matchedParameter ) {
-            $paramName = $urlParameters[1][$index];
-            $query = str_replace($matchedParameter, $parameters[$paramName], $query);
+            $query = str_replace($matchedParameter, $parameters[$index], $query);
         }
         
-        $scheme = $this->requestService->getRequest()->getScheme();
-        $host = $this->requestService->getRequest()->getHost();
-        $url = sprintf('%s://%s/%s', $scheme, $host, $query);
-        return $url;
+        return '/'.$query;
     }
 }
