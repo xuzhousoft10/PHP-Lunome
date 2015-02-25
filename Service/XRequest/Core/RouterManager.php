@@ -59,6 +59,10 @@ class RouterManager {
      * @return mixed
      */
     public function route($url) {
+        $url = parse_url($url);
+        $query = isset($url['query']) ? $url['query'] : '';
+        $url = $url['path'];
+        
         foreach ( $this->serviceConfiguration['rules'] as $name => $rule ) {
             $requestPattern = $rule['source'];
             preg_match_all('/\\{\\$(.*?):(.*?)\\}/', $requestPattern, $parameters);
@@ -84,6 +88,9 @@ class RouterManager {
                 $targetUrl = str_replace($paramName, $matchedParametersFromUrl[$index], $targetUrl);
             }
             
+            if ( !empty($query) ) {
+                $targetUrl .= '&'.$query;
+            }
             return $targetUrl;
         }
         
