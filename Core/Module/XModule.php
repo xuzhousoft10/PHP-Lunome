@@ -121,4 +121,25 @@ abstract class XModule {
     public function isEnabled(){
         return $this->getManagerConfigurationValue('enable');
     }
+    
+    /**
+     * @return string
+     */
+    public function getPrettyName() {
+        return $this->getName();
+    }
+    
+    /**
+     * @return string
+     */
+    public function getDescription() {
+        return '';
+    }
+    
+    /**
+     * @return array
+     */
+    public function getVersion() {
+        return array(0,0,0);
+    }
 }

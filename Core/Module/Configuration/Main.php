@@ -1,16 +1,24 @@
 <?php
 return array (
-  'Lunome' => 
+  'Administration' => 
   array (
     'enable' => true,
     'default' => true,
   ),
+  'Admin' => 
+  array (
+    'enable' => false,
+  ),
   'Backend' => 
   array (
-    'enable' => true,
+    'enable' => false,
+  ),
+  'Lunome' => 
+  array (
+    'enable' => false,
   ),
   'Smartphone' => 
   array (
-    'enable' => true,
+    'enable' => false,
   ),
 );

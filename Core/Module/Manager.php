@@ -119,9 +119,6 @@ class Manager extends UtilManager {
      * @return \X\Core\Module\XModule
      */
     public function get( $name ) {
-        if ( !$this->has($name) ) {
-            throw new Exception("Module '$name' can not be found.");
-        }
         return $this->load($name);
     }
     
