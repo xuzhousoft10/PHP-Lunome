@@ -125,7 +125,13 @@ class Manager extends UtilManager {
         if ( !$this->isLoaded($name) ) {
             $this->load($name, $this->configuration[$name]);
         }
-        return $this->services[$name]['service'];
+        
+        /* @var $service \X\Core\Service\XService */
+        $service = $this->services[$name]['service'];
+        if ( $service->isEnabled() && $service->isLazyLoadEnabled() && XService::STATUS_STOPPED===$service->getStatus() ) {
+            $service->start();
+        }
+        return $service;
     }
     
     /**

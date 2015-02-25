@@ -3,6 +3,7 @@ namespace X\Core\Test\Service;
 /**
  * 
  */
+use X\Core\X;
 use X\Core\Util\TestCase;
 use X\Core\Service\Manager;
 use X\Core\Util\Exception;
@@ -27,7 +28,7 @@ class ManagerTest extends TestCase {
      */
     protected function setUp() {
         parent::setUp();
-        $this->manager = Manager::getManager();
+        $this->manager = X::system()->getServiceManager();
         $this->oldConfiguration = $this->manager->getConfiguration()->toArray();
         $this->cleanTheConfiguration($this->manager);
     }
@@ -202,5 +203,20 @@ class ManagerTest extends TestCase {
         $this->manager->start();
         $this->assertTrue($this->manager->isLoaded('TestService'));
         $this->manager->stop();
+    }
+    
+    /**
+     * 
+     */
+    public function test_autoStartDelayedServiceWhenUserGetService() {
+        $this->manager->register('X\\Core\\Test\\Fixture\\Service\\TestService');
+        $service = $this->manager->get('TestService');
+        $this->assertSame(XService::STATUS_STOPPED, $service->getStatus());
+        $service->install();
+        $service->enable();
+        $service->enableLazyLoad();
+        
+        $service = $this->manager->get('TestService');
+        $this->assertSame(XService::STATUS_RUNNING, $service->getStatus());
     }
 }
