@@ -27,7 +27,7 @@ class Module extends \X\Core\Module\XModule {
         $group = $this->getName();
         $actionService->addGroup($group, __NAMESPACE__);
         $actionService->setGroupDefaultAction($group, 'movie/index');
-        $actionService->getParameter()->setValues($parameters);
+        $actionService->getParameter()->merge($parameters);
         $actionService->runGroup($group);
     }
 }

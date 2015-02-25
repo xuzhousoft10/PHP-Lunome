@@ -23,10 +23,17 @@ use X\Module\Lunome\Model\Account\AccountInformationModel;
  */
 class Service extends \X\Core\Service\XService {
     /**
-     * (non-PHPdoc)
-     * @see \X\Core\Service\XService::afterStart()
+     * @var string
      */
-    protected function afterStart() {
+    protected static $serviceName = 'User';
+    
+    /**
+     * (non-PHPdoc)
+     * @see \X\Core\Service\XService::start()
+     */
+    public function start() {
+        parent::start();
+        
         if ( isset($_SERVER['HTTP_HOST']) && 'lunome.kupoy.com' === $_SERVER['HTTP_HOST'] && $this->getIsGuest()) {
             if ( false !== strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'firefox') ) {
                 $account = AccountModel::model()->find(array('account'=>'0'));
