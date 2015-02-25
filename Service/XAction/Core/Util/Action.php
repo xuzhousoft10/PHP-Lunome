@@ -2,31 +2,32 @@
 /**
  * Namespace definition
  */
-namespace X\Service\XAction\Core;
+namespace X\Service\XAction\Core\Util;
+
+/**
+ * 
+ */
+use X\Service\XAction\Core\Exception;
 
 /**
  * The action class for XAction service.
- * 
  * @author Michael Luthor <michael.the.ranidae@gmail.com>
  * @version $Id$
- * 
- * @abstract integer runAction()
+ * @method mixed runAction()
  */
-abstract class Action extends Basic {
+abstract class Action {
     /**
      * The name of group that this action belongs.
-     * 
      * @var string
      */
-    protected $group = null;
+    protected $groupName = null;
     
     /**
      * Get the name of group of action.
-     * 
      * @return string
      */
-    public function getGroup() {
-        return $this->group;
+    public function getGroupName() {
+        return $this->groupName;
     }
     
     /**
@@ -34,8 +35,8 @@ abstract class Action extends Basic {
      * 
      * @param string $group The name of group that this action belongs.
      */
-    public function __construct( $group ) {
-        $this->group = $group;
+    public function __construct( $groupName ) {
+        $this->groupName = $groupName;
     }
     
     /**
@@ -54,8 +55,9 @@ abstract class Action extends Basic {
      */
     public function run( $parameters=array() ){
         $this->beforeRunAction();
-        $this->doRunAction($parameters);
+        $result = $this->doRunAction($parameters);
         $this->afterRunAction();
+        return $result;
     }
     
     /**
@@ -81,8 +83,6 @@ abstract class Action extends Basic {
                 $paramsToMethod[$name] = $parameters[$name];
             } else if ( $parmInfo->isOptional() && $parmInfo->isDefaultValueAvailable() ) {
                 $paramsToMethod[$name] = $parmInfo->getDefaultValue();
-            } else if ( $parmInfo->allowsNull() ) {
-                $paramsToMethod[$name] = null;
             } else {
                 throw new Exception('Parameters to action handler is not available.');
             }

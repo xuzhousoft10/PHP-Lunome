@@ -5,13 +5,18 @@
 namespace X\Service\XAction\Core\Handler;
 
 /**
+ * 
+ */
+use X\Core\X;
+
+/**
  * The Web action class.
  * 
  * @author  Michael Luthor <michael.the.ranidae@gmail.com>
  * @version 0.0.0
  * @since   Version 0.0.0
  */
-abstract class WebAction extends \X\Service\XAction\Core\Action {
+abstract class WebAction extends \X\Service\XAction\Core\Util\Action {
     /**
      * @param unknown $path
      * @param unknown $params
@@ -34,7 +39,7 @@ abstract class WebAction extends \X\Service\XAction\Core\Action {
     public function gotoURL( $url, $parms=null ) {
         $url = $this->createURL($url, $parms);
         header("Location: $url");
-        exit();
+        X::system()->stop();
     }
     
     /**
@@ -83,6 +88,6 @@ abstract class WebAction extends \X\Service\XAction\Core\Action {
             echo $this->E404Content;
         }
         
-        exit();
+        X::system()->stop();
     }
 }

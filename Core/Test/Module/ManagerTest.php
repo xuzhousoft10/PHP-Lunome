@@ -56,6 +56,10 @@ class ManagerTest extends TestCase {
         } catch ( Exception $e ) {}
         $module = $manager->get($testModuleName);
         
+        $this->assertSame($module->getName(), $module->getPrettyName());
+        $this->assertEmpty($module->getDescription());
+        $this->assertSame(array(0,0,0), $module->getVersion());
+        
         $module->setAsDefault();
         $this->assertTrue($module->isDefaultModule());
         $module->unsetAsDefault();
