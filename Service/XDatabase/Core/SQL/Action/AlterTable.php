@@ -134,9 +134,6 @@ class AlterTable extends ActionAboutTable {
      */
     protected function buildHandlerAction() {
         $handler = sprintf('actionHandler%s', ucfirst($this->action['handler']));
-        if ( !method_exists($this, $handler) ) {
-            throw new Exception('Can not find handler "'.$this->action['handler'].'" to AlterTablele.');
-        }
         $this->$handler();
     }
     

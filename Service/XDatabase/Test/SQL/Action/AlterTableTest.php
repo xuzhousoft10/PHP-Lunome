@@ -61,6 +61,16 @@ class AlterTableTest extends ServiceTestCase {
     /**
      * 
      */
+    public function test_noTableName() {
+        try {
+            $this->alterTable->dropColumn('test')->toString();
+            $this->fail('An exception should be throwed if there is no table name been setted while try to generate sql.');
+        } catch ( Exception $e ){}
+    }
+    
+    /**
+     * 
+     */
     public function test_addIndex( ) {
         $sql = $this->alterTable->name('table1')->addIndex('test_index', array('id','test_col'))->toString();
         $this->assertSame('ALTER TABLE `table1` ADD INDEX `test_index` (`id`,`test_col`)', $sql);
