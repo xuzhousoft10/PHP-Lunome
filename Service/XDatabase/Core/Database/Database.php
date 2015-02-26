@@ -5,6 +5,11 @@
 namespace X\Service\XDatabase\Core\Database;
 
 /**
+ * 
+ */
+use X\Service\XDatabase\Core\Util\Exception;
+
+/**
  * Database
  * 
  * @author  Michael Luthor <michael.the.ranidae@gmail.com>
@@ -16,10 +21,9 @@ namespace X\Service\XDatabase\Core\Database;
  * @method string quoteColumnName($name)
  * @method string quoteTableName($name)
  */
-class Database extends Basic {
+class Database {
     /**
      * Initiate the database by given config information.
-     *
      * @param array $config The config information to initiate the database.
      */
     public function __construct( $config ) {
@@ -28,7 +32,6 @@ class Database extends Basic {
     
     /**
      * Do magic call
-     * 
      * @param string $name The name of method to call
      * @param array $parms The parmas for the method
      */
@@ -67,15 +70,11 @@ class Database extends Basic {
     protected function getDriverByConfig() {
         $driverName = null;
         $driverHandler = null;
-        if ( isset($this->config['driver']) ) {
-            list($driverName, $driverHandler) = explode('.', $this->config['driver']);
-        }
-        else if ( isset($this->config['dsn']) ) {
+        if ( isset($this->config['dsn']) ) {
             $information = explode(':', $this->config['dsn']);
             $driverName = ucfirst($information[0]);
             $driverHandler = 'PDO';
-        }
-        else {
+        } else {
             throw new Exception('Can not find driver from config.');
         }
         

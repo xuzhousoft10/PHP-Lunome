@@ -5,14 +5,14 @@ namespace X\Service\XDatabase\Core\Database;
  * 
  */
 use X\Core\X;
-use X\Core\Util\Manager;
+use X\Core\Util\Manager as CoreManager;
 use X\Service\XDatabase\Service;
 use X\Service\XDatabase\Core\Util\Exception;
 
 /**
  * 
  */
-class Manager extends Manager {
+class Manager extends CoreManager {
     /**
      * @var array
      */
@@ -24,6 +24,11 @@ class Manager extends Manager {
     private $service = null;
     
     /**
+     * @var string
+     */
+    const DEFAULT_DATADASE = 'default';
+    
+    /**
      * (non-PHPdoc)
      * @see \X\Core\Util\Manager::start()
      */
@@ -33,9 +38,9 @@ class Manager extends Manager {
         
         $definedDatabases = $this->service->getConfiguration()->get('databases', array());
         foreach ( $definedDatabases as $name => $config ) {
-            $this->add($name, $config);
+            $this->load($name, $config);
         }
-        $this->currentDatabaseName = 'default';
+        $this->currentDatabaseName = self::DEFAULT_DATADASE;
     }
     
     /**
@@ -49,12 +54,42 @@ class Manager extends Manager {
     }
     
     /**
+     * @param unknown $name
+     * @param unknown $config
+     */
+    public function load( $name, $config ) {
+        $this->dbNotExistsRequired($name);
+        $this->databases[$name] = new Database($config);
+    }
+    
+    /**
      * @param string $name
      * @param array $config
      */
-    public function add( $name, $config ) {
-        $this->dbNotExistsRequired($name);
-        $this->databases[$name] = new Database($config);
+    public function register( $name, $config ) {
+        $this->load($name, $config);
+        
+        $configuration = $this->service->getConfiguration();
+        if ( !isset($configuration['databases']) ) {
+            $configuration['databases'] = array();
+        }
+        $configuration['databases'][$name]=$config;
+        $configuration->save();
+    }
+    
+    /**
+     * @param string $name
+     */
+    public function unregister( $name ) {
+        $this->dbExistsRequired($name);
+        unset($this->databases[$name]);
+        if ( $this->currentDatabaseName === $name ) {
+            $this->currentDatabaseName = null;
+        }
+        
+        $configuration = $this->service->getConfiguration();
+        unset($configuration['databases'][$name]);
+        $configuration->save();
     }
     
     /**
@@ -95,17 +130,6 @@ class Manager extends Manager {
     public function switchTo( $name ) {
         $this->dbExistsRequired($name);
         $this->currentDatabaseName = $name;
-    }
-    
-    /**
-     * @param string $name
-     */
-    public function remove( $name ) {
-        $this->dbExistsRequired($name);
-        unset($this->databases[$name]);
-        if ( $this->currentDatabaseName === $name ) {
-            $this->currentDatabaseName = null;
-        }
     }
     
     /**

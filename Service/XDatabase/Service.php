@@ -43,6 +43,7 @@ class Service extends \X\Core\Service\XService {
     public function stop() {
         $this->dbManager->stop();
         $this->dbManager->destroy();
+        $this->dbManager = null;
     }
     
     /**
