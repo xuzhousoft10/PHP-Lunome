@@ -2,7 +2,7 @@
 /**
  * action.about.table.php
  */
-namespace X\Service\XDatabase\Core\SQL\Action;
+namespace X\Service\XDatabase\Core\SQL\Util;
 
 /**
  * ActionAboutTable
@@ -11,7 +11,7 @@ namespace X\Service\XDatabase\Core\SQL\Action;
  * @since   0.0.0
  * @version 0.0.0
  */
-abstract class ActionAboutTable extends Basic {
+abstract class ActionAboutTable extends ActionBase {
     /**
      * The name of table to operate.
      *

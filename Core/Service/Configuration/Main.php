@@ -6,4 +6,10 @@ return array (
     'enable' => true,
     'delay' => true,
   ),
+  'XDatabase' => 
+  array (
+    'enable' => false,
+    'class' => 'X\\Service\\XDatabase\\Service',
+    'delay' => true,
+  ),
 );

@@ -14,7 +14,6 @@ namespace X\Service\XDatabase\Core\Driver;
 interface InterfaceDriver {
     /**
      * Execute the query, and return true on successed and false if failed.
-     * 
      * @param string $query The query to execute.
      * @return boolean
      */
@@ -23,7 +22,6 @@ interface InterfaceDriver {
     /**
      * Execute the query and return the result of query on successed 
      * and false if failed.
-     * 
      * @param string $query
      * @return boolean|array
      */
@@ -31,7 +29,6 @@ interface InterfaceDriver {
     
     /**
      * Quote the string for safety using in query.
-     * 
      * @param string $string The value to quote.
      * @return string
      */
@@ -39,24 +36,24 @@ interface InterfaceDriver {
     
     /**
      * Quote the name of table for safty using in query string.
-     *
      * @param string $name The name to quoted.
      * @return string
      */
     public function quoteTableName( $name );
     
+    /**
+     * @param unknown $name
+     */
     public function quoteColumnName( $name );
     
     /**
      * Get the last insert id after execute a insert query.
-     *
      * @return integer
      */
-    public function lastInsertId();
+    public function getLastInsertId();
     
     /**
      * Get the list of table names
-     * 
      * @return array
      */
     public function getTables();

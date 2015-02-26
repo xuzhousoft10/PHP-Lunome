@@ -23,6 +23,18 @@ use X\Service\XDatabase\Core\Util\Exception;
  */
 class Database {
     /**
+     * The config about the db.
+     * @var array
+     */
+    protected $config = array();
+    
+    /**
+     * The driver that current database object is using.
+     * @var \X\Database\Driver\Driver
+    */
+    protected $driver = null;
+    
+    /**
      * Initiate the database by given config information.
      * @param array $config The config information to initiate the database.
      */
@@ -40,20 +52,7 @@ class Database {
     }
     
     /**
-     * The config about the db.
-     * @var array
-     */
-    protected $config = array();
-    
-    /**
-     * The driver that current database object is using.
-     * @var \X\Database\Driver\Driver
-     */
-    protected $driver = null;
-    
-    /**
      * Get driver for current Database object.
-     *
      * @return \X\Database\Driver\Driver
      */
     protected function getDriver() {
@@ -78,17 +77,11 @@ class Database {
             throw new Exception('Can not find driver from config.');
         }
         
-        $driverClass = sprintf('%s\\Driver\\%s\\%s', __NAMESPACE__, $driverName, $driverHandler);
+        $driverClass = 'X\\Service\\XDatabase\\Core\\Driver\\'.$driverName.'\\'.$driverHandler;
+        if ( !class_exists($driverClass) ) {
+            throw new Exception('Unable to find database driver "'.$driverClass.'".');
+        }
+        
         return new $driverClass($this->config);
-    }
-    
-    /**
-     * Get config value from current database configs.
-     * 
-     * @param string $name The name of config option.
-     * @return mixed
-     */
-    private function getConfig( $name ) {
-        return $this->config[ $name ];
     }
 }

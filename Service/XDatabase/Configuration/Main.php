@@ -2,7 +2,7 @@
 return array (
   'databases' => 
   array (
-    'default' => 
+    'test-default' => 
     array (
       'dsn' => 'mysql:host=localhost;dbname=test',
       'username' => 'root',

@@ -2,24 +2,18 @@
 /**
  * This file implements the exoression for sql.
  */
-namespace X\Service\XDatabase\Core\SQL;
-
-/**
- * Use statements
- */
-use X\Service\XDatabase\Core\Basic;
+namespace X\Service\XDatabase\Core\SQL\Util;
 
 /**
  * The expression class.
  */
-class Expression extends Basic {
+class Expression {
     /**
      * @var string
      */
     private $expression = null;
     
     /**
-     * 
      * @param unknown $expression
      */
     public function __construct($expression) {

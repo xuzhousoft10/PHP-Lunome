@@ -2,7 +2,7 @@
 /**
  * Select.php
  */
-namespace X\Service\XDatabase\Core\SQL\Action;
+namespace X\Service\XDatabase\Core\SQL\Util;
 
 /**
  * Use statements
@@ -17,7 +17,7 @@ use X\Service\XDatabase\Service as XDatabaseService;
  * @since   0.0.0
  * @version 0.0.0
  */
-abstract class Basic extends \X\Service\XDatabase\Core\Basic {
+abstract class ActionBase {
     /**
      * This value contains each part of query string.
      * 
@@ -40,8 +40,9 @@ abstract class Basic extends \X\Service\XDatabase\Core\Basic {
      */
     public function toString() {
         foreach ( $this->getBuildHandlers() as $handler ) {
-            if ( method_exists($this, $handler) ) {
-                call_user_func_array(array($this, $handler), array());
+            $handlerMethod = 'buildHandler'.ucfirst($handler);
+            if ( method_exists($this, $handlerMethod) ) {
+                call_user_func_array(array($this, $handlerMethod), array());
             } else {
                 $this->sqlCommand[] = $handler;
             }
@@ -101,6 +102,8 @@ abstract class Basic extends \X\Service\XDatabase\Core\Basic {
      * @return \X\Service\XDatabase\Core\Database
      */
     protected function getDatabase() {
-        return X::system()->getServiceManager()->get(XDatabaseService::getServiceName())->getDatabase();
+        /* @var $service XDatabaseService */
+        $service = X::system()->getServiceManager()->get(XDatabaseService::getServiceName());
+        return $service->getDatabaseManager()->get();
     }
 }

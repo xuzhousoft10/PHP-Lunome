@@ -2,7 +2,7 @@
 /**
  * default.value.php
  */
-namespace X\Service\XDatabase\Core\SQL;
+namespace X\Service\XDatabase\Core\SQL\Util;
 
 /**
  * 

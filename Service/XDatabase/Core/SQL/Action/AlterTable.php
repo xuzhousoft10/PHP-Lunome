@@ -7,177 +7,85 @@ namespace X\Service\XDatabase\Core\SQL\Action;
 /**
  * Use statements
  */
-use X\Service\XDatabase\Core\Exception;
+use X\Service\XDatabase\Core\Util\Exception;
+use X\Service\XDatabase\Core\SQL\Util\ActionAboutTable;
 
 /**
  * AlterTable
- * 
  * @author  Michael Luthor <michael.the.ranidae@gmail.com>
  * @since   0.0.0
  * @version 0.0.0
  */
 class AlterTable extends ActionAboutTable {
     /**
-     * Get AlterTable name part of command for query.
-     * This method is called by toString() method.
-     *
-     * @return string
-     */
-    protected function getNameString() {
-        if ( is_null($this->name) ) {
-            throw new Exception('Name can not be empty to rename the table.');
-        }
-        $this->sqlCommand[] = sprintf('ALTER TABLE %s', $this->quoteTableName($this->name));
-        return $this;
-    }
-    
-    /**
-     * This value contains the toString handler and parms to that handler.
-     * 
-     * @var array
-     */
-    protected $action = array('handler'=>null, 'parms'=>null);
-    
-    /**
-     * Get action part of query command.
-     * 
-     * @return void
-     */
-    protected function getActionString() {
-        $handler = sprintf('actionHandler%s', ucfirst($this->action['handler']));
-        if ( !method_exists($this, $handler) ) {
-            throw new Exception('Can not find handler "'.$this->action['handler'].'" foAlterTablele.');
-        }
-        $this->$handler();
-    }
-    
-    /**
      * Set AlterTable action to add column.
-     * 
      * @param \X\Service\XDatabase\Core\Table\Column $column
      * @return AlterTable
      */
-    public function addColumn( $column ) {
+    public function addColumn( $name, $definition ) {
         $this->action['handler'] = 'addColumn';
-        $this->action['parms'] = array('name'=>$column->getName(), 'definition'=>$column);
+        $this->action['parms'] = array('name'=>$name, 'definition'=>$definition);
         return $this;
-    }
-    
-    /**
-     * Get the action handler string of add column to query command.
-     * 
-     * @return void
-     */
-    protected function actionHandlerAddColumn() {
-        $this->sqlCommand[] = sprintf(
-            'ADD %s %s', 
-            $this->quoteColumnName($this->action['parms']['name']),
-            $this->action['parms']['definition']);
     }
     
     /**
      * Set AlterTable action to "add index"
-     * 
      * @param string $name The name of the index.
      * @param array $columns The column list that index contains.
      * @return AlterTable
      */
     public function addIndex( $name, $columns ) {
+        if ( empty($columns) ) {
+            throw new Exception('Unable to add index without columns.');
+        }
         $this->action['handler'] = 'addIndex';
         $this->action['parms'] = array('name'=>$name, 'columns'=>$columns);
         return $this;
     }
     
     /**
-     * Add the action handler string of add index to query command.
-     * 
-     * @return void
-     */
-    protected function actionHandlerAddIndex() {
-        $this->sqlCommand[] = sprintf('ADD INDEX %s (%s)',
-            $this->quoteColumnName($this->action['parms']['name']),
-            implode(',', $this->quoteColumnNames($this->action['parms']['columns'])));
-    }
-    
-    /**
      * Set AlterTable action to "add primary key"
-     * 
      * @param array|string $columns The column names to be primary key
      * @return AlterTable
      */
     public function addPrimaryKey( $columns ) {
+        if ( empty($columns) ) {
+            throw new Exception('Unable to add primary key without columns.');
+        }
         $this->action['handler'] = 'addPrimaryKey';
         $this->action['parms'] = array('columns' => $columns);
         return $this;
     }
     
     /**
-     * Add the action handler string of add primary key to query command.
-     * 
-     * @return void
-     */
-    protected function actionHandlerAddPrimaryKey() {
-        $columns = $this->action['parms']['columns'];
-        $columns = is_array($columns) ? $columns : array($columns);
-        $columns = $this->quoteColumnNames($columns);
-        $columns = implode(',', $columns);
-        $this->sqlCommand[] = sprintf('ADD PRIMARY KEY (%s)', $columns);
-    }
-    
-    /**
      * Set AlterTable action to "add unique"
-     * 
      * @param array|string $columns The columns that unique contains.
      * @return AlterTable
      */
     public function addUnique( $columns ) {
+        if ( empty($columns) ) {
+            throw new Exception('Unable to add unique without columns.');
+        }
         $this->action['handler'] = 'addUnique';
         $this->action['parms'] = array('columns' => $columns);
         return $this;
     }
     
     /**
-     * Add the action handler string of "add unique" to query command.
-     * 
-     * @return void
-     */
-    protected function actionHandlerAddUnique() {
-        $columns = $this->action['parms']['columns'];
-        $columns = is_array($columns) ? $columns : array($columns);
-        $columns = $this->quoteColumnNames($columns);
-        $columns = implode(',', $columns);
-        $this->sqlCommand[] = sprintf('ADD UNIQUE ( %s )',$columns);
-    }
-    
-    /**
      * Set AlterTable action to "change column"
-     * 
      * @param string $column The name of column to change
      * @param string $newName The new name of the column
      * @param string $definition The definition of the column
      * @return AlterTable
      */
-    public function changeColumn( $column, $newName, $definition='' ) {
+    public function changeColumn( $column, $newName, $definition) {
         $this->action['handler'] = 'changeColumn';
         $this->action['parms'] = array('column'=>$column, 'newName'=>$newName, 'definition'=>$definition);
         return $this;
     }
     
     /**
-     * Add the action handler string of "change column" to query command.
-     * 
-     * @return void
-     */
-    protected function actionHandlerChangeColumn() {
-        $this->sqlCommand[] = sprintf('CHANGE COLUMN %s %s %s', 
-            $this->quoteColumnName($this->action['parms']['column']),
-            $this->quoteColumnName($this->action['parms']['newName']),
-            $this->action['parms']['definition']);
-    }
-    
-    /**
      * Set AlterTable action to "drop column"
-     * 
      * @param string $name The name of column to drop
      * @return AlterTable
      */
@@ -188,17 +96,7 @@ class AlterTable extends ActionAboutTable {
     }
     
     /**
-     * Add the action handler string of "drop column" to query command.
-     * 
-     * @return void
-     */
-    protected function actionHandlerDropColumn() {
-        $this->sqlCommand[] = sprintf('DROP COLUMN %s', $this->quoteColumnName($this->action['parms']['name']));
-    }
-    
-    /**
      * Set AlterTable action to "drop primary key"
-     * 
      * @return AlterTable
      */
     public function dropPrimaryKey() {
@@ -207,17 +105,7 @@ class AlterTable extends ActionAboutTable {
     }
     
     /**
-     * Add the action handler string of "drop column" to query command.
-     * 
-     * @return void
-     */
-    protected function actionHandlerDropPrimaryKey() {
-        $this->sqlCommand[] = 'DROP PRIMARY KEY';
-    }
-    
-    /**
      * Set AlterTable action to "drop index"
-     * 
      * @param string $name The name of index to drop
      * @return AlterTable
      */
@@ -228,21 +116,124 @@ class AlterTable extends ActionAboutTable {
     }
     
     /**
-     * Add the action handler string of "drop index" to query command.
-     * 
+     * Get AlterTable name part of command for query.
+     * This method is called by toString() method.
+     * @return string
+     */
+    protected function buildHandlerName() {
+        if ( null === $this->name ) {
+            throw new Exception('Name can not be empty to alter the table.');
+        }
+        $this->sqlCommand[] = 'ALTER TABLE '.$this->quoteTableName($this->name);
+        return $this;
+    }
+    
+    /**
+     * Get action part of query command.
      * @return void
      */
-    protected function actionHandlerDropIndex() {
-        $this->sqlCommand[] = sprintf('DROP INDEX %s', $this->action['parms']['name']);
+    protected function buildHandlerAction() {
+        $handler = sprintf('actionHandler%s', ucfirst($this->action['handler']));
+        if ( !method_exists($this, $handler) ) {
+            throw new Exception('Can not find handler "'.$this->action['handler'].'" to AlterTablele.');
+        }
+        $this->$handler();
     }
     
     /**
      * Get the name list of handlers to build the query string
-     * 
      * @see \X\Database\SQL\Action\Base::getBuildHandlers()
      * @return array
      */
     protected function getBuildHandlers() {
-        return array('getNameString', 'getActionString');
+        return array('name','action');
+    }
+    
+    /**
+     * This value contains the toString handler and parms to that handler.
+     * @var array
+     */
+    protected $action = array('handler'=>null, 'parms'=>null);
+    
+    /**
+     * Get the action handler string of add column to query command.
+     * @return void
+     */
+    protected function actionHandlerAddColumn() {
+        $name = $this->quoteColumnName($this->action['parms']['name']);
+        $definition = $this->action['parms']['definition'];
+        $this->sqlCommand[] = 'ADD '.$name.' '.$definition;
+    }
+    
+    /**
+     * Add the action handler string of add index to query command.
+     * @return void
+     */
+    protected function actionHandlerAddIndex() {
+        $name = $this->quoteColumnName($this->action['parms']['name']);
+        $columns = implode(',', $this->quoteColumnNames($this->action['parms']['columns']));
+        $this->sqlCommand[] = 'ADD INDEX '.$name.' ('.$columns.')';
+    }
+    
+    /**
+     * Add the action handler string of add primary key to query command.
+     * @return void
+     */
+    protected function actionHandlerAddPrimaryKey() {
+        $columns = $this->action['parms']['columns'];
+        $columns = is_array($columns) ? $columns : array($columns);
+        $columns = $this->quoteColumnNames($columns);
+        $columns = implode(',', $columns);
+        $this->sqlCommand[] = 'ADD PRIMARY KEY ('.$columns.')';
+    }
+    
+    /**
+     * Add the action handler string of "add unique" to query command.
+     * @return void
+     */
+    protected function actionHandlerAddUnique() {
+        $columns = $this->action['parms']['columns'];
+        $columns = is_array($columns) ? $columns : array($columns);
+        $columns = $this->quoteColumnNames($columns);
+        $columns = implode(',', $columns);
+        $this->sqlCommand[] = 'ADD UNIQUE ( '.$columns.' )';
+    }
+    
+    /**
+     * Add the action handler string of "change column" to query command.
+     * @return void
+     */
+    protected function actionHandlerChangeColumn() {
+        $query  = 'CHANGE COLUMN ';
+        $query .= $this->quoteColumnName($this->action['parms']['column']).' ';
+        $query .= $this->quoteColumnName($this->action['parms']['newName']).' ';
+        $query .= $this->action['parms']['definition'];
+        $this->sqlCommand[] = $query;
+    }
+    
+    /**
+     * Add the action handler string of "drop column" to query command.
+     * @return void
+     */
+    protected function actionHandlerDropColumn() {
+        $name = $this->quoteColumnName($this->action['parms']['name']);
+        $this->sqlCommand[] = 'DROP COLUMN '.$name;
+    }
+    
+    /**
+     * Add the action handler string of "drop column" to query command.
+     * @return void
+     */
+    protected function actionHandlerDropPrimaryKey() {
+        $this->sqlCommand[] = 'DROP PRIMARY KEY';
+    }
+    
+    /**
+     * Add the action handler string of "drop index" to query command.
+     * @return void
+     */
+    protected function actionHandlerDropIndex() {
+        $name = $this->quoteColumnName($this->action['parms']['name']);
+        $this->sqlCommand[] = 'DROP INDEX '.$name;
     }
 }
