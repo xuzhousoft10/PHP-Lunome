@@ -2,7 +2,7 @@
 /**
  * exception.php
  */
-namespace X\Service\XDatabase\Core;
+namespace X\Service\XDatabase\Core\Util;
 
 /**
  * Exception

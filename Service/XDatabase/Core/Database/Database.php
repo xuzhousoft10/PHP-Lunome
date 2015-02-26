@@ -2,7 +2,7 @@
 /**
  * database.php
  */
-namespace X\Service\XDatabase\Core;
+namespace X\Service\XDatabase\Core\Database;
 
 /**
  * Database
