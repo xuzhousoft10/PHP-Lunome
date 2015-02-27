@@ -3,7 +3,7 @@
  * Group.php
  */
 namespace X\Service\XDatabase\Core\SQL\Condition;
-use X\Service\XDatabase\Core\Basic;
+
 /**
  * Group
  * 
@@ -11,7 +11,7 @@ use X\Service\XDatabase\Core\Basic;
  * @since   0.0.0
  * @version 0.0.0
  */
-class Group extends Basic {
+class Group {
     /**
      * The start Group mark
      * 
@@ -39,7 +39,7 @@ class Group extends Basic {
      * @param integer $position The position of Group mark
      * @return void
      */
-    public function __construct( $position ) {
+    protected function __construct( $position ) {
         $this->position = $position;
     }
     
@@ -50,5 +50,19 @@ class Group extends Basic {
      */
     public function toString() {
         return $this->position == self::POSITION_START ? '(' : ')';
+    }
+    
+    /**
+     * @return \X\Service\XDatabase\Core\SQL\Condition\Group
+     */
+    public static function start() {
+        return new Group(self::POSITION_START);
+    }
+    
+    /**
+     * @return \X\Service\XDatabase\Core\SQL\Condition\Group
+     */
+    public static function end() {
+        return new Group(self::POSITION_END);
     }
 }

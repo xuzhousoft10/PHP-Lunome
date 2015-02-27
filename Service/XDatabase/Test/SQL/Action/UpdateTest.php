@@ -30,7 +30,5 @@ class UpdateTest extends ServiceTestCase {
             $update->values(array('col1'=>'v1'))->toString();
             $this->fail('An exception should be throwed if did not set the table name.');
         } catch( Exception $e ){}
-        
-        var_dump($sql);
     }
 }
