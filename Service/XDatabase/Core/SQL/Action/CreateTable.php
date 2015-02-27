@@ -7,59 +7,77 @@ namespace X\Service\XDatabase\Core\SQL\Action;
 /**
  * Use statements
  */
-use X\Service\XDatabase\Core\Exception;
+use X\Service\XDatabase\Core\Util\Exception;
+use X\Service\XDatabase\Core\SQL\Util\ActionAboutTable;
 
 /**
  * CreateTable
- * 
  * @author  Michael Luthor <michael.the.ranidae@gmail.com>
  * @since   0.0.0
  * @version 0.0.0
  */
 class CreateTable extends ActionAboutTable {
     /**
-     * Add name part of query string.
-     * 
-     * @return string
-     */
-    protected function getNameString() {
-        if ( is_null($this->name) ) {
-            throw new  Exception('Name can not be empty to create the table.');
-        }
-        $this->sqlCommand[] = sprintf('CREATE TABLE %s', $this->quoteTableName($this->name));
-        return $this;
-    }
-    
-    /**
-     * Definitions of new table columns.
-     * 
-     * @var array
-     */
-    protected $columns = null;
-    
-    /**
      * Set the column definitions for the table.
-     * 
      * @param array $columns The definetions of each column.
      * @return CreateTable
      */
     public function columns( $columns ) {
+        if ( empty($columns) ) {
+            throw new Exception('No columns information for creating the table.');
+        }
         $this->columns = $columns;
         return $this;
     }
     
     /**
+     * @param string $name
+     * @return \X\Service\XDatabase\Core\SQL\Action\CreateTable
+     */
+    public function primaryKey( $name ) {
+        $this->primaryKey = $name;
+        return $this;
+    }
+    
+    /**
+     * Get the handlers array, each element is the method name
+     * of the subclass class
+     *
+     * @see \X\Database\SQL\Action\Base::getBuildHandlers()
+     * @return array
+     */
+    protected function getBuildHandlers() {
+        return array('name','(', 'column','primaryKey',')');
+    }
+    
+    /**
+     * Add name part of query string.
+     * @return string
+     */
+    protected function buildHandlerName() {
+        if ( null === $this->name ) {
+            throw new  Exception('Name can not be empty to create the table.');
+        }
+        $this->sqlCommand[] = 'CREATE TABLE '.$this->quoteTableName($this->name);
+        return $this;
+    }
+    
+    /**
+     * Definitions of new table columns.
+     * @var array
+     */
+    protected $columns = null;
+    
+    /**
      * Add the column definination part of query.
-     * 
      * @return void
      */
-    protected function getColumnString() {
+    protected function buildHandlerColumn() {
         $columns = array();
-        foreach ( $this->columns as $column ) {
-            /* @var $column \X\Service\XDatabase\Core\Table\Column */
-            $columns[] = sprintf('%s %s', $this->quoteColumnName($column->getName()), $column);
+        foreach ( $this->columns as $name => $definition ) {
+            $columns[] = $this->quoteColumnName($name).' '.$definition;
         }
-        $this->sqlCommand[] = sprintf('%s', implode(',', $columns));
+        $this->sqlCommand[] = implode(',', $columns);
     }
     
     /**
@@ -69,32 +87,11 @@ class CreateTable extends ActionAboutTable {
     
     /**
      * 
-     * @param unknown $name
-     * @return \X\Service\XDatabase\Core\SQL\Action\CreateTable
      */
-    public function primaryKey( $name ) {
-        $this->primaryKey = $name;
-        return $this;
-    }
-    
-    /**
-     * 
-     */
-    protected function getPrimaryKeyString() {
+    protected function buildHandlerPrimaryKey() {
         if ( null === $this->primaryKey ) {
             return;
         }
-        $this->sqlCommand[] = sprintf(', PRIMARY KEY (%s)', $this->quoteColumnName($this->primaryKey));
-    }
-    
-    /**
-     * Get the handlers array, each element is the method name
-     * of the subclass class 
-     * 
-     * @see \X\Database\SQL\Action\Base::getBuildHandlers()
-     * @return array
-     */
-    protected function getBuildHandlers() {
-        return array('getNameString','(', 'getColumnString','getPrimaryKeyString',')');
+        $this->sqlCommand[] = ', PRIMARY KEY ('.$this->quoteColumnName($this->primaryKey).')';
     }
 }

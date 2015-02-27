@@ -3,62 +3,44 @@
  * Select.php
  */
 namespace X\Service\XDatabase\Core\SQL\Action;
-
+/**
+ * 
+ */
+use X\Service\XDatabase\Core\SQL\Util\ActionAboutTable;
+use X\Service\XDatabase\Core\Util\Exception;
 /**
  * Update
- * 
  * @author  Michael Luthor <michael.the.ranidae@gmail.com>
  * @version 0.0.0
  * @since   0.0.0
  */
-class Describe extends Basic {
-    /**
-     * Add action name into query
-     *
-     * @return Update
-     */
-    protected function getActionNameString() {
-        $this->sqlCommand[] = 'DESCRIBE';
-        return $this;
-    }
-    
-
-    /**
-     * The table reference.
-     *
-     * @var string
-     */
-    protected $tableReference = '';
-    
-    /**
-     * Set Table to Update
-     *
-     * @param string $table The table's name to Update
-     * @return Update
-     */
-    public function table( $table ) {
-        $this->tableReference = $table;
-        return $this;
-    }
-    
-    /**
-     * Add table string into query.
-     *
-     * @return Update
-     */
-    protected function getTableString() {
-        $this->sqlCommand[] = $this->quoteTableName($this->tableReference);
-        return $this;
-    }
-    
+class Describe extends ActionAboutTable {
     /**
      * (non-PHPdoc)
      * @see \X\Database\SQL\Action\Base::getBuildHandlers() Base::getBuildHandlers()
      */
     protected function getBuildHandlers() {
-        return array(
-                'getActionNameString',
-                'getTableString',
-        );
+        return array('action','table');
+    }
+    
+    /**
+     * Add action name into query
+     * @return Update
+     */
+    protected function buildHandlerAction() {
+        $this->sqlCommand[] = 'DESCRIBE';
+        return $this;
+    }
+    
+    /**
+     * Add table string into query.
+     * @return Update
+     */
+    protected function buildHandlerTable() {
+        if ( null === $this->name ) {
+            throw new Exception('Unable to do describe if table name is empty.');
+        }
+        $this->sqlCommand[] = $this->quoteTableName($this->name);
+        return $this;
     }
 }

@@ -3,21 +3,14 @@ namespace X\Service\XDatabase\Test\SQL\Action;
 /**
  * 
  */
-use X\Core\Util\TestCase\ServiceTestCase;
 use X\Service\XDatabase\Core\SQL\Action\AlterTable;
 use X\Service\XDatabase\Core\Util\Exception;
+use X\Service\XDatabase\Test\Util\ServiceTestCase;
 
 /**
  * 
  */
 class AlterTableTest extends ServiceTestCase {
-    /**
-     * @return string
-     */
-    protected function getServiceClass() {
-        return 'X\\Service\\XDatabase\\Service';
-    }
-    
     /**
      * @var AlterTable
      */
@@ -29,15 +22,6 @@ class AlterTableTest extends ServiceTestCase {
      */
     protected function setUp() {
         parent::setUp();
-        
-        $this->manager->getDatabaseManager()->register('test-default', array (
-          'dsn' => 'mysql:host=localhost;dbname=test',
-          'username' => 'root',
-          'password' => '',
-          'charset' => 'utf8',
-        ));
-        $this->manager->getDatabaseManager()->switchTo('test-default');
-        
         $this->alterTable = new AlterTable();
     }
     

@@ -2,13 +2,12 @@
 /**
  * Select.php
  */
-namespace X\Service\XDatabase\Core\SQL\Action;
+namespace X\Service\XDatabase\Core\SQL\Util;
 
 /**
  * 
  */
 use X\Service\XDatabase\Core\SQL\Condition\Builder as ConditionBuilder;
-use X\Service\XDatabase\Core\SQL\Action\Basic;
 use X\Service\XDatabase\Core\SQL\Func\XFunction;
 
 /**
@@ -18,7 +17,7 @@ use X\Service\XDatabase\Core\SQL\Func\XFunction;
  * @since   0.0.0
  * @version 0.0.0
  */
-abstract class ActionWithCondition extends Basic {
+abstract class ActionWithCondition extends ActionBase {
     /**
      * This value contains the condition part of query.
      *
@@ -50,7 +49,7 @@ abstract class ActionWithCondition extends Basic {
      *
      * @return ActionWithCondition
      */
-    protected function getConditionString() {
+    protected function buildHandlerCondition() {
         if ( empty($this->condition) ) return $this;
     
         $condition = $this->condition;
@@ -187,7 +186,7 @@ abstract class ActionWithCondition extends Basic {
      *
      * @return ActionWithCondition
      */
-    protected function getLimitString() {
+    protected function buildHandlerLimit() {
         if ( is_null($this->limit) || 0 == $this->limit ) return $this;
         $this->sqlCommand[] = sprintf('LIMIT %s', $this->limit);
         return $this;
