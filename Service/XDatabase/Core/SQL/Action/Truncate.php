@@ -7,7 +7,8 @@ namespace X\Service\XDatabase\Core\SQL\Action;
 /**
  * 
  */
-use X\Service\XDatabase\Core\Exception;
+use X\Service\XDatabase\Core\Util\Exception;
+use X\Service\XDatabase\Core\SQL\Util\ActionAboutTable;
 
 /**
  * Truncate
@@ -22,11 +23,11 @@ class Truncate extends ActionAboutTable {
      * 
      * @return Truncate
      */
-    protected function getNameString() {
-        if ( empty($this->name) ) {
+    protected function buildHandlerName() {
+        if ( null === $this->name ) {
             throw new Exception("Name can not be empty to truncate the table.");
         }
-        $this->sqlCommand[] = sprintf('TRUNCATE TABLE %s', $this->quoteTableName($this->name));
+        $this->sqlCommand[] = 'TRUNCATE TABLE '.$this->quoteTableName($this->name);
         return $this;
     }
     
@@ -35,6 +36,6 @@ class Truncate extends ActionAboutTable {
      * @see \X\Database\SQL\Action\Base::getBuildHandlers() Base::getBuildHandlers()
      */
     protected function getBuildHandlers() {
-        return array('getNameString');
+        return array('name');
     }
 }

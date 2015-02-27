@@ -140,7 +140,7 @@ abstract class ActionWithCondition extends ActionBase {
      *
      * @return ActionWithCondition
      */
-    protected function getOrderString() {
+    protected function buildHandlerOrder() {
         if ( !$this->hasOrder() ) return $this;
     
         $orders = array();
@@ -218,7 +218,7 @@ abstract class ActionWithCondition extends ActionBase {
      *
      * @return SQLBuilderActionSelect
      */
-    protected function getOffsetString() {
+    protected function buildHandlerOffset() {
         if ( is_null($this->offset) || 0 == $this->offset ) return $this;
         $this->sqlCommand[] = sprintf('OFFSET %s', $this->offset);
         return $this;

@@ -4,7 +4,6 @@
  */
 namespace X\Service\XDatabase\Core\SQL\Condition;
 
-use X\Service\XDatabase\Core\Basic;
 /**
  * Connector
  * 
@@ -12,7 +11,7 @@ use X\Service\XDatabase\Core\Basic;
  * @since   0.0.0
  * @version 0.0.0
  */
-class Connector extends Basic {
+class Connector {
     /**
      * The name of Connector "and"
      * 

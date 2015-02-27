@@ -119,12 +119,12 @@ class Select extends ActionWithCondition {
      * This method is called by toString() method. 
      * @return Select
      */
-    protected function buildHanderTable() {
+    protected function buildHandlerTable() {
         if ( 0 == count($this->tableReferences)) return $this;
         
         $tables = array();
         foreach ( $this->tableReferences as $item ) {
-            $reference = $this->quoteTableName($item['name']);
+            $reference = $this->quoteTableName($item['table']);
             if ( isset($item['alias']) ) {
                 $reference = $reference.' AS '.$this->quoteTableName($item['alias']);
             }
@@ -142,7 +142,7 @@ class Select extends ActionWithCondition {
     /**
      * @return Select
      */
-    protected function getGroupString() {
+    protected function buildHandlerGroup() {
         if ( 0 == count($this->groups) ) {
             return $this;
         }
@@ -150,7 +150,7 @@ class Select extends ActionWithCondition {
         $groups = array();
         foreach ( $this->groups as $group ) {
             $groupItem = $this->quoteColumnName($group['name']);
-            if ( !null !== $group['order'] ) {
+            if ( null !== $group['order'] ) {
                 $groupItem = $groupItem.' '.$group['order'];
             }
             $groups[] = $groupItem;

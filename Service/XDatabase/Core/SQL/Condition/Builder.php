@@ -11,7 +11,7 @@ namespace X\Service\XDatabase\Core\SQL\Condition;
  * @since   0.0.0
  * @version 0.0.0
  */
-class Builder extends \X\Service\XDatabase\Core\Basic {
+class Builder {
     /**
      * This value contains all the conditions
      *

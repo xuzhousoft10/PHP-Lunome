@@ -3,25 +3,20 @@
  * Select.php
  */
 namespace X\Service\XDatabase\Core\SQL\Action;
-
+/**
+ * 
+ */
+use X\Service\XDatabase\Core\SQL\Util\ActionWithCondition;
+use X\Service\XDatabase\Core\Util\Exception;
 /**
  * Update
- * 
  * @author  Michael Luthor <michael.the.ranidae@gmail.com>
  * @version 0.0.0
  * @since   0.0.0
  */
 class Update extends ActionWithCondition {
     /**
-     * The table reference. 
-     * 
-     * @var string
-     */
-    protected $tableReference = '';
-    
-    /**
      * Set Table to Update
-     * 
      * @param string $table The table's name to Update
      * @return Update
      */
@@ -31,72 +26,15 @@ class Update extends ActionWithCondition {
     }
     
     /**
-     * Add table string into query.
-     * 
-     * @return Update
-     */
-    protected function getTableString() {
-        $this->sqlCommand[] = sprintf('`%s`', $this->tableReference);
-        return $this;
-    }
-    
-    /**
-     * The updated values 
-     * <pre>
-     *  -- key : The name of the column
-     *  -- value : The value of the column
-     * </pre>
-     * @var array
-     */
-    protected $values = array();
-    
-    /**
-     * Set column to new value for query string.
-     * 
-     * @param string $column The name of column to Update.
-     * @param string $value The new value to column.
-     * @return Update
-     */
-    public function set( $column, $value ) {
-        $this->values[$column] = $value;
-        return $this;
-    }
-    
-    /**
      * Set values for query to Update.
-     * 
      * @param array $values The values to Update.
      * @return Update
      */
-    public function setValues( $values ) {
-        $this->values = $values;
-        return $this;
-    }
-    
-    /**
-     * Add value string into query.
-     * 
-     * @return Update
-     */
-    protected function getValueString() {
-        $changes = array();
-        
-        foreach ( $this->values as $name => $value ) {
-            $column = $this->quoteColumnName($name);
-            $value = $this->quoteValue($value);
-            $changes[] = sprintf('%s=%s', $column, $value);
+    public function values( $values ) {
+        if ( empty($values) ) {
+            throw new Exception('updated value could not be empty.');
         }
-        $this->sqlCommand[] = sprintf('SET %s', implode(',', $changes));
-        return $this;
-    }
-    
-    /**
-     * Add action name into query
-     *
-     * @return Update
-     */
-    protected function getActionNameString() {
-        $this->sqlCommand[] = 'UPDATE';
+        $this->values = $values;
         return $this;
     }
     
@@ -105,13 +43,57 @@ class Update extends ActionWithCondition {
      * @see \X\Database\SQL\Action\Base::getBuildHandlers() Base::getBuildHandlers()
      */
     protected function getBuildHandlers() {
-        return array(
-                'getActionNameString',
-                'getTableString',
-                'getValueString',
-                'getConditionString',
-                'getLimitString',
-                'getOrderString',
-        );
+        return array('action','table','value','condition','limit','order');
+    }
+    
+    /**
+     * The table reference. 
+     * 
+     * @var string
+     */
+    protected $tableReference = null;
+    
+    /**
+     * Add table string into query.
+     * 
+     * @return Update
+     */
+    protected function buildHandlerTable() {
+        if ( null === $this->tableReference ) {
+            throw new Exception('Table reference can not be empty.');
+        }
+        $this->sqlCommand[] = $this->quoteTableName($this->tableReference);
+        return $this;
+    }
+    
+    /**
+     * The updated values 
+     * @var array
+     */
+    protected $values = array();
+    
+    /**
+     * Add value string into query.
+     * @return Update
+     */
+    protected function buildHandlerValue() {
+        $changes = array();
+        foreach ( $this->values as $name => $value ) {
+            $column = $this->quoteColumnName($name);
+            $value = $this->quoteValue($value);
+            $changes[] = $column.'='.$value;
+        }
+        $this->sqlCommand[] = 'SET '.implode(',', $changes);
+        return $this;
+    }
+    
+    /**
+     * Add action name into query
+     *
+     * @return Update
+     */
+    protected function buildHandlerAction() {
+        $this->sqlCommand[] = 'UPDATE';
+        return $this;
     }
 }
