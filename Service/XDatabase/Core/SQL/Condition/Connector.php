@@ -51,4 +51,18 @@ class Connector {
     public function toString() {
         return $this->connector;
     }
+    
+    /**
+     * @return \X\Service\XDatabase\Core\SQL\Condition\Connector
+     */
+    public static function cAnd() {
+        return new Connector(self::CONNECTOR_AND);
+    }
+    
+    /**
+     * @return \X\Service\XDatabase\Core\SQL\Condition\Connector
+     */
+    public static function cOr() {
+        return new Connector(self::CONNECTOR_OR);
+    }
 }

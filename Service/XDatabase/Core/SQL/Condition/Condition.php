@@ -8,22 +8,19 @@ namespace X\Service\XDatabase\Core\SQL\Condition;
  * Use statements
  */
 use X\Core\X;
-use X\Service\XDatabase\Core\Basic;
-use X\Service\XDatabase\Core\Exception;
+use X\Service\XDatabase\Core\Util\Exception;
+use X\Service\XDatabase\Core\SQL\Util\Expression;
 use X\Service\XDatabase\Service as XDatabaseService;
-use X\Service\XDatabase\Core\SQL\Expression as SQLExpression ;
 
 /**
  * Condition
- * 
  * @author  Michael Luthor <michael.the.ranidae@gmail.com>
  * @since   0.0.0
  * @version 0.0.0
  */
-class Condition extends Basic {
+class Condition {
     /**
      * This value contains all supported operators.
-     * 
      * @var array
      */
     protected static $operators = array(
@@ -32,28 +29,24 @@ class Condition extends Basic {
     
     /**
      * The column name that current Condition object effected.
-     * 
      * @var string
      */
     protected $column = null;
     
     /**
      * The operator of current Condition object.
-     * 
      * @var integer
      */
     protected $operator = null;
     
     /**
      * The value that current Condition column would handle.
-     * 
      * @var mixed
      */
     protected $value = null;
     
     /**
      * Initiate the Condition object by given informations
-     * 
      * @param string $column The name of column
      * @param string $operator The operator of current Condition
      * @param string $value The value for column to handle
@@ -67,11 +60,10 @@ class Condition extends Basic {
     
     /**
      * Convert current Condition object to string.
-     * 
      * @return string
      */
     public function toString() {
-        $handler = sprintf('stringBuilder%s', self::$operators[$this->operator]);
+        $handler = 'stringBuilder'.self::$operators[$this->operator];
         $condition = null;
         if ( method_exists($this, $handler) ) {
             $condition = $this->$handler();
@@ -83,129 +75,128 @@ class Condition extends Basic {
     
     /**
      * The default string build for curent Condition object.
-     * 
      * @return string
      */
-    protected function defaultStringBuilder() {
+    private function defaultStringBuilder() {
         $column = $this->getQuotedCurrentColumn();
         $value  = $this->quoteValue($this->value);
-        $condition = sprintf('%s %s %s', $column, self::$operators[$this->operator], $value);
+        $condition = $column.' '.self::$operators[$this->operator].' '.$value;
         return $condition;
     }
     
     /**
      * Build Condition string for operator "like" 
-     * 
      * @return string
      */
-    protected function stringBuilderLike() {
+    private function stringBuilderLike() {
         $column = $this->getQuotedCurrentColumn();
         $value  = $this->quoteValue($this->value);
-        return sprintf('%s LIKE %s', $column, $value);
+        return $column.' LIKE '.$value;
     }
     
     /**
      * Build Condition string for operator "start with"
-     * 
      * @return string
      */
-    protected function stringBuilderStartWith() {
+    private function stringBuilderStartWith() {
         $column = $this->getQuotedCurrentColumn();
-        $value  = sprintf('%s', $this->quoteValue($this->value.'%%'));
-        return sprintf('%s LIKE %s', $column, $value);
+        $value  = $this->quoteValue($this->value.'%%');
+        return $column.' LIKE '.$value;
     }
     
     /**
      * Build Condition string for operator "end with"
-     * 
      * @return string
      */
-    protected function stringBuilderEndWith() {
+    private function stringBuilderEndWith() {
         $column = $this->getQuotedCurrentColumn();
-        $value  = sprintf('%s', $this->quoteValue('%%'.$this->value));
-        return sprintf('%s LIKE %s', $column, $value);
+        $value  = $this->quoteValue('%%'.$this->value);
+        return $column.' LIKE '.$value;
     }
     
     /**
      * Build Condition string for operator "includes"
-     *
      * @return string
      */
-    protected function stringBuilderIncludes() {
+    private function stringBuilderIncludes() {
         $column = $this->getQuotedCurrentColumn();
-        $value  = sprintf('%s', $this->quoteValue('%%'.$this->value.'%%'));
-        return sprintf('%s LIKE %s', $column, $value);
+        $value  = $this->quoteValue('%%'.$this->value.'%%');
+        return $column.' LIKE '.$value;
     }
     
     /**
      * Build Condition string for operator "between"
-     * 
      * @return string
      */
-    protected function stringBuilderBetween() {
+    private function stringBuilderBetween() {
         $column = $this->getQuotedCurrentColumn();
+        if ( !is_array($this->value) || 2!==count($this->value) ) {
+            throw new Exception('The value for between condition must be an array with two elements.');
+        }
         $minVal = $this->quoteValue($this->value[0]);
         $maxVal = $this->quoteValue($this->value[1]);
-        return sprintf('%s BETWEEN %s AND %s', $column, $minVal, $maxVal);
+        return $column.' BETWEEN '.$minVal.' AND '.$maxVal;
     }
     
     /**
-     * Build Condition string for operator "in"
-     * 
+     * @throws Exception
      * @return string
      */
-    protected function stringBuilderIn() {
-        $column = $this->getQuotedCurrentColumn();
-        if ( is_array($this->value) ) {
-            $values = array();
-            foreach ( $this->value as $value ) {
-                $values[] = $this->quoteValue($value);
+    private function getValueStringForConditionIn() {
+        if ( is_array($this->value) || $this->value instanceof \Iterator ) {
+            $values = $this->value;
+            if ( $values instanceof \Iterator ) {
+                $values = iterator_to_array($this->value);
             }
+            $values = array_map(array($this, 'quoteValue'), $values);
             $values = implode(',', $values);
         } else if (method_exists($this->value, 'toString')) {
             $values = $this->value->toString();
         } else {
-            throw new Exception('Invalid value for in.');
+            throw new Exception('The value for in codition is not validated.');
         }
-        
-        $condition = sprintf('%s IN (%s)', $column, $values);
-        return $condition;
+        return $values;
+    }
+    
+    /**
+     * Build Condition string for operator "in"
+     * @return string
+     */
+    private function stringBuilderIn() {
+        $column = $this->getQuotedCurrentColumn();
+        return $column.' IN ('.$this->getValueStringForConditionIn().')';
     }
     
     /**
      * Build Condition string for operator "not in"
-     *
      * @return string
      */
-    protected function stringBuilderNotIn() {
+    private function stringBuilderNotIn() {
         $column = $this->getQuotedCurrentColumn();
-        $values = array();
-        foreach ( $this->value as $value ) {
-            $values[] = $this->quoteValue($value);
-        }
-        return sprintf('%s NOT IN (%s)', $column, implode(',', $values));
+        return $column.' NOT IN ('.$this->getValueStringForConditionIn().')';
     }
     
     /**
-     * 
      * @return string
      */
-    protected function stringBuilderExists() {
-        return sprintf('EXISTS ( %s )', $this->value);
+    private function stringBuilderExists() {
+        return 'EXISTS ( '.$this->value.' )';
     }
     
-    protected function stringBuilderNotExists() {
-        return sprintf('NOT EXISTS ( %s )', $this->value);
+    /**
+     * @return string
+     */
+    private function stringBuilderNotExists() {
+        return 'NOT EXISTS ( '.$this->value.' )';
     }
     
     /**
      * Quote the string value
-     * 
      * @param unknown $value
      * @return string
      */
-    protected function quoteValue( $value ) {
-        if ( $value instanceof SQLExpression ) {
+    private function quoteValue( $value ) {
+        if ( $value instanceof Expression ) {
             $value = $value->toString();
         } else {
             $value = $this->getDatabase()->quote($value);
@@ -217,17 +208,10 @@ class Condition extends Basic {
      * @param unknown $name
      */
     private function quoteColumn( $name ) {
-        return $this->getDatabase()->quoteColumnName($name);
-    }
-    
-    /**
-     * @return string
-     */
-    private function getQuotedCurrentColumn() {
-        if ( false === strpos($this->column, '.') ) {
-            return $this->quoteColumn($this->column);
+        if ( false === strpos($name, '.') ) {
+            return $this->getDatabase()->quoteColumnName($name);
         } else {
-            $columnInfo = explode('.', $this->column);
+            $columnInfo = explode('.', $name);
             $tableName = $this->getDatabase()->quoteTableName($columnInfo[0]);
             $columnName = $this->quoteColumn($columnInfo[1]);
             return $tableName.'.'.$columnName;
@@ -235,13 +219,24 @@ class Condition extends Basic {
     }
     
     /**
-     * @return \X\Service\XDatabase\Core\Database
+     * @return string
      */
-    private function getDatabase() {
-        $dbService = X::system()->getServiceManager()->get(XDatabaseService::getServiceName());
-        return $dbService->getDatabase();
+    private function getQuotedCurrentColumn() {
+        return $this->quoteColumn($this->column);
     }
     
+    /**
+     * @return \X\Service\XDatabase\Core\Database
+     */
+    private function getDatabase() { 
+        /* @var $dbService XDatabaseService */
+        $dbService = X::system()->getServiceManager()->get(XDatabaseService::getServiceName());
+        return $dbService->getDatabaseManager()->get();
+    }
+    
+    /**
+     * @var unknown
+     */
     const OPERATOR_EQUAL            = 0;
     const OPERATOR_NOT_EQUAL        = 1;
     const OPERATOR_GREATER_THAN     = 2;

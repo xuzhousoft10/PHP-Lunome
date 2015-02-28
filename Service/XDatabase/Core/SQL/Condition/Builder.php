@@ -14,14 +14,12 @@ namespace X\Service\XDatabase\Core\SQL\Condition;
 class Builder {
     /**
      * This value contains all the conditions
-     *
      * @var Condition[]
      */
     protected $conditions = array();
     
     /**
      * Create a new condition Builder.
-     * 
      * @param mixed $condition The initiate condtion for condition Builder
      * @return Builder
      */
@@ -35,7 +33,6 @@ class Builder {
     
     /**
      * Add condition part to condition Builder. 
-     * 
      * @param string|array $condition -- The condition to add.
      * @return Builder
      */
@@ -49,9 +46,7 @@ class Builder {
                 }
                 $this->addCondition($con);
             }
-        } else if ( is_string($condition) 
-            || $condition instanceof Condition 
-            || $condition instanceof Builder ) {
+        } else if ( is_string($condition) || $condition instanceof Condition || $condition instanceof Builder ) {
             $this->conditions[] = $condition;
             $this->addConnector(Connector::CONNECTOR_AND);
         } else if ( method_exists($condition, 'toString') ) {
@@ -62,7 +57,6 @@ class Builder {
     
     /**
      * Add a single condition into current condition query.
-     * 
      * @param string $name The name of the column
      * @param string $operation The operator index of condition
      * @param mixed $value The value part of the condition.
@@ -92,7 +86,6 @@ class Builder {
     
     /**
      * Add "is" condition into current condition group. 
-     * 
      * @param string $name The name of column
      * @param mixed $value The value that column is.
      * @return Builder
@@ -104,7 +97,6 @@ class Builder {
     
     /**
      * Add "is not" condition into current condition group. 
-     * 
      * @param string $name The name of column.
      * @param mixed $value The value that column is not.
      * @return Builder
@@ -116,7 +108,6 @@ class Builder {
     
     /**
      * Add "equals" condition into current condition group. 
-     * 
      * @param string $name The name of the column
      * @param mixed $value The value that column is
      * @return Builder
@@ -127,7 +118,6 @@ class Builder {
     
     /**
      * Add "not equals" condition into current condition group. 
-     * 
      * @param string $name The name of column.
      * @param mixed $value The value that column not equals.
      * @return Builder
@@ -138,7 +128,6 @@ class Builder {
     
     /**
      * Add "greater than" condition into current condition group. 
-     * 
      * @param string $name The name of the column.
      * @param mixed $value The value that column greater than.
      * @return Builder
@@ -150,7 +139,6 @@ class Builder {
     
     /**
      * Add "greater or equals" condition into current condition group. 
-     * 
      * @param string $name The name of the column
      * @param mixed $value The value that column greateer or equals
      * @return Builder
@@ -162,7 +150,6 @@ class Builder {
     
     /**
      * Add "less than" condition into current condition group. 
-     * 
      * @param string $name The name of the column
      * @param mixed $value The value of the column less than
      * @return Builder
@@ -174,7 +161,6 @@ class Builder {
     
     /**
      * Add "less or equals" condition into current condition group. 
-     * 
      * @param string $name The name of the column 
      * @param mixed $value The value of the column less or equals.
      * @return Builder
@@ -186,7 +172,6 @@ class Builder {
     
     /**
      * Add "like" condition into current condition group. 
-     * 
      * @param string $name The name of the column
      * @param string $value The value that column likes
      * @return Builder
@@ -198,7 +183,6 @@ class Builder {
     
     /**
      * Add "start with" condition into current condition group. 
-     * 
      * @param string $name The name of the column
      * @param string $value The value that column start with
      * @return Builder
@@ -210,7 +194,6 @@ class Builder {
     
     /**
      * Add "end with" condition into current condition group. 
-     * 
      * @param string $name The name of column
      * @param string $value The value of column end with
      * @return Builder
@@ -221,7 +204,6 @@ class Builder {
     }
     
     /**
-     * 
      * @param unknown $name
      * @param unknown $value
      * @return \X\Database\SQL\Condition\Builder
@@ -233,7 +215,6 @@ class Builder {
     
     /**
      * Add "between" condition into current condition group. 
-     * 
      * @param string $name The name of column
      * @param mixed $minValue The min value that column greater than
      * @param mixed $maxValue The max value that column less than
@@ -246,7 +227,6 @@ class Builder {
     
     /**
      * Add "in" condition into current condition group. 
-     * 
      * @param string $name The name of column
      * @param array $values The values that column could be.
      * @return Builder
@@ -258,7 +238,6 @@ class Builder {
     
     /**
      * Add "not in" condition into current condition group. 
-     * 
      * @param string $name The name of the column
      * @param array $values The value that column could not be.
      * @return Builder
@@ -269,7 +248,6 @@ class Builder {
     }
     
     /**
-     * 
      * @param unknown $condition
      * @return \X\Service\XDatabase\Core\SQL\Condition\Builder
      */
@@ -279,7 +257,6 @@ class Builder {
     }
     
     /**
-     * 
      * @param unknown $condition
      * @return \X\Service\XDatabase\Core\SQL\Condition\Builder
      */
@@ -290,7 +267,6 @@ class Builder {
     
     /**
      * Add "and" connector into current condition group. 
-     * 
      * @return Builder
      */
     public function andAlso() {
@@ -300,7 +276,6 @@ class Builder {
     
     /**
      * Add "or" connector into current condition group. 
-     * 
      * @return Builder
      */
     public function orThat() {
@@ -310,7 +285,6 @@ class Builder {
     
     /**
      * Add group start into current condition group. 
-     * 
      * @return Builder
      */
     public function groupStart() {
@@ -321,7 +295,6 @@ class Builder {
     
     /**
      * Add group end mark into current condition group. 
-     * 
      * @return Builder
      */
     public function groupEnd() {
@@ -337,7 +310,6 @@ class Builder {
     
     /**
      * Convert current condition group into string.
-     * 
      * @return string
      */
     public function toString() {
@@ -345,21 +317,22 @@ class Builder {
         foreach ( $this->conditions as $condition ) {
             $conditions[] = is_string($condition) ? $condition : $condition->toString();
         }
-        if ( !empty($conditions) ) {
-            /* 去掉空白的条件。 */
-            for ( $i=0; $i<count($conditions); $i++ ) {
-                if ( !empty($conditions[$i]) ) {
-                    continue;
-                }
-                unset($conditions[$i]);
-                unset($conditions[$i+1]);
-                $i++;
-            }
-            array_pop($conditions);
-            $condition = implode(' ', $conditions);
-            return $condition;
-        } else {
+        
+        if ( empty($conditions) ) {
             return '';
         }
+        
+        /* 去掉空白的条件。 */
+        for ( $i=0; $i<count($conditions); $i++ ) {
+            if ( !empty($conditions[$i]) ) {
+                continue;
+            }
+            unset($conditions[$i]);
+            unset($conditions[$i+1]);
+            $i++;
+        }
+        array_pop($conditions);
+        $condition = implode(' ', $conditions);
+        return $condition;
     }
 }
