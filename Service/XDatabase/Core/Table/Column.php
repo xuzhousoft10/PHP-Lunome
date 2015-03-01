@@ -3,24 +3,22 @@
  * This file defines the class of Column.
  */
 namespace X\Service\XDatabase\Core\Table;
-
 /**
  * Use statements
  */
-use X\Service\XDatabase\Core\Basic;
-use X\Service\XDatabase\Core\Exception;
-
+use X\Core\X;
+use X\Service\XDatabase\Service;
 /**
  * 
  */
-class Column extends Basic {
+class Column {
     /**
      * Create a new column object.
      * 
      * @param string $name
      * @return \X\Service\XDatabase\Core\Table\Column
      */
-    public static function create( $name ) {
+    public static function setup( $name ) {
         $class = get_called_class();
         $column = new $class($name);
         return $column;
@@ -55,75 +53,22 @@ class Column extends Basic {
     
     /**
      * Set column's attribute.
-     * 
      * @param string $name
      * @param mixed $value
-     * @throws Exception
      * @return \X\Service\XDatabase\Core\Table\Column
      */
     protected function set( $name, $value ) {
-        if ( !array_key_exists($name, $this->attributes) ) {
-            throw new Exception(sprintf('"%s" is not a validate attribute.', $name));
-        }
-        
         $this->attributes[$name] = $value;
         return $this;
     }
     
     /**
      * Get the value of attribute.
-     * 
      * @param unknown $name
-     * @throws Exception
      * @return mixed
      */
     protected function get( $name ) {
-        if ( !array_key_exists($name, $this->attributes) ) {
-            throw new Exception(sprintf('"%s" is not a validate attribute.', $name));
-        }
         return $this->attributes[$name];
-    }
-    
-    /**
-     * Convert this column to description string.
-     * @return string
-     */
-    public function toString() {
-        $column = array();
-        $column['type'] = $this->getType();
-        if ( !is_null($this->getLength()) ) {
-            $column['type'] .= sprintf('(%d)', $this->getLength());
-        }
-        if ( $this->getIsZeroFill() ) {
-            $column['isZeroFill'] = 'ZEROFILL';
-        }
-        if ( $this->getIsUnsigned() ) {
-            $column['isUnsigned'] = 'UNSIGNED';
-        }
-        if ( $this->getIsBinary() ) {
-            $column['isBinary'] = 'BINARY';
-        }
-        if ( $this->getIsAutoIncrement() ) {
-            $column['isAutoIncrement'] = 'AUTO_INCREMENT';
-        }
-        if ( !$this->getNullable() ) {
-            $column['nullable'] = 'NOT NULL';
-        }
-        if ( !is_null($this->getDefault()) ) {
-            $column['default'] = sprintf('DEFAULT "%s"', addslashes($this->getDefault()));
-        }
-        
-        $column = implode(' ', $column);
-        return $column;
-    }
-    
-    /**
-     * Set column name
-     * @param string $value
-     * @return \X\Service\XDatabase\Core\Table\Column
-     */
-    public function setName($value) {
-        return $this->set('name', $value);
     }
     
     /**
@@ -141,7 +86,7 @@ class Column extends Basic {
      * @return \X\Service\XDatabase\Core\Table\Column
      */
     public function setLength($value) {
-        return $this->set('length', $value);
+        return $this->set('length', (int)$value);
     }
     
     /**
@@ -150,7 +95,7 @@ class Column extends Basic {
      * @return \X\Service\XDatabase\Core\Table\Column
      */
     public function setNullable($value) {
-        return $this->set('nullable', $value);
+        return $this->set('nullable', boolval($value));
     }
     
     /**
@@ -168,7 +113,7 @@ class Column extends Basic {
      * @return \X\Service\XDatabase\Core\Table\Column
      */
     public function setIsAutoIncrement($value) {
-        return $this->set('isAutoIncrement', $value);
+        return $this->set('isAutoIncrement', boolval($value));
     }
     
     /**
@@ -177,7 +122,7 @@ class Column extends Basic {
      * @return \X\Service\XDatabase\Core\Table\Column
      */
     public function setIsZeroFill($value) {
-        return $this->set('isZeroFill', $value);
+        return $this->set('isZeroFill', boolval($value));
     }
     
     /**
@@ -186,7 +131,7 @@ class Column extends Basic {
      * @return \X\Service\XDatabase\Core\Table\Column
      */
     public function setIsUnsigned($value) {
-        return $this->set('isUnsigned', $value);
+        return $this->set('isUnsigned', boolval($value));
     }
     
     /**
@@ -195,7 +140,7 @@ class Column extends Basic {
      * @return \X\Service\XDatabase\Core\Table\Column
      */
     public function setIsBinary($value) {
-        return $this->set('isBinary', $value);
+        return $this->set('isBinary', boolval($value));
     }
     
     /**
@@ -203,7 +148,7 @@ class Column extends Basic {
      * @return \X\Service\XDatabase\Core\Table\Column
      */
     public function setIsPrimaryKey( $value ) {
-        return $this->set('isPimaryKey', $value);
+        return $this->set('isPimaryKey', boolval($value));
     }
     
     /**
@@ -275,5 +220,41 @@ class Column extends Basic {
     public function getIsPrimaryKey() {
         return $this->get('isPimaryKey');
     }
-
+    
+    /**
+     * Convert this column to description string.
+     * @return string
+     */
+    public function toString() {
+        $column = array();
+        $column['type'] = $this->getType();
+        if ( !is_null($this->getLength()) ) {
+            $column['type'] .= '('.$this->getLength().')';
+        }
+        if ( $this->getIsZeroFill() ) {
+            $column['isZeroFill'] = 'ZEROFILL';
+        }
+        if ( $this->getIsUnsigned() ) {
+            $column['isUnsigned'] = 'UNSIGNED';
+        }
+        if ( $this->getIsBinary() ) {
+            $column['isBinary'] = 'BINARY';
+        }
+        if ( $this->getIsAutoIncrement() ) {
+            $column['isAutoIncrement'] = 'AUTO_INCREMENT';
+        }
+        if ( !$this->getNullable() ) {
+            $column['nullable'] = 'NOT NULL';
+        }
+        if ( null !== $this->getDefault() ) {
+            /* @var $service Service */
+            $service = X::system()->getServiceManager()->get(Service::getServiceName());
+            $db = $service->getDatabaseManager()->get();
+            $value = $db->quote($this->getDefault());
+            $column['default'] = 'DEFAULT '.$value;
+        }
+    
+        $column = implode(' ', $column);
+        return $column;
+    }
 }

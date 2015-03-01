@@ -58,14 +58,12 @@ abstract class ActionBase {
      * @return string
      */
     protected function quoteColumnName( $name ) {
-        if ( false === strpos($name, '.') ) {
-            return $this->getDatabase()->quoteColumnName($name);
-        } else {
-            $columnInfo = explode('.', $name);
-            $tableName = $this->getDatabase()->quoteTableName($columnInfo[0]);
-            $columnName = $this->getDatabase()->quoteColumnName($columnInfo[1]);
-            return $tableName.'.'.$columnName;
-        }
+        $database = $this->getDatabase();
+        
+        $column = explode('.', $name);
+        $column = array_map(array($database, 'quoteColumnName'), $column);
+        $column = implode('.', $column);
+        return $column;
     }
     
     /**

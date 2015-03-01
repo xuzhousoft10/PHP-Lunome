@@ -6,7 +6,7 @@ namespace X\Service\XDatabase\Core\SQL\Action;
 /**
  * 
  */
-use X\Service\XDatabase\Core\SQL\Func\XFunction;
+use X\Service\XDatabase\Core\SQL\Util\Func;
 use X\Service\XDatabase\Core\SQL\Util\ActionWithCondition;
 use X\Service\XDatabase\Core\SQL\Condition\Builder as ConditionBuilder;
 /**
@@ -89,7 +89,7 @@ class Select extends ActionWithCondition {
     protected function buildHandlerExpression() {
         $expressions = array();
         foreach ( $this->expressions as $expression ) {
-            if ( $expression['expr'] instanceof XFunction ) {
+            if ( $expression['expr'] instanceof Func ) {
                 $tempExpr = $expression['expr']->toString();
             } else if ( '*' === $expression['expr'] ) {
                 $tempExpr = '*';

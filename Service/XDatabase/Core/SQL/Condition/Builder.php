@@ -288,8 +288,7 @@ class Builder {
      * @return Builder
      */
     public function groupStart() {
-        $groupStart = new Group(Group::POSITION_START);
-        $this->conditions[] = $groupStart;
+        $this->conditions[] = Group::start();
         return $this;
     }
     
@@ -298,12 +297,11 @@ class Builder {
      * @return Builder
      */
     public function groupEnd() {
-        $groupEnd = new Group(Group::POSITION_END);
         if ($this->conditions[count($this->conditions)-1] instanceof Connector ) {
             array_splice($this->conditions, count($this->conditions)-1, 1);
         }
         
-        $this->conditions[] = $groupEnd;
+        $this->conditions[] = Group::end();
         $this->addConnector(Connector::CONNECTOR_AND);
         return $this;
     }

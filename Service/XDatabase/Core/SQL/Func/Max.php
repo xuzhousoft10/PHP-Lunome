@@ -5,13 +5,18 @@
 namespace X\Service\XDatabase\Core\SQL\Func;
 
 /**
+ * 
+ */
+use X\Service\XDatabase\Core\SQL\Util\Func;
+
+/**
  * Count
  * 
  * @author  Michael Luthor <michael.the.ranidae@gmail.com>
  * @since   0.0.0
  * @version 0.0.0
  */
-class Max extends XFunction {
+class Max extends Func {
     /**
      * The column name to count
      * 
@@ -34,6 +39,6 @@ class Max extends XFunction {
      * @see \X\Database\SQL\Func\Func::toString() Func::toString()
      */
     public function toString() {
-        return "MAX({$this->column})";
+        return 'MAX('.$this->quoteColumnName($this->column).')';
     }
 }

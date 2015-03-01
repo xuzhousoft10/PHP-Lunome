@@ -3,24 +3,17 @@
  * Namespace definatino
  */
 namespace X\Service\XDatabase\Core\SQL;
-
-/**
- * 
- */
-use X\Service\XDatabase\Core\Basic;
-
 /**
  * SQLBuilder
- * 
  * @author  Michael Luthor <Michael.the.ranidae@gmail.com>
  * @since   0.0.0
  * @version 0.0.0
  */
-class Builder extends Basic {
+class Builder {
     /**
      * Get a new SQLBuilder
      * 
-     * @return SQLBuilder
+     * @return Builder
      */
     public static function build() {
         return new Builder();
@@ -28,17 +21,15 @@ class Builder extends Basic {
     
     /**
      * Build action object by given name
-     * 
      * @param string $name The name of action.
-     * @return \X\Database\SQL\Action\Base
+     * @return \X\Service\XDatabase\Core\SQL\Util\ActionBase
      */
     protected function getActionByName( $name ) {
-        $action = sprintf('%s\\Action\\%s', __NAMESPACE__, $name);
+        $action = 'X\\Service\\XDatabase\\Core\\SQL\\Action\\'.$name;
         return new $action();
     }
     
     /**
-     * 
      * @return \X\Service\XDatabase\Core\SQL\Action\Describe
      */
     public function describe() {
@@ -47,7 +38,6 @@ class Builder extends Basic {
     
     /**
      * Get select action object.
-     * 
      * @return \X\Service\XDatabase\Core\SQL\Action\Select
      */
     public function select() {
@@ -56,7 +46,6 @@ class Builder extends Basic {
     
     /**
      * Get insert action object.
-     * 
      * @return \X\Database\SQL\Action\Insert
      */
     public function insert() {
@@ -65,7 +54,6 @@ class Builder extends Basic {
     
     /**
      * Get update action object.
-     * 
      * @return \X\Database\SQL\Action\Update
      */
     public function update() {
@@ -74,7 +62,6 @@ class Builder extends Basic {
     
     /**
      * Get delete action object.
-     * 
      * @return \X\Database\SQL\Action\Delete
      */
     public function delete() {
@@ -83,7 +70,6 @@ class Builder extends Basic {
     
     /**
      * Get create table action object.
-     * 
      * @return \X\Database\SQL\Action\CreateTable
      */
     public function createTable() {
@@ -92,7 +78,6 @@ class Builder extends Basic {
     
     /**
      * Get drop table action object.
-     * 
      * @return \X\Database\SQL\Action\DropTable
      */
     public function dropTable() {
@@ -101,7 +86,6 @@ class Builder extends Basic {
     
     /**
      * Get truncate action object.
-     * 
      * @return \X\Database\SQL\Action\Truncate
      */
     public function truncate() {
@@ -110,7 +94,6 @@ class Builder extends Basic {
     
     /**
      * Get rename action object.
-     * 
      * @return \X\Database\SQL\Action\Rename
      */
     public function rename() {
@@ -119,7 +102,6 @@ class Builder extends Basic {
     
     /**
      * Get alter table action object.
-     * 
      * @return \X\Database\SQL\Action\AlterTable
      */
     public function alterTable() {

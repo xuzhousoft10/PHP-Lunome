@@ -20,6 +20,7 @@ use X\Service\XDatabase\Core\Util\Exception;
  * @method integer lastInertId() Returns the ID of the last inserted row or sequence value.
  * @method string quoteColumnName($name)
  * @method string quoteTableName($name)
+ * @method string quote($value)
  */
 class Database {
     /**

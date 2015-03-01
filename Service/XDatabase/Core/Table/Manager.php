@@ -8,7 +8,6 @@ namespace X\Service\XDatabase\Core\Table;
  * Use statements
  */
 use X\Core\X;
-use X\Service\XDatabase\Core\Basic;
 use X\Service\XDatabase\Core\Exception;
 use X\Service\XDatabase\Service as XDatabaseService;
 use X\Service\XDatabase\Core\SQL\Builder as SQLBuilder;
@@ -20,14 +19,12 @@ use X\Service\XDatabase\Core\SQL\Builder as SQLBuilder;
  * @since   0.0.0
  * @version 0.0.0
  */
-class Manager extends Basic {
+class Manager {
     /**
      * Get table names in the database.
      */
     public static function getTables() {
-        $service = self::getService();
-        $tables = $service->getDatabase()->getTables();
-        return $tables;
+        return self::getDatabase()->getTables();
     }
     
     /**
@@ -65,7 +62,7 @@ class Manager extends Basic {
      * @return unknown
      */
     public function getInformation() {
-        $sql = SQLBuilder::build()->describe()->table($this->name)->toString();
+        $sql = SQLBuilder::build()->describe()->name($this->name)->toString();
         $result = $this->query($sql);
         return $result;
     }
@@ -130,8 +127,8 @@ class Manager extends Basic {
      * 
      * @return Management|boolean
      */
-    public function addColumn( $column ) {
-        return $this->doAlterAction('addColumn', array($column));
+    public function addColumn( $name, $definition ) {
+        return $this->doAlterAction('addColumn', array($name, $definition));
     }
     
     /**
@@ -145,25 +142,15 @@ class Manager extends Basic {
     }
     
     /**
-     * Rename column from the operating table.
-     * 
-     * @param string $oldName The old name of column to rename
-     * @param string $newName The new name of column
-     * @return Management|boolean
-     */
-    public function renameColumn( $oldName, $newName ){
-        return $this->doAlterAction('changeColumn', array($oldName, $newName));
-    }
-    
-    /**
      * Change column from the operating table.
      * 
      * @param string $name The name of column to change
      * @param string $definition The new definition for column
      * @return Management|boolean
      */
-    public function changeColumn($name, $definition){
-        return $this->doAlterAction('changeColumn', array($name, $name, $definition));
+    public function changeColumn($name, $definition, $newName=null){
+        $newName = (null===$newName) ? $name : $newName;
+        return $this->doAlterAction('changeColumn', array($name, $newName, $definition));
     }
     
     /**
@@ -231,17 +218,6 @@ class Manager extends Basic {
     }
     
     /**
-     * Execute a query an return the result.
-     * @param unknown $sql
-     * @throws Exception
-     * @return unknown
-     */
-    private function query( $sql ) {
-        $result = self::getService()->getDatabase()->query($sql);
-        return $result;
-    }
-    
-    /**
      * The name of the target table.
      *
      * @var string
@@ -258,12 +234,23 @@ class Manager extends Basic {
     }
     
     /**
-     * Get the xdatabse service.
-     * 
-     * @return \X\Service\XDatabase\XDatabaseService
+     * Execute a query an return the result.
+     * @param unknown $sql
+     * @throws Exception
+     * @return unknown
      */
-    private static function getService() {
-        return X::system()->getServiceManager()->get(XDatabaseService::getServiceName());
+    private function query( $sql ) {
+        $result = self::getDatabase()->query($sql);
+        return $result;
+    }
+    
+    /**
+     * Get the xdatabse service.
+     * @return \X\Service\XDatabase\Core\Database\Database
+     */
+    private static function getDatabase() {
+        $service = X::system()->getServiceManager()->get(XDatabaseService::getServiceName());
+        return $service->getDatabaseManager()->get();
     }
     
     /**
@@ -273,7 +260,6 @@ class Manager extends Basic {
      * @return boolean
      */
     private static function executeSQLQueryWithOutResult( $query ) {
-        $dbService = self::getService();
-        $dbService->getDatabase()->exec($query);
+        self::getDatabase()->exec($query);
     }
 }

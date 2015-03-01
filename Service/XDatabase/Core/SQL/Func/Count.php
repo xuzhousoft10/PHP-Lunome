@@ -7,8 +7,7 @@ namespace X\Service\XDatabase\Core\SQL\Func;
 /**
  * 
  */
-use X\Core\X;
-use X\Service\XDatabase\Service as XDatabaseService;
+use X\Service\XDatabase\Core\SQL\Util\Func;
 
 /**
  * Count
@@ -17,7 +16,7 @@ use X\Service\XDatabase\Service as XDatabaseService;
  * @since   0.0.0
  * @version 0.0.0
  */
-class Count extends XFunction {
+class Count extends Func {
     /**
      * The column name to count
      * 
@@ -40,31 +39,18 @@ class Count extends XFunction {
      * @see \X\Database\SQL\Func\Func::toString() Func::toString()
      */
     public function toString() {
-        return sprintf('COUNT(%s)', $this->quoteColumn($this->column));
+        return sprintf('COUNT(%s)', $this->quoteColumnName($this->column));
     }
     
     /**
-     * @return string
+     * (non-PHPdoc)
+     * @see \X\Service\XDatabase\Core\SQL\Util\Func::quoteColumnName()
      */
-    protected function quoteColumn() {
-        if ( '*' === $this->column ) {
+    protected function quoteColumnName($name) {
+        if ( '*' === $name ) {
             return '*';
         } else {
-            $column = explode('.', $this->column);
-            foreach ( $column as $index => $name ) {
-                $column[$index] = $this->getDatabase()->quoteColumnName($name);
-            }
-            $column = implode('.', $column);
-            return $column;
+            return parent::quoteColumnName($name);
         }
-    }
-    
-    /**
-     * Get the xdatabse service.
-     *
-     * @return \X\Service\XDatabase\Core\Database
-     */
-    private function getDatabase() {
-        return X::system()->getServiceManager()->get(XDatabaseService::getServiceName())->getDatabase();
     }
 }
