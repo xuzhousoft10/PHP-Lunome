@@ -95,7 +95,7 @@ class Column {
      * @return \X\Service\XDatabase\Core\Table\Column
      */
     public function setNullable($value) {
-        return $this->set('nullable', boolval($value));
+        return $this->set('nullable', $value?true:false);
     }
     
     /**
@@ -113,7 +113,7 @@ class Column {
      * @return \X\Service\XDatabase\Core\Table\Column
      */
     public function setIsAutoIncrement($value) {
-        return $this->set('isAutoIncrement', boolval($value));
+        return $this->set('isAutoIncrement', $value);
     }
     
     /**
@@ -122,7 +122,7 @@ class Column {
      * @return \X\Service\XDatabase\Core\Table\Column
      */
     public function setIsZeroFill($value) {
-        return $this->set('isZeroFill', boolval($value));
+        return $this->set('isZeroFill', $value?true:false);
     }
     
     /**
@@ -131,7 +131,8 @@ class Column {
      * @return \X\Service\XDatabase\Core\Table\Column
      */
     public function setIsUnsigned($value) {
-        return $this->set('isUnsigned', boolval($value));
+        $this->set('isUnsigned', $value?true:false);
+        return $this;
     }
     
     /**
@@ -140,7 +141,7 @@ class Column {
      * @return \X\Service\XDatabase\Core\Table\Column
      */
     public function setIsBinary($value) {
-        return $this->set('isBinary', boolval($value));
+        return $this->set('isBinary', $value?true:false);
     }
     
     /**
@@ -148,7 +149,7 @@ class Column {
      * @return \X\Service\XDatabase\Core\Table\Column
      */
     public function setIsPrimaryKey( $value ) {
-        return $this->set('isPimaryKey', boolval($value));
+        return $this->set('isPimaryKey', $value?true:false);
     }
     
     /**

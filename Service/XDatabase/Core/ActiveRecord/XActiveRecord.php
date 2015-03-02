@@ -3,23 +3,20 @@
  * Namespace defination
  */
 namespace X\Service\XDatabase\Core\ActiveRecord;
-
 /**
  * Use statements
  */
 use X\Core\X;
-use X\Service\XDatabase\Core\Exception;
+use X\Service\XDatabase\Core\Util\Exception;
 use X\Service\XDatabase\Core\SQL\Builder as SQLBuilder;
 use X\Service\XDatabase\Core\SQL\Func\Count as SQLFuncCount;
 use X\Service\XDatabase\Core\SQL\Condition\Condition as SQLCondition;
 use X\Service\XDatabase\Core\SQL\Condition\Builder as ConditionBuilder;
-use X\Service\XDatabase\Core\SQL\Condition\Query;
+use X\Service\XDatabase\Core\ActiveRecord\Query;
 use X\Service\XDatabase\Service as XDatabaseService;
 use X\Service\XDatabase\Core\SQL\Func\Max;
-
 /**
  * ActiveRecord
- * 
  * @author  Michael Luthor <michael.the.ranidae@gmail.com>
  * @package X\Database\ActiveRecord
  * @since   0.0.0
@@ -252,130 +249,6 @@ abstract class XActiveRecord implements \Iterator {
     }
     
     /**
-     * @return void
-     */
-    protected function beforeInit() {}
-    
-    /**
-     * @return void
-     */
-    protected function afterInit() {}
-    
-    /**
-     * A handler to trigger after insert event handlers.
-     * This method is called by save() method.
-     * @see ActiveRecord::save() ActiveRecord::save()
-     * @return void
-     */
-    protected function beforeSave() {}
-    
-    /**
-     * A handler to trigger after save event handlers.
-     * This method is called by save() method.
-     * @see ActiveRecord::save() ActiveRecord::save()
-     * @return void
-     */
-    protected function afterSave() {}
-    
-    /**
-     * A handler to trigger after insert event handlers.
-     * This method is called by doSaveInsert() method.
-     * @see ActiveRecord::doSaveInsert() ActiveRecord::doSaveInsert()
-     * @return void
-     */
-    protected function beforeInsert() {}
-    
-    /**
-     * A handler to trigger after insert event handlers.
-     * This method is called by doSaveInsert() method.
-     * @see ActiveRecord::doSaveInsert() ActiveRecord::doSaveInsert()
-     * @return void
-     */
-    protected function afterInsert() {
-        foreach ( $this->attributes as $name => $attribute ) {
-            if ( $attribute->getIsAutoIncrement() ) {
-                $attribute->setValue($this->getDb()->lastInsertId());
-            }
-            $attribute->setOldValue($attribute->getValue());
-        }
-        $this->isNew = false;
-    }
-    
-    /**
-     * A handler to trigger after insert event handlers.
-     * This method is called by doSaveUpdate() method.
-     * @see ActiveRecord::doSaveUpdate() ActiveRecord::doSaveUpdate()
-     * @return void
-     */
-    protected function beforeUpdate() { }
-    
-    /**
-     * A handler to trigger after update event handlers.
-     * This method is called by doSaveUpdate() method.
-     *
-     * @see ActiveRecord::doSaveUpdate() ActiveRecord::doSaveUpdate()
-     * @return void
-     */
-    protected function afterUpdate() {
-        foreach ( $this->attributes as $name => $attribute ) {
-            $attribute->setOldValue($attribute->getValue());
-        }
-    }
-    
-    /**
-     * A handler to trigger after insert event handlers.
-     * This method is called by validate(), validateAttribute() method.
-     * @see ActiveRecord::validate() ActiveRecord::validate()
-     * @see ActiveRecord::validateAttribute() ActiveRecord::validateAttribute()
-     * @return void
-     */
-    protected function beforeValidate($name) {}
-    
-    /**
-     * A handler to trigger after validate event handlers.
-     * This method is called by validate(), validateAttribute() method.
-     * @see ActiveRecord::validate() ActiveRecord::validate()
-     * @see ActiveRecord::validateAttribute() ActiveRecord::validateAttribute()
-     * @return void
-     */
-    protected function afterValidate($name) {}
-    
-    /**
-     * A handler to trigger after insert event handlers.
-     * This method is called by doFind() method.
-     * Notice, This event effect the current object, not result object.
-     * @see ActiveRecord::doFind() ActiveRecord::doFind()
-     * @return void
-     */
-    protected function beforeFind() {}
-    
-    /**
-     * A handler to trigger after insert event handlers.
-     * This method is called by doFind() method.
-     * But notice, This method would called on result objects,
-     * not the object you are using.
-     * @see ActiveRecord::doFind() ActiveRecord::doFind()
-     * @return void
-     */
-    protected function afterFind() {}
-    
-    /**
-     * A handler to trigger after insert event handlers.
-     * This method is called by delete() method.
-     * @see ActiveRecord::delete() ActiveRecord::delete()
-     * @return void
-     */
-    protected function beforeDelete() { }
-    
-    /**
-     * A handler to trigger after insert event handlers.
-     * This method is called by delete() method.
-     * @see ActiveRecord::delete() ActiveRecord::delete()
-     * @return void
-     */
-    protected function afterDelete() {}
-    
-    /**
      * Save the changes of current record. if the record is new,
      * it would create a new record, or it would update the exists
      * one, but if there is nothing changed, then it would not be updated.
@@ -386,9 +259,7 @@ abstract class XActiveRecord implements \Iterator {
             throw new Exception('Failed to save XActiveRecord object, Validation failed.');
         }
         
-        $this->beforeSave();
         $this->getIsNew() ? $this->doSaveInsert() : $this->doSaveUpdate();
-        $this->afterSave();
     }
     
     /**
@@ -397,13 +268,19 @@ abstract class XActiveRecord implements \Iterator {
      * @return boolean
      */
     protected function doSaveInsert() {
-        $this->beforeInsert();
         $sql = SQLBuilder::build()->insert()
             ->into($this->getTableFullName())
             ->values($this)
             ->toString();
         $this->execute($sql);
-        $this->afterInsert();
+        
+        foreach ( $this->attributes as $name => $attribute ) {
+            if ( $attribute->getIsAutoIncrement() ) {
+                $attribute->setValue($this->getDb()->lastInsertId());
+            }
+            $attribute->setOldValue($attribute->getValue());
+        }
+        $this->isNew = false;
     }
     
     /**
@@ -413,7 +290,6 @@ abstract class XActiveRecord implements \Iterator {
      * @return boolean
      */
     protected function doSaveUpdate() {
-        $this->beforeUpdate();
         $changes = array();
         foreach ( $this->attributes as $name => $attribute ) {
             if ( !$attribute->getIsDirty() ) {
@@ -425,14 +301,17 @@ abstract class XActiveRecord implements \Iterator {
             return;
         }
     
-        $sql = SQLBuilder::build()->update()
-            ->table($this->getTableFullName())
-            ->setValues($changes)
-            ->where($this->getRecordCondition())
-            ->limit(1)
-            ->toString();
-        $this->execute($sql);
-        $this->afterUpdate();
+        $sql = SQLBuilder::build()->update();
+        $sql->table($this->getTableFullName());
+        $sql->values($changes);
+        $sql->where($this->getRecordCondition());
+        $sql->limit(1);
+        
+        $this->execute($sql->toString());
+        
+        foreach ( $this->attributes as $name => $attribute ) {
+            $attribute->setOldValue($attribute->getValue());
+        }
     }
     
     /**
@@ -459,13 +338,11 @@ abstract class XActiveRecord implements \Iterator {
      * @return boolean
      */
     public function delete() {
-        $this->beforeDelete();
         $sql = SQLBuilder::build()->delete()
             ->from($this->getTableFullName())
             ->where($this->getRecordCondition())
             ->limit(1)
             ->toString();
-        $this->afterDelete();
         return $this->execute($sql);
     }
     
@@ -597,9 +474,7 @@ abstract class XActiveRecord implements \Iterator {
             return;
         }
         
-        $this->beforeValidate($name);
         $isValid = $attribute->validate();
-        $this->afterValidate($name);
         return $isValid;
     }
     
@@ -658,9 +533,7 @@ abstract class XActiveRecord implements \Iterator {
      */
     public function __construct() {
         $this->initAttributesByDeacribe();
-        $this->beforeInit();
         $this->init();
-        $this->afterInit();
     }
     
     /**
@@ -751,7 +624,7 @@ abstract class XActiveRecord implements \Iterator {
      * Create a new active record model. if $attribute is not null,
      * then, it would update the attributes by given attributes.
      * @param array $attributes The value to new object.
-     * @return ActiveRecord
+     * @return \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord
      */
     public static function create( $attributes=null, $isNew=true ) {
         $class = get_called_class();
@@ -769,14 +642,14 @@ abstract class XActiveRecord implements \Iterator {
     }
     
     /**
-     * @return \X\Service\XDatabase\Core\SQL\Condition\Query
+     * @return \X\Service\XDatabase\Core\ActiveRecord\Query
      */
     public static function query() {
         $class = get_called_class();
         /* @var $object XActiveRecord */
         $object =  new $class();
         $query = new Query();
-        $query->setTables(array($object->getTableFullName()));
+        $query->addTable($object->getTableFullName());
         return $query;
     }
     
