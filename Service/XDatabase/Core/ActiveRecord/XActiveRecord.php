@@ -13,7 +13,6 @@ use X\Service\XDatabase\Core\SQL\Builder as SQLBuilder;
 use X\Service\XDatabase\Core\SQL\Func\Count as SQLFuncCount;
 use X\Service\XDatabase\Core\SQL\Condition\Condition as SQLCondition;
 use X\Service\XDatabase\Core\SQL\Condition\Builder as ConditionBuilder;
-use X\Service\XDatabase\Core\Basic;
 use X\Service\XDatabase\Core\SQL\Condition\Query;
 use X\Service\XDatabase\Service as XDatabaseService;
 use X\Service\XDatabase\Core\SQL\Func\Max;
@@ -26,7 +25,7 @@ use X\Service\XDatabase\Core\SQL\Func\Max;
  * @since   0.0.0
  * @version 0.0.0
  */
-abstract class XActiveRecord extends Basic implements \Iterator {
+abstract class XActiveRecord implements \Iterator {
     /**
      * Find records by given criteria and return the matched records.
      * @param Criteria $criteria
@@ -511,7 +510,7 @@ abstract class XActiveRecord extends Basic implements \Iterator {
      */
     public function count( $condition=null ) {
         $sql = SQLBuilder::build()->select()
-            ->columns(array('count'=>new SQLFuncCount()))
+            ->expression(new SQLFuncCount(), 'count')
             ->from($this->getTableFullName())
             ->where($condition)
             ->toString();
@@ -570,7 +569,9 @@ abstract class XActiveRecord extends Basic implements \Iterator {
      * @return \X\Service\XDatabase\Core\Database
      */
     protected function getDb() {
-        return X::system()->getServiceManager()->get(XDatabaseService::getServiceName())->getDatabase();
+        /* @var $service XDatabaseService */
+        $service = X::system()->getServiceManager()->get(XDatabaseService::getServiceName());
+        return $service->getDatabaseManager()->get();
     }
     
     /**

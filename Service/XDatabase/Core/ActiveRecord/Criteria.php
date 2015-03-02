@@ -6,15 +6,10 @@ namespace X\Service\XDatabase\Core\ActiveRecord;
 
 /**
  * 
- */
-use X\Service\XDatabase\Core\Basic;
-
-/**
- * 
  * @author michael
  *
  */
-class Criteria extends Basic {
+class Criteria {
     /**
      * The condition for current query.
      * @var mixed

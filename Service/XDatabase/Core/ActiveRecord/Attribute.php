@@ -8,7 +8,6 @@ namespace X\Service\XDatabase\Core\ActiveRecord;
  * 
  */
 use X\Core\X;
-use X\Library\XData\XString;
 use X\Service\XDatabase\Core\Table\Column as TableColumn;
 
 /**
@@ -28,7 +27,7 @@ class Attribute extends TableColumn {
             case 'NOTNULL'  : $this->setNullable(false); break;
             default:
                 if ( ('[' === $item[0]) && (']' === $item[strlen($item)-1]) ) {
-                    $this->setDefault(substr($item, 1, strlen($item)-1));
+                    $this->setDefault(substr($item, 1, strlen($item)-2));
                 } else {
                     $type = explode('(', $item);
                     $this->setType($type[0]);
@@ -64,7 +63,6 @@ class Attribute extends TableColumn {
     );
     
     /**
-     * 
      * @param unknown $name
      */
     public function __construct($name) {
@@ -76,9 +74,12 @@ class Attribute extends TableColumn {
      * @return \X\Service\XDatabase\Core\ActiveRecord\Column
      */
     public function setMinLength( $length ) {
-        return $this->set('minLength', $length);
+        return $this->set('minLength', (int)$length);
     }
     
+    /**
+     * @return Ambigous <\X\Service\XDatabase\Core\Table\mixed, multitype:>
+     */
     public function getMinLength() {
         return $this->get('minLength');
     }
@@ -90,10 +91,16 @@ class Attribute extends TableColumn {
         return $this->set('isUnique', $isUnique);
     }
     
+    /**
+     * @return Ambigous <\X\Service\XDatabase\Core\Table\mixed, multitype:>
+     */
     public function getIsUnique() {
         return $this->get('isUnique');
     }
     
+    /**
+     * @var unknown
+     */
     protected $valueBuilder = null;
     
     /**
@@ -104,9 +111,19 @@ class Attribute extends TableColumn {
         return $this;
     }
     
+    /**
+     * @var unknown
+     */
     protected $newValue = null;
+    
+    /**
+     * @var unknown
+     */
     protected $oldValue = null;
     
+    /**
+     * @var unknown
+     */
     public function setOldValue( $oldValue ) {
         $this->oldValue = $oldValue;
         return $this;
@@ -122,7 +139,6 @@ class Attribute extends TableColumn {
     
     /**
      * Get value from Column object.
-     *
      * @return mixed
      */
     public function getValue() {
@@ -130,7 +146,7 @@ class Attribute extends TableColumn {
         if ( null !== $this->newValue ) {
             $value = $this->newValue;
         } else if ( null !== $this->valueBuilder && is_callable($this->valueBuilder) ) {
-            $value = call_user_func_array($this->valueBuilder, array($this->record));
+            $value = call_user_func_array($this->valueBuilder, array($this->record, $this->getName()));
         } else {
             $value = $this->getDefault();
         }
@@ -140,7 +156,6 @@ class Attribute extends TableColumn {
     
     /**
      * Get whether the value of Column has been modified.
-     * 
      * @return boolean
      */
     public function getIsDirty() {
@@ -149,7 +164,6 @@ class Attribute extends TableColumn {
     
     /**
      * Clean the dirty status, set the value to new value.
-     * 
      * @return Column
      */
     public function cleanDirty() {
@@ -159,14 +173,12 @@ class Attribute extends TableColumn {
     
     /**
      * This value contains all errors on current Column object. 
-     * 
      * @var array
      */
     protected $errors = array();
     
     /**
      * Add error to current Column object.
-     * 
      * @param string $message
      * @return Column
      */
@@ -177,7 +189,6 @@ class Attribute extends TableColumn {
     
     /**
      * Get whether there is an error on current Column obejct.
-     * 
      * @return boolean
      */
     public function hasError() {
@@ -186,7 +197,6 @@ class Attribute extends TableColumn {
     
     /**
      * Get the errors on current Column object.
-     * 
      * @return array
      */
     public function getErrors() {
@@ -195,14 +205,12 @@ class Attribute extends TableColumn {
     
     /**
      * This value contains all custome validators for current Column object.
-     * 
      * @var callback[]
      */
     protected $validators = array();
     
     /**
      * Add custome validator to current Column obejct.
-     * 
      * @param callback $validator
      * @return Column
      */
@@ -213,7 +221,6 @@ class Attribute extends TableColumn {
     
     /**
      * Validate current Column object, and return validate result.
-     * 
      * @return boolean
      */
     public function validate() {
@@ -224,31 +231,26 @@ class Attribute extends TableColumn {
         }
         
         $value = $this->getValue();
-        
-        $validateItems = array(
-            'NotNull',  'DataType',     'Length', 
-            'Unique',   'PrimaryKey',   'Unsigned');
-        
-        foreach ( $validateItems as $item ) {
-            $handler = sprintf('validate%s', $item);
-            if ( false === $this->$handler($value) ) {
-                return false;
-            }
+        $isValidated = true;
+        $isValidated = $isValidated && $this->validateNotNull($value);
+        $isValidated = $isValidated && $this->validateDataType($value);
+        $isValidated = $isValidated && $this->validateLength($value);
+        $isValidated = $isValidated && $this->validateUnique($value);
+        $isValidated = $isValidated && $this->validatePrimaryKey($value);
+        $isValidated = $isValidated && $this->validateUnsigned($value);
+        if ( false === $isValidated ){
+            return false;
         }
         
-        $hasValidateError = false;
         foreach ( $this->validators as $validator ) {
-            if ( false === call_user_func_array($validator, array($this)) ) {
-                $hasValidateError = true;
-            }
+            call_user_func_array($validator, array($this->record, $this));
         }
         
-        return !$hasValidateError;
+        return !$this->hasError();
     }
     
     /**
      * "NOT NULL" check for current Column object.
-     * 
      * @param mixed $value
      * @return boolean
      */
@@ -256,8 +258,9 @@ class Attribute extends TableColumn {
         if ( $this->getNullable() ) {
             return true;
         }
+        
         if ( null === $value ) {
-            $this->addError(sprintf('"%s" can not be empty.', $this->name));
+            $this->addError('"%s" can not be null.', $this->getName());
             return false;
         }
         return true;
@@ -265,87 +268,83 @@ class Attribute extends TableColumn {
     
     /**
      * Validate the data type for current Column object.
-     * 
      * @param mixed $value
      * @return boolean
      */
     protected function validateDataType( $value ) {
-        $handler = sprintf('validateDataType%s', ucfirst(strtolower($this->type)));
+        $handler = 'validateDataType'.ucfirst(strtolower($this->getType()));
         if ( method_exists($this, $handler) ) {
             return call_user_func_array(array($this, $handler), array($value));
-        }
-        else {
-            $this->addError('Unknown type "%s" of Column "%s".', $this->type, $this->name);
+        } else {
+            $this->addError('Unknown type "%s" of Column "%s".', $this->getType(), $this->getName());
             return false;
         }
     }
     
     /**
      * Validate the data type integer for current Column object.
-     * 
      * @param mixed $value
      * @return boolean
      */
     protected function validateDataTypeInt( $value ) {
-        if ( empty($value) ) {
-            return true;
-        }
-        
-        if ( sprintf('%d', $value*1) !== "$value" ) {
-            $this->addError(sprintf('The value of "%s" is not a validated integer.', $this->name));
+        if ( !empty($value) && (!is_numeric($value) || !is_int($value*1)) ) {
+            $this->addError('The value of "%s" is not a validated integer.', $this->getName());
             return false;
         }
         return true;
     }
     
+    /**
+     * @param unknown $value
+     * @return boolean
+     */
     protected function validateDataTypeTinyint($value) {
-        if ( empty($value) ) {
-            return true;
+        if (!empty($value)) {
+            $isValidate = is_numeric($value);
+            $isValidate = $isValidate && is_int($value*1);
+            $isValidate = $isValidate && (($this->getIsUnsigned())?(0<$value&&$value<255):(-128<$value&&$value<128));
+            if ( !$isValidate ){
+                $this->addError('The value of "%s" is not a validated integer.', $this->getName());
+                return false;
+            }
         }
-        
-        if ( (!is_numeric($value) || (int)$value != $value ) 
-        || ( ($this->getIsUnsigned()) ? ($value < 0 || 255 < $value) : ( $value < -128 || 128 < $value ) )
-        ) {
-            $this->addError(sprintf('The value of "%s" is not a validated integer.', $this->name));
-            return false;
-        }
-        
-        
         return true;
     }
     
     /**
      * Validate the data type varchar for current Column object.
-     * 
      * @param mixed $value
      * @return boolean
      */
     protected function validateDataTypeVarchar( $value ) {
-        $validate = is_numeric($value) 
-        || is_string($value) 
-        || ( is_object($value) && method_exists($value, '__toString') );
+        $validate = null===$value && $this->getNullable();
+        $validate = $validate || is_numeric($value);
+        $validate = $validate || is_string($value);
+        $validate = $validate || (is_object($value) && method_exists($value, '__toString'));
         
         if ( !$validate ) {
-            $this->addError(sprintf('The value of "%s" is not a validated string.', $this->name));
+            $this->addError('The value of "%s" is not a validated string.', $this->getName());
             return false;
         }
         return true;
     }
     
+    /**
+     * @param unknown $value
+     * @return boolean
+     */
     protected function validateDataTypeLongtext( $value ) {
         return $this->validateDataTypeVarchar($value);
     }
     
     /**
      * Validate the data type for datetime current Column object.
-     * 
      * @param mixed $value
      * @return boolean
      */
     protected function validateDataTypeDatetime( $value ) {
-        if ( empty($value) ) { return true; }
-        if ( false === \DateTime::createFromFormat('Y-m-d H:i:s', $value) ) {
-            $this->addError(sprintf('The value of "%s" is not a validated date and time.', $this->name));
+        if (!empty($value) && false === \DateTime::createFromFormat('Y-m-d H:i:s', $value) ) {
+            $this->addError('The value of "%s" is not a validated date and time.', $this->getName());
             return false;
         }
         return true;
@@ -353,14 +352,12 @@ class Attribute extends TableColumn {
     
     /**
      * Validate the data type for datetime current Column object.
-     *
      * @param mixed $value
      * @return boolean
      */
     protected function validateDataTypeDate( $value ) {
-        if ( empty($value) ) { return true; }
-        if ( false === \DateTime::createFromFormat('Y-m-d', $value) ) {
-            $this->addError(sprintf('The value of "%s" is not a validated date and time.', $this->name));
+        if ( !empty($value) && false === \DateTime::createFromFormat('Y-m-d', $value) ) {
+            $this->addError('The value of "%s" is not a validated date and time.', $this->getName());
             return false;
         }
         return true;
@@ -368,7 +365,6 @@ class Attribute extends TableColumn {
     
     /**
      * Validate the data length for current Column object.
-     * 
      * @param mixed $value
      * @return boolean
      */
@@ -379,15 +375,15 @@ class Attribute extends TableColumn {
         }
         
         $length = $this->getLength();
-        $valLength = XString::str($value)->getLength();
+        $valLength = mb_strlen($value);
         if ( null !== $length && $valLength > $length ) {
-            $this->addError(sprintf('The value "%s" of "%s" is too long.', $value, $this->name));
+            $this->addError('The value "%s" of "%s" is too long.', $value, $this->getName());
             return false;
         }
         
         $minLength = $this->getMinLength();
         if ( null !== $minLength && $valLength < $minLength ) {
-            $this->addError(sprintf('The value "%s" of "%s" is too short.', $value, $this->name));
+            $this->addError('The value "%s" of "%s" is too short.', $value, $this->getName());
             return false;
         }
         
@@ -396,7 +392,6 @@ class Attribute extends TableColumn {
     
     /**
      * Unique check for current Column object.
-     * 
      * @param mixed $value
      * @return boolean
      */
@@ -404,18 +399,15 @@ class Attribute extends TableColumn {
         if ( !$this->record->getIsNew() && !$this->getIsDirty() ) {
             return true;
         }
-        
-        if( $this->getIsUnique() && $this->record->exists(array($this->name=>$value)) ) {
-            $this->addError(sprintf('"%s" already exists.', $value));
+        if( $this->getIsUnique() && $this->record->exists(array($this->getName()=>$value)) ) {
+            $this->addError('The value "%s" for "%s" already exists.', $value, $this->getName());
             return false;
         }
-        
         return true;
     }
     
     /**
      * Primary key check for current Column object.
-     * 
      * @param mixed $value
      * @return boolean
      */
@@ -423,7 +415,7 @@ class Attribute extends TableColumn {
         if( $this->getIsPrimaryKey()
         &&  $this->getIsDirty() 
         &&  $this->record->exists(array($this->getName()=>$value)) ) {
-            $this->addError(sprintf('The key "%s" of "%s" already exists.', $value, get_class($this->record)));
+            $this->addError('The key "%s" of "%s" already exists.', $value, get_class($this->record));
             return false;
         }
         
@@ -432,15 +424,14 @@ class Attribute extends TableColumn {
     
     /**
      * Unsigned check for current Column object.
-     * 
      * @param mixed $value
      * @return boolean
      */
     protected function validateUnsigned( $value ){
         $unsignedTypes = array('TINYINT', 'SMALLINT','INT', 'BIGINT');
         $type = strtoupper($this->getType());
-        if ( in_array($type, $unsignedTypes) && 0 > $value ) {
-            $this->addError(sprintf('The value "%s" of "%s" can not lower that 0.', $value, $this->name));
+        if ( $this->getIsUnsigned() && in_array($type, $unsignedTypes) && 0>$value ) {
+            $this->addError('The value "%s" of "%s" can not lower that 0.', $value, $this->getName());
             return false;
         }
         return true;
