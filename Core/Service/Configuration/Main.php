@@ -8,8 +8,13 @@ return array (
   ),
   'XDatabase' => 
   array (
-    'enable' => false,
+    'enable' => true,
     'class' => 'X\\Service\\XDatabase\\Service',
+    'delay' => true,
+  ),
+  'User' => array(
+    'enable' => true,
+    'class' => 'X\\Module\\Lunome\\Service\\User\\Service',
     'delay' => true,
   ),
 );
