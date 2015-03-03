@@ -38,10 +38,11 @@ abstract class XActiveRecord implements \Iterator {
             ->from($this->getTableFullName())
             ->where($condition)
             ->limit($criteria->limit)
-            ->offset($criteria->position)
-            ->orders($criteria->getOrders())
-            ->toString();
-        $result = $this->doQuery($sql);
+            ->offset($criteria->position);
+        foreach ( $criteria->getOrders() as $order ) {
+            $sql->orderBy($order['expression'], $order['order']);
+        }
+        $result = $this->doQuery($sql->toString());
         
         $class = get_class($this);
         foreach ( $result as $index => $attributes ) {
@@ -104,8 +105,7 @@ abstract class XActiveRecord implements \Iterator {
     public function findByPrimaryKey( $primaryKey ) {
         $name = $this->getPrimaryKeyName();
         if ( null === $name ) {
-            $message = 'Can not find primary key in "'.get_class($this).'"';
-            throw new Exception($message);
+            throw new Exception('Can not find primary key in "'.get_class($this).'"');
         }
         return $this->find(array($name=>$primaryKey));
     }
@@ -234,18 +234,18 @@ abstract class XActiveRecord implements \Iterator {
      * @return string|null
      */
     protected function getPrimaryKeyName() {
-        if ( null !== $this->primaryKeyName ) {
-            return $this->primaryKeyName;
-        }
-    
-        foreach ($this->attributes as $name => $attribute) {
-            if ( $attribute->getIsPrimaryKey() ) {
-                $this->primaryKeyName = $name;
-                break;
+        if ( null === $this->primaryKeyName ) {
+            foreach ($this->attributes as $name => $attribute) {
+                if ( $attribute->getIsPrimaryKey() ) {
+                    $this->primaryKeyName = $name;
+                    break;
+                }
+            }
+            if ( null === $this->primaryKeyName ) {
+                $this->primaryKeyName = false;
             }
         }
-    
-        return $this->primaryKeyName;
+        return false===$this->primaryKeyName?null:$this->primaryKeyName;
     }
     
     /**
@@ -276,7 +276,7 @@ abstract class XActiveRecord implements \Iterator {
         
         foreach ( $this->attributes as $name => $attribute ) {
             if ( $attribute->getIsAutoIncrement() ) {
-                $attribute->setValue($this->getDb()->lastInsertId());
+                $attribute->setValue($this->getDb()->getLastInsertId());
             }
             $attribute->setOldValue($attribute->getValue());
         }
@@ -321,11 +321,13 @@ abstract class XActiveRecord implements \Iterator {
      * @param integer $limit The number to effect.
      * @return integer The number of updated records
      */
-    public function updateAll( $values, $condition, $limit=0 ) {
-        $criteria = new Criteria();
-        $criteria->condition = $condition;
-        $criteria->limit = $limit;
-        $results = $this->doFind($criteria);
+    public function updateAll( $values, $condition=null) {
+        if ( !($condition instanceof Criteria) ) {
+            $criteria = new Criteria();
+            $criteria->condition = $condition;
+            $condition = $criteria;
+        }
+        $results = $this->doFind($condition);
         foreach ( $results as $result ) {
             $result->setAttributeValues($values);
             $result->save();
@@ -353,11 +355,13 @@ abstract class XActiveRecord implements \Iterator {
      * @param integer $limit The limitation of deleteion.
      * @return integer The number of deleted record.
      */
-    public function deleteAll( $condition, $limit=0 ){
-        $criteria = new Criteria();
-        $criteria->condition = $condition;
-        $criteria->limit = $limit;
-        $results = $this->doFind($criteria);
+    public function deleteAll( $condition=null ){
+        if ( !($condition instanceof Criteria) ) {
+            $criteria = new Criteria();
+            $criteria->condition = $condition;
+            $condition = $criteria;
+        }
+        $results = $this->doFind($condition);
         foreach ( $results as $result ) {
             $result->delete();
         }
@@ -392,7 +396,7 @@ abstract class XActiveRecord implements \Iterator {
             ->where($condition)
             ->toString();
         $result = $this->doQuery($sql);
-        return $result[0]['count'];
+        return (int)($result[0]['count']);
     }
     
     /**
@@ -401,7 +405,7 @@ abstract class XActiveRecord implements \Iterator {
      */
     public function getMax( $column, $condition=null ) {
         $sql = SQLBuilder::build()->select()
-            ->columns(array('max'=> new Max($column)))
+            ->expression(new Max($column), 'max')
             ->from($this->getTableFullName())
             ->where($condition)
             ->toString();
@@ -436,9 +440,6 @@ abstract class XActiveRecord implements \Iterator {
      */
     protected function doQuery( $query ) {
         $result = $this->getDb()->query($query);
-        if ( false === $result ) {
-            throw new Exception(sprintf('Failed to execute query: %s', $query));
-        }
         return $result;
     }
     
@@ -470,7 +471,7 @@ abstract class XActiveRecord implements \Iterator {
      */
     public function validateAttribute( $name ) {
         $attribute = $this->getAttribute($name);
-        if ( !$attribute->getIsDirty() ) {
+        if ( !$this->getIsNew() && !$attribute->getIsDirty() ) {
             return;
         }
         
