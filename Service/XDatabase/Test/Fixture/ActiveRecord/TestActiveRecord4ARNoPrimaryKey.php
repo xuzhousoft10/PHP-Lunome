@@ -7,17 +7,14 @@ use X\Service\XDatabase\Core\ActiveRecord\XActiveRecord;
 /**
  * 
  */
-class TestActiveRecord extends XActiveRecord {
+class TestActiveRecord4ARNoPrimaryKey extends XActiveRecord {
     /**
      * (non-PHPdoc)
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::describe()
      */
     protected function describe() {
         $columns = array();
-        $columns['id']          = 'PRIMARY VARCHAR(36) NOTNULL';
         $columns['value']       = 'VARCHAR(36)';
-        $columns['mark']        = 'VARCHAR(36) UNIQUE NOTNULL';
-        $columns['status']      = 'INT [1]';
         return $columns;
     }
 
@@ -26,6 +23,6 @@ class TestActiveRecord extends XActiveRecord {
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::getTableName()
      */
     protected function getTableName() {
-        return 'test_activerecord';
+        return 'test_activerecord_4_ar_no_primary_key';
     }
 }
