@@ -52,7 +52,9 @@ class Service extends \X\Core\Service\XService {
         }
         
         $this->request = new Request();
-        $this->routeCurrentRequest();
+        if ( $this->getConfiguration()->get('route', false) ) {
+            $this->routeCurrentRequest();
+        }
     }
     
     /**

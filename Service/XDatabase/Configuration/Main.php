@@ -2,9 +2,9 @@
 return array (
   'databases' => 
   array (
-    'test-default' => 
+    'default' => 
     array (
-      'dsn' => 'mysql:host=localhost;dbname=test',
+      'dsn' => 'mysql:host=localhost;dbname=lunome',
       'username' => 'root',
       'password' => '',
       'charset' => 'utf8',

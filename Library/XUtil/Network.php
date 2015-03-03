@@ -40,7 +40,7 @@ class Network {
      * @return string
      */
     public static function getClientIP() {
-        if ( X::system()->isCLI() ) {
+        if ( 'cli' === X::system()->getEnvironment()->getName() ) {
             return '127.0.0.1';
         }
         

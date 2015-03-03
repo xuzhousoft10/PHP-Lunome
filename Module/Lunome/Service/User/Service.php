@@ -17,6 +17,7 @@ use X\Service\QQ\Service as QQService;
 use X\Service\Sina\Service as SinaService;
 use X\Module\Lunome\Model\Account\AccountNotificationModel;
 use X\Module\Lunome\Model\Account\AccountInformationModel;
+use X\Service\XRequest\Service as XRequestService;
 
 /**
  * The service class
@@ -34,7 +35,7 @@ class Service extends \X\Core\Service\XService {
     public function start() {
         parent::start();
         
-        if ( isset($_SERVER['HTTP_HOST']) && 'lunome.kupoy.com' === $_SERVER['HTTP_HOST'] && $this->getIsGuest()) {
+        if ( $this->getIsDebugEnvironment() && $this->getIsGuest()) {
             if ( false !== strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'firefox') ) {
                 $account = AccountModel::model()->find(array('account'=>'0'));
             } else {
@@ -43,6 +44,17 @@ class Service extends \X\Core\Service\XService {
             $this->loginAccount($account, 'DEBUG');
         }
         $this->initCurrentUserInformation();
+    }
+    
+    /**
+     * @return boolean
+     */
+    private function getIsDebugEnvironment() {
+        /* @var $requestService XRequestService */
+        $requestService = X::system()->getServiceManager()->get(XRequestService::getServiceName());
+        
+        $request = $requestService->getRequest();
+        return $request->getHost() === X::system()->getConfiguration()->get('development_host');
     }
     
     /**

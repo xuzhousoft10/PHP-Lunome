@@ -1,5 +1,10 @@
 <?php
 return array (
+  'XRequest' => array(
+    'class' => 'X\Service\XRequest\Service',
+    'enable' => true,
+    'delay' => false,
+  ),
   'XAction' => 
   array (
     'class' => 'X\\Service\\XAction\\Service',
