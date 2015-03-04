@@ -3,28 +3,37 @@
  * Namespace defination
  */
 namespace X\Service\XView;
-
+/**
+ * 
+ */
+use X\Service\XView\Core\Util\Exception;
 /**
  * The view service
- * 
  * @author  Michael Luthor <michael.the.ranidae@gmail.com>
  * @since   0.0.0
  * @version 0.0.0
  */
 class Service extends \X\Core\Service\XService {
     /**
-     * (non-PHPdoc)
-     * @see \X\Core\Service\XService::afterStart()
+     * 
      */
-    protected function afterStart() {
-        register_shutdown_function(array($this, 'autoDisplayHandler'));
+    protected static $serviveName = 'XView';
+    
+    /**
+     * (non-PHPdoc)
+     * @see \X\Core\Service\XService::stop()
+     */
+    public function stop() {
+        if ( $this->getConfiguration()->get('auto_display', false) ) {
+            $this->display();
+        }
+        parent::stop();
     }
     
     /**
      * This value contains all loaded view instance.
      * -- key : {string} the name of view
      * -- value: {X\Service\XView\View} the instance of view handler.
-     *
      * @var X\Service\XView\View[]
      */
     protected $views = array(
@@ -32,42 +41,36 @@ class Service extends \X\Core\Service\XService {
     );
     
     /**
-     * The type of view for html page.
-     *
-     * @var string
-     */
-    const VIEW_TYPE_HTML = 'Html';
-    
-    /**
      * Create a new view handler and load it into view service.
-     *
      * @param string $name The name of the view.
      * @param string $type The type of the view, the value of it could be a name of view
      *                     handler class or the const values of XViewService::VIEW_TYPE_*
      * @return \X\Service\XView\Service
      */
-    public function create( $name, $type ) {
-        if ( isset($this->views[$name]) ) {
-            throw new Exception(sprintf('View handler "%s" already exists.', $name));
+    private function create( $name, $type ) {
+        if ( $this->has($name) ) {
+            throw new Exception('View handler "'.$name.'" already exists.');
         }
         
-        $viewHandler = $type;
-        if ( !class_exists($viewHandler, false) ) {
-            $viewHandler = sprintf('\\X\\Service\\XView\\Core\\Handler\\%s', $type);
-        }
-        
+        $viewHandler = '\\X\\Service\\XView\\Core\\Handler\\'.$type;
         $view = new $viewHandler();
-        if ( !($view instanceof \X\Service\XView\Core\View) ) {
-            throw new Exception(sprintf('"%s" is not a valid view handler.', $viewHandler));
+        if ( !($view instanceof \X\Service\XView\Core\Util\View) ) {
+            throw new Exception('"'.$viewHandler.'" is not a valid view handler.');
         }
-        
         $this->views[$name] = $view;
         return $view;
     }
     
     /**
+     * @param unknown $name
+     * @return Ambigous <\X\Service\XView\Service, \X\Service\XView\Core\View, unknown>
+     */
+    public function  createHtml($name) {
+        return $this->create($name, 'Html');
+    }
+    
+    /**
      * Check the view by given name. return  true if the view exists or false if not.
-     * 
      * @param string $name The name of view
      * @return boolean
      */
@@ -77,21 +80,18 @@ class Service extends \X\Core\Service\XService {
     
     /**
      * Get view instance by given name.
-     * 
      * @param string $name The name of view.
      * @return X\Service\XView\View
      */
     public function get($name){
         if ( !$this->has($name) ) {
-            throw new Exception(sprintf('Can not find view "%s".', $name));
+            throw new Exception('View "'.$name.'" does not exists.');
         }
-        
         return $this->views[$name];
     }
     
     /**
      * Get the name list of views.
-     *
      * @return \X\View\XView
      */
     public function getList(){
@@ -100,67 +100,26 @@ class Service extends \X\Core\Service\XService {
     
     /**
      * The name of active view.
-     *
      * @var string
      */
     protected $activedView = null;
     
     /**
      * Set given view to active.
-     *
      * @param string $name The name of view to active.
      * @return void
      */
     public function activeView($name){
         $this->activedView = $name;
     }
-    
-    /**
-     * Whether it would auto dispaly the view.
-     * 
-     * @var boolean
-     */
-    protected $isAutoDisplay = false;
-    
-    /**
-     * Enable the auto display function.
-     * 
-     * @return void
-     */
-    public function enableAutoDisplay() {
-        $this->isAutoDisplay = true;
-    }
-    
-    /**
-     * Disable the auto display function
-     * 
-     * @return void
-     */
-    public function disableAutoDisplay() {
-        $this->isAutoDisplay = false;
-    }
-    
-    /**
-     * The auto display handler to display active view automaticly.
-     * 
-     * @return void
-     */
-    public function autoDisplayHandler() {
-        if ( !$this->isAutoDisplay || is_null($this->activedView) ) {
-            return;
-        }
-        
-        $this->display();
-    }
-    
+       
     /**
      * Display the active view. If there is no active view, then
      * nothing would be displayed.
-     * 
      * @return void
      */
     public function display(){
-        if ( is_null($this->activedView) ) {
+        if ( null === $this->activedView ) {
             return;
         }
         $this->views[$this->activedView]->display();

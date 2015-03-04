@@ -8,8 +8,9 @@ namespace X\Service\XView\Core\Handler;
  * Use statement
  */
 use X\Core\X;
-use X\Service\XView\Core\Exception;
+use X\Service\XView\Core\Util\Exception;
 use X\Service\XView\Service as XViewService;
+use X\Service\XView\Core\Util\HtmlView\StyleManager;
 
 /**
  * The view handler for html page.
@@ -18,368 +19,40 @@ use X\Service\XView\Service as XViewService;
  * @since   0.0.0
  * @version Version 0.0.0
  */
-class Html extends \X\Service\XView\Core\View {
+class Html extends \X\Service\XView\Core\Util\View {
     /**
-     * Safe mode mark
-     * 
-     * @var boolean
+     * @var StyleManager
      */
-    protected $safeMode = false;
+    private $styleManager = null;
     
     /**
-     * Enable safe mode for this view.
      * 
-     * @return void
      */
-    public function enableSafeMode() {
-        $this->safeMode = true;
+    public function __construct() {
+        $this->styleManager = new StyleManager();
     }
     
     /**
-     * Disable safe mode for this view.
-     *
-     * @return void
+     * @return \X\Service\XView\Core\Util\HtmlView\StyleManager
      */
-    public function disableSafeMode() {
-        $this->safeMode = false;
-    }
-    
-    /* */
-    const FORMAT_MODE_NONE = null;
-    const FORMAT_MODE_COMPRESS = 'Compress';
-    
-    /**
-     * 
-     * @var unknown
-     */
-    protected $formatMode = self::FORMAT_MODE_NONE;
-    
-    /**
-     * 
-     * @param unknown $mode
-     */
-    public function setFormatMode( $mode ) {
-        $this->formatMode = $mode;
+    public function getStyleManager() {
+        return $this->styleManager;
     }
     
     /**
      * The title of the page.
-     *
      * @var string
      */
     public $title = '';
     
     /**
      * Get the content of title 
-     * 
      * @return string
      */
     protected function getTitleContent( ) {
         $title = $this->title;
-        if ( $this->safeMode ) {
-            $title = htmlspecialchars($title);
-        }
-        return sprintf('<title>%s</title>', $title);
-    }
-    
-    /**
-     * The style list that current page used.
-     * 
-     * @var array
-     */
-    protected $styles = array(
-    /* 'body@screen' => array(
-     *   'item'  => 'body'
-     *   'style' => array('background-color'=>'red'),
-     *   'media' => 'screen',
-     * ),
-     */
-    );
-    
-    /**
-     * Add style into current page.
-     * 
-     * @param string $item The name of item.
-     * @param array $style The css attributes of the item.
-     */
-    public function addStyle( $item, array $style, $media=null ) {
-        if ( empty($item) || empty($style) ) {
-            throw new Exception('$item or $style can not be empty.');
-        }
-        
-        $key = $this->getKeyForStyles($item, $media);
-        if ( !isset($this->styles[$key]) ) {
-            $this->styles[$key]['style'] = $style;
-        } else {
-            $this->styles[$key]['style'] = array_merge($this->styles[$key]['style'], $style);
-        }
-        $this->styles[$key]['item'] = $item;
-        $this->styles[$key]['media'] = $media;
-    }
-    
-    /**
-     * Set the css attribute value on an exists item.
-     * 
-     * @param string $item The name of the item.
-     * @param string $attribute The name of the attribute.
-     * @param mixed $value The value of of the attribute.
-     * 
-     * @return void
-     */
-    public function setStyle( $item, $attribute, $value, $media=null ) {
-        if ( empty($item) || empty($attribute) || empty($value) ) {
-            throw new Exception('$item, $attribute or $value can not be empty.');
-        }
-        
-        $key = $this->getKeyForStyles($item, $media);
-        if ( !isset($this->styles[$key]) ) {
-            $this->styles[$key] = array();
-            $this->styles[$key]['item'] = $item;
-            $this->styles[$key]['media'] = $media;
-        }
-        $this->styles[$key]['style'][$attribute] = $value;
-    }
-    
-    /**
-     * Get all the definded style information.
-     * 
-     * @return array
-     */
-    public function getStyles( ) {
-        return $this->styles;
-    }
-    
-    /**
-     * Get the value of the attribute on given item.
-     * 
-     * @param string $item The name of the item.
-     * @param string $attribute The name of the attribute.
-     * 
-     * @return mixed
-     */
-    public function getStyleValue( $item, $attribute, $media=null) {
-        $key = $this->getKeyForStyles($item, $media);
-        if ( !isset($this->styles[$key]) ) {
-            return null;
-        } else if ( !isset($this->styles[$key]['style'][$attribute]) ) {
-            return null;
-        } else {
-            return $this->styles[$key]['style'][$attribute];
-        }
-    }
-    
-    /**
-     * Remove the style item from current page.
-     * 
-     * @param string $item The item to remove.
-     */
-    public function removeStyle( $item, $media=null ) {
-        $key = $this->getKeyForStyles($item, $media);
-        if ( isset($this->styles[$key]) ) {
-            unset($this->styles[$key]);
-        }
-    }
-    
-    /**
-     * Remove attribute from style list.
-     * 
-     * @param string $item The name of item.
-     * @param string $name The name of attribute.
-     */
-    public function removeStyleAttribute( $item, $name, $media ) {
-        $key = $this->getKeyForStyles($item, $media);
-        if ( !isset($this->styles[$key]) ) {
-            return;
-        }
-        
-        if ( !isset($this->styles[$key]['style'][$name]) ) {
-            return;
-        }
-        
-        unset($this->styles[$key]['style'][$name]);
-        if ( 0 === count($this->styles[$key]['style']) ) {
-            unset($this->styles[$key]);
-        }
-    }
-    
-    /**
-     * Get the conetnet of styles.
-     * 
-     * @return string
-     */
-    protected function getStyleContent() {
-        if ( 0 === count($this->styles) ) {
-            return null;
-        }
-        
-        $styleList = array();
-        foreach ( $this->styles as $item => $attribute ) {
-            $itemStyle = array();
-            foreach ( $attribute['style'] as $name => $value ) {
-                $itemStyle[] = sprintf('%s:%s', $name, $value);
-            }
-            $itemStyle = sprintf('%s {%s;}', $attribute['item'], implode(';', $itemStyle));
-            if ( !is_null($attribute['media']) ) {
-                $itemStyle = sprintf('@media %s{ %s }', $attribute['media'], $itemStyle);
-            }
-            $styleList[] = $itemStyle;
-        }
-        $styleList = implode("\n", $styleList);
-        $styleList = sprintf("<style type=\"text/css\">\n%s\n</style>", $styleList);
-        return $styleList;
-    }
-    
-    /**
-     * Get the key for getting data from styles array.
-     * 
-     * @param string $item
-     * @param string $media
-     * @return string
-     */
-    private function getKeyForStyles( $item, $media ) {
-        return is_null($media) ? $item : sprintf('%s@%s', $item, $media);
-    }
-    
-    /**
-     * The links list in head element.
-     *
-     * @var array
-     */
-    protected  $links = array(
-    /* 'identifier' => array(
-     *      'rel'=>'stylesheet',
-     *      'href'=>'style.css',
-     *      'type'=>'text/css',
-     *      'hreflang'=>'en',
-     *      'media'=>'print',
-     *      'sizes'=>'16x16'
-     * ),
-     */
-    );
-    
-    /* Values for attribute rel in link */
-    const LINK_REL_ALTERNATE    = 'alternate';
-    const LINK_REL_AUTHOR       = 'author';
-    const LINK_REL_HELP         = 'help';
-    const LINK_REL_ICON         = 'icon';
-    const LINK_REL_LICENCE      = 'licence';
-    const LINK_REL_NEXT         = 'next';
-    const LINK_REL_PINGBACK     = 'pingback';
-    const LINK_REL_PREFETCH     = 'prefetch';
-    const LINK_REL_PREV         = 'prev';
-    const LINK_REL_SEARCH       = 'search';
-    const LINK_REL_SIDEBAR      = 'sidebar';
-    const LINK_REL_STYLESHEET   = 'stylesheet';
-    const LINK_REL_TAG          = 'tag';
-    
-    
-    /**
-     * Add link to this page.
-     * 
-     * @param string $identifier The name of the link, use to idenity the link.
-     * @param string $rel The rel value of the link
-     * @param string $type The type value of the link
-     * @param string $href The href value of the link
-     * @param string $media The media value of the link
-     * @param string $hreflang The hreflang value of the link
-     * @param string $sizes The sizes value of the link
-     */
-    public function addLink( $identifier, $rel=null, $type=null, $href=null, $media=null, $hreflang=null, $sizes=null ) {
-        if ( is_null($rel) && is_null($href) && is_null($type) && is_null($hreflang) && is_null($sizes) ) {
-            throw new Exception('The given parameters can not create a valid link label.');
-        }
-            
-        $attributes = array(
-            'rel'       => $rel,
-            'href'      => $href,
-            'type'      => $type,
-            'hreflang'  => $hreflang,
-            'media'     => $media,
-            'sizes'     => $sizes
-        );
-        
-        if ( !isset($this->links[$identifier]) ) {
-            $this->links[$identifier] = $attributes;
-        } else {
-            $this->links[$identifier] = array_merge($this->links[$identifier],$attributes);
-        }
-    }
-    
-    /**
-     * Add css link to current page.
-     * 
-     * @param string $identifier The name of the css
-     * @param string $link The link address of the css.
-     */
-    public function addCssLink( $identifier, $link ) {
-        $this->addLink($identifier, self::LINK_REL_STYLESHEET, 'text/css', $link);
-    }
-    
-    /**
-     * @param unknown $identifier
-     */
-    public function removeCssLink( $identifier ) {
-        unset($this->links[$identifier]);
-    }
-    
-    /**
-     * Set the favicon for current page by given path.
-     * 
-     * @param string $path The page where the icon stored.
-     * @return void
-     */
-    public function setFavicon( $path='/favicon.ico' ) {
-        $this->addLink('favicon', self::LINK_REL_ICON, 'image/x-icon', $path);
-    }
-    
-    /**
-     * Get the link information by name
-     * 
-     * @param string $name The name of the link
-     * @return array
-     */
-    public function getLink( $identifier ) {
-        if ( isset($this->links[$identifier]) ) {
-            return $this->links[$identifier];
-        } else {
-            return null;
-        }
-    }
-    
-    /**
-     * Get all the names of link of current page.
-     * 
-     * @return array
-     */
-    public function getLinks() {
-        return array_keys($this->links);
-    }
-    
-    /**
-     * Get the content of links
-     * 
-     * @return string
-     */
-    protected function getLinkContent() {
-        $linkList = array();
-        foreach ( $this->links as $name => $link ) {
-            $linkString = array('<link');
-            foreach ( $link as $attr => $value ) {
-                if ( is_null($value) ) {
-                    continue;
-                }
-                $linkString[] = sprintf('%s="%s"', $attr, $value);
-            }
-            $linkString[] = '/>';
-            $linkList[] = implode(' ', $linkString);
-        }
-        
-        if ( 0 === count($linkList) ) {
-            return null;
-        }
-        
-        $linkList = implode("\n", $linkList);
-        return $linkList;
+        $title = htmlspecialchars($title);
+        return '<title>'.$title.'</title>';
     }
     
     /**
