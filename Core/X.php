@@ -188,11 +188,11 @@ class X {
         if ( null === self::$system ) {
             return;
         }
-    
-        $this->getServiceManager()->stop();
-        $this->getServiceManager()->destroy();
+        
         $this->getModuleManager()->stop();
         $this->getModuleManager()->destroy();
+        $this->getServiceManager()->stop();
+        $this->getServiceManager()->destroy();
         $this->shortcutManager->stop();
         $this->shortcutManager->destroy();
         self::$system = null;
