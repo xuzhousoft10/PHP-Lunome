@@ -53,6 +53,9 @@ class ServiceTest extends TestCase {
         $this->service->getRouterManager()->register('test', $source, $dest);
         $this->service->getConfiguration()->set('testing', true);
         
+        $isRoute = $this->service->getConfiguration()->get('route', false);
+        $this->service->getConfiguration()->set('route', true);
+        
         $this->service->start();
         $this->assertTrue(X::system()->getShortcutManager()->has('createURL'));
         $this->assertSame('/book/content/page_1.html', X::system()->createURL('test', 'book', 'content', '1'));
@@ -60,6 +63,7 @@ class ServiceTest extends TestCase {
         
         $this->service->getRouterManager()->unregister('test');
         $this->service->getConfiguration()->set('testing', false);
+        $this->service->getConfiguration()->set('route', $isRoute);
         $this->service->getConfiguration()->save();
         
         $_GET = $old_GET;

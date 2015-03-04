@@ -1,7 +1,8 @@
 <?php
 return array (
-  'XRequest' => array(
-    'class' => 'X\Service\XRequest\Service',
+  'XRequest' => 
+  array (
+    'class' => 'X\\Service\\XRequest\\Service',
     'enable' => true,
     'delay' => false,
   ),
@@ -17,7 +18,8 @@ return array (
     'class' => 'X\\Service\\XDatabase\\Service',
     'delay' => true,
   ),
-  'User' => array(
+  'User' => 
+  array (
     'enable' => true,
     'class' => 'X\\Module\\Lunome\\Service\\User\\Service',
     'delay' => true,
