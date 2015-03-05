@@ -1,5 +1,8 @@
 <?php
 namespace X\Service\XView\Core\Util\HtmlView;
+/**
+ * 
+ */
 use X\Service\XView\Core\Util\Exception;
 /**
  * 

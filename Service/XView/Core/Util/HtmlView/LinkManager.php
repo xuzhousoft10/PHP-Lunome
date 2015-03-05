@@ -1,5 +1,8 @@
 <?php
 namespace X\Service\XView\Core\Util\HtmlView;
+/**
+ * 
+ */
 use X\Service\XView\Core\Util\Exception;
 /**
  * 
@@ -39,23 +42,8 @@ class LinkManager {
         $this->addLink('favicon', 'icon', 'image/x-icon', $path);
     }
     
-    /* Values for attribute rel in link */
-    const LINK_REL_ALTERNATE    = 'alternate';
-    const LINK_REL_AUTHOR       = 'author';
-    const LINK_REL_HELP         = 'help';
-    const LINK_REL_LICENCE      = 'licence';
-    const LINK_REL_NEXT         = 'next';
-    const LINK_REL_PINGBACK     = 'pingback';
-    const LINK_REL_PREFETCH     = 'prefetch';
-    const LINK_REL_PREV         = 'prev';
-    const LINK_REL_SEARCH       = 'search';
-    const LINK_REL_SIDEBAR      = 'sidebar';
-    const LINK_REL_TAG          = 'tag';
-    
-    
     /**
      * Add link to this page.
-     * 
      * @param string $identifier The name of the link, use to idenity the link.
      * @param string $rel The rel value of the link
      * @param string $type The type value of the link
@@ -64,8 +52,8 @@ class LinkManager {
      * @param string $hreflang The hreflang value of the link
      * @param string $sizes The sizes value of the link
      */
-    public function addLink( $identifier, $rel=null, $type=null, $href=null, $media=null, $hreflang=null, $sizes=null ) {
-        if ( is_null($rel) && is_null($href) && is_null($type) && is_null($hreflang) && is_null($sizes) ) {
+    private function addLink( $identifier, $rel=null, $type=null, $href=null, $media=null, $hreflang=null, $sizes=null ) {
+        if ( (null===$rel) && (null===$href) && (null===$type) && (null===$hreflang) && (null===$sizes) ) {
             throw new Exception('The given parameters can not create a valid link label.');
         }
             
@@ -88,17 +76,16 @@ class LinkManager {
     /**
      * @param unknown $identifier
      */
-    public function removeCssLink( $identifier ) {
+    public function remove( $identifier ) {
         unset($this->links[$identifier]);
     }
     
     /**
      * Get the link information by name
-     * 
      * @param string $name The name of the link
      * @return array
      */
-    public function getLink( $identifier ) {
+    public function get( $identifier ) {
         if ( isset($this->links[$identifier]) ) {
             return $this->links[$identifier];
         } else {
@@ -108,27 +95,25 @@ class LinkManager {
     
     /**
      * Get all the names of link of current page.
-     * 
      * @return array
      */
-    public function getLinks() {
+    public function getList() {
         return array_keys($this->links);
     }
     
     /**
      * Get the content of links
-     * 
      * @return string
      */
-    protected function getLinkContent() {
+    public function toString() {
         $linkList = array();
         foreach ( $this->links as $name => $link ) {
             $linkString = array('<link');
             foreach ( $link as $attr => $value ) {
-                if ( is_null($value) ) {
+                if ( null === $value ) {
                     continue;
                 }
-                $linkString[] = sprintf('%s="%s"', $attr, $value);
+                $linkString[] = $attr.'='.$value;
             }
             $linkString[] = '/>';
             $linkList[] = implode(' ', $linkString);
