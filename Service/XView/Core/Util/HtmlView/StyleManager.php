@@ -103,7 +103,7 @@ class StyleManager {
      * @param string $item The name of item.
      * @param string $name The name of attribute.
      */
-    public function removeAttribute( $item, $name, $media ) {
+    public function removeAttribute( $item, $name, $media=null ) {
         $key = $this->getKeyForStyles($item, $media);
         if ( !isset($this->styles[$key]) ) {
             return;
@@ -134,9 +134,9 @@ class StyleManager {
             foreach ( $attribute['style'] as $name => $value ) {
                 $itemStyle[] = $name.':'.$value;
             }
-            $itemStyle = $attribute['item'].' {%s;}'.implode(';', $itemStyle);
-            if ( !(null !== $attribute['media']) ) {
-                $itemStyle = '@media '.$attribute['media'].'{ '.$itemStyle.' }';
+            $itemStyle = $attribute['item'].' {'.implode(';', $itemStyle).';}';
+            if ( null !== $attribute['media'] ) {
+                $itemStyle = '@media '.$attribute['media'].' { '.$itemStyle.' }';
             }
             $styleList[] = $itemStyle;
         }

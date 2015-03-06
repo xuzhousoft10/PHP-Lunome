@@ -29,12 +29,12 @@ class ScriptManager {
      * @param string $script The content of script
      * @param string $type The type of script
      */
-    public function addString( $identifier, $script, $type='text/javascript' ) {
+    public function addString( $name, $script, $type='text/javascript' ) {
         if ( empty($script) ) {
             return;
         }
         
-        $this->scripts[$identifier] = array(
+        $this->scripts[$name] = array(
                 'type'      => $type,
                 'src'       => null,
                 'content'   => $script,
@@ -52,12 +52,12 @@ class ScriptManager {
      * @param string $charset The charset of script 
      * @param string $asyns The asyns of script
      */
-    public function addFile( $identifier, $link, $type='text/javascript', $charset='UTF-8', $asyns=false ) {
+    public function addFile( $name, $link, $type='text/javascript', $charset='UTF-8', $asyns=false ) {
         if ( empty($link) ) {
             return;
         }
         
-        $this->scripts[$identifier] = array(
+        $this->scripts[$name] = array(
             'type'      => $type,
             'src'       => $link,
             'content'   => null,
@@ -80,8 +80,8 @@ class ScriptManager {
      * @param string $identifier The script identifier
      * @return boolean
      */
-    public function has( $identifier ) {
-        return isset($this->scripts[$identifier]);
+    public function has( $name ) {
+        return isset($this->scripts[$name]);
     }
     
     /**
@@ -89,20 +89,20 @@ class ScriptManager {
      * @param string $identifier The script identifier
      * @return array
      */
-    public function get( $identifier ) {
-        if ( !$this->has($identifier) ) {
-            throw new Exception('Can not find script "'.$identifier.'".');
+    public function get( $name ) {
+        if ( !$this->has($name) ) {
+            throw new Exception('Can not find script "'.$name.'".');
         }
-        return $this->scripts[$identifier];
+        return $this->scripts[$name];
     }
     
     /**
      * Remove Script from current page.
      * @param string $identifier The name of script
      */
-    public function remove($identifier) {
-        if ( isset($this->scripts[$identifier]) ) {
-            unset($this->scripts[$identifier]);
+    public function remove($name) {
+        if ( isset($this->scripts[$name]) ) {
+            unset($this->scripts[$name]);
         }
     }
     

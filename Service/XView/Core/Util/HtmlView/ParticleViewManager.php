@@ -55,7 +55,7 @@ class ParticleViewManager {
      * Get the paticle information by given name.
      * @param string $name The particle name.
      * @throws Exception
-     * @return array
+     * @return \X\Service\XView\Core\Util\HtmlView\ParticleView
      */
     public function get( $name ) {
         if ( !$this->has($name) ) {
