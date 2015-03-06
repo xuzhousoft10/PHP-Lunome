@@ -59,7 +59,7 @@ class Html extends \X\Service\XView\Core\Util\View {
         $this->linkManager = new LinkManager();
         $this->metaManager = new MetaManager();
         $this->scriptManager = new ScriptManager();
-        $this->particleViewManager = new ParticleViewManager();
+        $this->particleViewManager = new ParticleViewManager($this);
         $this->dataManager = new ConfigurationArray();
     }
     
@@ -135,18 +135,18 @@ class Html extends \X\Service\XView\Core\Util\View {
      * @return string
      */
     private function renderLayout() {
-        if ( is_file($this->layout['view']) ) {
+        if ( is_string($this->layout['view']) && is_file($this->layout['view']) ) {
             extract($this->getDataManager()->toArray(), EXTR_OVERWRITE);
             ob_start();
             ob_implicit_flush(false);
             require $this->layout['view'];
             $this->layout['content'] = ob_get_clean();
         } else if ( is_callable($this->layout['view']) ) {
-            $this->layout['content'] = call_user_func_array($this->layout['view'], $this->getDataManager()->toArray());
+            $this->layout['content'] = call_user_func_array($this->layout['view'], array($this));
         } else if ( is_string($this->layout['view']) ) {
             $this->layout['content'] = $this->layout['view'];
         } else {
-            $this->layout['content'] = null;
+            $this->layout['content'] = '';
         }
         return $this->layout['content'];
     }
@@ -169,8 +169,8 @@ class Html extends \X\Service\XView\Core\Util\View {
      * The system layout names are defined by const which starts with LAYOUT_.
      * @param string $name The name of the layout
      */
-    public function setLayout( $name ) {
-        $this->layout['view'] = $name;
+    public function setLayout( $handler ) {
+        $this->layout['view'] = $handler;
     }
     
     /**
@@ -186,9 +186,6 @@ class Html extends \X\Service\XView\Core\Util\View {
      * @return void
      */
     public function cleanUp() {
-        while (ob_get_level() > 0) {
-            ob_end_flush();
-        }
         $this->layout['content'] = null;
         $this->getParticleViewManager()->cleanUp();
     }

@@ -4,7 +4,6 @@ namespace X\Service\XView\Core\Util\HtmlView;
  * 
  */
 use X\Service\XView\Core\Util\Exception;
-use X\Service\XView\Core\Handler\Html;
 /**
  * 
  */
@@ -12,33 +11,14 @@ class ParticleViewManager {
     /**
      * @var array
      */
-    private $particles = array();
-    
-    /**
-     * @var Html
-     */
-    private $host = null;
-    
-    /**
-     * @param Html $host
-     */
-    public function __construct( Html $host ) {
-        $this->host = $host;
-    }
-    
-    /**
-     * @return \X\Service\XView\Core\Handler\Html
-     */
-    public function getHost() {
-        return $this->host;
-    }
+    private $particles = null;
     
     /**
      * Load paritcle view into current view.
      * @return \X\Service\XView\Core\Util\HtmlView\ParticleView
      */
     public function load( $name, $handler ) {
-        $this->particles[$name] = new ParticleView($handler, $this);
+        $this->particles[$name] = new ParticleView($handler);
         return $this->particles[$name];
     }
     

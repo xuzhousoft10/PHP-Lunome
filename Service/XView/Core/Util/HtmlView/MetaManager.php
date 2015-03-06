@@ -3,10 +3,6 @@ namespace X\Service\XView\Core\Util\HtmlView;
 /**
  * 
  */
-use X\Service\XView\Core\Util\Exception;
-/**
- * 
- */
 class MetaManager {
     /**
      * The metas contains all meta data of the page.
@@ -43,13 +39,13 @@ class MetaManager {
      * @param unknown $keywords
      */
     public function addKeywords( $newKeywords ) {
-        $keywords = $this->getMetaAttribute('page.keyword', 'content');
-        if ( is_null($keywords) ) {
+        $keywords = $this->getAttribute('page.keyword', 'content');
+        if ( null === $keywords ) {
             $keywords = array();
         } else {
             $keywords = explode(',', $keywords);
         }
-        $keywords = array_merge($newKeywords);
+        $keywords = array_merge($keywords, $newKeywords);
         $keywords = array_unique($keywords);
         $keywords = implode(',', $keywords);
         $this->addMetaData('page.keyword', 'keywords', $keywords );
@@ -95,7 +91,7 @@ class MetaManager {
      * @param int $time The number of day to revisi.
      */
     public function setRevisitAfter( $time = 3 ) {
-        $time = ( 1 == $time ) ? '1 Day' : sprintf('%s Days', $time);
+        $time = ( 1 == $time ) ? '1 Day' : $time.' Days';
         $this->addMetaData('page.revisit.after', 'revisit-after', $time);
     }
     
@@ -120,28 +116,6 @@ class MetaManager {
     }
     
     /**
-     * Set the action on page enter
-     * @param string $filter The name of fileter
-     * @param string $transition The id of transition
-     * @param string $duration The time of transition
-     */
-    public function setPageEnter( $filter, $transition, $duration ) {
-        $content = $filter.'(Duration='.$duration.',Transition='.$transition.')';
-        $this->addMetaData('page.enter', 'Page-Enter', $content);
-    }
-    
-    /**
-     * Set the action on page exit
-     * @param string $filter The name of fileter
-     * @param string $transition The id of transition
-     * @param string $duration The time of transition
-     */
-    public function setPageExit( $filter, $transition, $duration ) {
-        $content = $filter.'(Duration='.$duration.',Transition='.$transition.')';
-        $this->addMetaData('page.exit', 'Page-Exit', $content);
-    }
-    
-    /**
      * Let client do not get the page form local cache.
      * @return void
      */
@@ -159,10 +133,6 @@ class MetaManager {
      * @param string $httpEquiv The http-equiv of the meta data.
      */
     public function addMetaData($identifier, $name=null, $content=null, $charset=null, $httpEquiv=null ) {
-        if ( empty($name) && empty($content) && empty($charset) && empty($httpEquiv) ) {
-            throw new Exception('The given paramaters can not create a valid meta.');
-        }
-    
         $this->metas[$identifier] = array(
             'name'          => $name,
             'content'       => $content,

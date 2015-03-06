@@ -53,10 +53,6 @@ class LinkManager {
      * @param string $sizes The sizes value of the link
      */
     private function addLink( $identifier, $rel=null, $type=null, $href=null, $media=null, $hreflang=null, $sizes=null ) {
-        if ( (null===$rel) && (null===$href) && (null===$type) && (null===$hreflang) && (null===$sizes) ) {
-            throw new Exception('The given parameters can not create a valid link label.');
-        }
-            
         $attributes = array(
             'rel'       => $rel,
             'href'      => $href,
@@ -76,8 +72,17 @@ class LinkManager {
     /**
      * @param unknown $identifier
      */
-    public function remove( $identifier ) {
-        unset($this->links[$identifier]);
+    public function remove( $name ) {
+        if ( $this->has($name) ) {
+            unset($this->links[$name]);
+        }
+    }
+    
+    /**
+     * @param unknown $name
+     */
+    public function has( $name ) {
+        return isset($this->links[$name]);
     }
     
     /**
@@ -85,12 +90,11 @@ class LinkManager {
      * @param string $name The name of the link
      * @return array
      */
-    public function get( $identifier ) {
-        if ( isset($this->links[$identifier]) ) {
-            return $this->links[$identifier];
-        } else {
-            return null;
+    public function get( $name ) {
+        if ( !$this->has($name) ) {
+            throw new Exception('Link "'.$name.'" does not exists.');
         }
+        return $this->links[$name];
     }
     
     /**

@@ -17,7 +17,7 @@ class Service extends \X\Core\Service\XService {
     /**
      * 
      */
-    protected static $serviveName = 'XView';
+    protected static $serviceName = 'XView';
     
     /**
      * (non-PHPdoc)
@@ -27,6 +27,8 @@ class Service extends \X\Core\Service\XService {
         if ( $this->getConfiguration()->get('auto_display', false) ) {
             $this->display();
         }
+        $this->views = array();
+        $this->activedView = null;
         parent::stop();
     }
     

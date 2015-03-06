@@ -1,5 +1,8 @@
 <?php
 namespace X\Service\XView\Core\Util\HtmlView;
+/**
+ * 
+ */
 use X\Core\Util\ConfigurationArray;
 /**
  * 
@@ -26,12 +29,19 @@ class ParticleView {
     private $content = null;
     
     /**
-     * @param string $path
+     * @var ParticleViewManager
      */
-    public function __construct( $handler ) {
+    private $manager = null;
+    
+    /**
+     * @param unknown $handler
+     * @param ParticleViewManager $manager
+     */
+    public function __construct( $handler, ParticleViewManager $manager ) {
         $this->handler = $handler;
         $this->data = new ConfigurationArray();
         $this->option = new ConfigurationArray();
+        $this->manager = $manager;
     }
     
     /**
@@ -72,19 +82,29 @@ class ParticleView {
      * @return string
      */
     private function doRender() {
-        if ( is_file($this->handler) ) {
-            extract($this->getDataManager()->toArray(), EXTR_OVERWRITE);
+        if ( is_string($this->handler) && is_file($this->handler) ) {
+            extract($this->getViewRenderData());
             ob_start();
             ob_implicit_flush(false);
             require $this->handler;
             return ob_get_clean();
         } else if ( is_callable($this->handler) ) {
-            return call_user_func_array($this->handler, $this->getDataManager()->toArray(), $this->getOptionManager()->toArray());
+            return call_user_func_array($this->handler, array($this->getViewRenderData(), $this->getOptionManager()->toArray()));
         } else if ( is_string($this->handler) ) {
             return $this->handler;
         } else {
             return null;
         }
+    }
+    
+    /**
+     * @return multitype:
+     */
+    private function getViewRenderData(){
+        return array_merge(
+                $this->manager->getHost()->getDataManager()->toArray(),
+                $this->getDataManager()->toArray()
+        );
     }
     
     /**
