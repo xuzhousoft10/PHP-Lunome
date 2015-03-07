@@ -24,12 +24,6 @@ return array (
     'class' => 'X\\Module\\Lunome\\Service\\User\\Service',
     'delay' => true,
   ),
-  0 => 
-  array (
-    'enable' => false,
-    'class' => 'X\\Service\\XView\\Service',
-    'delay' => true,
-  ),
   'XView' => 
   array (
     'enable' => false,
