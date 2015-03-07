@@ -35,13 +35,13 @@ abstract class VisualMain extends Visual {
         parent::beforeRunAction();
         
         $layout = $this->getLayoutViewPath('Main');
-        $this->getView()->loadLayout($layout);
-        $this->getView()->addData('user', $this->getCurrentUserData());
+        $this->getView()->setLayout($layout);
+        $this->getView()->getDataManager()->set('user', $this->getCurrentUserData());
         $this->initMainMenuItems();
     }
     
     protected function afterRunAction() {
-        $this->getView()->addData('mainMenu', $this->menuItems);
+        $this->getView()->getDataManager()->set('mainMenu', $this->menuItems);
         parent::afterRunAction();
     }
     

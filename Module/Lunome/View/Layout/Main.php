@@ -1,10 +1,11 @@
 <?php 
 /* @var $this \X\Service\XView\Core\Handler\Html */
-$this->addStyle('body', array('padding-top'=>'70px'));
+$this->getStyleManager()->add('body', array('padding-top'=>'70px'));
 $vars = get_defined_vars();
 $mainMenu = $vars['mainMenu'];
 $user = $vars['user'];
 ?>
+<body>
 <div class="container">
     <div class="row">
         <div class="col-md-2">
@@ -30,3 +31,4 @@ $user = $vars['user'];
         </div>
     </div>
 </div>
+</body>

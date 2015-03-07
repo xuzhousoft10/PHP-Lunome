@@ -29,11 +29,10 @@ abstract class Visual extends \X\Util\Action\Visual {
         $this->E404Content = array($this, 'error404Handler');
         
         /* Load navigation bar */
-        $name   = 'INDEX_NAV_BAR';
         $path   = $this->getParticleViewPath('Util/Navigation');
-        $option = array('zone'=>'header');
-        $data   = array('user'=>$this->getCurrentUserData());
-        $this->getView()->loadParticle($name, $path, $option, $data);
+        $view = $this->getView()->getParticleViewManager()->load('INDEX_NAV_BAR', $path);
+        $view->getOptionManager()->set('zone', 'header');
+        $view->getDataManager()->set('user', $this->getCurrentUserData());
     }
     
     /**
@@ -43,15 +42,17 @@ abstract class Visual extends \X\Util\Action\Visual {
     protected function beforeDisplay() {
         parent::beforeDisplay();
         $assetsURL = $this->getAssetsURL();
-        $this->getView()->addCssLink('bootstrap',       $assetsURL.'/library/bootstrap/css/bootstrap.min.css');
-        $this->getView()->addCssLink('bootstrap-theme', $assetsURL.'/library/bootstrap/css/bootstrap-theme.min.css');
-        $this->getView()->addCssLink('application',     $assetsURL.'/css/application.css');
-        $this->getView()->addCssLink('bootstrap-ext',   $assetsURL.'/css/bootstrap-ext.css');
+        $linkManager = $this->getView()->getLinkManager();
+        $linkManager->addCSS('bootstrap',       $assetsURL.'/library/bootstrap/css/bootstrap.min.css');
+        $linkManager->addCSS('bootstrap-theme', $assetsURL.'/library/bootstrap/css/bootstrap-theme.min.css');
+        $linkManager->addCSS('application',     $assetsURL.'/css/application.css');
+        $linkManager->addCSS('bootstrap-ext',   $assetsURL.'/css/bootstrap-ext.css');
         
-        $this->getView()->addScriptFile('jquery',           $assetsURL.'/library/jquery/jquery-1.11.1.min.js');
-        $this->getView()->addScriptFile('bootstrap',        $assetsURL.'/library/bootstrap/js/bootstrap.min.js');
-        $this->getView()->addScriptFile('jquery-waypoints', $assetsURL.'/library/jquery/plugin/waypoints.js');
-        $this->getView()->addScriptFile('application',      $assetsURL.'/js/application.js');
+        $scriptManager = $this->getView()->getScriptManager();
+        $scriptManager->addFile('jquery',           $assetsURL.'/library/jquery/jquery-1.11.1.min.js');
+        $scriptManager->addFile('bootstrap',        $assetsURL.'/library/bootstrap/js/bootstrap.min.js');
+        $scriptManager->addFile('jquery-waypoints', $assetsURL.'/library/jquery/plugin/waypoints.js');
+        $scriptManager->addFile('application',      $assetsURL.'/js/application.js');
     }
     
     /**
@@ -62,9 +63,8 @@ abstract class Visual extends \X\Util\Action\Visual {
         /* Load footer view */
         $name   = 'FOOTER';
         $path   = $this->getParticleViewPath('Util/Footer');
-        $option = array('zone'=>'footer');
-        $data   = array();
-        $this->getView()->loadParticle($name, $path, $option, $data);
+        $particleView = $this->getView()->getParticleViewManager()->load($name, $path);
+        $particleView->getOptionManager()->set('zone', 'footer');
         
         parent::afterRunAction();
     }

@@ -29,7 +29,7 @@ abstract class Basic extends \X\Service\XAction\Core\Handler\WebAction {
      */
     public function getModule() {
         if ( is_null($this->module) ) {
-            $this->module = X::system()->getModuleManager()->get($this->getGroup());
+            $this->module = X::system()->getModuleManager()->get($this->getGroupName());
         }
         return $this->module;
     }

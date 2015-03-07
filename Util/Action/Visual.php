@@ -88,14 +88,14 @@ abstract class Visual extends Basic {
         /* @var $viewService \X\Service\XView\XViewService */
         $viewService = X::system()->getServiceManager()->get(XViewService::getServiceName());
         $viewName = str_replace('\\', '_', get_class($this));
-        $viewType = XViewService::VIEW_TYPE_HTML;
         
+        $viewObject = $viewService->createHtml($viewName);
         $this->view['service'] = $viewService;
-        $this->view['object'] = $viewService->create($viewName, $viewType);
-        $this->view['name'] = $viewType;
+        $this->view['object'] = $viewObject;
+        $this->view['name'] = $viewName;
         
-        $this->view['object']->setCharset('UTF-8');
-        $this->view['object']->addData('assetsURL', $this->getAssetsURL());
+        $viewObject->getMetaManager()->setCharset('UTF-8');
+        $viewObject->getDataManager()->set('assetsURL', $this->getAssetsURL());
         parent::beforeRunAction();
     }
     
@@ -104,10 +104,7 @@ abstract class Visual extends Basic {
      * @see \X\Service\XAction\Core\Action::afterRunAction()
      */
     protected function afterRunAction() {
-        /* 该行代码是为了完成新浪微博网站所有权的验证。 */
-        $this->getView()->addOpenGraphData('SINA-WEIBO-VERIFICATION', 'wb:webmaster', '9598c04587327873');
-        
-        if ( $this->getView()->hasLayout() && (false !== $this->beforeDisplay()) ) {
+        if ( false !== $this->beforeDisplay() ) {
             $this->getView()->display();
         }
     }

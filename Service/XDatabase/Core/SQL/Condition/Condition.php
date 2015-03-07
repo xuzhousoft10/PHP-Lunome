@@ -180,14 +180,22 @@ class Condition {
      * @return string
      */
     private function stringBuilderExists() {
-        return 'EXISTS ( '.$this->value.' )';
+        $value = $this->value;
+        if ( is_object($value) && method_exists($value, 'toString') ) {
+            $value = $value->toString();
+        }
+        return 'EXISTS ( '.$value.' )';
     }
     
     /**
      * @return string
      */
     private function stringBuilderNotExists() {
-        return 'NOT EXISTS ( '.$this->value.' )';
+        $value = $this->value;
+        if ( is_object($value) && method_exists($value, 'toString') ) {
+            $value = $value->toString();
+        }
+        return 'NOT EXISTS ( '.$value.' )';
     }
     
     /**

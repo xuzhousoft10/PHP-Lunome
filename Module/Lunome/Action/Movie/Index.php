@@ -75,12 +75,12 @@ class Index extends VisualMain {
         $this->activeMenuItem(self::MENU_ITEM_MOVIE);
         
         /* Load index view */
-        $viewName   = 'MEDIA_INDEX';
+        $viewName = 'MEDIA_INDEX';
         $viewPath   = $this->getParticleViewPath('Movie/Index');
-        $view->loadParticle($viewName, $viewPath);
+        $particleView = $this->getView()->getParticleViewManager()->load($viewName, $viewPath);
         
         /* add query data to view. */
-        $view->setDataToParticle($viewName, 'query', htmlspecialchars(json_encode($query)));
+        $particleView->getDataManager()->set('query', htmlspecialchars(json_encode($query)));
         
         /* Add mark data to view. */
         $markInfo = array();
@@ -89,21 +89,21 @@ class Index extends VisualMain {
             $markInfo[$key]['count']    = $movieService->getMarkedCount($key);
             $markInfo[$key]['isActive'] = $mark === $key;
         }
-        $view->setDataToParticle($viewName, 'marks', $markInfo);
+        $particleView->getDataManager()->set('marks', $markInfo);
         
         /* Add current mark to view. */
-        $view->setDataToParticle($viewName, 'currentMark', $mark);
+        $particleView->getDataManager()->set('currentMark', $mark);
         
         /* Add waitting image resource path to view. */
-        $view->setDataToParticle($viewName, 'mediaItemWaitingImage', $moduleConfig->get('media_item_operation_waiting_image'));
-        $view->setDataToParticle($viewName, 'mediaLoaderLoaddingImage', $moduleConfig->get('media_loader_loading_image'));
+        $particleView->getDataManager()->set('mediaItemWaitingImage', $moduleConfig->get('media_item_operation_waiting_image'));
+        $particleView->getDataManager()->set('mediaLoaderLoaddingImage', $moduleConfig->get('media_loader_loading_image'));
         
         /* Add debug mark to view. */
         $isDebug = X::system()->getConfiguration()->get('is_debug') ? 'true' : 'false';
-        $view->setDataToParticle($viewName, 'isDebug', $isDebug);
+        $particleView->getDataManager()->set('isDebug', $isDebug);
         
         /* Add page size to view. */
-        $view->setDataToParticle($viewName, 'pageSize', $moduleConfig->get('media_list_page_size'));
+        $particleView->getDataManager()->set('pageSize', $moduleConfig->get('media_list_page_size'));
         
         /* Add handler url for loadding movies. */
         $dataURL = array('mark'=>$mark);
@@ -111,23 +111,23 @@ class Index extends VisualMain {
             $dataURL['score'] = true;
         }
         $dataURL = $this->createURL('/?module=lunome&action=movie/find', $dataURL);
-        $view->setDataToParticle($viewName, 'dataURL', $dataURL);
+        $particleView->getDataManager()->set('dataURL', $dataURL);
         
         /* Add configuration to view. */
-        $view->setDataToParticle($viewName, 'searchMaxLength', $moduleConfig->get('movie_search_max_length'));
-        $view->setDataToParticle($viewName, 'maxAutoLoadTimeCount', $moduleConfig->get('max_auto_load_time_count'));
+        $particleView->getDataManager()->set('searchMaxLength', $moduleConfig->get('movie_search_max_length'));
+        $particleView->getDataManager()->set('maxAutoLoadTimeCount', $moduleConfig->get('max_auto_load_time_count'));
         
         /* Add search condition data to view.  */
         $searchConditionData = array();
         $searchConditionData['regions'] = $movieService->getRegions();
         $searchConditionData['languages'] = $movieService->getLanguages();
         $searchConditionData['categories'] = $movieService->getCategories();
-        $view->setDataToParticle($viewName, 'searchData', $searchConditionData);
+        $particleView->getDataManager()->set('searchData', $searchConditionData);
         
         /* Add tool bar view. */
         $viewName   = 'MEDIA_TOO_BAR';
         $viewPath   = $this->getParticleViewPath('Movie/ToolBar');
-        $this->getView()->loadParticle($viewName, $viewPath);
+        $this->getView()->getParticleViewManager()->load($viewName, $viewPath);
     }
     
     /**
@@ -137,12 +137,12 @@ class Index extends VisualMain {
     protected function beforeDisplay() {
         parent::beforeDisplay();
         $assetsURL = $this->getAssetsURL();
-        $this->getView()->addScriptFile('media-index', $assetsURL.'/js/movie/index.js');
-        $this->getView()->addScriptFile('cookie', $assetsURL.'/library/jquery/plugin/cookie.js');
+        $this->getView()->getScriptManager()->addFile('media-index', $assetsURL.'/js/movie/index.js');
+        $this->getView()->getScriptManager()->addFile('cookie', $assetsURL.'/library/jquery/plugin/cookie.js');
         
         if ( MovieService::MARK_WATCHED === $this->currentMark ) {
-            $this->getView()->addScriptFile('rate-it', $assetsURL.'/library/jquery/plugin/rate/rateit.js');
-            $this->getView()->addCssLink('rate-it', $assetsURL.'/library/jquery/plugin/rate/rateit.css');
+            $this->getView()->getScriptManager()->addFile('rate-it', $assetsURL.'/library/jquery/plugin/rate/rateit.js');
+            $this->getView()->getLinkManager()->addCSS('rate-it', $assetsURL.'/library/jquery/plugin/rate/rateit.css');
         }
     }
 }

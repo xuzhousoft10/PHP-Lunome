@@ -65,7 +65,7 @@ class Service extends \X\Core\Service\XService {
     
     /**
      * @param unknown $name
-     * @return Ambigous <\X\Service\XView\Service, \X\Service\XView\Core\View, unknown>
+     * @return \X\Service\XView\Core\Handler\Html
      */
     public function  createHtml($name) {
         return $this->create($name, 'Html');

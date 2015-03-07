@@ -24,6 +24,11 @@ return array (
     'class' => 'X\\Module\\Lunome\\Service\\User\\Service',
     'delay' => true,
   ),
+  'Movie' => array(
+    'enable' => true,
+    'delay' => true,
+    'class' => 'X\\Module\\Lunome\\Service\\Movie\\Service',
+  ),
   'XView' => 
   array (
     'enable' => false,

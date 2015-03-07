@@ -13,7 +13,7 @@ use X\Service\XDatabase\Core\ActiveRecord\Criteria;
 use X\Module\Lunome\Model\Movie\MovieLanguageModel;
 use X\Module\Lunome\Model\Movie\MovieCategoryModel;
 use X\Service\XDatabase\Core\SQL\Condition\Builder as ConditionBuilder;
-use X\Service\XDatabase\Core\SQL\Expression as SQLExpression;
+use X\Service\XDatabase\Core\SQL\Util\Expression as SQLExpression;
 use X\Module\Lunome\Model\Movie\MovieModel;
 use X\Module\Lunome\Model\Movie\MovieCategoryMapModel;
 use X\Service\XDatabase\Core\Exception as DBException;
@@ -36,7 +36,6 @@ use X\Module\Lunome\Service\User\Service as UserService;
 use X\Service\XDatabase\Core\SQL\Func\Count;
 use X\Service\XDatabase\Service as DatabaseService;
 use X\Module\Lunome\Service\Configuration\Service as ConfigService;
-use X\Service\XDatabase\Core\SQL\Expression;
 use X\Util\ImageResize;
 use X\Module\Lunome\Util\Exception as LunomeException;
 use X\Module\Lunome\Model\Movie\MovieUserVisited;
@@ -45,6 +44,11 @@ use X\Module\Lunome\Model\Movie\MovieUserVisited;
  * The service class
  */
 class Service extends \X\Core\Service\XService {
+    /**
+     * @var unknown
+     */
+    protected static $serviceName = 'Movie';
+    
     /**
      *
      * @param unknown $condition
@@ -334,7 +338,7 @@ class Service extends \X\Core\Service\XService {
         $markedCondition = array();
         $markedCondition['movie_id'] = new SQLExpression($mediaTable.'.id');
         $markedCondition['account_id'] = $this->getCurrentUserId();
-        $markedMedias = MovieUserMarkModel::query()->activeColumns(array('movie_id'))->find($markedCondition);
+        $markedMedias = MovieUserMarkModel::query()->addExpression('movie_id')->find($markedCondition);
         $basicCondition = ConditionBuilder::build()->notExists($markedMedias);
         return $basicCondition;
     }
@@ -359,7 +363,7 @@ class Service extends \X\Core\Service\XService {
         }
         $markedCondition['mark'] = $mark;
     
-        $markCondition = MovieUserMarkModel::query()->activeColumns(array('movie_id'))->find($markedCondition);
+        $markCondition = MovieUserMarkModel::query()->addExpression('movie_id')->find($markedCondition);
         $basicCondition = ConditionBuilder::build()->exists($markCondition);
         return $basicCondition;
     }
