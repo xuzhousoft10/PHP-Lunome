@@ -19,7 +19,7 @@ class Sns extends UserSetting {
      * The action handle for index action.
      * @return void
      */ 
-    public function runAction( $config ) {
+    public function runAction( $config=null ) {
         $account = $this->getUserService()->getAccount();
         $configurations = array();
         $configurations['auto_share'] = $account->getConfiguration(Account::SETTING_TYPE_SNS, 'auto_share', '1');
@@ -34,7 +34,7 @@ class Sns extends UserSetting {
         $path   = $this->getParticleViewPath('User/Setting/SNS');
         $option = array();
         $data   = array('configurations'=>$configurations);
-        $view->loadParticle($name, $path, $option, $data);
+        $this->loadParticle($name, $path, $option, $data);
         
         $view->title = '社交平台设置';
     }
@@ -54,12 +54,11 @@ class Sns extends UserSetting {
     protected function beforeDisplay() {
         parent::beforeDisplay();
         $assetsURL = $this->getAssetsURL();
-        $view = $this->getView();
         
-        $view->addCssLink('Bootstrap-Switch', $assetsURL.'/library/bootstrap/plugin/bootstrap-switch/css/bootstrap3/bootstrap-switch.min.css');
-        $view->addScriptFile('Bootstrap-Switch', $assetsURL.'/library/bootstrap/plugin/bootstrap-switch/js/bootstrap-switch.min.js');
+        $this->addCssLink('Bootstrap-Switch', $assetsURL.'/library/bootstrap/plugin/bootstrap-switch/css/bootstrap3/bootstrap-switch.min.css');
+        $this->addScriptFile('Bootstrap-Switch', $assetsURL.'/library/bootstrap/plugin/bootstrap-switch/js/bootstrap-switch.min.js');
         
         $switchOption = json_encode(array('size'=>'mini', 'onText'=>'已开启', 'offText'=>'已关闭'));
-        $view->addScriptString('Bootstrap-Switch-Enable', '$(document).ready(function(){$("#sns-auto-share").bootstrapSwitch('.$switchOption.');});');
+        $this->getView()->getScriptManager()->addString('Bootstrap-Switch-Enable', '$(document).ready(function(){$("#sns-auto-share").bootstrapSwitch('.$switchOption.');});');
     }
 }

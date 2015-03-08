@@ -18,7 +18,7 @@ use X\Service\XDatabase\Core\ActiveRecord\Criteria;
 use X\Service\XDatabase\Core\SQL\Condition\Builder as ConditionBuilder;
 use X\Module\Lunome\Model\Account\AccountFriendshipRequestModel;
 use X\Module\Lunome\Model\Account\AccountFriendshipModel;
-use X\Service\XDatabase\Core\SQL\Expression as SQLExpression;
+use X\Service\XDatabase\Core\SQL\Util\Expression as SQLExpression;
 use X\Module\Lunome\Model\Account\AccountChatContentModel;
 
 /**
@@ -306,6 +306,8 @@ class Account {
         $conditionObject = ConditionBuilder::build();
         if ( isset($condition['main']) ) {
             $conditionObject->groupStart()
+                ->includes('nickname', $condition['main'])
+                ->orThat()
                 ->is('cellphone', $condition['main'])
                 ->orThat()
                 ->is('qq', $condition['main'])
@@ -325,7 +327,7 @@ class Account {
         $extCondition = array();
         $extCondition['account_friend'] = new SQLExpression(AccountInformationModel::model()->getTableFullName().'.account_id');
         $extCondition['account_me'] = $this->getCurrentUserId();
-        $extCondition = AccountFriendshipModel::query()->activeColumns(array('id'))->find($extCondition);
+        $extCondition = AccountFriendshipModel::query()->addExpression('id')->find($extCondition);
         $conditionObject->notExists($extCondition);
         
         $criteria = new Criteria();

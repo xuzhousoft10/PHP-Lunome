@@ -164,7 +164,7 @@ class GlobalSearch extends Visual {
         $path   = $this->getParticleViewPath('Movie/GlobalSearchResult');
         $option = array();
         $data   = array('movies'=>$movieData);
-        $this->getView()->loadParticle($name, $path, $option, $data);
-        $this->getView()->displayParticle($name);
+        $view = $this->loadParticle($name, $path, $option, $data);
+        $view->display();
     }
 }

@@ -253,12 +253,12 @@ class Service extends \X\Core\Service\XService {
         $markTableName = MovieUserMarkModel::model()->getTableFullName();
     
         $query = SQLBuilder::build()->select()
-        ->addExpression('medias.id', 'id')
-        ->addExpression('medias.name', 'name')
-        ->addExpression(new Count('marks.id'), 'mark_count')
-        ->addTable($modelTableName, 'medias')
-        ->addTable($markTableName, 'marks')
-        ->where(array('marks.mark'=>$type, 'medias.id'=>new Expression('`marks`.`movie_id`')))
+        ->expression('medias.id', 'id')
+        ->expression('medias.name', 'name')
+        ->expression(new Count('marks.id'), 'mark_count')
+        ->from($modelTableName, 'medias')
+        ->from($markTableName, 'marks')
+        ->where(array('marks.mark'=>$type, 'medias.id'=>new SQLExpression('`marks`.`movie_id`')))
         ->limit($limit)
         ->groupBy('marks.movie_id')
         ->orderBy('mark_count', 'DESC')
@@ -322,7 +322,7 @@ class Service extends \X\Core\Service\XService {
      * @return \X\Service\XDatabase\Core\Database
      */
     protected function getDb() {
-        return X::system()->getServiceManager()->get(DatabaseService::getServiceName())->getDatabase();
+        return X::system()->getServiceManager()->get(DatabaseService::getServiceName())->getDatabaseManager()->get();
     }
     
     /**
@@ -505,7 +505,7 @@ class Service extends \X\Core\Service\XService {
             $categoryCondition = array();
             $categoryCondition['movie_id'] = new SQLExpression(MovieModel::model()->getTableFullName().'.id');
             $categoryCondition['category_id'] = $condition['category'];
-            $categoryCondition = MovieCategoryMapModel::query()->activeColumns(array('movie_id'))->find($categoryCondition);
+            $categoryCondition = MovieCategoryMapModel::query()->addExpression('movie_id')->find($categoryCondition);
             $con->exists($categoryCondition);
         }
         if ( isset($condition['name']) ) {
@@ -913,7 +913,7 @@ class Service extends \X\Core\Service\XService {
         $friendCondition = array();
         $releatedAttrName = MovieShortCommentModel::model()->getAttributeQueryName('commented_by');
         $friendCondition['account_friend'] = new SQLExpression($releatedAttrName);
-        $friendCondition = AccountFriendshipModel::query()->activeColumns(array('id'))->find($friendCondition);
+        $friendCondition = AccountFriendshipModel::query()->addExpression('id')->find($friendCondition);
         $condition->exists($friendCondition);
         
         $criteria = new Criteria();
@@ -941,7 +941,7 @@ class Service extends \X\Core\Service\XService {
         $friendCondition = array();
         $releatedAttrName = MovieShortCommentModel::model()->getAttributeQueryName('commented_by');
         $friendCondition['account_friend'] = new SQLExpression($releatedAttrName);
-        $friendCondition = AccountFriendshipModel::query()->activeColumns(array('id'))->find($friendCondition);
+        $friendCondition = AccountFriendshipModel::query()->addExpression('id')->find($friendCondition);
         $condition->exists($friendCondition);
         
         $count = MovieShortCommentModel::model()->count($condition);
@@ -1257,7 +1257,7 @@ class Service extends \X\Core\Service\XService {
         $releatedAttrName = MovieUserMarkModel::model()->getAttributeQueryName('account_id');
         $friendCondition['account_me'] = $currentUserID;
         $friendCondition['account_friend'] = new SQLExpression($releatedAttrName);
-        $friendCondition = AccountFriendshipModel::query()->activeColumns(array('id'))->find($friendCondition);
+        $friendCondition = AccountFriendshipModel::query()->addExpression('id')->find($friendCondition);
         $condition->exists($friendCondition);
         
         $count = MovieUserMarkModel::model()->count($condition);
@@ -1280,7 +1280,7 @@ class Service extends \X\Core\Service\XService {
         $markConditon['movie_id'] = $movieId;
         $markConditon['mark'] = $mark;
         $markConditon['account_id'] = new SQLExpression($releatedAttrName);;
-        $markConditon = MovieUserMarkModel::query()->activeColumns(array('id'))->findAll($markConditon);
+        $markConditon = MovieUserMarkModel::query()->addExpression('id')->findAll($markConditon);
         $condition->exists($markConditon);
         
         $criteria = new Criteria();
@@ -1308,14 +1308,14 @@ class Service extends \X\Core\Service\XService {
         $markConditon['movie_id'] = $movieId;
         $markConditon['mark'] = $mark;
         $markConditon['account_id'] = new SQLExpression($releatedAttrName);;
-        $markConditon = MovieUserMarkModel::query()->activeColumns(array('id'))->findAll($markConditon);
+        $markConditon = MovieUserMarkModel::query()->addExpression('id')->findAll($markConditon);
         $condition->exists($markConditon);
         
         $friendCondition = array();
         $releatedAttrName = AccountInformationModel::model()->getAttributeQueryName('account_id');
         $friendCondition['account_friend'] = new SQLExpression($releatedAttrName);
         $friendCondition['account_me'] = $this->getCurrentUserId();
-        $friendCondition = AccountFriendshipModel::query()->activeColumns(array('id'))->find($friendCondition);
+        $friendCondition = AccountFriendshipModel::query()->addExpression('id')->find($friendCondition);
         $condition->exists($friendCondition);
         
         $criteria = new Criteria();
@@ -1332,8 +1332,8 @@ class Service extends \X\Core\Service\XService {
      */
     public function getInterestedMovieSetByAccounts ( $accounts, $length=0, $position=0 ) {
         $marks = SQLBuilder::build()->select()
-            ->addExpression('id')
-            ->addTable(MovieUserMarkModel::model()->getTableFullName(), 'mark_accounts')
+            ->expression('id')
+            ->from(MovieUserMarkModel::model()->getTableFullName(), 'mark_accounts')
             ->where(ConditionBuilder::build()
                 ->is('mark', self::MARK_INTERESTED)
                 ->in('account_id', $accounts)
@@ -1342,8 +1342,8 @@ class Service extends \X\Core\Service\XService {
         
         $markTable = MovieUserMarkModel::model()->getTableFullName();
         $sql = SQLBuilder::build()->select()
-            ->addExpression('movie_id')
-            ->from(array('mark_movies'=>$markTable))
+            ->expression('movie_id')
+            ->from($markTable, 'mark_movies')
             ->groupBy('movie_id')
             ->where(ConditionBuilder::build()->exists($marks))
             ->having('COUNT(`movie_id`)='.count($accounts));
@@ -1406,8 +1406,8 @@ class Service extends \X\Core\Service\XService {
      */
     public function getWatchedMoviesByAccounts( $accounts, $score, $operator='=', $length=0, $position=0 ) {
         $markAccountsCondition = SQLBuilder::build()->select()
-            ->addExpression('id')
-            ->addTable(MovieUserMarkModel::model()->getTableFullName(), 't2')
+            ->expression('id')
+            ->from(MovieUserMarkModel::model()->getTableFullName(), 't2')
             ->where(ConditionBuilder::build()
                 ->is('t1.id', new SQLExpression('`t2`.`id`'))
                 ->is('mark', self::MARK_WATCHED)
@@ -1415,15 +1415,15 @@ class Service extends \X\Core\Service\XService {
             );
         
         $markCondition = SQLBuilder::build()->select()
-            ->addExpression('movie_id')
-            ->addTable(MovieUserMarkModel::model()->getTableFullName(), 't1')
+            ->expression('movie_id')
+            ->from(MovieUserMarkModel::model()->getTableFullName(), 't1')
             ->groupBy('t1.movie_id')
             ->having('COUNT(t1.account_id) = '.count($accounts))
             ->where(ConditionBuilder::build()->exists($markAccountsCondition));
         
         $movieCondition = SQLBuilder::build()->select()
-            ->addExpression('movie_id')
-            ->addTable(MovieUserRateModel::model()->getTableFullName())
+            ->expression('movie_id')
+            ->from(MovieUserRateModel::model()->getTableFullName())
             ->groupBy('movie_id')
             ->where(ConditionBuilder::build()
                 ->in('account_id', $accounts)

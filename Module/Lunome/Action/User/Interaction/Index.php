@@ -33,7 +33,7 @@ class Index extends Userinteraction {
             'items'         => $this->interactionMenu, 
             'parameters'    => empty($this->interactionMenuParams) ? '' : '&'.http_build_query($this->interactionMenuParams),
         );
-        $this->getView()->loadParticle($name, $path, $option, $data);
+        $this->loadParticle($name, $path, $option, $data);
         $this->getView()->title = '与'.$friendInformation->nickname.'互动';
     }
 }

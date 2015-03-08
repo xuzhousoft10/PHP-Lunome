@@ -59,16 +59,16 @@ class Search extends FriendManagement {
         $path   = $this->getParticleViewPath('User/Friend/Search');
         $option = array();
         $data   = array('informations'=>$informations, 'condition'=>$condition, 'pager'=>$pager);
-        $view->loadParticle($name, $path, $option, $data);
+        $this->loadParticle($name, $path, $option, $data);
         $view->title = '寻找好友';
         
-        $view->setDataToParticle($name, 'sexMap', $accountManager->getSexNames());
-        $view->setDataToParticle($name, 'sexualityMap', $accountManager->getSexualityNames());
-        $view->setDataToParticle($name, 'emotionMap', $accountManager->getEmotionStatuNames());
+        $this->setDataToParticle($name, 'sexMap', $accountManager->getSexNames());
+        $this->setDataToParticle($name, 'sexualityMap', $accountManager->getSexualityNames());
+        $this->setDataToParticle($name, 'emotionMap', $accountManager->getEmotionStatuNames());
         $length = AccountFriendshipRequestModel::model()->getAttribute('message')->getLength();
-        $view->setDataToParticle($name, 'toBeFriendMessageLength', $length);
+        $this->setDataToParticle($name, 'toBeFriendMessageLength', $length);
         $peopleLeft = $moduleConfig->get('user_friend_max_count')-$accountManager->countFriends();
-        $view->setDataToParticle($name, 'peopleLeft', $peopleLeft);
+        $this->setDataToParticle($name, 'peopleLeft', $peopleLeft);
     }
     
     /**
@@ -103,6 +103,6 @@ class Search extends FriendManagement {
     protected function beforeDisplay() {
         parent::beforeDisplay();
         $assetsURL = $this->getAssetsURL();
-        $this->getView()->addScriptFile('User-Setting-Information', $assetsURL.'/js/user/search.js');
+        $this->addScriptFile('User-Setting-Information', $assetsURL.'/js/user/search.js');
     }
 }

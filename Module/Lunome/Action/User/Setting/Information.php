@@ -31,10 +31,10 @@ class Information extends UserSetting {
         $path   = $this->getParticleViewPath('User/Setting/Information');
         $option = array();
         $data   = array('account'=>$account);
-        $view->loadParticle($name, $path, $option, $data);
-        $view->setDataToParticle($name, 'sexMap', $accountManager->getSexNames());
-        $view->setDataToParticle($name, 'sexualityMap', $accountManager->getSexualityNames());
-        $view->setDataToParticle($name, 'emotionMap', $accountManager->getEmotionStatuNames());
+        $this->loadParticle($name, $path, $option, $data);
+        $this->setDataToParticle($name, 'sexMap', $accountManager->getSexNames());
+        $this->setDataToParticle($name, 'sexualityMap', $accountManager->getSexualityNames());
+        $this->setDataToParticle($name, 'emotionMap', $accountManager->getEmotionStatuNames());
         $view->title = '个人信息';
     }
     
@@ -53,10 +53,9 @@ class Information extends UserSetting {
     protected function beforeDisplay() {
         parent::beforeDisplay();
         $assetsURL = $this->getAssetsURL();
-        $view = $this->getView();
-        $view->addCssLink('Bootstrap-Date-Picker', $assetsURL.'/library/bootstrap/plugin/bootstrap-datepicker/css/datepicker3.css'); 
-        $view->addScriptFile('Bootstrap-Date-Picker', $assetsURL.'/library/bootstrap/plugin/bootstrap-datepicker/js/bootstrap-datepicker.js'); 
-        $view->addScriptFile('Bootstrap-Date-Picker-Language', $assetsURL.'/library/bootstrap/plugin/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js'); 
-        $view->addScriptFile('User-Setting-Information', $assetsURL.'/js/user/information.js'); 
+        $this->addCssLink('Bootstrap-Date-Picker', $assetsURL.'/library/bootstrap/plugin/bootstrap-datepicker/css/datepicker3.css'); 
+        $this->addScriptFile('Bootstrap-Date-Picker', $assetsURL.'/library/bootstrap/plugin/bootstrap-datepicker/js/bootstrap-datepicker.js'); 
+        $this->addScriptFile('Bootstrap-Date-Picker-Language', $assetsURL.'/library/bootstrap/plugin/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js'); 
+        $this->addScriptFile('User-Setting-Information', $assetsURL.'/js/user/information.js'); 
     }
 }

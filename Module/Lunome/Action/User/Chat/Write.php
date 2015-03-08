@@ -33,7 +33,7 @@ class Write extends Visual {
         $path   = $this->getParticleViewPath('User/Chat/ISay');
         $option = array();
         $data   = array('record'=>$record, 'myInformation'=>$myInformation);
-        $this->getView()->loadParticle($name, $path, $option, $data);
-        $this->getView()->displayParticle($name);
+        $view = $this->loadParticle($name, $path, $option, $data);
+        $view->display();
     }
 }

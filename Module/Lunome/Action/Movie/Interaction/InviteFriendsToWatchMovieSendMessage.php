@@ -9,7 +9,6 @@ namespace X\Module\Lunome\Action\Movie\Interaction;
  */
 use X\Core\X;
 use X\Module\Lunome\Util\Action\Basic;
-
 /**
  * InviteFriendsToWatchMovieSendMessage
  * @author Michael Luthor <michaelluthor@163.com>

@@ -25,9 +25,7 @@ $user = $vars['user'];
             </div>
         </div>
         <div class="col-md-10">
-            <?php foreach ( $this->particles as $particle ) : ?>
-                <?php echo $particle['content'];?>
-            <?php endforeach; ?>
+            <?php echo $this->getParticleViewManager()->toString(); ?>
         </div>
     </div>
 </div>

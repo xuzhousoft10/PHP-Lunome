@@ -79,7 +79,7 @@ class Index extends VisualUserHome {
             'movies'    => $movies, 
             'pager'     => $pager
         );
-        $this->getView()->loadParticle($name, $path, $option, $data);
+        $this->loadParticle($name, $path, $option, $data);
         
         $this->homeUserAccountID = $id;
     }
@@ -91,11 +91,11 @@ class Index extends VisualUserHome {
     protected function beforeDisplay() {
         parent::beforeDisplay();
         $assetsURL = $this->getAssetsURL();
-        $this->getView()->addScriptFile('movie-index', $assetsURL.'/js/movie/home.js');
+        $this->addScriptFile('movie-index', $assetsURL.'/js/movie/home.js');
         
         if (MovieService::MARK_WATCHED === $this->currentMark) {
-            $this->getView()->addScriptFile('rate-it', $assetsURL.'/library/jquery/plugin/rate/rateit.js');
-            $this->getView()->addCssLink('rate-it', $assetsURL.'/library/jquery/plugin/rate/rateit.css');
+            $this->addScriptFile('rate-it', $assetsURL.'/library/jquery/plugin/rate/rateit.js');
+            $this->addCssLink('rate-it', $assetsURL.'/library/jquery/plugin/rate/rateit.css');
         }
     }
 }

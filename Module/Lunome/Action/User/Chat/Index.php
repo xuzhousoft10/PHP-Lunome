@@ -41,9 +41,9 @@ class Index extends Visual {
         $path   = $this->getParticleViewPath('User/Chat/Index');
         $option = array();
         $data   = array('friend'=>$friendInformation);
-        $this->getView()->loadParticle($name, $path, $option, $data);
+        $this->loadParticle($name, $path, $option, $data);
         
-        $this->getView()->loadLayout($this->getLayoutViewPath('BlankThin'));
+        $this->getView()->setLayout($this->getLayoutViewPath('BlankThin'));
         $this->getView()->title = '与'.$friendInformation['nickname'].'聊天中';
         $userService->getAccount()->markChattingWithFriend($friend);
     }
@@ -55,6 +55,6 @@ class Index extends Visual {
     protected function beforeDisplay() {
         parent::beforeDisplay();
         $assetsURL = $this->getAssetsURL();
-        $this->getView()->addScriptFile('user-chat', $assetsURL.'/js/user/chat.js');
+        $this->addScriptFile('user-chat', $assetsURL.'/js/user/chat.js');
     }
 }

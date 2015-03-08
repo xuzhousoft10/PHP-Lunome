@@ -3,12 +3,10 @@
  * @license LGPL http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 namespace X\Module\Lunome\Action\Movie\Interaction;
-
 /**
  * use statements
  */
 use X\Module\Lunome\Util\Action\Basic;
-
 /**
  * AnswerMovieInvitation
  * @author Michael Luthor <michaelluthor@163.com>

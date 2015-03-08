@@ -3,7 +3,6 @@
  * The action file for user/friend/index action.
  */
 namespace X\Module\Lunome\Action\User\Friend;
-
 /**
  * 
  */

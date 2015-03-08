@@ -39,11 +39,11 @@ class InviteToWatchMovie extends Userinteraction {
         
         $viewName = 'MOVIE_INTERACTION_INVITETOWATCHMOVIE';
         $path   = $this->getParticleViewPath('Movie/Interaction/InviteToWatchMovie');
-        $view->loadParticle($viewName, $path);
-        $view->setDataToParticle($viewName, 'movies', $movies);
-        $view->setDataToParticle($viewName, 'friendInformation', $friendInformation);
+        $this->loadParticle($viewName, $path);
+        $this->setDataToParticle($viewName, 'movies', $movies);
+        $this->setDataToParticle($viewName, 'friendInformation', $friendInformation);
         $commentLength = MovieInvitationModel::model()->getAttribute('comment')->getLength();
-        $view->setDataToParticle($viewName, 'commentLength', $commentLength);
+        $this->setDataToParticle($viewName, 'commentLength', $commentLength);
         
         $view->title = '想请TA看场电影';
         $this->setActiveInteractionMenuItem(self::INTERACTION_MENU_ITEM_INVITE_TO_WATCH_MOVIE);
@@ -57,6 +57,6 @@ class InviteToWatchMovie extends Userinteraction {
     protected function beforeDisplay() {
         parent::beforeDisplay();
         $assetsURL = $this->getAssetsURL();
-        $this->getView()->addScriptFile('invite', $assetsURL.'/js/movie/invite.js');
+        $this->addScriptFile('invite', $assetsURL.'/js/movie/invite.js');
     }
 }

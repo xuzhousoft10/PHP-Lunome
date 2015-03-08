@@ -33,10 +33,10 @@ class Detail extends Visual {
         }
         
         /* setup view. */
-        $view->loadLayout($this->getLayoutViewPath('BlankThin'));
+        $view->setLayout($this->getLayoutViewPath('BlankThin'));
         $viewName   = 'MEDIA_DETAIL';
         $path       = $this->getParticleViewPath('Movie/Detail');
-        $view->loadParticle($viewName, $path);
+        $detailView = $view->getParticleViewManager()->load($viewName, $path);
         
         /* add movie data to view. */
         $movie = $movieService->get($id);
@@ -50,7 +50,7 @@ class Detail extends Visual {
         $movie['category']  = $movieService->getCategoriesByMovieId($movie['id']);
         $movie['directors'] = $movieService->getDirectors($movie['id']);
         $movie['actors']    = $movieService->getActors($movie['id']);
-        $view->setDataToParticle($viewName, 'movie', $movie);
+        $detailView->getDataManager()->set('movie', $movie);
                 
         /* add mark count info to view. */
         $markCount = array();
@@ -66,11 +66,11 @@ class Detail extends Visual {
             $markCount[$markValue]['all']  = $movieService->countMarkedUsers($id, $markValue);
             $markCount[$markValue]['friend'] = $movieService->countMarkedFriends($id, $markValue);
         }
-        $view->setDataToParticle($viewName, 'markCount', $markCount);
+        $detailView->getDataManager()->set('markCount', $markCount);
         
         /* add my mark of this movie to view. */
         $myMark = $isGuest ? MovieService::MARK_UNMARKED : $movieService->getMark($id);
-        $view->setDataToParticle($viewName, 'myMark', $myMark);
+        $detailView->getDataManager()->set('myMark', $myMark);
         
         /* add mark styles. */
         $styles = array(
@@ -79,7 +79,7 @@ class Detail extends Visual {
             MovieService::MARK_WATCHED       => 'info',
             MovieService::MARK_IGNORED       => 'default'
         );
-        $view->setDataToParticle($viewName, 'markStyles', $styles);
+        $detailView->getDataManager()->set('markStyles', $styles);
         
         /* add share message to view. */
         $message = '';
@@ -102,7 +102,7 @@ class Detail extends Visual {
             default:$message='';break;
             }
         }
-        $view->setDataToParticle($viewName, 'shareMessage', $message);
+        $detailView->getDataManager()->set('shareMessage', $message);
         
         /* add share message title to view. */
         $shareMessageTitle = '分享';
@@ -113,13 +113,13 @@ class Detail extends Visual {
         } else {
             $shareMessageTitle = '分享';
         }
-        $view->setDataToParticle($viewName, 'shareMessageTitle', $shareMessageTitle);
+        $detailView->getDataManager()->set('shareMessageTitle', $shareMessageTitle);
         
         /* add other data to view. */
-        $view->setDataToParticle($viewName, 'markNames', $movieService->getMarkNames());
-        $view->setDataToParticle($viewName, 'isGuestUser', $isGuest);
+        $detailView->getDataManager()->set('markNames', $movieService->getMarkNames());
+        $detailView->getDataManager()->set('isGuestUser', $isGuest);
         $userData = $isGuest ? null : $this->getUserService()->getAccount()->getInformation($this->getUserService()->getCurrentUserId());
-        $view->setDataToParticle($viewName, 'currentUser', $userData);
+        $detailView->getDataManager()->set('currentUser', $userData);
         
         $view->title = $movie['name'];
     }
@@ -131,7 +131,8 @@ class Detail extends Visual {
     protected function beforeDisplay() {
         parent::beforeDisplay();
         $assetsURL = $this->getAssetsURL();
-        $this->getView()->addScriptFile('ajaxfileupload', $assetsURL.'/library/jquery/plugin/ajaxfileupload.js');
-        $this->getView()->addScriptFile('detail-detail', $assetsURL.'/js/movie/detail.js');
+        $scriptManager = $this->getView()->getScriptManager();
+        $scriptManager->addFile('ajaxfileupload', $assetsURL.'/library/jquery/plugin/ajaxfileupload.js');
+        $scriptManager->addFile('detail-detail', $assetsURL.'/js/movie/detail.js');
     }
 }

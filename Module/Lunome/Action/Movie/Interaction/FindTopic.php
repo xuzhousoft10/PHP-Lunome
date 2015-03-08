@@ -47,7 +47,7 @@ class FindTopic extends Userinteraction {
         $data   = array(
             'movies'=>$movies, 
             'friendInformation'=>$friendInformation);
-        $this->getView()->loadParticle($name, $path, $option, $data);
+        $this->loadParticle($name, $path, $option, $data);
         $this->getView()->title = '想与TA聊聊电影';
         
         $this->setActiveInteractionMenuItem(self::INTERACTION_MENU_ITEM_GET_TOPIC);
@@ -77,6 +77,6 @@ class FindTopic extends Userinteraction {
     protected function beforeDisplay() {
         parent::beforeDisplay();
         $assetsURL = $this->getAssetsURL();
-        $this->getView()->addScriptFile('user-home-movie-index', $assetsURL.'/js/movie/topic.js');
+        $this->addScriptFile('user-home-movie-index', $assetsURL.'/js/movie/topic.js');
     }
 }

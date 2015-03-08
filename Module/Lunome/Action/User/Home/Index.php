@@ -8,7 +8,6 @@ namespace X\Module\Lunome\Action\User\Home;
  *
  */
 use X\Module\Lunome\Util\Action\VisualUserHome;
-
 /**
  * 
  */

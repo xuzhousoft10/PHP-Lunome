@@ -81,6 +81,46 @@ abstract class Visual extends Basic {
     }
     
     /**
+     * @param unknown $name
+     * @param unknown $path
+     * @param unknown $option
+     * @param unknown $data
+     * @return \X\Service\XView\Core\Util\HtmlView\ParticleView
+     */
+    public function loadParticle($name, $path, $option=array(), $data=array()) {
+        $view = $this->getView()->getParticleViewManager()->load($name, $path);
+        $view->getDataManager()->merge($data);
+        $view->getOptionManager()->merge($option);
+        return $view;
+    }
+    
+    /**
+     * @param unknown $particleName
+     * @param unknown $name
+     * @param unknown $value
+     */
+    public function setDataToParticle( $particleName, $name, $value ) {
+        $view = $this->getView()->getParticleViewManager()->get($particleName);
+        $view->getDataManager()->set($name, $value);
+    }
+    
+    /**
+     * @param unknown $name
+     * @param unknown $path
+     */
+    public function addScriptFile($name, $path) {
+        $this->getView()->getScriptManager()->addFile($name, $path);
+    }
+    
+    /**
+     * @param unknown $name
+     * @param unknown $path
+     */
+    public function addCssLink( $name, $path ) {
+        $this->getView()->getLinkManager()->addCSS($name, $path);
+    }
+    
+    /**
      * (non-PHPdoc)
      * @see \X\Service\XAction\Core\Action::beforeRunAction()
      */

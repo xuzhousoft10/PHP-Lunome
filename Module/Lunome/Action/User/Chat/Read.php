@@ -29,7 +29,7 @@ class Read extends Visual {
         $path   = $this->getParticleViewPath('User/Chat/FriendSays');
         $option = array();
         $data   = array('messages'=>$messages, 'friendInformation'=>$friendInformation);
-        $this->getView()->loadParticle($name, $path, $option, $data);
-        $this->getView()->displayParticle($name);
+        $view = $this->loadParticle($name, $path, $option, $data);
+        $view->display();
     }
 }

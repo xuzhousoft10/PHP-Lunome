@@ -8,7 +8,6 @@ namespace X\Module\Lunome\Action\Movie;
  * Use statements
  */
 use X\Module\Lunome\Util\Action\Basic;
-
 /**
  * The action class for movie/ignore action.
  * @author Michael Luthor <michaelluthor@163.com>

@@ -1,6 +1,6 @@
 <?php
 /* @var $this \X\Service\XView\Core\Handler\Html */
-$this->addStyle('#footer', array('border-top'=>'1px solid #E5E5E5'));
+$this->getManager()->getHost()->getStyleManager()->add('#footer', array('border-top'=>'1px solid #E5E5E5'));
 ?>
 <div class="text-center" id="main-footer">
     <br/>

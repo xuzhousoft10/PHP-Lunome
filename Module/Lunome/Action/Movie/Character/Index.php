@@ -41,9 +41,9 @@ class Index extends Visual {
         $isWatched = MovieService::MARK_WATCHED === $movieService->getMark($id);
         $name   = 'CHARACTER_INDEX';
         $path   = $this->getParticleViewPath('Movie/Characters');
-        $option = array();
         $data   = array('characters'=>$characters, 'id'=>$id, 'pager'=>$pager, 'isWatched'=>$isWatched);
-        $this->getView()->loadParticle($name, $path, $option, $data);
-        $this->getView()->displayParticle($name);
+        $view = $this->getView()->getParticleViewManager()->load($name, $path);
+        $view->getDataManager()->merge($data);
+        $view->display();
     }
 }

@@ -35,7 +35,7 @@ abstract class UserSetting extends VisualMain {
         $path   = $this->getParticleViewPath('User/Setting/Menu');
         $option = array();
         $data   = array('settingItems'=>$this->settingItems);
-        $this->getView()->loadParticle($name, $path, $option, $data);
+        $this->loadParticle($name, $path, $option, $data);
         
         parent::afterRunAction();
     }

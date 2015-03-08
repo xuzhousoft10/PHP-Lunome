@@ -25,12 +25,12 @@ class Top extends Visual {
         $topListLimitation = $this->getModule()->getConfiguration()->get('top_list_limitation');
         
         /* Setup view */
-        $view->loadLayout($this->getLayoutViewPath('BlankThin'));
+        $view->setLayout($this->getLayoutViewPath('BlankThin'));
         $viewName   = 'MEDIA_TOP';
         $path       = $this->getParticleViewPath('Movie/Top');
-        $view->loadParticle($viewName, $path);
+        $this->loadParticle($viewName, $path);
         $view->title = '电影排行榜 -- TOP '.$topListLimitation;
-        $view->setDataToParticle($viewName, 'length', $topListLimitation);
+        $this->setDataToParticle($viewName, 'length', $topListLimitation);
         
         /* Get marks, except unmark. */
         $serviceClass = new \ReflectionClass($movieService);
@@ -47,6 +47,6 @@ class Top extends Visual {
             $list[$mark]['label'] = $marks[$mark];
             $list[$mark]['list'] = $movieService->getTopList($mark, $topListLimitation);
         }
-        $view->setDataToParticle($viewName, 'list', $list);
+        $this->setDataToParticle($viewName, 'list', $list);
     }
 }

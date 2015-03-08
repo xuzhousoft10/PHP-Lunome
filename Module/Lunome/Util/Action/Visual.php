@@ -104,13 +104,12 @@ abstract class Visual extends \X\Util\Action\Visual {
     protected function error404Handler() {
         /* @var $viewService \X\Service\XView\XViewService */
         $viewService = X::system()->getServiceManager()->get(XViewService::getServiceName());
-        $viewType = XViewService::VIEW_TYPE_HTML;
         
         /* @var $view \X\Service\XView\Core\Handler\Html */
-        $view = $viewService->create('ERROR_404', $viewType);
-        $view->setCharset('UTF-8');
-        $view->loadLayout($this->getLayoutViewPath('Blank'));
-        $view->loadParticle('ERROR_404_CONTENT', $this->getParticleViewPath('Util/Error404'));
+        $view = $viewService->createHtml('ERROR_404');
+        $view->getMetaManager()->setCharset('UTF-8');
+        $view->setLayout($this->getLayoutViewPath('Blank'));
+        $view->getParticleViewManager()->load('ERROR_404_CONTENT', $this->getParticleViewPath('Util/Error404'));
         $view->display();
     }
 }

@@ -3,7 +3,6 @@
  * The action file for account/login action.
  */
 namespace X\Module\Lunome\Action\User\Login;
-
 /**
  * 
  */

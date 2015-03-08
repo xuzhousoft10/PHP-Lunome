@@ -41,9 +41,9 @@ class Index extends Visual {
         $isWatched = MovieService::MARK_WATCHED === $movieService->getMark($id);
         $name   = 'CLASSIC_DIALOGUES_INDEX';
         $path   = $this->getParticleViewPath('Movie/ClassicDialogues');
-        $option = array();
         $data   = array('dialogues'=>$dialogues, 'id'=>$id, 'pager'=>$pager, 'isWatched'=>$isWatched);
-        $this->getView()->loadParticle($name, $path, $option, $data);
-        $this->getView()->displayParticle($name);
+        $view = $this->getView()->getParticleViewManager()->load($name, $path);
+        $view->getDataManager()->merge($data);
+        $view->display();
     }
 }

@@ -19,7 +19,7 @@ class GetOption extends Visual {
      * @param string $parent
      * @param string $selected
      */
-    public function runAction( $parent, $selected='' ) {
+    public function runAction( $parent='', $selected='' ) {
         /* @var $servie RegionService */
         $servie = $this->getService(RegionService::getServiceName());
         $regions = $servie->getAll($parent);
@@ -29,7 +29,7 @@ class GetOption extends Visual {
         $path   = $this->getParticleViewPath('Region/GetOption');
         $option = array();
         $data   = array( 'regions'=>$regions, 'selected'=>$selected);
-        $this->getView()->loadParticle($name, $path, $option, $data);
-        $this->getView()->displayParticle($name);
+        $view = $this->loadParticle($name, $path, $option, $data);
+        $view->display();
     }
 }

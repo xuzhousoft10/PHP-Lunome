@@ -3,7 +3,6 @@
  * 
  */
 namespace X\Module\Lunome\Action\User\Chat;
-
 /**
  * 
  */

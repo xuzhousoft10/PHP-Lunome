@@ -53,9 +53,9 @@ class Index extends Visual {
         
         $name   = 'COMMENTS_INDEX';
         $path   = $this->getParticleViewPath('Movie/Comments');
-        $option = array();
         $data   = array('comments'=>$comments, 'id'=>$id, 'pager'=>$pager, 'scope'=>$scope);
-        $this->getView()->loadParticle($name, $path, $option, $data);
-        $this->getView()->displayParticle($name);
+        $view = $this->getView()->getParticleViewManager()->load($name, $path);
+        $view->getDataManager()->merge($data);
+        $view->display();
     }
 }

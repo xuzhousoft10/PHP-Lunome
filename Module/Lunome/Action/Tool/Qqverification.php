@@ -8,7 +8,6 @@ namespace X\Module\Lunome\Action\Tool;
  * use statements
  */
 use X\Util\Action\Visual;
-use X\Service\XView\Core\Handler\Html;
 
 /**
  * The action class for tool/qqverification action.
@@ -19,8 +18,8 @@ class Qqverification extends Visual {
      * @return void
      */
     public function runAction() {
-        $this->getView()->loadLayout(Html::LAYOUT_SINGLE_COLUMN);
-        $this->getView()->addOpenGraphData('qq-verification', 'qc:admins', '5241260046755655206077');
+        $this->getView()->setLayout($this->getLayoutViewPath('Blank'));
+        $this->getView()->getMetaManager()->setOGAdmins('5241260046755655206077','qc:admins');
     }
     
     /**

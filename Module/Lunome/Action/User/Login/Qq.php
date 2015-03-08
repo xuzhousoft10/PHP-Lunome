@@ -3,7 +3,6 @@
  * The action file for user/login/qq action.
  */
 namespace X\Module\Lunome\Action\User\Login;
-
 /**
  * 
  */

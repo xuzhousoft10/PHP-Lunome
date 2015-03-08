@@ -49,20 +49,21 @@ class MarkedUserList extends Visual {
         $view       = $this->getView();
         $viewName   = 'MARKED_USER_LIST';
         $path       = $this->getParticleViewPath('Movie/MarkedUserList');
-        $view->loadParticle($viewName, $path);
+        $listView   = $this->loadParticle($viewName, $path);
         
         /* add data to view. */
-        $view->setDataToParticle($viewName, 'accounts', $accounts);
-        $view->setDataToParticle($viewName, 'pager', $pager);
-        $view->setDataToParticle($viewName, 'id', $id);
-        $view->setDataToParticle($viewName, 'mark', $mark);
-        $view->setDataToParticle($viewName, 'scope', $scope);
-        $view->setDataToParticle($viewName, 'sexNames', $accountManager->getSexNames());
-        $view->setDataToParticle($viewName, 'sexMarks', $accountManager->getSexMarks());
-        $view->setDataToParticle($viewName, 'sexualityNames', $accountManager->getSexualityNames());
-        $view->setDataToParticle($viewName, 'emotionStatuNames', $accountManager->getEmotionStatuNames());
+        $this->setDataToParticle($viewName, 'accounts', $accounts);
+        $this->setDataToParticle($viewName, 'pager', $pager);
+        $this->setDataToParticle($viewName, 'id', $id);
+        $this->setDataToParticle($viewName, 'mark', $mark);
+        $this->setDataToParticle($viewName, 'scope', $scope);
+        $this->setDataToParticle($viewName, 'sexNames', $accountManager->getSexNames());
+        $this->setDataToParticle($viewName, 'sexMarks', $accountManager->getSexMarks());
+        $this->setDataToParticle($viewName, 'sexualityNames', $accountManager->getSexualityNames());
+        $this->setDataToParticle($viewName, 'emotionStatuNames', $accountManager->getEmotionStatuNames());
+        
         
         /* display particle view. */
-        $this->getView()->displayParticle($viewName);
+        $listView->display();
     }
 }

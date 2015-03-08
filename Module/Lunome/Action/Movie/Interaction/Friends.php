@@ -58,12 +58,12 @@ class Friends extends FriendManagement {
         
         $viewName   = 'USER_FRIENDS_INTERACTION';
         $path   = $this->getParticleViewPath('Movie/Interaction/InviteFriendsToWatchMovie');
-        $view->loadParticle($viewName, $path);
-        $view->setDataToParticle($viewName, 'movies', $movies);
-        $view->setDataToParticle($viewName, 'selectedFriendIDs', implode(',', $selectedFriendIDs));
-        $view->setDataToParticle($viewName, 'selectedFriendNames', implode(',', $selectedFriendNames));
+        $this->loadParticle($viewName, $path);
+        $this->setDataToParticle($viewName, 'movies', $movies);
+        $this->setDataToParticle($viewName, 'selectedFriendIDs', implode(',', $selectedFriendIDs));
+        $this->setDataToParticle($viewName, 'selectedFriendNames', implode(',', $selectedFriendNames));
         $commentLength = MovieInvitationModel::model()->getAttribute('comment')->getLength();
-        $view->setDataToParticle($viewName, 'commentLength', $commentLength);
+        $this->setDataToParticle($viewName, 'commentLength', $commentLength);
         
         $view->title = '邀请好友一起去看电影';
     }
@@ -83,6 +83,6 @@ class Friends extends FriendManagement {
     protected function beforeDisplay() {
         parent::beforeDisplay();
         $assetsURL = $this->getAssetsURL();
-        $this->getView()->addScriptFile('invite', $assetsURL.'/js/movie/invite_friends.js');
+        $this->addScriptFile('invite', $assetsURL.'/js/movie/invite_friends.js');
     }
 }

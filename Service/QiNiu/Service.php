@@ -14,15 +14,22 @@ use X\Service\QiNiu\Core\QiniuOSS;
  */
 class Service extends \X\Core\Service\XService {
     /**
+     * @var string
+     */
+    protected static $serviceName = 'Qiniu';
+    
+    /**
      * @var QiniuOSS
      */
     private $OSS = null;
     
     /**
      * (non-PHPdoc)
-     * @see \X\Core\Service\XService::afterStart()
+     * @see \X\Core\Service\XService::start()
      */
-    protected function afterStart() {
+    public function start() {
+        parent::start();
+        
         $accessToken = $this->getConfiguration()->get('AccessToken');
         $secretKey = $this->getConfiguration()->get('SecretKey');
         $this->OSS = new QiniuOSS($accessToken, $secretKey);

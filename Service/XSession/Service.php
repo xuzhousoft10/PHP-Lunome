@@ -13,6 +13,27 @@ namespace X\Service\XSession;
  */
 class Service extends \X\Core\Service\XService {
     /**
+     * @var unknown
+     */
+    protected static $serviceName = 'XSession';
+    
+    /**
+     * (non-PHPdoc)
+     * @see \X\Core\Service\XService::start()
+     */
+    public function start() {
+        parent::start();
+        session_start();
+    }
+    
+    /**
+     * 
+     */
+    public function close() {
+        session_write_close();
+    }
+    
+    /**
      * (non-PHPdoc)
      * @see \X\Core\Service\XService::afterStart()
      */
@@ -57,10 +78,6 @@ class Service extends \X\Core\Service\XService {
         $handler = sprintf('\\X\\Service\\XSession\\Core\\Driver\\Handler%s', ucfirst($config['type']));
         $sessionHandler = new $handler($config);
         return $sessionHandler;
-    }
-    
-    public function close() {
-        session_write_close();
     }
 }
 return __NAMESPACE__;

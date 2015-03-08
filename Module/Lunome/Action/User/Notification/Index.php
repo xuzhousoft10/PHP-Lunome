@@ -28,7 +28,7 @@ class Index extends Visual {
         $path   = $this->getParticleViewPath('User/Notification/Index');
         $option = array();
         $data   = array('notifications'=>$notifications);
-        $this->getView()->loadParticle($name, $path, $option, $data);
-        $this->getView()->displayParticle($name);
+        $view = $this->loadParticle($name, $path, $option, $data);
+        $view->display();
     }
 }

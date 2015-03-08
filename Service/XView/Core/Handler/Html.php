@@ -110,9 +110,15 @@ class Html extends \X\Service\XView\Core\Util\View {
      * @return string
      */
     public function toString() {
+        if ( null === $this->layout['view'] ) {
+            return null;
+        }
+        
+        $layoutContent = $this->renderLayout();
+        
         $content = array();
         $content[] = '<!DOCTYPE html>';
-        $content[] = '<html xmlns=\"http://www.w3.org/1999/xhtml\">';
+        $content[] = '<html xmlns="http://www.w3.org/1999/xhtml">';
         $content[] = '<head>';
         $content[] = '<title>'.htmlspecialchars($this->title).'</title>';
         $content[] = $this->getStyleManager()->toString();
@@ -121,7 +127,7 @@ class Html extends \X\Service\XView\Core\Util\View {
         $content[] = $this->getScriptManager()->toString();
         $content[] = '</head>';
         $content[] = ' ';
-        $content[] = $this->renderLayout();
+        $content[] = $layoutContent;
         $content[] = '</html>';
         
         $content = array_filter($content);

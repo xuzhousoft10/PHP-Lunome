@@ -222,8 +222,8 @@ class MetaManager {
     /**
      * @param unknown $admins
      */
-    public function setOGAdmins( $admins ) {
-        $this->addOpenGraphData('OpenGraph:Admins', 'og:admins', $admins);
+    public function setOGAdmins( $admins, $mark='og:admins' ) {
+        $this->addOpenGraphData('OpenGraph:Admins', $mark, $admins);
     }
     
     /**

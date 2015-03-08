@@ -1,3 +1,2 @@
-<?php foreach ( $this->particles as $particle ) : ?>
-    <?php echo $particle['content'];?>
-<?php endforeach; ?>
+<?php /* @var $this \X\Service\XView\Core\Handler\Html */ ?>
+<?php echo $this->getParticleViewManager()->toString(); ?>

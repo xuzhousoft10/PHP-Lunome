@@ -1,7 +1,7 @@
 <?php use X\Core\X; ?>
 <?php 
-/* @var $this \X\Service\XView\Core\Handler\Html */
-$this->addStyle('body', array('padding-top'=>'50px'));
+/* @var $this \X\Service\XView\Core\Util\HtmlView\ParticleView */
+$this->getManager()->getHost()->getStyleManager()->add('body', array('padding-top'=>'70px'));
 $vars = get_defined_vars();
 $user = $vars['user'];
 ?>

@@ -35,14 +35,14 @@ class Service extends \X\Core\Service\XService {
     public function start() {
         parent::start();
         
-        if ( $this->getIsDebugEnvironment() && $this->getIsGuest()) {
-            if ( false !== strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'firefox') ) {
-                $account = AccountModel::model()->find(array('account'=>'0'));
-            } else {
-                $account = AccountModel::model()->find(array('account'=>'1'));
-            }
-            $this->loginAccount($account, 'DEBUG');
-        }
+//         if ( $this->getIsDebugEnvironment() && $this->getIsGuest()) {
+//             if ( false !== strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'firefox') ) {
+//                 $account = AccountModel::model()->find(array('account'=>'0'));
+//             } else {
+//                 $account = AccountModel::model()->find(array('account'=>'1'));
+//             }
+//             $this->loginAccount($account, 'DEBUG');
+//         }
         $this->initCurrentUserInformation();
     }
     

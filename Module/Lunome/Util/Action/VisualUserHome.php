@@ -29,14 +29,14 @@ class VisualUserHome extends Visual {
         $view = $this->getView();
         
         $layout = $this->getLayoutViewPath('UserHome');
-        $view->loadLayout($layout);
-        $view->addData('currentUser', $this->getCurrentUserData());
+        $view->setLayout($layout);
+        $view->getDataManager()->set('currentUser', $this->getCurrentUserData());
         
         $name   = 'USER_TOP_BOARD';
         $path   = $this->getParticleViewPath('User/Home/TopBoard');
-        $option = array();
         $data   = array('homeUser'=>array());
-        $view->loadParticle($name, $path, $option, $data);
+        $particleView = $view->getParticleViewManager()->load($name, $path);
+        $particleView->getDataManager()->merge($data);
     }
     
     /**
@@ -55,7 +55,7 @@ class VisualUserHome extends Visual {
         $userData['sex']                = $accountManager->getSexName($userData['sex']);
         $userData['sexuality']          = $accountManager->getSexualityName($userData['sexuality']);
         $userData['emotion_status']     = $accountManager->getEmotionStatuName($userData['emotion_status']);
-        $this->getView()->setDataToParticle('USER_TOP_BOARD', 'homeUser', $userData);
+        $this->setDataToParticle('USER_TOP_BOARD', 'homeUser', $userData);
         
         $this->getView()->title = $userData['nickname']."的主页";
         

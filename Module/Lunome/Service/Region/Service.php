@@ -14,6 +14,11 @@ use X\Module\Lunome\Model\Region\RegionModel;
  */
 class Service extends \X\Core\Service\XService {
     /**
+     * @var unknown
+     */
+    protected static $serviceName = 'Region';
+    
+    /**
      * @return \X\Module\Lunome\Model\Region\RegionModel[]
      */
     public function getAll( $parent='' ) {

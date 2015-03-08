@@ -59,6 +59,13 @@ class ParticleView {
     }
     
     /**
+     * @return \X\Service\XView\Core\Util\HtmlView\ParticleViewManager
+     */
+    public function getManager() {
+        return $this->manager;
+    }
+    
+    /**
      * Displayt the content of particle.
      */
     public function display() {

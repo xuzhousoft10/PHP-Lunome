@@ -3,7 +3,6 @@
  * The action file for user/login/qqcallback action.
  */
 namespace X\Module\Lunome\Action\User\Login;
-
 /**
  *
  */

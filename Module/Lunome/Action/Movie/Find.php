@@ -22,11 +22,11 @@ class Find extends Visual {
      * @param integer $length
      * @param boolean $score
      */
-    public function runAction( $mark=0, $condition=null, $position=0, $length=20, $score=false ) {
+    public function runAction( $mark=0, $condition=null, $position=0, $score=false ) {
         /* 格式化查询条件参数。 */
         $mark       = intval($mark);
         $position   = intval($position);
-        $length     = intval($length);
+        $length     = 20;
         $score      = $score ? true : false;
         $condition  = (empty($condition) || !is_array($condition))? array() : $condition;
         if ( isset($condition['name']) ) {
@@ -99,19 +99,19 @@ class Find extends Visual {
         $resultGroupSign = 'item-'.uniqid();
         $view = $this->getView();
         $viewName = 'MOVIE_FIND_RESULT';
-        $view->loadParticle($viewName, $this->getParticleViewPath('Movie/FindResult'));
+        $particleView = $view->getParticleViewManager()->load($viewName, $this->getParticleViewPath('Movie/FindResult'));
         
         /* add view data. */
-        $view->setDataToParticle($viewName, 'movies', $medias);
-        $view->setDataToParticle($viewName, 'marks', $actions);
-        $view->setDataToParticle($viewName, 'isWatched', MovieService::MARK_WATCHED===$mark);
-        $view->setDataToParticle($viewName, 'sign', $resultGroupSign);
+        $particleView->getDataManager()->set('movies', $medias);
+        $particleView->getDataManager()->set('marks', $actions);
+        $particleView->getDataManager()->set('isWatched', MovieService::MARK_WATCHED===$mark);
+        $particleView->getDataManager()->set('sign', $resultGroupSign);
         
         /* 返回media列表 */
         $jsonResult = array();
         $jsonResult['count'] = $count;
         $jsonResult['mediaCount'] = count($medias);
-        $jsonResult['medias'] = $view->getParticleContent($viewName);
+        $jsonResult['medias'] = $particleView->toString();
         $jsonResult['sign'] = $resultGroupSign;
         echo json_encode($jsonResult);
     }

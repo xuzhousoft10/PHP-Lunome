@@ -56,9 +56,9 @@ class Index extends FriendManagement {
         /* Load friend index view. */
         $name   = 'FRIEND_INDEX';
         $path   = $this->getParticleViewPath('User/Friend/Index');
-        $option = array();
         $data   = array('friends'=>$friends, 'pager'=>$pager);
-        $this->getView()->loadParticle($name, $path, $option, $data);
+        $indexView = $this->getView()->getParticleViewManager()->load($name, $path);
+        $indexView->getDataManager()->merge($data);
         $this->getView()->title = '我的好友';
     }
     

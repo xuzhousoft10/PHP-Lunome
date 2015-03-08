@@ -27,7 +27,7 @@ class Interaction extends FriendManagement {
         $path   = $this->getParticleViewPath('User/Friend/Interaction');
         $option = array();
         $data   = array('friends'=>$friends, 'peopleCount'=>$moduleConfig->get('user_interaction_max_friend_count'));
-        $this->getView()->loadParticle($name, $path, $option, $data);
+        $this->loadParticle($name, $path, $option, $data);
         
         $this->getView()->title = '集体互动';
     }
@@ -39,7 +39,7 @@ class Interaction extends FriendManagement {
     protected function beforeDisplay() {
         parent::beforeDisplay();
         $assetsURL = $this->getAssetsURL();
-        $this->getView()->addScriptFile('User-Friend-Interaction', $assetsURL.'/js/user/interaction.js');
+        $this->addScriptFile('User-Friend-Interaction', $assetsURL.'/js/user/interaction.js');
     }
     
     /**

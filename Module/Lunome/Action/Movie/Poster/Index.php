@@ -50,7 +50,8 @@ class Index extends Visual {
             'pager'=>$pager, 
             'isWatched'=>$isWatched,
         );
-        $this->getView()->loadParticle($name, $path, $option, $data);
-        $this->getView()->displayParticle($name);
+        
+        $view = $this->loadParticle($name, $path, $option, $data);
+        $view->display();
     }
 }
