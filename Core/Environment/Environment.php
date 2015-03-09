@@ -21,6 +21,7 @@ class Environment {
      */
     public function __construct() {
         $handlerName = php_sapi_name();
+        $handlerName = str_replace('-', '_', $handlerName);
         $handlerClass = '\\X\\Core\\Environment\\Handler\\'.ucfirst($handlerName);
         if ( !class_exists($handlerClass) ) {
             throw new Exception("Unable to find a environment handler '$handlerClass'.");

@@ -13,7 +13,7 @@ function initDirectory( $path ) {
     global $fileState;
     
     if ( is_dir($path) ) {
-        printf("init directory %s\n", $path);
+        // printf("init directory %s\n", $path);
         if ( !isset($fileState[$path]) ) {
             $fileState[$path]['type']='dir';
             $fileState[$path]['remote']=null;
@@ -77,7 +77,7 @@ function syncPath( $connect, $path, $remotePath='/' ) {
     }
     
     if ( is_dir($path) ) {
-        printf("cd  %-48s %4d/%d %05.2f%% %8s\n", $displayPath, $processedCount, $totalFileCount, $percentage, $timeSpend);
+        //printf("cd  %-48s %4d/%d %05.2f%% %8s\n", $displayPath, $processedCount, $totalFileCount, $percentage, $timeSpend);
         if ( null === $fileState[$path]['remote'] ) {
             $fileState[$path]['remote']=$remotePath;
             
@@ -120,22 +120,21 @@ ftp_login($connect, 'michael@lunome.com', 'ginhappy1215');
 syncPath($connect, '.');
 file_put_contents('status.php', "<?php \n return ".var_export($fileState, true).';');
 
-function syncDeletedFiles( $path ) {
-    global $fileState, $connect;
-    
-    $info = $fileState[$path];
-    if ( 'dir' === $info['type'] ) {
-        $files = ftp_nlist($connect, $info['remote']);
-        if ( false === $files ) {
-            die(sprintf("Unable to get file list in '%s'.\n", $info['remote']));
-        }
-        $files = array_filter($files, 'filterInvalidateFileByName');
-        ---------------
-    } else {
-        ftp_delete($connect, $info['remove']);
+foreach ( $fileState as $filePath => $fileInfo ) {
+    if ( 'file' === $fileInfo['type'] && !file_exists($filePath) ) {
+        printf("DEL %s\n", $fileInfo['remote']);
+        ftp_delete($connect, $fileInfo['remote']);
+        unset($fileState[$filePath]);
     }
 }
 
 foreach ( $fileState as $filePath => $fileInfo ) {
-    
+    if ( 'dir' === $fileInfo['type'] && !is_dir($filePath) ) {
+        printf("RM  %s\n", $fileInfo['remote']);
+        ftp_rmdir($connect, $fileInfo['remote']);
+        unset($fileState[$filePath]);
+    }
 }
+
+ftp_quit($connect);
+file_put_contents('status.php', "<?php \n return ".var_export($fileState, true).';');
