@@ -59,4 +59,10 @@ return array (
     'class' => 'X\\Service\\QQ\\Service',
     'delay' => true,
   ),
+  'Configuration' =>
+  array (
+    'enable' => true,
+    'class' => 'X\\Module\\Lunome\\Service\\Configuration\\Service',
+    'delay' => true,
+  ),
 );

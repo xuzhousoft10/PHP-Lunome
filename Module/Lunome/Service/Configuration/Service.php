@@ -15,6 +15,11 @@ use X\Module\Lunome\Util\Exception;
  */
 class Service extends \X\Core\Service\XService {
     /**
+     * @var unknown
+     */
+    protected static $serviceName = 'Configuration';
+    
+    /**
      * @param unknown $name
      */
     public function get( $name ) {
