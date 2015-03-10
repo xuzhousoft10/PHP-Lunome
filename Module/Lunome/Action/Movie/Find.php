@@ -7,8 +7,10 @@ namespace X\Module\Lunome\Action\Movie;
 /**
  * Use statements
  */
+use X\Core\X;
 use X\Module\Lunome\Util\Action\Visual;
 use X\Module\Lunome\Service\Movie\Service as MovieService;
+use X\Service\XSession\Service as SessionService;
 
 /**
  * The action class for movie/find action.
@@ -23,6 +25,8 @@ class Find extends Visual {
      * @param boolean $score
      */
     public function runAction( $mark=0, $condition=null, $position=0, $score=false ) {
+        X::system()->getServiceManager()->get(SessionService::getServiceName())->close();
+        
         /* 格式化查询条件参数。 */
         $mark       = intval($mark);
         $position   = intval($position);

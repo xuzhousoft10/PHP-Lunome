@@ -33,8 +33,10 @@ class MovieModel extends Basic {
         $columns['date']            = 'DATE';
         $columns['region_id']       = 'VARCHAR(36)';
         $columns['language_id']     = 'VARCHAR(36)';
-        $columns['introduction']    = 'VARCHAR(1024)';
+        $columns['introduction']    = 'VARCHAR(2048)';
         $columns['has_cover']       = 'TINYINT [0]';
+        $columns['url']             = 'VARCHAR(255)';
+        $columns['source']          = 'VARCHAR(45)';
         return $columns;
     }
 

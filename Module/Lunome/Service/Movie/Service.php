@@ -23,7 +23,6 @@ use X\Module\Lunome\Model\Movie\MovieUserRateModel;
 use X\Module\Lunome\Model\Movie\MoviePosterModel;
 use X\Service\QiNiu\Service as QiniuService;
 use X\Module\Lunome\Model\Movie\MovieDirectorMapModel;
-use X\Module\Lunome\Model\People\PeopleModel;
 use X\Module\Lunome\Model\Movie\MovieActorMapModel;
 use X\Module\Lunome\Model\Movie\MovieCharacterModel;
 use X\Module\Lunome\Model\Movie\MovieUserMarkModel;
@@ -39,6 +38,8 @@ use X\Module\Lunome\Service\Configuration\Service as ConfigService;
 use X\Util\ImageResize;
 use X\Module\Lunome\Util\Exception as LunomeException;
 use X\Module\Lunome\Model\Movie\MovieUserVisited;
+use X\Module\Lunome\Model\Movie\MovieDirectorModel;
+use X\Module\Lunome\Model\Movie\MovieActorModel;
 
 /**
  * The service class
@@ -480,25 +481,25 @@ class Service extends \X\Core\Service\XService {
             $con->equals('language_id', $condition['language']);
         }
         if ( isset( $condition['director'] ) ) {
-            $directors = PeopleModel::model()->findAll(array('name'=>$condition['director']));
+            $directors = MovieDirectorModel::model()->findAll(array('name'=>$condition['director']));
             foreach ( $directors as $index => $director ) {
                 $directors[$index] = $director->id;
             }
             $directorCondition = array();
             $directorCondition['movie_id'] = new SQLExpression(MovieModel::model()->getTableFullName().'.id');
             $directorCondition['director_id'] = $directors;
-            $directorCondition = MovieDirectorMapModel::query()->activeColumns(array('movie_id'))->find($directorCondition);
+            $directorCondition = MovieDirectorMapModel::query()->addExpression('movie_id')->find($directorCondition);
             $con->exists($directorCondition);
         }
         if ( isset( $condition['actor'] ) ) {
-            $actors = PeopleModel::model()->findAll(array('name'=>$condition['actor']));
+            $actors = MovieActorModel::model()->findAll(array('name'=>$condition['actor']));
             foreach ( $actors as $index => $actor ) {
                 $actors[$index] = $actor->id;
             }
             $actorCondition = array();
             $actorCondition['movie_id'] = new SQLExpression(MovieModel::model()->getTableFullName().'.id');
             $actorCondition['actor_id'] = $actors;
-            $actorCondition = MovieActorMapModel::query()->activeColumns(array('movie_id'))->find($actorCondition);
+            $actorCondition = MovieActorMapModel::query()->addExpression('movie_id')->find($actorCondition);
             $con->exists($actorCondition);
         }
         if ( isset($condition['category']) ) {
@@ -1086,7 +1087,7 @@ class Service extends \X\Core\Service\XService {
         foreach ( $directors as $index => $director ) {
             $directors[$index] = $director->director_id;
         }
-        $directors = PeopleModel::model()->findAll(array('id'=>$directors));
+        $directors = MovieDirectorModel::model()->findAll(array('id'=>$directors));
         return $directors;
     }
     
@@ -1096,9 +1097,10 @@ class Service extends \X\Core\Service\XService {
             return false;
         }
         
-        $people = PeopleModel::model()->find(array('name'=>$name));
+        $people = MovieDirectorModel::model()->find(array('name'=>$name));
         if ( null === $people ) {
-            $people = new PeopleModel();
+            $people = new MovieDirectorModel();
+            $people->count = 1;
             $people->name = $name;
             $people->save();
         }
@@ -1136,7 +1138,7 @@ class Service extends \X\Core\Service\XService {
         foreach ( $actors as $index => $actor ) {
             $actors[$index] = $actor->actor_id;
         }
-        $directors = PeopleModel::model()->findAll(array('id'=>$actors));
+        $directors = MovieActorModel::model()->findAll(array('id'=>$actors));
         return $directors;
     }
     
@@ -1146,10 +1148,11 @@ class Service extends \X\Core\Service\XService {
             return false;
         }
     
-        $people = PeopleModel::model()->find(array('name'=>$name));
+        $people = MovieActorModel::model()->find(array('name'=>$name));
         if ( null === $people ) {
-            $people = new PeopleModel();
+            $people = new MovieDirectorModel();
             $people->name = $name;
+            $people->count = 1;
             $people->save();
         }
     
