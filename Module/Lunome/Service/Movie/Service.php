@@ -447,11 +447,11 @@ class Service extends \X\Core\Service\XService {
         $isDebug = X::system()->getConfiguration()->get('is_debug');
         $isDebug = false;
         if ( $isDebug ) {
-            $url = '7vijk1.com1.z0.glb.clouddn.com';
+            $url = '7xawql.com1.z0.glb.clouddn.com';
         } else {
-            $url = '7sbycx.com1.z0.glb.clouddn.com';
+            $url = '7xawql.com1.z0.glb.clouddn.com';
         }
-        $path = 'http://'.$url.'/'.$id.'.jpg';
+        $path = 'http://'.$url.'/'.$id;
         if ( $refresh ) {
             $path .= '?rand='.uniqid();
         }
