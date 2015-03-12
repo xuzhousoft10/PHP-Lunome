@@ -9,12 +9,19 @@ namespace X\Service\XLog;
  */
 class Service extends \X\Core\Service\XService {
     /**
-     * (non-PHPdoc)
-     * @see \X\Core\Service\XService::afterStart()
+     * @var unknown
      */
-    protected function afterStart() {
+    protected static $serviceName = 'XLog';
+    
+    /**
+     * (non-PHPdoc)
+     * @see \X\Core\Service\XService::start()
+     */
+    public function start() {
+        parent::start();
+        
         require_once $this->getPath('Core/Log4PHP/Logger.php');
-        $configuration = $this->getConfiguration()->getAll();
+        $configuration = $this->getConfiguration()->toArray();
         \Logger::configure($configuration['log4php']);
         $this->logger = \Logger::getRootLogger();
     }

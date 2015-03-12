@@ -375,7 +375,7 @@ class Service extends \X\Core\Service\XService {
      */
     protected function getCurrentUserId() {
         $currentUser = $this->getUserService()->getCurrentUser();
-        return $currentUser['ID'];
+        return isset($currentUser['ID']) ? $currentUser['ID'] : null;
     }
     
     /**

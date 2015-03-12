@@ -37,13 +37,13 @@ function userNotificationChecker( setTimer ) {
             }
         }
         $('#user-notification-trigger').attr('data-counter', count);
+        
+        if ( setTimer ) {
+            setTimeout(function() {
+                userNotificationChecker(true);
+            }, 5000);
+        }
     }, 'json');
-    
-    if ( setTimer ) {
-        setTimeout(function() {
-            userNotificationChecker(true);
-        }, 3000);
-    }
 }
 
 function fixNotificationCountValue( diffValue ) {
