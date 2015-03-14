@@ -22,4 +22,8 @@ return array (
   array (
     'enable' => false,
   ),
+  'Account' =>
+   array (
+     'enable' => false,
+  ),
 );
