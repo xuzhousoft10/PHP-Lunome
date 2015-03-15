@@ -1,6 +1,6 @@
 <?php
 namespace X\Module\Account\Service\Account\Core;
-class CHatManager {
+class ChatManager {
     public function start(){}
     public function stop(){}
     public function send(){}
