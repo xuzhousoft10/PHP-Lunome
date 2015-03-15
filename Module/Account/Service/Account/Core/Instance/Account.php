@@ -1,5 +1,5 @@
 <?php
-namespace X\Module\Account\Service\Account\Core;
+namespace X\Module\Account\Service\Account\Core\Instance;
 class Account {
     public function loginByOAuth() {}
     public function logout(){}
@@ -9,5 +9,7 @@ class Account {
     public function getActionHistoryManager(){}
     public function getConfigurationManager(){}
     public function getInformationManager(){}
-    public function getFriendManager(){}
+    public function getFriendManager(){
+        
+    }
 }

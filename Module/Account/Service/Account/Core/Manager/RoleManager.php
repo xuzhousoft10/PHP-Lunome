@@ -1,5 +1,5 @@
 <?php
-namespace X\Module\Account\Service\Account\Core;
+namespace X\Module\Account\Service\Account\Core\Manager;
 class RoleManager {
     public function is() {}
     public function set() {}

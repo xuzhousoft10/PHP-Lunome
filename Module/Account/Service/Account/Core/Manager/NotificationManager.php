@@ -1,5 +1,5 @@
 <?php
-namespace X\Module\Account\Service\Account\Core;
+namespace X\Module\Account\Service\Account\Core\Manager;
 class NotificationManager {
     public function send(){}
     public function find(){}
