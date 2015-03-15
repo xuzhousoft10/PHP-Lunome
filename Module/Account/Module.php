@@ -1,18 +1,17 @@
 <?php
 namespace X\Module\Account;
 /**
- * 
+ *
  */
-use X\Core\Module\XModule;
+use X\Util\Module\Basic;
 /**
  * 
  */
-class Module extends XModule {
+class Module extends Basic {
     /**
-     * (non-PHPdoc)
-     * @see \X\Core\Module\XModule::run()
+     * @return string
      */
-    public function run($parameters = array()) {
-        echo 'Got Account Module.';
+    protected function getDefaultActionName() {
+        return 'login/index';
     }
 }

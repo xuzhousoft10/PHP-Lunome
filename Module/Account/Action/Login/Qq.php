@@ -1,26 +1,21 @@
 <?php
-/**
- * The action file for user/login/qq action.
- */
-namespace X\Module\Lunome\Action\User\Login;
+namespace X\Module\Account\Action\Login;
 /**
  * 
  */
 use X\Core\X;
-use X\Module\Lunome\Service\User\Service;
-
 /**
- * The action class for user/login/qq action.
- * @author Unknown
+ * 
  */
 class Qq extends \X\Util\Action\Basic { 
-    /** 
-     * The action handle for index action.
-     * @return void
-     */ 
+    /**
+     * (non-PHPdoc)
+     * @see \X\Service\XAction\Core\Util\Action::runAction()
+     */
     public function runAction( ) {
-        $url = $this->getService(Service::getServiceName())->getQQLoginURL();
-        header("Location:$url");
-        X::system()->stop();
+        /* @var $QQService \X\Service\QQ\Service */
+        $QQService = X::system()->getServiceManager()->get(\X\Service\QQ\Service::getServiceName());
+        $loginURL = $QQService->getConnect()->getLoginUrl();
+        $this->gotoURL($loginURL);
     }
 }

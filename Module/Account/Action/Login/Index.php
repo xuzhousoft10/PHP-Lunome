@@ -1,24 +1,18 @@
 <?php
-/**
- * The action file for account/login action.
- */
-namespace X\Module\Lunome\Action\User\Login;
+namespace X\Module\Account\Action\Login;
 /**
  * 
  */
-use X\Core\X;
 use X\Module\Lunome\Util\Action\Visual;
-
 /**
- * The action class for account/login action.
- * @author Unknown
+ * 
  */
 class Index extends Visual { 
-    /** 
-     * The action handle for index action.
-     * @return void
-     */ 
+    /**
+     * (non-PHPdoc)
+     * @see \X\Service\XAction\Core\Util\Action::runAction()
+     */
     public function runAction( ) {
-        $this->gotoURL('/index.php?module=lunome&action=user/login/qq');
+        $this->gotoURL('/index.php?module=account&action=login/qq');
     }
 }
