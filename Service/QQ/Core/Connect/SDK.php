@@ -80,6 +80,13 @@ class SDK {
             'client_secret' => self::$appkey,
             'code'          => $_GET['code']
         ));
+        
+        /* check error first. */
+        $this->token = $request->get(Request::FORMAT_JS_CALLBACK_JSON);
+        if ( null !== $this->token && isset($this->token['error']) ) {
+            throw new Exception($this->token['error_description'], $this->token['error']);
+        }
+        
         $this->token = $request->get(Request::FORMAT_URL_PARAM);
         $this->token['expires_in'] = date('Y-m-d H:i:s',strtotime("{$this->token['expires_in']} second"));
         

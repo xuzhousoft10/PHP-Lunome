@@ -26,7 +26,7 @@ class AccountOauth20Model extends Basic {
         $columns['openid']          = 'VARCHAR(36) NOTNULL';
         $columns['access_token']    = 'VARCHAR(36) NOTNULL';
         $columns['refresh_token']   = 'VARCHAR(36)';
-        $columns['expired_at']      = 'DATETIME NOTNULL';
+        $columns['expired_at']      = 'DATETIME';
         return $columns;
     }
 

@@ -1,29 +1,9 @@
 <?php
 namespace X\Module\Account\Service\Account\Core\Model;
-
 /**
  * 
  */
-use X\Util\Model\Basic;
-/**
- * 
-  CREATE  TABLE `lunome`.`account_information` (
-  `id` VARCHAR(36) NOT NULL ,
-  `account_id` VARCHAR(36) NOT NULL ,
-  `email` VARCHAR(36) NULL ,
-  `qq` VARCHAR(16) NULL ,
-  `cellphone` VARCHAR(16) NULL ,
-  `living_country` VARCHAR(36) NULL ,
-  `living_province` VARCHAR(36) NULL ,
-  `living_city` VARCHAR(36) NULL ,
-  `sex` TINYINT NULL ,
-  `sexuality` TINYINT NULL,
-  `birthday` DATE NULL ,
-  `is_lunar_calendar` TINYINT NULL,
-  `emotion_status` TINYINT NULL ,
-  PRIMARY KEY (`id`) ,
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) );
- */
+use X\Module\Lunome\Util\Model\Basic;
 /**
  * @property string $id
  * @property string $account_id

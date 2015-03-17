@@ -1,11 +1,9 @@
 <?php
 namespace X\Module\Account\Service\Account\Core\Model;
-
 /**
- * Use statements
+ *
  */
-use X\Util\Model\Basic;
-
+use X\Module\Lunome\Util\Model\Basic;
 /**
  * @property string $id
  * @property string $account
@@ -23,7 +21,6 @@ class AccountModel extends Basic {
         $columns = array();
         $columns['id']          = 'PRIMARY VARCHAR(36) NOTNULL';
         $columns['account']     = 'INT NOTNULL';
-        $columns['oauth20_id']  = 'VARCHAR(36)';
         $columns['status']      = 'TINYINT NOTNULL';
         $columns['enabled_at']  = 'DATETIME';
         $columns['role']        = 'TINYINT [1] UNSIGNED';
@@ -38,11 +35,29 @@ class AccountModel extends Basic {
         return 'accounts';
     }
     
+    /**
+     * @var integer
+     */
     const RL_NORMAL_ACCOUNT     = 1;
+    /**
+     * @var integer
+     */
     const RL_EDITOR_ACCOUNT     = 2;
+    /**
+     * @var integer
+     */
     const RL_MANAGEMENT_ACCOUNT = 4;
     
+    /**
+     * @var integer
+     */
     const ST_NOT_USED   = 1;
+    /**
+     * @var integer
+     */
     const ST_IN_USE     = 2;
+    /**
+     * @var integer
+     */
     const ST_FREEZE     = 3;
 }

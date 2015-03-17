@@ -54,19 +54,26 @@ class Request {
     }
     
     /**
+     * @var unknown
+     */
+    private $response = null;
+    
+    /**
      * 执行GET请求并返回请求结果。并解析结果。
      * @param string $format
      * @return mixed
      */
-    public function get( $format='' ) {
-        $combined = $this->toString();
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_URL, $combined);
-        $response =  curl_exec($ch);
-        curl_close($ch);
-        return $this->formatResponse($response, $format);
+    public function get( $format='', $refresh=false ) {
+        if ( null === $this->response || $refresh ) {
+            $combined = $this->toString();
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_URL, $combined);
+            $this->response =  curl_exec($ch);
+            curl_close($ch);
+        }
+        return $this->formatResponse($this->response, $format);
     }
     
     /**
@@ -74,15 +81,17 @@ class Request {
      * @param string $format
      * @return mixed
      */
-    public function post( $format='' ) {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_POST, TRUE);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $this->parameters);
-        curl_setopt($ch, CURLOPT_URL, $this->url);
-        $response = curl_exec($ch);
-        curl_close($ch);
-        return $this->formatResponse($response, $format);
+    public function post( $format='', $refresh=false) {
+        if ( null === $this->response || $refresh ) {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_POST, TRUE);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $this->parameters);
+            curl_setopt($ch, CURLOPT_URL, $this->url);
+            $this->response = curl_exec($ch);
+            curl_close($ch);
+        }
+        return $this->formatResponse($this->response, $format);
     }
     
     /**
@@ -118,7 +127,18 @@ class Request {
         $params = array();
         parse_str($response, $params);
         return $params;
-    } 
+    }
+    
+    /**
+     * @param unknown $response
+     * @return multitype:
+     */
+    private function formatResponseJSCallbackJSON( $response ) {
+        $response = substr($response, 10);
+        $response = substr($response, 0, strlen($response)-4);
+        $response = json_decode($response, true);
+        return $response;
+    }
     
     /**
      * 将请求结果标记为JSON格式数据。
@@ -131,4 +151,9 @@ class Request {
      * @var string
      */
     const FORMAT_URL_PARAM  = 'URLParam';
+    
+    /**
+     * @var unknown
+     */
+    const FORMAT_JS_CALLBACK_JSON = 'JSCallbackJSON';
 }
