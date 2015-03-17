@@ -71,4 +71,10 @@ return array (
         'class' => 'X\\Service\\XLog\\Service',
         'delay' => true,
     ),
+    'Account' =>
+    array (
+        'enable' => true,
+        'class' => 'X\\Module\\Account\\Service\\Account\\Service',
+        'delay' => true,
+    ),
 );

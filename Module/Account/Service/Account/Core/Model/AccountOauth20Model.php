@@ -1,30 +1,17 @@
 <?php
 namespace X\Module\Account\Service\Account\Core\Model;
-
 /**
- * Use statements
+ * 
  */
-use X\Util\Model\Basic;
-
+use X\Module\Lunome\Util\Model\Basic;
 /**
  * @property string $id
- * @property string $server
+ * @property string $account_id
+ * @property string $server_name
  * @property string $openid
  * @property string $access_token
  * @property string $refresh_token
  * @property string $expired_at
- * 
- * 
-CREATE TABLE `oauth_20` (
-  `id` varchar(36) NOT NULL,
-  `server` varchar(36) NOT NULL,
-  `openid` varchar(36) NOT NULL,
-  `access_token` varchar(36) NOT NULL,
-  `refresh_token` varchar(36) NOT NULL,
-  `expired_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
  **/
 class AccountOauth20Model extends Basic {
     /**
@@ -34,10 +21,11 @@ class AccountOauth20Model extends Basic {
     protected function describe() {
         $columns = array();
         $columns['id']              = 'PRIMARY VARCHAR(36) NOTNULL';
-        $columns['server']          = 'VARCHAR(36) NOTNULL';
+        $columns['account_id']      = 'VARCHAR(36) NOTNULL';
+        $columns['server_name']     = 'VARCHAR(36) NOTNULL';
         $columns['openid']          = 'VARCHAR(36) NOTNULL';
         $columns['access_token']    = 'VARCHAR(36) NOTNULL';
-        $columns['refresh_token']   = 'VARCHAR(36) NOTNULL';
+        $columns['refresh_token']   = 'VARCHAR(36)';
         $columns['expired_at']      = 'DATETIME NOTNULL';
         return $columns;
     }
@@ -49,8 +37,4 @@ class AccountOauth20Model extends Basic {
     protected function getTableName() {
         return 'account_oauth_20';
     }
-    
-    /* OAuthr services */
-    const SERVER_QQ = 'qq';
-    const SERVER_SINA = 'sina';
 }

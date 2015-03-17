@@ -1,24 +1,31 @@
 <?php
+namespace X\Module\Account\Action\Login;
 /**
- * The action file for user/login/qqcallback action.
+ * 
  */
-namespace X\Module\Lunome\Action\User\Login;
+use X\Core\X;
+use X\Service\QQ\Service as QQService;
+use X\Module\Account\Service\Account\Service as AccountService;
 /**
- *
- */
-use X\Module\Lunome\Service\User\Service;
-
-/**
- * The action class for user/login/qqcallback action.
- * @author Unknown
+ * 
  */
 class Qqcallback extends \X\Util\Action\Basic { 
-    /** 
-     * The action handle for index action.
-     * @return void
-     */ 
+    /**
+     * (non-PHPdoc)
+     * @see \X\Service\XAction\Core\Util\Action::runAction()
+     */
     public function runAction( ) {
-        $this->getService(Service::getServiceName())->loginByQQCallBack();
+        /* @var $QQService QQService */
+        $QQService = X::system()->getServiceManager()->get(QQService::getServiceName());
+        $QQConnect = $QQService->getConnect();
+        
+        $QQConnect->setup();
+        $tokenInfo = $QQConnect->getTokenInfo();
+        
+        /* @var $accountService AccountService */
+        $accountService = X::system()->getServiceManager()->get(AccountService::getServiceName());
+        $accountService->getByOpenID('QQ', array('openid'=>'568109749'));
+        
         $this->gotoURL('/index.php');
     }
 }
