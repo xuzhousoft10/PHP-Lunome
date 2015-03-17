@@ -10,7 +10,6 @@ use X\Module\Account\Service\Account\Core\Instance\Account;
 use X\Module\Account\Service\Account\Core\Model\AccountModel;
 use X\Module\Account\Service\Account\Core\Model\AccountOauth20Model;
 use X\Service\XDatabase\Core\ActiveRecord\Criteria;
-use X\Module\Account\Service\Account\Core\Model\AccountInformationModel;
 /**
  * 
  */
