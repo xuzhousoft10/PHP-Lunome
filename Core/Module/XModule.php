@@ -30,6 +30,15 @@ abstract class XModule {
     }
     
     /**
+     * @return string
+     */
+    public static function getModuleName() {
+        $className = get_called_class();
+        $className = explode('\\', $className);
+        return $className[count($className)-2];
+    }
+    
+    /**
      * @param string $path
      * @return string
      */

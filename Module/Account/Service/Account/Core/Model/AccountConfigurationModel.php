@@ -1,11 +1,9 @@
 <?php
 namespace X\Module\Account\Service\Account\Core\Model;
-
 /**
- * Use statements
+ *
  */
-use X\Util\Model\Basic;
-
+use X\Module\Lunome\Util\Model\Basic;
 /**
  * @property string $id
  * @property string $account_id
@@ -27,7 +25,6 @@ class AccountConfigurationModel extends Basic {
         $columns['value']       = 'VARCHAR(64)';
         return $columns;
     }
-
     /**
      * (non-PHPdoc)
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::getTableName()

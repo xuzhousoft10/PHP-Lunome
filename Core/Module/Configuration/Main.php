@@ -3,7 +3,7 @@ return array (
   'Administration' => 
   array (
     'enable' => false,
-    'default' => true,
+    'default' => false,
   ),
   'Admin' => 
   array (
@@ -16,7 +16,7 @@ return array (
   'Lunome' => 
   array (
     'enable' => true,
-    'default' => true,
+    'default' => false,
   ),
   'Smartphone' => 
   array (
@@ -25,5 +25,6 @@ return array (
   'Account' =>
    array (
      'enable' => false,
+     'default' => true,
   ),
 );

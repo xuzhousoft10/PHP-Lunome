@@ -6,6 +6,7 @@ namespace X\Module\Account\Service\Account\Core\Instance;
 use X\Module\Account\Service\Account\Core\Model\AccountModel;
 use X\Module\Account\Service\Account\Core\Manager\ProfileManager;
 use X\Module\Account\Service\Account\Core\Model\AccountProfileModel;
+use X\Module\Account\Service\Account\Core\Manager\ConfigurationManager;
 /**
  * 
  */
@@ -90,9 +91,25 @@ class Account {
         return $this->profileManager;
     }
     
+    /**
+     * @var ConfigurationManager
+     */
+    private $configurationManager = null;
+    
+    /**
+     * @return \X\Module\Account\Service\Account\Core\Manager\ConfigurationManager
+     */
+    public function getConfigurationManager(){
+        if ( null === $this->configurationManager ) {
+            $this->configurationManager = new ConfigurationManager($this->accountID);
+        }
+        
+        return $this->configurationManager;
+    }
+    
     public function getRoleManager(){}
     public function getNotificationManager(){}
     public function getActionHistoryManager(){}
-    public function getConfigurationManager(){}
+    
     public function getFriendManager(){}
 }

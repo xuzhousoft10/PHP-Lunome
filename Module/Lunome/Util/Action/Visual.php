@@ -9,15 +9,22 @@ namespace X\Module\Lunome\Util\Action;
  */
 use X\Core\X;
 use X\Service\XView\Service as XViewService;
+use X\Module\Lunome\Module as LunomeModule;
 
 /**
- * Visual action class
  * 
- * @method \X\Module\Lunome\Service\User\Service getUserService()
- * @method \X\Module\Lunome\Service\Movie\Service getMovieService()
- * @method \X\Module\Lunome\Service\Tv\Service getTvService()
  */
 abstract class Visual extends \X\Util\Action\Visual {
+    /**
+     * @return string
+     */
+    public function getLunomeParticleViewPath($view) {
+        $lunomeModule = X::system()->getModuleManager()->get(LunomeModule::getModuleName());
+        $view = 'View/Particle/'.$view.'.php';
+        $view = $lunomeModule->getPath($view);
+        return $view;
+    }
+    
     /**
      * (non-PHPdoc)
      * @see \X\Util\Action\Visual::beforeRunAction()
@@ -29,7 +36,7 @@ abstract class Visual extends \X\Util\Action\Visual {
         $this->E404Content = array($this, 'error404Handler');
         
         /* Load navigation bar */
-        $path   = $this->getParticleViewPath('Util/Navigation');
+        $path   = $this->getLunomeParticleViewPath('Util/Navigation');
         $view = $this->getView()->getParticleViewManager()->load('INDEX_NAV_BAR', $path);
         $view->getOptionManager()->set('zone', 'header');
         $view->getDataManager()->set('user', $this->getCurrentUserData());
@@ -62,7 +69,7 @@ abstract class Visual extends \X\Util\Action\Visual {
     protected function afterRunAction() {
         /* Load footer view */
         $name   = 'FOOTER';
-        $path   = $this->getParticleViewPath('Util/Footer');
+        $path   = $this->getLunomeParticleViewPath('Util/Footer');
         $particleView = $this->getView()->getParticleViewManager()->load($name, $path);
         $particleView->getOptionManager()->set('zone', 'footer');
         
@@ -73,16 +80,18 @@ abstract class Visual extends \X\Util\Action\Visual {
      * @return multitype:unknown NULL
      */
     protected function getCurrentUserData() {
+        $currentAccount = $this->getCurrentAccount();
+        $profile = $currentAccount->getProfileManager();
+        
         $userData = array();
-        $userData['isGuest'] = $this->getUserService()->getIsGuest();
+        $userData['isGuest'] = null===$currentAccount;
         if ( !$userData['isGuest'] ) {
-            $data = $this->getUserService()->getCurrentUser();
-            $userData['id']         = $data['ID'];
-            $userData['nickname']   = $data['NICKNAME'];
-            $userData['photo']      = $data['PHOTO'];
-            $userData['account']    = $data['ACCOUNT'];
-            $userData['isEditor']   = $data['IS_EDITOR'];
-            $userData['isManager']  = $data['IS_MANAGER'];
+            $userData['id']         = $profile->get('account_id');
+            $userData['nickname']   = $profile->get('nickname');
+            $userData['photo']      = $profile->get('photo');
+            $userData['account']    = $profile->get('account_number');
+            $userData['isEditor']   = false;
+            $userData['isManager']  = false;
         }
         return $userData;
     }

@@ -1,30 +1,23 @@
 <?php
-/**
- * This file define a basic action class.
- */
 namespace X\Util\Action;
-
 /**
- * Use statements
+ * 
  */
 use X\Core\X;
-
+use X\Module\Account\Service\Account\Service as AccountService;
 /**
  * The basic action class
- * 
  * @author Michael Luthor <michaelluthor@163.com>
  */
 abstract class Basic extends \X\Service\XAction\Core\Handler\WebAction {
     /**
      * The activated module instance.
-     *
      * @var \X\Core\Module\XModule
      */
     private $module = null;
     
     /**
      * Get the module that this action belongs to.
-     *
      * @return \X\Core\Module\XModule
      */
     public function getModule() {
@@ -39,6 +32,15 @@ abstract class Basic extends \X\Service\XAction\Core\Handler\WebAction {
      */
     public function getAssetsURL () {
         return X::system()->getConfiguration()->get('assets-base-url');
+    }
+    
+    /**
+     * @return \X\Module\Account\Service\Account\Core\Instance\Account
+     */
+    public function getCurrentAccount() {
+        /* @var $accountService AccountService */
+        $accountService = X::system()->getServiceManager()->get(AccountService::getServiceName());
+        return $accountService->getCurrentAccount();
     }
     
     public function __call( $name, $parms ) {

@@ -8,7 +8,6 @@ namespace X\Module\Lunome\Util\Action;
  * 
  */
 use X\Core\X;
-use X\Module\Lunome\Service\User\Service as UserService;
 
 /**
  * 该Action是当用户直接登录后进入的用户主页的Action基类。
@@ -26,10 +25,8 @@ abstract class VisualMain extends Visual {
      * @see \X\Util\Action\Visual::beforeRunAction()
      */
     protected function beforeRunAction() {
-        $isGuest = $this->getService(UserService::getServiceName())->getIsGuest();
-        if ( $isGuest ) {
-            $this->gotoURL('/index.php?module=lunome&action=user/login/index');
-            X::system()->stop();
+        if ( null === $this->getCurrentAccount() ) {
+            $this->gotoURL('/index.php?module=account&action=login/index');
         }
         
         parent::beforeRunAction();

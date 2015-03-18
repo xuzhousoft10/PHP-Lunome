@@ -2,7 +2,7 @@
 $vars = get_defined_vars();
 $config = $vars['configurations'];
 ?>
-<form action="/?module=lunome&action=user/setting/sns" method="post">
+<form action="/?module=account&action=setting/sns" method="post">
 <div class="col-md-9 thumbnail">
     <div class="row">
         <div class="col-md-9"><span class="lead"><small>同步信息到其他社交平台：</small></span></div>

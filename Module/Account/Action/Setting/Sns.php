@@ -1,18 +1,11 @@
 <?php
-/**
- * The action file for user/logout action.
- */
-namespace X\Module\Lunome\Action\User\Setting;
-
+namespace X\Module\Account\Action\Setting;
 /**
  *
  */
-use X\Module\Lunome\Util\Action\UserSetting;
-use X\Module\Lunome\Service\User\Account;
-
+use X\Module\Account\Util\Action\UserSetting;
 /**
- * The action class for user/logout action.
- * @author Unknown
+ * 
  */
 class Sns extends UserSetting { 
     /** 
@@ -20,18 +13,21 @@ class Sns extends UserSetting {
      * @return void
      */ 
     public function runAction( $config=null ) {
-        $account = $this->getUserService()->getAccount();
-        $configurations = array();
-        $configurations['auto_share'] = $account->getConfiguration(Account::SETTING_TYPE_SNS, 'auto_share', '1');
-        $view = $this->getView();
+        $account = $this->getCurrentAccount();
+        $configurationManager = $account->getConfigurationManager();
+        $configurationType = 'sns';
         
+        $view = $this->getView();
         if ( !empty($config) && is_array($config)) {
-            $configurations = array_merge($configurations, $config);
-            $account->setConfigurations(Account::SETTING_TYPE_SNS, $configurations);
+            foreach ( $config as $name => $value ) {
+                $configurationManager->set($configurationType, $name, $value);
+            }
         }
         
+        $configurations = array();
+        $configurations['auto_share'] = $configurationManager->get($configurationType, 'auto_share', '0');
         $name   = 'USER_SETTING_SNS';
-        $path   = $this->getParticleViewPath('User/Setting/SNS');
+        $path   = $this->getParticleViewPath('Setting/SNS');
         $option = array();
         $data   = array('configurations'=>$configurations);
         $this->loadParticle($name, $path, $option, $data);
