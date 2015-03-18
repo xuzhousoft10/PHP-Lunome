@@ -579,10 +579,6 @@ class Account {
         return $this->userService;
     }
     
-    public function getSexNames() {
-        return array(0=>'保密',1=>'男',2=>'女',3=>'其他');
-    }
-    
     public function getSexName( $sex ) {
         $sex = intval($sex);
         $codes = $this->getSexNames();
@@ -599,9 +595,7 @@ class Account {
         return isset($codes[$sex]) ? $codes[0] : $codes[$sex];
     }
     
-    public function getSexualityNames() {
-        return array(0=>'保密',1=>'异性',2=>'同性',3=>'双性',4=>'无性',5=>'二禁');
-    }
+    
     
     public function getSexualityName( $code ) {
         $code = intval($code);
@@ -609,9 +603,6 @@ class Account {
         return isset($codes[$code]) ? $codes[0] : $codes[$code];
     }
     
-    public function getEmotionStatuNames() {
-        return array(0=>'保密',1=>'单身',2=>'热恋中',3=>'同居',4=>'已订婚',5=>'已婚',6=>'分居',7=>'离异',8=>'很难说',9=>'其他');
-    }
     
     public function getEmotionStatuName( $code ) {
         $code = intval($code);

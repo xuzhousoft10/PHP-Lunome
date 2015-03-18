@@ -35,6 +35,9 @@ $(document).ready(function() {
     }, 'html');
     
     /* 声明生日输入框为时间选择器 */
+    if ( '0000-00-00' === $('#user-setting-information-birthday').val() ) {
+        $('#user-setting-information-birthday').val('');
+    }
     $('#user-setting-information-birthday').datepicker({
         autoclose : true,
         clearBtn  : true,

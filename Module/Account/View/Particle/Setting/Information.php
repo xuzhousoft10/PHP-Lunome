@@ -1,11 +1,12 @@
 <?php 
 $vars = get_defined_vars();
+/* @var $account \X\Module\Account\Service\Account\Core\Manager\ProfileManager */
 $account = $vars['account']; 
 $sexMap = $vars['sexMap'];
 $sexualityMap = $vars['sexualityMap'];
 $emotionMap = $vars['emotionMap'];
 ?>
-<form action="/?module=lunome&action=user/setting/information" method="post" class="form-horizontal">
+<form action="/?module=account&action=setting/information" method="post" class="form-horizontal">
 <div class="col-md-9 thumbnail">
     <h5>个人信息更新</h5>
     <hr>
@@ -15,7 +16,7 @@ $emotionMap = $vars['emotionMap'];
             <input  type="text" 
                     class="form-control"
                     name="information[email]"
-                    value="<?php echo empty($account) ? '' : $account->email; ?>"
+                    value="<?php echo $account->get('email'); ?>"
             >
         </div>
     </div>
@@ -26,7 +27,7 @@ $emotionMap = $vars['emotionMap'];
             <input  type    = "text" 
                     class   = "form-control"
                     name    = "information[qq]"
-                    value   = "<?php echo empty($account) ? '' : $account->qq; ?>"
+                    value   = "<?php echo $account->get('qq'); ?>"
             >
         </div>
     </div>
@@ -37,7 +38,7 @@ $emotionMap = $vars['emotionMap'];
             <input  type    = "text" 
                     name    = "information[cellphone]"
                     class   = "form-control"
-                    value   = "<?php echo empty($account) ? '' : $account->cellphone; ?>"
+                    value   = "<?php echo $account->get('cellphone'); ?>"
             >
         </div>
     </div>
@@ -49,7 +50,7 @@ $emotionMap = $vars['emotionMap'];
                     id      = "user-setting-information-birthday"
                     name    = "information[birthday]"
                     class   = "form-control"
-                    value   = "<?php echo empty($account) ? '' : $account->birthday; ?>"
+                    value   = "<?php echo $account->get('birthday'); ?>"
             >
         </div>
         <div class="col-sm-2">
@@ -57,7 +58,7 @@ $emotionMap = $vars['emotionMap'];
             <input  type        = "checkbox" 
                     name        = "information[is_lunar_calendar]" 
                     value       = "1" 
-                    <?php echo (empty($account) || 0 === $account->is_lunar_calendar*1 ) ? '' : 'checked'; ?>
+                    <?php echo (0===(int)$account->get('is_lunar_calendar')) ? '' : 'checked'; ?>
             > 阴历
         </div>
     </div>
@@ -67,7 +68,7 @@ $emotionMap = $vars['emotionMap'];
         <div class="col-sm-10">
             <select class       = "form-control value-init-required"
                     name        = "information[sex]"
-                    data-value  = "<?php echo empty($account) ? 0 : $account->sex; ?>"
+                    data-value  = "<?php echo $account->get('sex'); ?>"
             >
                 <option value="0"></option>
                 <?php foreach ( $sexMap as $key => $value ) : ?>
@@ -82,7 +83,7 @@ $emotionMap = $vars['emotionMap'];
         <div class="col-sm-10">
             <select class       = "form-control value-init-required"
                     name        = "information[sexuality]"
-                    data-value  = "<?php echo empty($account) ? 0 : $account->sexuality; ?>"
+                    data-value  = "<?php echo $account->get('sexuality'); ?>"
             >
                 <option value="0"></option>
                 <?php foreach ( $sexualityMap as $key => $value ) : ?>
@@ -97,7 +98,7 @@ $emotionMap = $vars['emotionMap'];
         <div class="col-sm-10">
             <select class       = "form-control value-init-required"
                     name        = "information[emotion_status]"
-                    data-value  = "<?php echo empty($account) ? 0 : $account->emotion_status; ?>"
+                    data-value  = "<?php echo $account->get('emotion_status'); ?>"
             >
                 <option value="0"></option>
                 <?php foreach ( $emotionMap as $key => $value ) : ?>
@@ -113,21 +114,21 @@ $emotionMap = $vars['emotionMap'];
             <select class       = "form-control" 
                     id          = "user-setting-information-living-country"
                     name        = "information[living_country]"
-                    data-value  = "<?php echo empty($account) ? '' : $account->living_country; ?>"
+                    data-value  = "<?php echo $account->get('living_country'); ?>"
             ></select>
         </div>
         <div class="col-sm-3">
             <select class       = "form-control" 
                     id          = "user-setting-information-living-province"
                     name        = "information[living_province]"
-                    data-value  = "<?php echo empty($account) ? '' : $account->living_province; ?>"
+                    data-value  = "<?php echo $account->get('living_province'); ?>"
             ></select>
         </div>
         <div class="col-sm-3">
             <select class       = "form-control" 
                     id          = "user-setting-information-living-city"
                     name        = "information[living_city]"
-                    data-value  = "<?php echo empty($account) ? '' : $account->living_city; ?>"
+                    data-value  = "<?php echo $account->get('living_city'); ?>"
             ></select>
         </div>
     </div>
