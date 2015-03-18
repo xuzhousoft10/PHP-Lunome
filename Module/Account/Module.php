@@ -12,6 +12,6 @@ class Module extends Basic {
      * @return string
      */
     protected function getDefaultActionName() {
-        return 'login/index';
+        return 'setting/sns';
     }
 }
