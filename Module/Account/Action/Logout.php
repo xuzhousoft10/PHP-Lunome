@@ -1,25 +1,26 @@
 <?php
-/**
- * The action file for user/logout action.
- */
-namespace X\Module\Lunome\Action\User;
-
+namespace X\Module\Account\Action;
 /**
  * 
  */
-use X\Module\Lunome\Util\Action\Basic;
-
+use X\Core\X;
+use X\Module\Account\Service\Account\Service as AccountService;
 /**
  * The action class for user/logout action.
  * @author Unknown
  */
-class Logout extends Basic { 
-    /** 
-     * The action handle for index action.
-     * @return void
-     */ 
+class Logout extends \X\Util\Action\Basic { 
+    /**
+     * (non-PHPdoc)
+     * @see \X\Service\XAction\Core\Util\Action::runAction()
+     */
     public function runAction( ) {
-        $this->getUserService()->logout();
+        /* @var $accountService AccountService */
+        $accountService = X::system()->getServiceManager()->get(AccountService::getServiceName());
+        $currentAccount = $accountService->getCurrentAccount();
+        if ( null !== $currentAccount ) {
+            $currentAccount->logout();
+        }
         $this->gotoURL('/index.php');
     }
 }
