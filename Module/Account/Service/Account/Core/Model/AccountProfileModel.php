@@ -22,7 +22,7 @@ use X\Module\Lunome\Util\Model\Basic;
  * @property string $photo
  * @property string $nickname
  */
-class AccountInformationModel extends Basic {
+class AccountProfileModel extends Basic {
     /**
      * (non-PHPdoc)
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::describe()
@@ -53,6 +53,6 @@ class AccountInformationModel extends Basic {
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::getTableName()
      */
     protected function getTableName() {
-        return 'account_information';
+        return 'account_profiles';
     }
 }

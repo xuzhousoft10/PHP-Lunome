@@ -47,6 +47,24 @@ class Service extends XService {
     
     /**
      * @param string $serverName
+     * @param array $openID
+     * @return \X\Module\Account\Service\Account\Core\Instance\Account
+     */
+    public function getByOpenID( $serverName, $openID ) {
+        $condition = array('server_name'=>$serverName, 'openid'=>$openID);
+        /* @var $oauth20 AccountOauth20Model */
+        $oauth20 = AccountOauth20Model::model()->find($condition);
+        if ( null === $oauth20 ) {
+            return null;
+        } 
+        
+        $account = AccountModel::model()->findByPrimaryKey($oauth20->account_id);
+        $accountInstance = new Account($account);
+        return $accountInstance;
+    }
+    
+    /**
+     * @param string $serverName
      * @param array $openIDInfo An array contains the following keys : <br>
      * <li>openid : required</li>
      * <li>access_token : required</li>
@@ -54,31 +72,24 @@ class Service extends XService {
      * <li>expired_at : default null</li>
      * @return \X\Module\Account\Service\Account\Core\Instance\Account
      */
-    public function getByOpenID( $serverName, $openIDInfo ) {
+    public function enableByOpenIDInfo( $serverName, $openIDInfo ) {
         ParameterChecker::check(func_get_args(), __METHOD__)
             ->notEmpty('serverName')
             ->isArray('openIDInfo')
             ->notEmpty('openIDInfo["openid"]');
-            
+        
         $validateOpenIDInfo = array('refresh_token'=>null, 'expired_at'=>null);
         $validateOpenIDInfo = array_merge($validateOpenIDInfo, $openIDInfo);
         
-        $condition = array('server_name'=>$serverName, 'openid'=>$openIDInfo['openid']);
-        /* @var $oauth20 AccountOauth20Model */
-        $oauth20 = AccountOauth20Model::model()->find($condition);
-        if ( null === $oauth20 ) {
-            $account = $this->enableRandomAccount();
-            $oauth20 = new AccountOauth20Model();
-            $oauth20->account_id    = $account->id;
-            $oauth20->server_name   = $serverName;
-            $oauth20->openid        = $validateOpenIDInfo['openid'];
-            $oauth20->access_token  = $validateOpenIDInfo['access_token'];
-            $oauth20->refresh_token = $validateOpenIDInfo['refresh_token'];
-            $oauth20->expired_at    = $validateOpenIDInfo['expired_at'];
-            $oauth20->save();
-        } else {
-            $account = AccountModel::model()->findByPrimaryKey($oauth20->account_id);
-        }
+        $account = $this->enableRandomAccount();
+        $oauth20 = new AccountOauth20Model();
+        $oauth20->account_id    = $account->id;
+        $oauth20->server_name   = $serverName;
+        $oauth20->openid        = $validateOpenIDInfo['openid'];
+        $oauth20->access_token  = $validateOpenIDInfo['access_token'];
+        $oauth20->refresh_token = $validateOpenIDInfo['refresh_token'];
+        $oauth20->expired_at    = $validateOpenIDInfo['expired_at'];
+        $oauth20->save();
         
         $accountInstance = new Account($account);
         return $accountInstance;
