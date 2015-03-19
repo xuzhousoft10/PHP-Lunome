@@ -1,11 +1,9 @@
 <?php
 namespace X\Module\Account\Service\Account\Core\Model;
-
 /**
- * Use statements
+ * 
  */
-use X\Util\Model\Basic;
-
+use X\Module\Lunome\Util\Model\Basic;
 /**
  * @property string $id
  * @property string $created_at
@@ -15,23 +13,6 @@ use X\Util\Model\Basic;
  * @property string $source_model
  * @property string $source_id
  * @property string $recipient_id
- * 
-CREATE TABLE `account_notifications` (
-  `id` varchar(36) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `produced_by` varchar(36) DEFAULT NULL,
-  `type` tinyint(4) DEFAULT NULL,
-  `content` varchar(256) DEFAULT NULL,
-  `link` varchar(256) DEFAULT NULL,
-  `status` tinyint(4) DEFAULT NULL,
-  `view` varchar(128) DEFAULT NULL,
-  `source_model` varchar(128) DEFAULT NULL,
-  `source_id` varchar(36) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
-
-
  **/
 class AccountNotificationModel extends Basic {
     /**
@@ -59,6 +40,13 @@ class AccountNotificationModel extends Basic {
         return 'account_notifications';
     }
     
+    /**
+     * @var integer
+     */
     const STATUS_NEW = 1;
+    
+    /**
+     * @var integer
+     */
     const STATUS_CLOSED = 2;
 }

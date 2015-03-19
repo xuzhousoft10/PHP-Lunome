@@ -3,13 +3,6 @@
  * The visual action of lunome module.
  */
 namespace X\Module\Lunome\Util\Action;
-
-/**
- * 
- */
-use X\Core\X;
-use X\Module\Lunome\Service\User\Service as UserService;
-
 /**
  * Basic action class
  * 
@@ -22,10 +15,8 @@ abstract class Basic extends \X\Util\Action\Basic {
      * @see \X\Service\XAction\Core\Action::beforeRunAction()
      */
     protected function beforeRunAction() {
-        $isGuest = $this->getService(UserService::getServiceName())->getIsGuest();
-        if ( $isGuest ) {
-            $this->gotoURL('/index.php?module=lunome&action=user/login/index');
-            X::system()->stop();
+        if ( null === $this->getCurrentAccount() ) {
+            $this->gotoURL('/index.php?module=account&action=login/index');
         }
     }
 }

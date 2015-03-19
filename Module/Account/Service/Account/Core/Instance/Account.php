@@ -7,6 +7,7 @@ use X\Module\Account\Service\Account\Core\Model\AccountModel;
 use X\Module\Account\Service\Account\Core\Manager\ProfileManager;
 use X\Module\Account\Service\Account\Core\Model\AccountProfileModel;
 use X\Module\Account\Service\Account\Core\Manager\ConfigurationManager;
+use X\Module\Account\Service\Account\Core\Manager\NotificationManager;
 /**
  * 
  */
@@ -107,9 +108,22 @@ class Account {
         return $this->configurationManager;
     }
     
-    public function getRoleManager(){}
-    public function getNotificationManager(){}
-    public function getActionHistoryManager(){}
+    /**
+     * @var NotificationManager
+     */
+    private $notificationManager = null;
     
+    /**
+     * @return \X\Module\Account\Service\Account\Core\Manager\NotificationManager
+     */
+    public function getNotificationManager(){
+        if ( null === $this->notificationManager ) {
+            $this->notificationManager = new NotificationManager($this->accountID);
+        }
+        return $this->notificationManager;
+    }
+    
+    public function getRoleManager(){}
+    public function getActionHistoryManager(){}
     public function getFriendManager(){}
 }

@@ -20,7 +20,7 @@
 
 /* 定时检查新消息 */
 function userNotificationChecker( setTimer ) {
-    $.get('/?module=lunome&action=user/notification/check', {}, function( response ) {
+    $.get('/?module=account&action=notification/check', {}, function( response ) {
         var count = response.count*1;
         if ( 0 == count ) { /* 如果为空， 则隐藏消息图标和消息列表 */
             $('#user-notification-trigger').popover('hide');
@@ -58,7 +58,7 @@ function fixNotificationCountValue( diffValue ) {
 }
 
 function closeNotificationByID( notificationID, handler ) {
-    $.post('/?module=lunome&action=user/notification/close', {
+    $.post('/?module=account&action=notification/close', {
         id:notificationID,
     }, function( response ) {
         fixNotificationCountValue(-1);
@@ -105,7 +105,7 @@ $(document).ready(function() {
         var img = $('<img>').attr('src', loadingImg);
         $('#user-notification-container').addClass('text-center').append(img);
         $('#user-notification-container').parent().css('padding','0');
-        $.get('/?module=lunome&action=user/notification/index', {}, function( response ) {
+        $.get('/?module=account&action=notification/index', {}, function( response ) {
             $('#user-notification-container').removeClass('text-center').html(response);
         }, 'text');
     });
