@@ -58,5 +58,6 @@ class Qqcallback extends \X\Util\Action\Basic {
         }
         
         $account->login();
+        $this->gotoURL('index.php');
     }
 }

@@ -1,18 +1,16 @@
 <?php
-namespace X\Module\Lunome\Model\Region;
-
+namespace X\Module\Account\Service\Account\Core\Model;
 /**
- * Use statements
+ * 
  */
-use X\Util\Model\Basic;
-
+use X\Module\Lunome\Util\Model\Basic;
 /**
  * @property string $id
  * @property string $name
  * @property string $parent
  * @property string $level
  **/
-class RegionModel extends Basic {
+class AccountRegionModel extends Basic {
     /**
      * (non-PHPdoc)
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::describe()
@@ -31,6 +29,6 @@ class RegionModel extends Basic {
      * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::getTableName()
      */
     protected function getTableName() {
-        return 'regions';
+        return 'account_regions';
     }
 }

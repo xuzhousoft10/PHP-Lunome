@@ -5,7 +5,7 @@ $(document).ready(function() {
             $('#user-setting-information-living-city').empty();
             return;
         }
-        $.get('/?module=lunome&action=region/getOption', {
+        $.get('/?module=account&action=region/getOption', {
             parent:$('#user-setting-information-living-province').val(),
             selected:$('#user-setting-information-living-city').attr('data-value')
         }, function( response ) {
@@ -19,7 +19,7 @@ $(document).ready(function() {
             $('#user-setting-information-living-province').val('').trigger('change').empty();
             return;
         }
-        $.get('/?module=lunome&action=region/getOption', {
+        $.get('/?module=account&action=region/getOption', {
             parent:$('#user-setting-information-living-country').val(),
             selected:$('#user-setting-information-living-province').attr('data-value')
         }, function( response ) {
@@ -28,7 +28,7 @@ $(document).ready(function() {
     });
     
     /* 初始化国家数据。 */
-    $.get('/?module=lunome&action=region/getOption', {
+    $.get('/?module=account&action=region/getOption', {
         selected:$('#user-setting-information-living-country').attr('data-value')
     }, function( response ) {
         $('#user-setting-information-living-country').html(response).trigger('change');

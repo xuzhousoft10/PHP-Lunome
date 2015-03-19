@@ -10,6 +10,7 @@ use X\Module\Account\Service\Account\Core\Instance\Account;
 use X\Module\Account\Service\Account\Core\Model\AccountModel;
 use X\Module\Account\Service\Account\Core\Model\AccountOauth20Model;
 use X\Service\XDatabase\Core\ActiveRecord\Criteria;
+use X\Module\Account\Service\Account\Core\Manager\RegionManager;
 /**
  * 
  */
@@ -151,5 +152,20 @@ class Service extends XService {
             $account->save();
         }
         return $account;
+    }
+    
+    /**
+     * @var RegionManager
+     */
+    private $regionManager = null;
+    
+    /**
+     * @return \X\Module\Account\Service\Account\Core\Manager\RegionManager
+     */
+    public function getRegionManager() {
+        if ( null === $this->regionManager ) {
+            $this->regionManager = new RegionManager();
+        }
+        return $this->regionManager;
     }
 }

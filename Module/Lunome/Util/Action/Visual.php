@@ -81,11 +81,11 @@ abstract class Visual extends \X\Util\Action\Visual {
      */
     protected function getCurrentUserData() {
         $currentAccount = $this->getCurrentAccount();
-        $profile = $currentAccount->getProfileManager();
         
         $userData = array();
         $userData['isGuest'] = null===$currentAccount;
         if ( !$userData['isGuest'] ) {
+            $profile = $currentAccount->getProfileManager();
             $userData['id']         = $profile->get('account_id');
             $userData['nickname']   = $profile->get('nickname');
             $userData['photo']      = $profile->get('photo');

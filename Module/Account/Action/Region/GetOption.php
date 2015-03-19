@@ -1,15 +1,11 @@
 <?php
+namespace X\Module\Account\Action\Region;
 /**
- * @license LGPL http://www.gnu.org/licenses/lgpl-3.0.txt
+ * 
  */
-namespace X\Module\Lunome\Action\Region;
-
-/**
- * use statements
- */
+use X\Core\X;
 use X\Util\Action\Visual;
-use X\Module\Lunome\Service\Region\Service as RegionService;
-
+use X\Module\Account\Service\Account\Service as AccountService;
 /**
  * GetOption
  * @author Michael Luthor <michaelluthor@163.com>
@@ -20,9 +16,9 @@ class GetOption extends Visual {
      * @param string $selected
      */
     public function runAction( $parent='', $selected='' ) {
-        /* @var $servie RegionService */
-        $servie = $this->getService(RegionService::getServiceName());
-        $regions = $servie->getAll($parent);
+        /* @var $service AccountService */
+        $service = X::system()->getServiceManager()->get(AccountService::getServiceName());
+        $regions = $service->getRegionManager()->find(array('parent'=>$parent));
         
         /* Load particle view. */
         $name   = 'REGION_OPTIONS';
