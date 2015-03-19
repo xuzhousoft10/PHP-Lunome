@@ -8,6 +8,7 @@ namespace X\Module\Lunome\Util\Action;
  * 
  */
 use X\Module\Lunome\Util\Action\VisualMain;
+use X\Module\Account\Module as AccountModule;
 
 /**
  * 
@@ -50,7 +51,7 @@ abstract class Userinteraction extends VisualMain {
     private function initInteractionMenu() {
         $this->interactionMenu = array();
         $this->interactionMenu[self::INTERACTION_MENU_ITEM_INDEX]['label'] = '互动主页';
-        $this->interactionMenu[self::INTERACTION_MENU_ITEM_INDEX]['link'] = '/?module=lunome&action=user/interaction/index';
+        $this->interactionMenu[self::INTERACTION_MENU_ITEM_INDEX]['link'] = '/?module=account&action=interaction/index';
         
         $this->interactionMenu[self::INTERACTION_MENU_ITEM_INVITE_TO_WATCH_MOVIE]['label'] = '想请TA看场电影';
         $this->interactionMenu[self::INTERACTION_MENU_ITEM_INVITE_TO_WATCH_MOVIE]['link'] = '/?module=lunome&action=movie/interaction/inviteToWatchMovie';
@@ -74,7 +75,7 @@ abstract class Userinteraction extends VisualMain {
      */
     protected function afterRunAction() {
         $name   = 'USER_INTERACTION_MENU';
-        $path   = $this->getParticleViewPath('User/Interaction/InteractionMenu');
+        $path   = $this->getParticleViewPath('Interaction/InteractionMenu', AccountModule::getModuleName());
         $option = array();
         $data   = array(
             'items'         => $this->interactionMenu, 

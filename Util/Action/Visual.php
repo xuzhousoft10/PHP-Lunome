@@ -63,9 +63,14 @@ abstract class Visual extends Basic {
      * @param string $view The view name
      * @return string
      */
-    public function getParticleViewPath( $view ) {
+    public function getParticleViewPath( $view, $module=null ) {
+        if ( null === $module ) {
+            $module = $this->getModule();
+        } else {
+            $module = X::system()->getModuleManager()->get($module);
+        }
         $view = sprintf('View/Particle/%s.php', $view);
-        $view = $this->getModule()->getPath($view);
+        $view = $module->getPath($view);
         return $view;
     }
     

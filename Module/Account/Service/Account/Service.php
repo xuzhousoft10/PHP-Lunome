@@ -22,7 +22,18 @@ class Service extends XService {
     
     public function find($criteria) {}
     public function count($criteria) {}
-    public function get($id) {}
+    
+    /**
+     * @param string $id
+     * @return \X\Module\Account\Service\Account\Core\Instance\Account
+     */
+    public function get($id) {
+        $account = AccountModel::model()->findByPrimaryKey($id);
+        if ( null === $account ) {
+            return null;
+        }
+        return new Account($account);
+    }
     
     /**
      * @var Account
