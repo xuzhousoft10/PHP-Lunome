@@ -1,23 +1,25 @@
 <?php
-/**
- * 
- */
-namespace X\Module\Lunome\Action\User\Home;
-
+namespace X\Module\Account\Action\Home;
 /**
  *
  */
+use X\Core\X;
 use X\Module\Lunome\Util\Action\VisualUserHome;
+use X\Module\Account\Service\Account\Service as AccountService;
 /**
  * 
  */
 class Index extends VisualUserHome {
     /**
-     * @param unknown $id
+     * (non-PHPdoc)
+     * @see \X\Service\XAction\Core\Util\Action::runAction()
      */
     public function runAction( $id ) {
-        $accountManager = $this->getUserService()->getAccount();
-        if ( !$accountManager->has($id) ) {
+        /* @var $accountService AccountService */
+        $accountService = X::system()->getServiceManager()->get(AccountService::getServiceName());
+        $account = $accountService->get($id);
+        
+        if ( null === $account ) {
             $this->throw404();
         }
         
