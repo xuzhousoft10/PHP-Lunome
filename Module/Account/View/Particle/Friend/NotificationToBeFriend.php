@@ -1,19 +1,20 @@
 <?php use X\Core\X; ?>
 <?php use X\Util\UUID; ?>
-<?php use X\Module\Lunome\Service\User\Service as UserService; ?>
-<?php use X\Module\Lunome\Model\Account\AccountFriendshipRequestModel; ?>
-<?php /* @var $userService \X\Module\Lunome\Service\User\Service */ ?>
-<?php $userService = X::system()->getServiceManager()->get(UserService::getServiceName()); ?>
+<?php use X\Module\Account\Service\Account\Service as AccountService; ?>
+<?php use \X\Module\Account\Service\Account\Core\Model\AccountFriendshipRequestModel; ?>
+<?php /* @var $accountService AccountService */ ?>
+<?php $accountService = X::system()->getServiceManager()->get(AccountService::getServiceName()); ?>
 <?php $vars = get_defined_vars(); ?>
+<?php /* @var $notification \X\Module\Account\Service\Account\Core\Instance\Notification */ ?>
 <?php $notification = $vars['notification']; ?>
-<?php $sourceData = $notification['sourceData']; ?>
-<?php $requester = $userService->getAccount()->getInformation($sourceData['requester_id']); ?>
+<?php $sourceData = $notification->getData(); ?>
+<?php $requesterProfile = $accountService->get($sourceData['requester_id'])->getProfileManager(); ?>
 <?php $elemMark = UUID::generate(); ?>
 <?php $assetsURL = X::system()->getConfiguration()->get('assets-base-url'); ?>
 <?php $loaddingImg = $assetsURL.'/image/loadding.gif'; ?>
 <?php $resultMessageLength = AccountFriendshipRequestModel::model()->getAttribute('result_message')->getLength(); ?>
 <div id="request-<?php echo $elemMark; ?>">
-    <strong><?php echo $requester->nickname; ?></strong>请求成为您的好友：<br>
+    <strong><?php echo $requesterProfile->get('nickname'); ?></strong>请求成为您的好友：<br>
     <?php if ( !empty($sourceData['message']) ) : ?>
     <small><?php echo $sourceData['message'];?></small><br>
     <?php endif; ?>
@@ -47,9 +48,9 @@
 <script>
 $(document).ready(function() {
     function answerToBeFriendRequest( result, message ) {
-        $.post('/?module=lunome&action=user/friend/answerToBeFriendRequest', {
+        $.post('/?module=account&action=friend/answerToBeFriendRequest', {
             request         : '<?php echo $sourceData['id'];?>', 
-            notification    : '<?php echo $notification['id']; ?>', 
+            notification    : '<?php echo $notification->getID(); ?>', 
             result          : result,
             message         : message,
         }, function( response ) {

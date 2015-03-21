@@ -1,11 +1,9 @@
 <?php
 namespace X\Module\Account\Service\Account\Core\Model;
-
 /**
- * Use statements
+ * 
  */
-use X\Util\Model\Basic;
-
+use X\Module\Lunome\Util\Model\Basic;
 /**
  * @property string $id
  * @property string $account_me
@@ -13,19 +11,6 @@ use X\Util\Model\Basic;
  * @property string $started_at
  * @property string $is_chatting
  * @property string $is_unread_notification_sended
- * 
- * delimiter $$
-
-CREATE TABLE `account_friendships` (
-  `id` varchar(36) NOT NULL,
-  `account_me` varchar(36) NOT NULL,
-  `account_friend` varchar(36) NOT NULL,
-  `started_at` varchar(36) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
-
-
  **/
 class AccountFriendshipModel extends Basic {
     /**

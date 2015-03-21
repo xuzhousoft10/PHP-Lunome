@@ -1,26 +1,9 @@
 <?php
 namespace X\Module\Account\Service\Account\Core\Model;
-
 /**
- * Use statements
- */
-use X\Util\Model\Basic;
-
-/**
-CREATE TABLE `account_friendship_requests` (
-  `id` varchar(36) NOT NULL,
-  `requester_id` varchar(36) NOT NULL,
-  `recipient_id` varchar(36) NOT NULL,
-  `message` varchar(64) DEFAULT NULL,
-  `request_started_at` datetime DEFAULT NULL,
-  `result` tinyint(4) DEFAULT NULL,
-  `result_message` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
  * 
  */
-
+use X\Module\Lunome\Util\Model\Basic;
 /**
  * @property string $id
  * @property string $requester_id

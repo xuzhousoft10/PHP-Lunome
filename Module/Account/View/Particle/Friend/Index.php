@@ -1,20 +1,34 @@
 <?php 
+use X\Core\X;
+use X\Module\Account\Module as AccountModule;
+use X\Module\Account\Service\Account\Service as AccountService;
 /* @var $this \X\Service\XView\Core\Handler\Html */
 $vars = get_defined_vars();
 $friends = $vars['friends'];
+$module = X::system()->getModuleManager()->get(AccountModule::getModuleName());
+$moduleConfiguration = $module->getConfiguration();
+$sexNames = $moduleConfiguration->get('account_profile_sex_names');
+$sexSigns = $moduleConfiguration->get('account_profile_sex_signs');
+$sexualityNames = $moduleConfiguration->get('account_profile_sexuality');
+$emotionStatusNames = $moduleConfiguration->get('account_profile_emotion_status');
+/* @var $accountService AccountService */
+$accountService = X::system()->getServiceManager()->get(AccountService::getServiceName());
+$regionManager = $accountService->getRegionManager();
 ?>
 <div class="col-md-9">
 <strong>我的好友</strong>
 <hr class="margin-top-10">
 <div class="clearfix">
 <?php foreach ( $friends as $index =>  $friend ) :?>
+<?php /* @var $friend \X\Module\Account\Service\Account\Core\Instance\Account */ ?>
+<?php $profile = $friend->getProfileManager(); ?>
     <div class="well-sm padding-0 clearfix col-md-5 padding-left-10">
         <div class="well well-sm">
             <div class="clearfix">
                 <div class="pull-left">
                     <img    class="img-thumbnail"
-                            alt="<?php echo $friend['nickname'];?>" 
-                            src="<?php echo $friend['photo'];?>"
+                            alt="<?php echo $profile->get('nickname');?>" 
+                            src="<?php echo $profile->get('photo');?>"
                             width="80"
                             height="80"
                     >
@@ -22,28 +36,30 @@ $friends = $vars['friends'];
                 <div class="pull-left padding-left-5 user-information-text-area">
                     <p>
                         <strong>
-                            <span class="text-info" title="性别:<?php echo $friend['sex']; ?>"><?php echo $friend['sexSign'];?></span>
-                            <?php echo $friend['nickname'];?>
+                            <span class="text-info" title="性别:<?php echo $sexNames[(int)$profile->get('sex')]; ?>">
+                                <?php echo $sexSigns[(int)$profile->get('sex')];?>
+                            </span>
+                            <?php echo $profile->get('nickname');?>
                         </strong>
                     </p>
                     <p>
                         <span class="glyphicon glyphicon-heart"></span>
-                        <?php echo $friend['sexuality'];?>
+                        <?php echo $sexualityNames[(int)$profile->get('sexuality')];?>
                         <span class="glyphicon glyphicon-user"></span>
-                        <?php echo $friend['emotion_status'];?>
+                        <?php echo $emotionStatusNames[(int)$profile->get('emotion_status')];?>
                     </p>
                     <p>
-                        <?php echo $friend['living_country'];?>
-                        <?php echo $friend['living_province'];?>
-                        <?php echo $friend['living_city'];?>
+                        <?php echo $regionManager->getNameByID($profile->get('living_country'));?>
+                        <?php echo $regionManager->getNameByID($profile->get('living_province'));?>
+                        <?php echo $regionManager->getNameByID($profile->get('living_city'));?>
                     </p>
                 </div>
             </div>
             
             <div class="text-right">
-                <a class="btn btn-primary btn-xs" target="_blank" href="/?module=lunome&action=user/interaction/index&id=<?php echo $friend['account_id'];?>">互动</a>
-                <a class="btn btn-primary btn-xs" target="_blank" href="/?module=lunome&action=user/chat/index&friend=<?php echo $friend['account_id'];?>">聊天</a>
-                <a class="btn btn-primary btn-xs" target="_blank" href="/?module=lunome&action=user/home/index&id=<?php echo $friend['account_id'];?>">主页</a>
+                <a class="btn btn-primary btn-xs" target="_blank" href="/?module=account&action=interaction/index&id=<?php echo $profile->get('account_id');?>">互动</a>
+                <a class="btn btn-primary btn-xs" target="_blank" href="/?module=account&action=chat/index&friend=<?php echo $profile->get('account_id');?>">聊天</a>
+                <a class="btn btn-primary btn-xs" target="_blank" href="/?module=account&action=home/index&id=<?php echo $profile->get('account_id');?>">主页</a>
             </div>
         </div>
     </div>

@@ -76,7 +76,7 @@ class Builder {
      */
     public function addConnector( $connector = Connector::CONNECTOR_AND ) {
         $connector = new Connector($connector);
-        if ($this->conditions[count($this->conditions)-1] instanceof Connector ) {
+        if (!empty($this->conditions) && $this->conditions[count($this->conditions)-1] instanceof Connector ) {
             $this->conditions[count($this->conditions)-1] = $connector;
         } else {
             $this->conditions[] = $connector;
@@ -270,7 +270,10 @@ class Builder {
      * @return Builder
      */
     public function andAlso() {
-        $this->addConnector(Connector::CONNECTOR_AND);
+        if ( !empty($this->conditions) ) {
+            $this->addConnector(Connector::CONNECTOR_AND);
+        }
+        
         return $this;
     }
     
@@ -279,7 +282,9 @@ class Builder {
      * @return Builder
      */
     public function orThat() {
-        $this->addConnector(Connector::CONNECTOR_OR);
+        if ( !empty($this->conditions) ) {
+            $this->addConnector(Connector::CONNECTOR_OR);
+        }
         return $this;
     }
     

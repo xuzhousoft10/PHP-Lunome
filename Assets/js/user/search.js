@@ -6,7 +6,7 @@ $(document).ready(function() {
             $('#user-friend-search-living-city').empty();
             return;
         }
-        $.get('/?module=lunome&action=region/getOption', {
+        $.get('/?module=account&action=region/getOption', {
             parent:$('#user-friend-search-living-province').val(),
             selected:$('#user-friend-search-living-city').attr('data-value')
         }, function( response ) {
@@ -20,7 +20,7 @@ $(document).ready(function() {
             $('#user-friend-search-living-province').val('').trigger('change').empty();
             return;
         }
-        $.get('/?module=lunome&action=region/getOption', {
+        $.get('/?module=account&action=region/getOption', {
             parent:$('#user-friend-search-living-country').val(),
             selected:$('#user-friend-search-living-province').attr('data-value')
         }, function( response ) {
@@ -29,7 +29,7 @@ $(document).ready(function() {
     });
     
     /* 初始化国家数据。 */
-    $.get('/?module=lunome&action=region/getOption', {
+    $.get('/?module=account&action=region/getOption', {
         selected:$('#user-friend-search-living-country').attr('data-value')
     }, function( response ) {
         $('#user-friend-search-living-country').html(response).trigger('change');
@@ -63,7 +63,7 @@ $(document).ready(function() {
     
     /* 绑定点击事件到添加好友按钮 */
     $('#btn-add-as-friend').click(function() {
-       $.post('/?module=lunome&action=user/friend/SendToBeFriendRequest', {
+       $.post('/?module=account&action=friend/SendToBeFriendRequest', {
            recipient : $(this).attr('data-recipient'),
            message   : $('#add-as-friend-message').val(),
        }, function( response ) {

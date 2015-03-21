@@ -1,31 +1,27 @@
 <?php
-/**
- * 
- */
-namespace X\Module\Lunome\Action\User\Chat;
+namespace X\Module\Account\Action\Chat;
 /**
  * 
  */
 use X\Core\X;
 use X\Module\Lunome\Util\Action\Basic;
-
 /**
  * 
  */
 class StartByNotification extends Basic {
     /**
-     * 
+     * (non-PHPdoc)
+     * @see \X\Service\XAction\Core\Util\Action::runAction()
      */
     public function runAction( $id ) {
-        $userService = $this->getUserService();
-        if ( !$userService->hasNotification($id) ) {
+        $currentAccount = $this->getCurrentAccount();
+        $notification = $currentAccount->getNotificationManager()->get($id);
+        if ( null === $notification ) {
             $this->throw404();
         }
         
-        $notification = $userService->getNotification($id);
-        $userService->closeNotification($id);
-        $message = $notification['sourceData'];
-        $userService->getAccount()->cleanIsUnreadMotificationSendedMark($message['writer_id']);
-        $this->gotoURL('/?module=lunome&action=user/chat/index', array('friend'=>$message['writer_id']));
+        $message = $notification->getData();
+        $notification->close();
+        $this->gotoURL('/?module=account&action=chat/index', array('friend'=>$message['writer_id']));
     }
 }

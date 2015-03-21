@@ -1,28 +1,23 @@
 <?php
-/**
- * 
- */
-namespace X\Module\Lunome\Action\User\Chat;
+namespace X\Module\Account\Action\Chat;
 /**
  * 
  */
 use X\Module\Lunome\Util\Action\Basic;
-
 /**
  * 
  */
 class Stop extends Basic {
     /**
-     * 
+     * (non-PHPdoc)
+     * @see \X\Service\XAction\Core\Util\Action::runAction()
      */
     public function runAction( $id ) {
-        $accountManager = $this->getUserService()->getAccount();
-        
-        if ( !$accountManager->hasFriend($id) ) {
+        $friendManager = $this->getCurrentAccount()->getFriendManager();
+        if ( !$friendManager->isFriendWith($id) ) {
             return;
         }
-        
-        $accountManager->unmarkChattingWithFriend($id);
-        echo array('status'=>'1');
+        $friendManager->get($id)->getChatManager()->stop();
+        echo json_encode(array('status'=>'1'));
     }
 }

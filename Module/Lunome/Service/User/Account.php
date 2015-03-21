@@ -298,180 +298,6 @@ class Account {
     }
     
     /**
-     * @param unknown $condition
-     * @param unknown $offset
-     * @param unknown $limit
-     */
-    public function findFriends( $condition, $offset=0, $limit=0 ) {
-        $conditionObject = ConditionBuilder::build();
-        if ( isset($condition['main']) ) {
-            $conditionObject->groupStart()
-                ->includes('nickname', $condition['main'])
-                ->orThat()
-                ->is('cellphone', $condition['main'])
-                ->orThat()
-                ->is('qq', $condition['main'])
-                ->orThat()
-                ->is('email', $condition['main'])
-                ->orThat()
-                ->is('account_number', $condition['main'])
-            ->groupEnd();
-            unset($condition['main']);
-        }
-        $conditionObject->addCondition($condition);
-        
-        /* Remove self information while search friends. */
-        $conditionObject->isNot('account_id', $this->getCurrentUserId());
-        
-        /* Remove friends which already been. */
-        $extCondition = array();
-        $extCondition['account_friend'] = new SQLExpression(AccountInformationModel::model()->getTableFullName().'.account_id');
-        $extCondition['account_me'] = $this->getCurrentUserId();
-        $extCondition = AccountFriendshipModel::query()->addExpression('id')->find($extCondition);
-        $conditionObject->notExists($extCondition);
-        
-        $criteria = new Criteria();
-        $criteria->position = $offset;
-        $criteria->limit = $limit;
-        $criteria->condition = $conditionObject;
-        $informations = AccountInformationModel::model()->findAll($criteria);
-        $count = AccountInformationModel::model()->count($conditionObject);
-        return array('count'=>$count, 'data'=>$informations);
-    }
-    
-    /**
-     * @param unknown $friendAccountId
-     * @return boolean
-     */
-    public function hasFriend( $friendAccountId ) {
-        $condition = array();
-        $condition['account_friend'] = $friendAccountId;
-        $condition['account_me'] = $this->getCurrentUserId();
-        return AccountFriendshipModel::model()->exists($condition);
-    }
-    
-    public function countFriends() {
-        $condition = array();
-        $condition['account_me'] = $this->getCurrentUserId();
-        return AccountFriendshipModel::model()->count($condition);
-    }
-    
-    
-    
-    /**
-     * @param unknown $recipient
-     * @param unknown $message
-     */
-    public function sendToBeFriendRequest( $recipient, $message, $view ) {
-        $request = new AccountFriendshipRequestModel();
-        $request->message = $message;
-        $request->recipient_id = $recipient;
-        $request->request_started_at = date('Y-m-d H:i:s', time());
-        $request->requester_id = $this->getCurrentUserId();
-        $request->validate();
-        $request->save();
-        
-        $sourceModel    = 'X\\Module\\Lunome\\Model\\Account\\AccountFriendshipRequestModel';
-        $sourceId       = $request->id;
-        $recipiendId    = $recipient;
-        $this->getUserService()->sendNotification($view, $sourceModel, $sourceId, $recipiendId);
-    }
-    
-    /**
-     * @param unknown $requestID
-     * @param unknown $isAgreed
-     * @param unknown $message
-     */
-    public function updateToBeFriendRequestAnswer( $requestID, $isAgreed, $message, $view ) {
-        /* @var $request AccountFriendshipRequestModel */
-        $request = AccountFriendshipRequestModel::model()->findByPrimaryKey($requestID);
-        $request->is_agreed         = $isAgreed ? 1 : 0;
-        $request->result_message    = $message;
-        $request->answered_at       = date('Y-m-d H:i:s');
-        $request->save();
-        
-        if ( $isAgreed ) {
-            $friendship = new AccountFriendshipModel();
-            $friendship->started_at     = date('Y-m-d H:i:s');
-            $friendship->account_me     = $request->recipient_id;
-            $friendship->account_friend = $request->requester_id;
-            $friendship->save();
-            
-            $friendship = new AccountFriendshipModel();
-            $friendship->started_at     = date('Y-m-d H:i:s');
-            $friendship->account_me     = $request->requester_id;
-            $friendship->account_friend = $request->recipient_id;
-            $friendship->save();
-        } 
-        
-        $sourceModel    = 'X\\Module\\Lunome\\Model\\Account\\AccountFriendshipRequestModel';
-        $sourceId       = $request->id;
-        $requster       = $request->requester_id;
-        $this->getUserService()->sendNotification($view, $sourceModel, $sourceId, $requster);
-    }
-    
-    /**
-     * @param string $requestId
-     */
-    public function hasToBeFriendRequest( $requestId ) {
-        return AccountFriendshipRequestModel::model()->exists(array('id'=>$requestId));
-    }
-    
-    /**
-     * @param unknown $position
-     * @param unknown $length
-     * @return \X\Module\Lunome\Model\Account\AccountInformationModel[]
-     */
-    public function getFriends( $position=0, $length=0 ) {
-        $criteria = new Criteria();
-        $criteria->condition = array('account_me'=>$this->getCurrentUserId());
-        $criteria->position = $position;
-        $criteria->limit = $length;
-        $friends = AccountFriendshipModel::model()->findAll($criteria);
-        if ( empty($friends) ) {
-            return array();
-        }
-        foreach ( $friends as $index => $friend ) {
-            $friends[$index] = $friend->account_friend;
-        }
-        $friends = AccountInformationModel::model()->findAll(array('account_id'=>$friends));
-        return $friends;
-    }
-    
-    /**
-     * @param unknown $accountID
-     * @param unknown $content
-     */
-    public function sendChatMessage( $accountID, $content, $notificationView ) {
-        $currentUserID = $this->getCurrentUserId();
-        $record = new AccountChatContentModel();
-        $record->content = $content;
-        $record->reader_id = $accountID;
-        $record->writer_id = $currentUserID;
-        $record->wrote_at = date('Y-m-d H:i:s');
-        $record->status = self::CHAT_MESSAGE_UNREAD;
-        $record->save();
-        
-        $condition = array();
-        $condition['account_me'] = $accountID;
-        $condition['account_friend'] = $currentUserID;
-        /* @var $friendShipModel \X\Module\Lunome\Model\Account\AccountFriendshipModel */
-        $friendShipModel = AccountFriendshipModel::model()->find($condition);
-        
-        $isChattingWithThisFriend = self::ACCOUNT_IS_CHATTING_WITH_FRIEND_YES === $friendShipModel->is_chatting*1;
-        $isUnreadNotificationSended = self::CHAT_IS_UNREAD_NOTIFICATION_SENDED_YES === $friendShipModel->is_unread_notification_sended*1;
-        if ( !$isChattingWithThisFriend && !$isUnreadNotificationSended ) {
-            $sourceModel = 'X\\Module\\Lunome\\Model\\Account\\AccountChatContentModel';
-            $sourceId = $record->id;
-            $this->getUserService()->sendNotification($notificationView, $sourceModel, $sourceId, $accountID);
-            $friendShipModel->is_unread_notification_sended = self::CHAT_IS_UNREAD_NOTIFICATION_SENDED_YES;
-            $friendShipModel->save();
-        }
-        
-        return $record;
-    }
-    
-    /**
      * @param unknown $friendID
      */
     public function cleanIsUnreadMotificationSendedMark( $friendID ) {
@@ -484,8 +310,7 @@ class Account {
         $friendShipModel->save();
     }
     
-    const CHAT_IS_UNREAD_NOTIFICATION_SENDED_YES = 1;
-    const CHAT_IS_UNREAD_NOTIFICATION_SENDED_NO = 0;
+    
     
     /**
      * @param string $markAsRead
@@ -561,11 +386,9 @@ class Account {
         }
     }
     
-    const ACCOUNT_IS_CHATTING_WITH_FRIEND_YES = 1;
-    const ACCOUNT_IS_CHATTING_WITH_FRIEND_NO  = 0;
     
-    const CHAT_MESSAGE_UNREAD = 1;
-    const CHAT_MESSAGE_READ = 2;
+    
+    
     
     private $userService = null;
     
@@ -583,10 +406,6 @@ class Account {
         $sex = intval($sex);
         $codes = $this->getSexNames();
         return isset($codes[$sex]) ? $codes[0] : $codes[$sex];
-    }
-    
-    public function getSexMarks() {
-        return array(0=>'＊',1=>'♂',2=>'♀',3=>'？');
     }
     
     public function getSexMark( $sex ) {

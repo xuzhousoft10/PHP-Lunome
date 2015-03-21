@@ -1,51 +1,41 @@
 <?php
-/**
- * 
- */
-namespace X\Module\Lunome\Action\User\Chat;
-
+namespace X\Module\Account\Action\Chat;
 /**
  * 
  */
 use X\Core\X;
 use X\Module\Lunome\Util\Action\Visual;
-use X\Module\Lunome\Service\Region\Service as RegionService;
-
+use X\Module\Account\Service\Account\Service as AccountService;
 /**
  * 
  */
 class Index extends Visual {
     /**
-     * 
+     * (non-PHPdoc)
+     * @see \X\Service\XAction\Core\Util\Action::runAction()
      */
     public function runAction( $friend ) {
-        $userService = $this->getUserService();
-        $accountManager = $userService->getAccount();
-        
-        if ( !$userService->getAccount()->hasFriend($friend) ) {
+        $currentAccount = $this->getCurrentAccount();
+        $friendManager = $currentAccount->getFriendManager();
+        if ( !$friendManager->isFriendWith($friend) ) {
             $this->throw404();
         }
         
-        /* @var $regionService RegionService */
-        $regionService = X::system()->getServiceManager()->get(RegionService::getServiceName());
-        $friendInformation = $userService->getAccount()->getInformation($friend)->toArray();
-        $friendInformation['living_country']    = $regionService->getNameByID($friendInformation['living_country']);
-        $friendInformation['living_province']   = $regionService->getNameByID($friendInformation['living_province']);
-        $friendInformation['living_city']       = $regionService->getNameByID($friendInformation['living_city']);
-        $friendInformation['sexSign']           = $accountManager->getSexMark($friendInformation['sex']);
-        $friendInformation['sex']               = $accountManager->getSexName($friendInformation['sex']);
-        $friendInformation['sexuality']         = $accountManager->getSexualityName($friendInformation['sexuality']);
-        $friendInformation['emotion_status']    = $accountManager->getEmotionStatuName($friendInformation['emotion_status']);
+        /* @var $accountService AccountService */
+        $accountService = X::system()->getServiceManager()->get(AccountService::getServiceName());
+        $friend = $accountService->get($friend);
+        $friendProfile = $friend->getProfileManager();
         
         $name   = 'USER_CHAT'; 
-        $path   = $this->getParticleViewPath('User/Chat/Index');
+        $path   = $this->getParticleViewPath('Chat/Index');
         $option = array();
-        $data   = array('friend'=>$friendInformation);
+        $data   = array('friend'=>$friendProfile);
         $this->loadParticle($name, $path, $option, $data);
         
+        $friendManager->get($friend->getID())->getChatManager()->start();
+        
         $this->getView()->setLayout($this->getLayoutViewPath('BlankThin'));
-        $this->getView()->title = '与'.$friendInformation['nickname'].'聊天中';
-        $userService->getAccount()->markChattingWithFriend($friend);
+        $this->getView()->title = '与'.$friendProfile->get('nickname').'聊天中';
     }
     
     /**

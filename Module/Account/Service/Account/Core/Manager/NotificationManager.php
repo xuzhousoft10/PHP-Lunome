@@ -53,6 +53,13 @@ class NotificationManager {
         return new Notification($notification);
     }
     
-    public function send(){}
+    /**
+     * @return \X\Module\Account\Service\Account\Core\Instance\Notification
+     */
+    public function create(){
+        $notification = new AccountNotificationModel();
+        $notification->produced_by = $this->accountID;
+        return new Notification($notification);
+    }
     
 }

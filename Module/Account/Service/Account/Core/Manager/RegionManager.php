@@ -17,4 +17,29 @@ class RegionManager {
         }
         return $regions;
     }
+    
+    /**
+     * @param string $id
+     * @return \X\Module\Account\Service\Account\Core\Instance\Region
+     */
+    public function get($id) {
+        $region = AccountRegionModel::model()->findByPrimaryKey($id);
+        if ( null === $region ) {
+            return null;
+        }
+        return new Region($region);
+    }
+    
+    /**
+     * @param string $id
+     * @return string
+     */
+    public function getNameByID( $id ) {
+        $region = $this->get($id);
+        return (null===$region) ? '' : $region->get('name');
+    }
+    
+    public function searchNonFriends() {
+        
+    }
 }

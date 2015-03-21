@@ -36,6 +36,14 @@ class Service extends XService {
     }
     
     /**
+     * @param string $id
+     * @return boolean
+     */
+    public function exists( $id ) {
+        return AccountModel::model()->exists(array('id'=>$id));
+    }
+    
+    /**
      * @var Account
      */
     private $currentAccount = null;

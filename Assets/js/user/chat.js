@@ -8,10 +8,10 @@ $(document).ready(function() {
     }).trigger('resize');
     
     function readChatMessages() {
-        $.get('/?module=lunome&action=user/chat/read', {friend:friendID}, function( response ) {
+        $.get('/?module=account&action=chat/read', {friend:friendID}, function( response ) {
             chatContentContainer.append(response);
             scrollMessagesToButtom();
-            setTimeout(readChatMessages, 1000);
+            setTimeout(readChatMessages, 3000);
         }, 'text');
     }
     
@@ -25,7 +25,7 @@ $(document).ready(function() {
             return;
         }
         
-        $.post('/?module=lunome&action=user/chat/write', {
+        $.post('/?module=account&action=chat/write', {
             friend:friendID,
             content:sendMessageContainer.val()
         }, function( response ) {
@@ -35,7 +35,7 @@ $(document).ready(function() {
         }, 'text');
     }
     
-    setTimeout(readChatMessages, 1000);
+    readChatMessages();
     
     $('#user-chat-send-button').click(sendMessage);
     
@@ -47,7 +47,7 @@ $(document).ready(function() {
     });
     
     $(window).bind('beforeunload', function() {
-        $.get('/?module=lunome&action=user/chat/stop', {id:friendID}, function( response ) {
+        $.get('/?module=account&action=chat/stop', {id:friendID}, function( response ) {
         }, 'text');
     } );
 });

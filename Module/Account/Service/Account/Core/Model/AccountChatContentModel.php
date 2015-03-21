@@ -1,11 +1,9 @@
 <?php
 namespace X\Module\Account\Service\Account\Core\Model;
-
 /**
- * Use statements
+ * 
  */
-use X\Util\Model\Basic;
-
+use X\Module\Lunome\Util\Model\Basic;
 /**
  * @property string $id
  * @property string $writer_id

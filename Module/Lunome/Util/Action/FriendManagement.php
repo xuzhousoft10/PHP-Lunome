@@ -8,6 +8,7 @@ namespace X\Module\Lunome\Util\Action;
  * 
  */
 use X\Core\X;
+use X\Module\Account\Module as AccountModule;
 
 /**
  * 该Action是当用户直接登录后进入的用户主页的Action基类。
@@ -32,7 +33,7 @@ abstract class FriendManagement extends VisualMain {
         $this->activeMenuItem(self::MENU_ITEM_FRIEND);
         
         $name   = 'FRIEND_MANAGEMENT_MENU';
-        $path   = $this->getParticleViewPath('User/Friend/Menu');
+        $path   = $this->getParticleViewPath('Friend/Menu', AccountModule::getModuleName());
         $option = array();
         $data   = array('settingItems'=>$this->settingItems);
         $this->loadParticle($name, $path, $option, $data);
@@ -54,17 +55,17 @@ abstract class FriendManagement extends VisualMain {
         $items[self::FRIEND_MENU_ITEM_LIST] = array();
         $items[self::FRIEND_MENU_ITEM_LIST]['label']     = '所有好友';
         $items[self::FRIEND_MENU_ITEM_LIST]['isActive']  = false;
-        $items[self::FRIEND_MENU_ITEM_LIST]['link']      = '/?module=lunome&action=user/friend/index';
+        $items[self::FRIEND_MENU_ITEM_LIST]['link']      = '/?module=account&action=friend/index';
         
         $items[self::FRIEND_MENU_ITEM_SEARCH] = array();
         $items[self::FRIEND_MENU_ITEM_SEARCH]['label']     = '寻找好友';
         $items[self::FRIEND_MENU_ITEM_SEARCH]['isActive']  = false;
-        $items[self::FRIEND_MENU_ITEM_SEARCH]['link']      = '/?module=lunome&action=user/friend/search';
+        $items[self::FRIEND_MENU_ITEM_SEARCH]['link']      = '/?module=account&action=friend/search';
         
         $items[self::FRIEND_MENU_ITEM_INTERACTION] = array();
         $items[self::FRIEND_MENU_ITEM_INTERACTION]['label']     = '集体互动';
         $items[self::FRIEND_MENU_ITEM_INTERACTION]['isActive']  = false;
-        $items[self::FRIEND_MENU_ITEM_INTERACTION]['link']      = '/?module=lunome&action=user/friend/interaction';
+        $items[self::FRIEND_MENU_ITEM_INTERACTION]['link']      = '/?module=account&action=friend/interaction';
         
         $this->settingItems = $items;
     }

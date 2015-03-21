@@ -1,4 +1,8 @@
 <?php 
+use X\Core\X;
+use X\Module\Account\Module as AccountModule;
+use X\Module\Account\Service\Account\Service as AccountService;
+
 $vars = get_defined_vars();
 $informations = $vars['informations'];
 $condition = $vars['condition']; 
@@ -9,8 +13,18 @@ $sexualityMap = $vars['sexualityMap'];
 $emotionMap = $vars['emotionMap'];
 $peopleLeft = $vars['peopleLeft'];
 $toBeFriendMessageLength = $vars['toBeFriendMessageLength'];
+
+$module = X::system()->getModuleManager()->get(AccountModule::getModuleName());
+$moduleConfiguration = $module->getConfiguration();
+$sexNames = $moduleConfiguration->get('account_profile_sex_names');
+$sexSigns = $moduleConfiguration->get('account_profile_sex_signs');
+$sexualityNames = $moduleConfiguration->get('account_profile_sexuality');
+$emotionStatusNames = $moduleConfiguration->get('account_profile_emotion_status');
+/* @var $accountService AccountService */
+$accountService = X::system()->getServiceManager()->get(AccountService::getServiceName());
+$regionManager = $accountService->getRegionManager();
 ?>
-<form action="/?module=lunome&action=user/friend/search" method="post" class="form-horizontal">
+<form action="/?module=account&action=friend/search" method="post" class="form-horizontal">
 <div class="col-md-9 clearfix">
     <div class="clearfix thumbnail">
         <div class="input-group">
@@ -114,12 +128,14 @@ $toBeFriendMessageLength = $vars['toBeFriendMessageLength'];
         <div class="thumbnail">
             <div class="clearfix" id="result-container" data-people-left="<?php echo $peopleLeft;?>">
             <?php foreach ( $informations as $index => $information ) : ?>
+            <?php /* @var $information \X\Module\Account\Service\Account\Core\Instance\Account */ ?>
+            <?php $profile = $information->getProfileManager(); ?>
                 <div class="col-md-5 well well-sm clearfix">
                     <div class="clearfix">
                         <div class="pull-left">
                             <img    class="img-thumbnail"
-                                    alt="<?php echo $information['nickname'];?>" 
-                                    src="<?php echo $information['photo'];?>"
+                                    alt="<?php echo $profile->get('nickname');?>" 
+                                    src="<?php echo $profile->get('photo');?>"
                                     width="80"
                                     height="80"
                             >
@@ -127,27 +143,27 @@ $toBeFriendMessageLength = $vars['toBeFriendMessageLength'];
                         <div class="pull-left padding-left-5 user-information-text-area">
                             <p>
                                 <strong>
-                                    <span class="text-info"><?php echo $information['sexSign'];?></span>
-                                    <?php echo $information['nickname'];?>
+                                    <span class="text-info"><?php echo $sexSigns[(int)$profile->get('sex')];?></span>
+                                    <?php echo $profile->get('nickname');?>
                                 </strong>
                             </p>
                             <p>
                                 <span class="glyphicon glyphicon-heart"></span>
-                                <?php echo $information['sexuality'];?>
+                                <?php echo $sexualityNames[(int)$profile->get('sexuality')];?>
                                 <span class="glyphicon glyphicon-user"></span>
-                                <?php echo $information['emotion_status'];?>
+                                <?php echo $emotionStatusNames[(int)$profile->get('emotion_status')];?>
                             </p>
                             <p>
-                                <?php echo $information['living_country'];?>
-                                <?php echo $information['living_province'];?>
-                                <?php echo $information['living_city'];?>
+                                <?php echo $regionManager->getNameByID($profile->get('living_country'));?>
+                                <?php echo $regionManager->getNameByID($profile->get('living_province'));?>
+                                <?php echo $regionManager->getNameByID($profile->get('living_city'));?>
                             </p>
                         </div>
                     </div>
                     <div class="text-right">
                         <a  href            = "#" 
                             class           = "btn btn-primary btn-xs btn-add-as-friend-open-dialog"
-                            data-recipient  = "<?php echo $information['account_id']; ?>"
+                            data-recipient  = "<?php echo $profile->get('account_id');?>"
                         >加为好友</a>
                     </div>
                 </div>

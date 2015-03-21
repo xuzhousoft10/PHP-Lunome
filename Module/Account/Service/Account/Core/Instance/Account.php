@@ -8,6 +8,7 @@ use X\Module\Account\Service\Account\Core\Manager\ProfileManager;
 use X\Module\Account\Service\Account\Core\Model\AccountProfileModel;
 use X\Module\Account\Service\Account\Core\Manager\ConfigurationManager;
 use X\Module\Account\Service\Account\Core\Manager\NotificationManager;
+use X\Module\Account\Service\Account\Core\Manager\FriendManager;
 /**
  * 
  */
@@ -30,6 +31,13 @@ class Account {
             $this->accountModel = AccountModel::model()->findByPrimaryKey($this->accountID);
         }
         return $this->accountModel;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getID() {
+        return $this->accountID;
     }
     
     /**
@@ -123,7 +131,22 @@ class Account {
         return $this->notificationManager;
     }
     
+    /**
+     * @var FriendManager
+     */
+    private $friendManager = null;
+    
+    /**
+     * @return \X\Module\Account\Service\Account\Core\Manager\FriendManager
+     */
+    public function getFriendManager(){
+        if ( null === $this->friendManager ) {
+            $this->friendManager = new FriendManager($this);
+        }
+        return $this->friendManager;
+    }
+    
     public function getRoleManager(){}
     public function getActionHistoryManager(){}
-    public function getFriendManager(){}
+    
 }

@@ -129,32 +129,6 @@ class Service extends \X\Core\Service\XService {
         $notification->save();
     }
     
-    public function getNotification( $id ) {
-        $notification = AccountNotificationModel::model()->findByPrimaryKey($id);
-        $notification = $notification->toArray();
-        $sourceModel = $notification['source_model'];
-        $sourceModel = $sourceModel::model()->findByPrimaryKey($notification['source_id']);
-        $notification['sourceData'] = $sourceModel->toArray();
-        return $notification;
-    }
-    
-    /**
-     * @param unknown $id
-     * @return boolean
-     */
-    public function hasNotification( $id ) {
-        return AccountNotificationModel::model()->exists(array('id'=>$id));
-    }
-    
-    /**
-     * @param unknown $notificationID
-     */
-    public function closeNotification( $notificationID ) {
-        $notification = AccountNotificationModel::model()->findByPrimaryKey($notificationID);
-        $notification->status = AccountNotificationModel::STATUS_CLOSED;
-        $notification->save();
-    }
-    
 //     /**
 //      * @var \X\Module\Lunome\Service\User\Friend
 //      */

@@ -1,17 +1,13 @@
 <?php
-/**
- * The action file for user/friend/index action.
- */
-namespace X\Module\Lunome\Action\User\Friend;
-
+namespace X\Module\Account\Action\Friend;
 /**
  * 
  */
 use X\Core\X;
 use X\Module\Lunome\Util\Action\FriendManagement;
-use X\Module\Lunome\Service\Region\Service as RegionService;
-use X\Module\Lunome\Model\Account\AccountFriendshipRequestModel;
-
+use X\Module\Account\Service\Account\Core\Model\AccountFriendshipRequestModel;
+use X\Module\Account\Service\Account\Service as AccountService;
+use X\Service\XDatabase\Core\ActiveRecord\Criteria;
 /**
  * The action class for user/friend/index action.
  * @author Unknown
@@ -22,7 +18,7 @@ class Search extends FriendManagement {
      * @return void
      */ 
     public function runAction( $condition=null, $page=1 ) {
-        $accountManager = $this->getUserService()->getAccount();
+        $currentAccountFriendManager = $this->getCurrentAccount()->getFriendManager();
         $moduleConfig = $this->getModule()->getConfiguration();
         $page = intval($page);
         $view = $this->getView();
@@ -30,44 +26,38 @@ class Search extends FriendManagement {
         $informations = false;
         $pager = array('prev'=>false, 'next'=>false);
         if ( !empty($condition) && is_array($condition) ) {
-            /* @var $regionService RegionService */
-            $regionService = X::system()->getServiceManager()->get(RegionService::getServiceName());
-            
+            /* @var $accountService AccountService */
+            $accountService = X::system()->getServiceManager()->get(AccountService::getServiceName());
             $pageSize = $moduleConfig->get('user_friend_search_result_page_size');
             $filteredCondition = $this->filterConditions($condition);
-            $result = $accountManager->findFriends($filteredCondition, ($page-1)*$pageSize, $pageSize);
-            foreach ( $result['data'] as $index => $information ) {
-                $informations[$index] = $information->toArray();
-                $informations[$index]['living_country']     = $regionService->getNameByID($information->living_country);
-                $informations[$index]['living_province']    = $regionService->getNameByID($information->living_province);
-                $informations[$index]['living_city']        = $regionService->getNameByID($information->living_city);
-                $informations[$index]['sexSign']                 = $accountManager->getSexMark($information->sex);
-                $informations[$index]['sex']                     = $accountManager->getSexName($information->sex);
-                $informations[$index]['sexuality']               = $accountManager->getSexualityName($information->sexuality);
-                $informations[$index]['emotion_status']          = $accountManager->getEmotionStatuName($information->emotion_status);
-            }
             
+            $criteria = new Criteria();
+            $criteria->condition = $filteredCondition;
+            $criteria->position = ($page-1)*$pageSize;
+            $criteria->limit = $pageSize;
+            $informations = $currentAccountFriendManager->findNonFriends($criteria);
+            $resultCount = $currentAccountFriendManager->countNonFriends($filteredCondition);
             $pager = array(
                 'prev'      => ( 1 >= $page*1 ) ? false : $page-1,
-                'next'      => ( $result['count']<=$pageSize || ($page-1)*$pageSize >= $result['count'] ) ? false : $page+1,
+                'next'      => ( $resultCount<=$pageSize || ($page-1)*$pageSize >= $resultCount ) ? false : $page+1,
                 'current'   => $page,
-                'pageCount' => ( 0===($result['count']%$pageSize) ) ? $result['count']/$pageSize : intval($result['count']/$pageSize)+1,
+                'pageCount' => ( 0===($resultCount%$pageSize) ) ? $resultCount/$pageSize : intval($resultCount/$pageSize)+1,
             );
         }
         
         $name   = 'FRIEND_SEARCH';
-        $path   = $this->getParticleViewPath('User/Friend/Search');
+        $path   = $this->getParticleViewPath('Friend/Search');
         $option = array();
         $data   = array('informations'=>$informations, 'condition'=>$condition, 'pager'=>$pager);
         $this->loadParticle($name, $path, $option, $data);
         $view->title = '寻找好友';
         
-        $this->setDataToParticle($name, 'sexMap', $accountManager->getSexNames());
-        $this->setDataToParticle($name, 'sexualityMap', $accountManager->getSexualityNames());
-        $this->setDataToParticle($name, 'emotionMap', $accountManager->getEmotionStatuNames());
+        $this->setDataToParticle($name, 'sexMap', $moduleConfig->get('account_profile_sex_names'));
+        $this->setDataToParticle($name, 'sexualityMap', $moduleConfig->get('account_profile_sexuality'));
+        $this->setDataToParticle($name, 'emotionMap', $moduleConfig->get('account_profile_emotion_status'));
         $length = AccountFriendshipRequestModel::model()->getAttribute('message')->getLength();
         $this->setDataToParticle($name, 'toBeFriendMessageLength', $length);
-        $peopleLeft = $moduleConfig->get('user_friend_max_count')-$accountManager->countFriends();
+        $peopleLeft = $moduleConfig->get('user_friend_max_count')-$currentAccountFriendManager->count();
         $this->setDataToParticle($name, 'peopleLeft', $peopleLeft);
     }
     
