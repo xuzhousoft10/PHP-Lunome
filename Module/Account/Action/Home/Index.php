@@ -23,6 +23,6 @@ class Index extends VisualUserHome {
             $this->throw404();
         }
         
-        $this->gotoURL('/?module=lunome&action=movie/home/index', array('id'=>$id));
+        $this->gotoURL('/?module=movie&action=home/index', array('id'=>$id));
     }
 }

@@ -8,7 +8,8 @@ namespace X\Module\Lunome\Util\Action;
  * 
  */
 use X\Core\X;
-use X\Module\Lunome\Service\Region\Service as RegionService;
+use X\Module\Account\Service\Account\Service as AccountService;
+use X\Module\Account\Module as AccountModule;
 
 /**
  * 
@@ -31,9 +32,8 @@ class VisualUserHome extends Visual {
         $layout = $this->getLayoutViewPath('UserHome');
         $view->setLayout($layout);
         $view->getDataManager()->set('currentUser', $this->getCurrentUserData());
-        
         $name   = 'USER_TOP_BOARD';
-        $path   = $this->getParticleViewPath('User/Home/TopBoard');
+        $path   = $this->getParticleViewPath('Home/TopBoard', AccountModule::getModuleName());
         $data   = array('homeUser'=>array());
         $particleView = $view->getParticleViewManager()->load($name, $path);
         $particleView->getDataManager()->merge($data);
@@ -44,21 +44,12 @@ class VisualUserHome extends Visual {
      * @see \X\Module\Lunome\Util\Action\Visual::afterRunAction()
      */
     protected function afterRunAction() {
-        /* @var $regionService \X\Module\Lunome\Service\Region\Service */
-        $regionService = X::system()->getServiceManager()->get(RegionService::getServiceName());
-        $accountManager = $this->getUserService()->getAccount();
-        $userData = $this->getUserService()->getAccount()->getInformation($this->homeUserAccountID)->toArray();
-        $userData['living_country']     = $regionService->getNameByID($userData['living_country']);
-        $userData['living_province']    = $regionService->getNameByID($userData['living_province']);
-        $userData['living_city']        = $regionService->getNameByID($userData['living_city']);
-        $userData['sexSign']            = $accountManager->getSexMark($userData['sex']);
-        $userData['sex']                = $accountManager->getSexName($userData['sex']);
-        $userData['sexuality']          = $accountManager->getSexualityName($userData['sexuality']);
-        $userData['emotion_status']     = $accountManager->getEmotionStatuName($userData['emotion_status']);
-        $this->setDataToParticle('USER_TOP_BOARD', 'homeUser', $userData);
-        
-        $this->getView()->title = $userData['nickname']."的主页";
-        
+        /* @var $accountService AccountService */
+        $accountService = $this->getService(AccountService::getServiceName());
+        $account = $accountService->get($this->homeUserAccountID);
+        $accountProfile = $account->getProfileManager();
+        $this->setDataToParticle('USER_TOP_BOARD', 'homeUser', $account);
+        $this->getView()->title = $accountProfile->get('nickname')."的主页";
         parent::afterRunAction();
     }
 }

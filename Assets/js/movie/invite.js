@@ -19,7 +19,7 @@ $(document).ready(function() {
         var $this = $(this);
         var loadingImage = $('<img>').attr('src', $this.attr('data-loadding-img'));
         $('#invite-to-watch-movie-dialog-message').html(loadingImage).next().hide();
-        $.post('/?module=lunome&action=movie/interaction/InviteToWatchMovieSendMessage', {
+        $.post('/?module=movie&action=interaction/InviteToWatchMovieSendMessage', {
             friend:$this.attr('data-friend'), 
             movie:$this.attr('data-movie'),
             comment:$('#invite-to-watch-movie-dialog-comment').val()

@@ -53,7 +53,7 @@ abstract class VisualMain extends Visual {
         $items[self::MENU_ITEM_MOVIE] = array();
         $items[self::MENU_ITEM_MOVIE]['label']      = '电影';
         $items[self::MENU_ITEM_MOVIE]['isActive']   = false;
-        $items[self::MENU_ITEM_MOVIE]['link']       = '/?module=lunome&action=movie/index';
+        $items[self::MENU_ITEM_MOVIE]['link']       = '/?module=movie&action=index';
         
         $items[self::MENU_ITEM_FRIEND] = array();
         $items[self::MENU_ITEM_FRIEND]['label']     = '好友';

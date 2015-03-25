@@ -53,6 +53,10 @@ abstract class Basic extends \X\Service\XAction\Core\Handler\WebAction {
         }
     }
     
+    /**
+     * @param unknown $name
+     * @return \X\Core\Service\XService
+     */
     protected function getService( $name ) {
         return X::system()->getServiceManager()->get($name);
     }

@@ -226,5 +226,13 @@ class FriendManager {
         return new Friend($friendShip);
     }
     
+    /**
+     * @param string $attribute
+     * @return string
+     */
+    public function getFindAttributeName( $attribute ) {
+        return AccountFriendshipModel::model()->getAttributeQueryName($attribute);
+    }
+    
     public function getGroupManager(){}
 }

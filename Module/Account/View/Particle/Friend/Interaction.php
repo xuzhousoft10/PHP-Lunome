@@ -4,7 +4,7 @@ $friends = $vars['friends'];
 $peopleCount = $vars['peopleCount'];
 ?>
 <div class="col-md-9">
-    <form action="/?module=lunome" method="post">
+    <form action="/?module=movie" method="post">
         <div class="thumbnail clearfix lunome-friends-interaction-friends-container" data-people-count="<?php echo $peopleCount; ?>">
         <?php foreach ( $friends as $index => $friend ) : ?>
             <?php /* @var $friend \X\Module\Account\Service\Account\Core\Instance\Account */ ?>
@@ -17,6 +17,6 @@ $peopleCount = $vars['peopleCount'];
         <?php endforeach; ?>
         </div>
         
-        <button class="btn btn-default btn-block" name="action" value="movie/interaction/friends" type="submit">一起去看电影</button>
+        <button class="btn btn-default btn-block" name="action" value="interaction/friends" type="submit">一起去看电影</button>
     </form>
 </div>

@@ -244,7 +244,7 @@ MediaIndex.load = function( refresh ) {
             })
             .bind('rated', function (e) {
                 var ri = $(this);
-                $.get('/?module=lunome&action=movie/rate', {
+                $.get('/?module=movie&action=rate', {
                     id:ri.attr('data-media-id'),
                     score:ri.rateit('value'),
                 }, function( response ) {

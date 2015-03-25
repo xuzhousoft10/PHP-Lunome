@@ -316,7 +316,7 @@ $(document).ready(function() {
      */
     var globalSearchResultItem = function( trigger, container ) {
         var $this = trigger;
-        $.get('/?module=lunome&action=movie/play', {
+        $.get('/?module=movie&action=play', {
             source : $(trigger).attr('data-source'),
             link   : $(trigger).attr('data-link')
         }, function( response ) {
@@ -366,7 +366,7 @@ $(document).ready(function() {
         })
         .on('shown.bs.popover', function () {
             var $this = $(this);
-            $.get('/?module=lunome&action=movie/markedUserList', {
+            $.get('/?module=movie&action=markedUserList', {
                 id    : $this.attr('data-id'),
                 mark  : $this.attr('data-mark'),
                 scope : $this.attr('data-scope'),

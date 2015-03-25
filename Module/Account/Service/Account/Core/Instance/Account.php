@@ -9,6 +9,7 @@ use X\Module\Account\Service\Account\Core\Model\AccountProfileModel;
 use X\Module\Account\Service\Account\Core\Manager\ConfigurationManager;
 use X\Module\Account\Service\Account\Core\Manager\NotificationManager;
 use X\Module\Account\Service\Account\Core\Manager\FriendManager;
+use X\Module\Account\Service\Account\Core\Model\AccountOauth20Model;
 /**
  * 
  */
@@ -144,6 +145,17 @@ class Account {
             $this->friendManager = new FriendManager($this);
         }
         return $this->friendManager;
+    }
+    
+    /**
+     * @return \X\Module\Account\Service\Account\Core\Instance\OAuthInformation
+     */
+    public function getOAuthInformation() {
+        $oauth = AccountOauth20Model::model()->find(array('account_id'=>$this->accountID));
+        if ( null === $oauth ) {
+            return null;
+        }
+        return new OAuthInformation($oauth);
     }
     
     public function getRoleManager(){}

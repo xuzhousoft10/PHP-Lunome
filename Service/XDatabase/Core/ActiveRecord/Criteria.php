@@ -30,6 +30,13 @@ class Criteria {
     }
     
     /**
+     * @return boolean
+     */
+    public function hasOrder() {
+        return !empty($this->orders);
+    }
+    
+    /**
      * @return array
      */
     public function getOrders() {

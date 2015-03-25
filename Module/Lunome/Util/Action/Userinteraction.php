@@ -30,18 +30,12 @@ abstract class Userinteraction extends VisualMain {
     public $interactionMenuParams = array();
     
     /**
-     * @var \X\Module\Lunome\Service\User\Service
-     */
-    protected $userService = null;
-    
-    /**
      * (non-PHPdoc)
      * @see \X\Module\Lunome\Util\Action\VisualMain::beforeRunAction()
      */
     protected function beforeRunAction() {
         parent::beforeRunAction();
         $this->initInteractionMenu();
-        $this->userService = $this->getUserService();
         $this->activeMenuItem(self::MENU_ITEM_FRIEND);
     }
     
@@ -54,10 +48,10 @@ abstract class Userinteraction extends VisualMain {
         $this->interactionMenu[self::INTERACTION_MENU_ITEM_INDEX]['link'] = '/?module=account&action=interaction/index';
         
         $this->interactionMenu[self::INTERACTION_MENU_ITEM_INVITE_TO_WATCH_MOVIE]['label'] = '想请TA看场电影';
-        $this->interactionMenu[self::INTERACTION_MENU_ITEM_INVITE_TO_WATCH_MOVIE]['link'] = '/?module=lunome&action=movie/interaction/inviteToWatchMovie';
+        $this->interactionMenu[self::INTERACTION_MENU_ITEM_INVITE_TO_WATCH_MOVIE]['link'] = '/?module=movie&action=interaction/inviteToWatchMovie';
         
         $this->interactionMenu[self::INTERACTION_MENU_ITEM_GET_TOPIC]['label'] = '想与TA找点话题';
-        $this->interactionMenu[self::INTERACTION_MENU_ITEM_GET_TOPIC]['link'] = '/?module=lunome&action=movie/interaction/findTopic';
+        $this->interactionMenu[self::INTERACTION_MENU_ITEM_GET_TOPIC]['link'] = '/?module=movie&action=interaction/findTopic';
         
         $this->setActiveInteractionMenuItem(self::INTERACTION_MENU_ITEM_INDEX);
     }

@@ -24,7 +24,11 @@ return array (
   ),
   'Account' =>
    array (
-     'enable' => false,
-     'default' => true,
+     'enable' => true,
+  ),
+  'Movie' =>
+  array (
+    'enable' => true,
+    'default' => true,
   ),
 );

@@ -18,17 +18,6 @@ return array (
     'class' => 'X\\Service\\XDatabase\\Service',
     'delay' => true,
   ),
-  'User' => 
-  array (
-    'enable' => true,
-    'class' => 'X\\Module\\Lunome\\Service\\User\\Service',
-    'delay' => true,
-  ),
-  'Movie' => array(
-    'enable' => true,
-    'delay' => true,
-    'class' => 'X\\Module\\Lunome\\Service\\Movie\\Service',
-  ),
   'XView' => 
   array (
     'enable' => false,
@@ -76,5 +65,10 @@ return array (
         'enable' => true,
         'class' => 'X\\Module\\Account\\Service\\Account\\Service',
         'delay' => true,
+    ),
+    'Movie' => array(
+        'enable' => true,
+        'delay' => true,
+        'class' => 'X\\Module\\Movie\\Service\\Movie\\Service',
     ),
 );

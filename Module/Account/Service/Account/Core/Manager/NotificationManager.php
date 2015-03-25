@@ -59,6 +59,7 @@ class NotificationManager {
     public function create(){
         $notification = new AccountNotificationModel();
         $notification->produced_by = $this->accountID;
+        $notification->created_at = date('Y-m-d H:i:s');
         return new Notification($notification);
     }
     

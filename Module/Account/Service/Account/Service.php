@@ -11,6 +11,7 @@ use X\Module\Account\Service\Account\Core\Model\AccountModel;
 use X\Module\Account\Service\Account\Core\Model\AccountOauth20Model;
 use X\Service\XDatabase\Core\ActiveRecord\Criteria;
 use X\Module\Account\Service\Account\Core\Manager\RegionManager;
+use X\Service\XDatabase\Core\SQL\Condition\Builder as ConditionBuilder;
 /**
  * 
  */
@@ -20,7 +21,29 @@ class Service extends XService {
      */
     protected static $serviceName = 'Account';
     
-    public function find($criteria) {}
+    /**
+     * @param mixed $condition
+     * @return \X\Module\Account\Service\Account\Core\Instance\Account
+     */
+    public function find($condition) {
+        if ( !($condition instanceof Criteria) ) {
+            $condition = ConditionBuilder::build($condition);
+            $criteria = new Criteria();
+            $criteria->condition = $condition;
+            $condition = $criteria;
+        }
+        
+        if ( !($condition->condition instanceof ConditionBuilder ) ) {
+            $condition->condition = ConditionBuilder::build($condition->condition);
+        }
+        
+        $accounts = AccountModel::model()->findAll($condition);
+        foreach ( $accounts as $index => $account ) {
+            $accounts[$index] = new Account($account);
+        }
+        return $accounts;
+    }
+    
     public function count($criteria) {}
     
     /**
@@ -186,5 +209,13 @@ class Service extends XService {
             $this->regionManager = new RegionManager();
         }
         return $this->regionManager;
+    }
+    
+    /**
+     * @param string $attribute
+     * @return string
+     */
+    public function getFindAttributeName( $attribute ) {
+        return AccountModel::model()->getAttributeQueryName($attribute);
     }
 }
