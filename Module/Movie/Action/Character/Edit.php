@@ -4,40 +4,40 @@ namespace X\Module\Movie\Action\Character;
  * 
  */
 use X\Core\X;
-use X\Module\Lunome\Util\Action\Basic;
+use X\Module\Lunome\Util\Action\JSON;
 use X\Module\Movie\Service\Movie\Service as MovieService;
 /**
  * The action class for movie/character/edit action.
  * @author Michael Luthor <michaelluthor@163.com>
  */
-class Edit extends Basic { 
+class Edit extends JSON { 
     /**
-     * @param string $movie
-     * @param array $character
+     * (non-PHPdoc)
+     * @see \X\Service\XAction\Core\Util\Action::runAction()
      */
     public function runAction( $movie, $character ) {
         /* @var $movieService MovieService */
-        $movieService = X::system()->getServiceManager()->get(MovieService::getServiceName());
+        $movieService = $this->getService(MovieService::getServiceName());
         $movie = $movieService->get($movie);
         if ( null === $movie ) {
-            return;
+            return $this->error('Movie does not exists.');
         }
         
-        $characterManager = $movie->getCharacterManager();
-        $image = null;
-        if ( isset($_FILES['image']) && 0===$_FILES['image']['error'] ) {
-            $tmpname = tempnam(sys_get_temp_dir(), 'UPCI');
-            move_uploaded_file($_FILES['image']['tmp_name'], $tmpname);
-            $image = $tmpname;
+        if ( !isset($_FILES['image']) || 0!==$_FILES['image']['error'] ) {
+            return $this->error('Character\'s photo is required.');
         }
+        
+        $image = tempnam(sys_get_temp_dir(), 'UPCI');
+        move_uploaded_file($_FILES['image']['tmp_name'], $image);
+        
+        $characterManager = $movie->getCharacterManager();
         $characterManager->add()
             ->set('name', $character['name'])
             ->set('description', $character['description'])
             ->setPhoto($image)
             ->save();
-        if ( null !== $image ) {
-            unlink($image);
-        }
-        echo json_encode(array('status'=>'ok'));
+        
+        unlink($image);
+        return $this->success();
     }
 }

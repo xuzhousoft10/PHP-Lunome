@@ -11,20 +11,41 @@ use X\Module\Account\Service\Account\Service as AccountService;
  */
 abstract class Basic extends \X\Service\XAction\Core\Handler\WebAction {
     /**
-     * The activated module instance.
-     * @var \X\Core\Module\XModule
-     */
-    private $module = null;
-    
-    /**
      * Get the module that this action belongs to.
      * @return \X\Core\Module\XModule
      */
-    public function getModule() {
-        if ( is_null($this->module) ) {
-            $this->module = X::system()->getModuleManager()->get($this->getGroupName());
+    protected function getModule($name=null) {
+        if ( null===$this->module ) {
+            return X::system()->getModuleManager()->get($this->getGroupName());
+        } else {
+            return X::system()->getModuleManager()->get($name);
         }
-        return $this->module;
+    }
+    
+    /**
+     * @param string $name
+     * @return \X\Core\Service\XService
+     */
+    protected function getService( $name ) {
+        return X::system()->getServiceManager()->get($name);
+    }
+    
+    /**
+     * @return \X\Module\Account\Service\Account\Core\Instance\Account
+     */
+    protected function getCurrentAccount() {
+        /* @var $accountService AccountService */
+        $accountService = $this->getService(AccountService::getServiceName());
+        return $accountService->getCurrentAccount();
+    }
+    
+    /**
+     * @return void
+     */
+    protected function checkLoginRequirement() {
+        if ( null === $this->getCurrentAccount() ) {
+            $this->gotoURL('/index.php?module=account&action=login/index');
+        }
     }
     
     /**
@@ -32,32 +53,5 @@ abstract class Basic extends \X\Service\XAction\Core\Handler\WebAction {
      */
     public function getAssetsURL () {
         return X::system()->getConfiguration()->get('assets-base-url');
-    }
-    
-    /**
-     * @return \X\Module\Account\Service\Account\Core\Instance\Account
-     */
-    public function getCurrentAccount() {
-        /* @var $accountService AccountService */
-        $accountService = X::system()->getServiceManager()->get(AccountService::getServiceName());
-        return $accountService->getCurrentAccount();
-    }
-    
-    public function __call( $name, $parms ) {
-        if ( 'get' === substr($name, 0, 3) && 'Service' === substr($name, strlen($name)-7)){
-            $serviceName = substr($name, 3);
-            $serviceName = substr($serviceName, 0, strlen($serviceName)-7);
-            return $this->getService($serviceName);
-        } else {
-            ;// nothing
-        }
-    }
-    
-    /**
-     * @param unknown $name
-     * @return \X\Core\Service\XService
-     */
-    protected function getService( $name ) {
-        return X::system()->getServiceManager()->get($name);
     }
 }
