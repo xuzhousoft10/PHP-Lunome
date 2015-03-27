@@ -18,26 +18,26 @@ class Index extends Visual {
      * @param integer $page
      */
     public function runAction( $id, $page=1 ) {
-        /* @var $movieService MovieService */
-        $movieService = X::system()->getServiceManager()->get(MovieService::getServiceName());
         $moduleConfig = $this->getModule()->getConfiguration();
         $pageSize = $moduleConfig->get('movie_detail_character_page_size');
-        $characterManager = $movieService->get($id)->getCharacterManager();
-        $movieAccount = $movieService->getCurrentAccount();
-        
-        $page = intval($page);
-        if ( 0 >= $page ) {
-            $page = 1;
-        }
-        
+        $page = (0>= (int)$page) ? 1 : (int)$page;
         $criteria = new Criteria();
         $criteria->limit = $pageSize;
         $criteria->position = ($page-1)*$pageSize;
+        
+        /* @var $movieService MovieService */
+        $movieService = $this->getService(MovieService::getServiceName());
+        $movie = $movieService->get($id);
+        if ( null === $movie ) {
+            $this->throw404();
+        }
+        $characterManager = $movie->getCharacterManager();
         $characters = $characterManager->find($criteria);
         $pager = array();
         $pager['prev'] = (1 >= $page) ? false : $page-1;
         $pager['next'] = (($page)*$pageSize >= $characterManager->count()) ? false : $page+1;
         
+        $movieAccount = $movieService->getCurrentAccount();
         $isWatched = Movie::MARK_WATCHED === $movieAccount->getMark($id);
         $name   = 'CHARACTER_INDEX';
         $path   = $this->getParticleViewPath('Characters');
