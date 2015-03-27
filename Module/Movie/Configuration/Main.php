@@ -1,14 +1,9 @@
 <?php
 return array(
+'movie_character_photo_types' => array('png'=>'image/png','gif'=>'image/gif','jpg'=>'image/jpeg'),
+'movie_character_photo_max_size' => 1024*1024,
+
 'movie_mark_names'=>array('未标记','想看','已看','不喜欢'),
-    
-    
-    
-    
-    
-    
-    
-    
 'system_name' => 'Lunome',
 'movie_search_max_length' => 32,
 'media_item_operation_waiting_image' => 'http://lunome-assets.qiniudn.com/image/waitting.gif',

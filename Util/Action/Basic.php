@@ -15,7 +15,7 @@ abstract class Basic extends \X\Service\XAction\Core\Handler\WebAction {
      * @return \X\Core\Module\XModule
      */
     protected function getModule($name=null) {
-        if ( null===$this->module ) {
+        if ( null===$name ) {
             return X::system()->getModuleManager()->get($this->getGroupName());
         } else {
             return X::system()->getModuleManager()->get($name);

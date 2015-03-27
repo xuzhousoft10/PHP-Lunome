@@ -14,6 +14,7 @@ class File {
      */
     public function __construct( $uploadInfo ) {
         $this->uploadInfo = $uploadInfo;
+        $this->path = $this->getTempName();
     }
     
     /**
@@ -85,6 +86,48 @@ class File {
      * @return boolean
      */
     public function move($targetPath){
-        return move_uploaded_file($this->getTempName(), $targetPath);
+        $srcPath = $this->getTempName();
+        $dscPath = $this->getPath();
+        if ( $srcPath === $dscPath ) {
+            return true;
+        }
+        return move_uploaded_file($srcPath, $dscPath);
+    }
+    
+    /**
+     * @return \X\Library\FileUploadHandler\File
+     */
+    public function moveToTempPath() {
+        $this->path = tempnam(sys_get_temp_dir(), 'UPTM');
+        move_uploaded_file($this->getTempName(), $this->path);
+        return $this;
+    }
+    
+    /**
+     * @var string
+     */
+    private $path = null;
+    
+    /**
+     * @param string $path
+     * @return \X\Library\FileUploadHandler\File
+     */
+    public function setPath( $path ) {
+        $this->path = $path;
+        return $this;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getPath() {
+        return $this->path;
+    }
+    
+    /**
+     * @return boolean
+     */
+    public function delete() {
+        return unlink($this->path);
     }
 }

@@ -174,7 +174,7 @@ $(document).ready(function() {
             return false;
         }
         
-        if ( !(/(jpg|png)/.test(file.val())) ) {
+        if ( !(/(jpg|png|gif)/.test(file.val())) ) {
             alert('头像仅支持JPG和PNG格式文件。');
             return false;
         }

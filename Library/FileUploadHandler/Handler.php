@@ -21,10 +21,14 @@ class Handler {
      * @param string $name
      */
     private function __construct( $name ) {
-        foreach($_FILES[$name] as $key1 => $value1) {
-            foreach($value1 as $key2 => $value2) {
-                $this->files[$key2][$key1] = $value2;
+        if ( is_array($_FILES[$name]['name']) ) {
+            foreach($_FILES[$name] as $key1 => $value1) {
+                foreach($value1 as $key2 => $value2) {
+                    $this->files[$key2][$key1] = $value2;
+                }
             }
+        } else {
+            $this->files[] = $_FILES[$name];
         }
         foreach ( $this->files as $index => $fileInfo ) {
             $this->files[$index] = new File($fileInfo);
@@ -49,7 +53,7 @@ class Handler {
      * @param number $index
      * @return \X\Library\FileUploadHandler\File
      */
-    public function get( $index=0 ){
+    public function getFile( $index=0 ){
         return $this->files[$index];
     }
 }
