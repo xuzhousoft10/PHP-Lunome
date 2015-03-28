@@ -4,21 +4,25 @@ namespace X\Module\Movie\Action\Comment;
  * 
  */
 use X\Core\X;
-use X\Module\Lunome\Util\Action\Basic;
 use X\Module\Movie\Service\Movie\Service as MovieService;
+use X\Module\Lunome\Util\Action\JSON;
 /**
- * The action class for movie/comment/add action.
- * @author Michael Luthor <michaelluthor@163.com>
+ * 
  */
-class Add extends Basic { 
+class Add extends JSON { 
     /**
      * (non-PHPdoc)
      * @see \X\Service\XAction\Core\Util\Action::runAction()
      */
     public function runAction( $id, $content ) {
         /* @var $movieService MovieService */
-        $movieService = X::system()->getServiceManager()->get(MovieService::getServiceName());
+        $movieService = $this->getService(MovieService::getServiceName());
+        if ( !$movieService->has($id) ) {
+            return $this->error('Movie does not exists.');
+        }
+        
         $movieAccount = $movieService->getCurrentAccount();
         $movieAccount->addShortComment($id)->set('content', $content)->save();
+        return $this->success();
     }
 }

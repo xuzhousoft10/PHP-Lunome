@@ -22,6 +22,6 @@ class Edit extends JSON {
         }
         
         $movie->getClassicDialogueManager()->add()->set('content', $content)->save();
-        $this->success();
+        return $this->success();
     }
 }

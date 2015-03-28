@@ -7,32 +7,29 @@ use X\Core\X;
 use X\Module\Lunome\Util\Action\Visual;
 use X\Module\Movie\Service\Movie\Service as MovieService;
 use X\Service\XDatabase\Core\ActiveRecord\Criteria;
+use X\Module\Lunome\Widget\Pager\Simple as SimplePager;
 /**
- * The action class for movie/comment/index action.
- * @author Michael Luthor <michaelluthor@163.com>
+ * 
  */
 class Index extends Visual { 
     /**
-     * @param string $id
-     * @param integer $page
-     * @param string $scope
+     * (non-PHPdoc)
+     * @see \X\Service\XAction\Core\Util\Action::runAction()
      */
     public function runAction( $id, $page=1, $scope='friends' ) {
         /* @var $movieService MovieService */
-        $movieService = X::system()->getServiceManager()->get(MovieService::getServiceName());
-        $moduleConfig = $this->getModule()->getConfiguration();
-        $pageSize = $moduleConfig->get('movie_detail_comment_page_size');
+        $movieService = $this->getService(MovieService::getServiceName());
         $movie = $movieService->get($id);
         if ( null === $movie ) {
-            return;
+            return $this->throw404();
         }
         
-        $page = intval($page);
+        $moduleConfig = $this->getModule()->getConfiguration();
+        $pageSize = $moduleConfig->get('movie_detail_comment_page_size');
+        $page = (0 >= (int)$page) ? 1 : (int)$page;
         $criteria = new Criteria();
         $criteria->position = ($page-1)*$pageSize;
         $criteria->limit = $pageSize;
-        $shortCommentManager = $movie->getShortCommentManager();
-        
         if ( 'friends' === $scope ) {
             $currentAccount = $this->getCurrentAccount();
             $friends = $currentAccount->getFriendManager()->find();
@@ -42,14 +39,15 @@ class Index extends Visual {
             $criteria->condition = array('commented_by'=>$friends);
         }
         
+        $shortCommentManager = $movie->getShortCommentManager();
         $comments = $shortCommentManager->find($criteria);
         $commentCount = $shortCommentManager->count($criteria->condition);
         
-        $pager = array();
-        $pager['current'] = $page;
-        $pager['pageCount'] = (0===($commentCount%$pageSize)) ? $commentCount/$pageSize : (intval($commentCount/$pageSize)+1);
-        $pager['prev'] = (1 >= $page) ? false : $page-1;
-        $pager['next'] = (($page)*$pageSize >= $commentCount) ? false : $page+1;
+        $pager = new SimplePager();
+        $pager->setPagerURL($this->createURL('/',array('module'=>'movie','action'=>'comment/index','id'=>$id,'page'=>'{$page}', 'scope'=>$scope)));
+        $pager->setCurrentPage($page);
+        $pager->setPageSize($pageSize);
+        $pager->setTotalNumber($commentCount);
         
         $name   = 'COMMENTS_INDEX';
         $path   = $this->getParticleViewPath('Comments');

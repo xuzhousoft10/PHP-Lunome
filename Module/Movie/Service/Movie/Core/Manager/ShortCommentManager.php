@@ -46,6 +46,7 @@ class ShortCommentManager {
         }
         
         $criteria->condition->andAlso()->is('movie_id', $this->movieID);
+        $criteria->addOrder('commented_at', 'DESC');
         $comments = MovieShortCommentModel::model()->findAll($condition);
         foreach ( $comments as $index => $comment ) {
             $comments[$index] = new ShortComment($comment);

@@ -47,27 +47,8 @@ $pager = $vars['pager'];
         </div>
     <?php endforeach; ?>
     </div>
-<?php endif; ?>
-<?php if ( false !== $pager['prev'] || false !== $pager['next'] ) : ?>
-<div>
-    <nav>
-        <ul class="pager">
-            <li class="previous<?php echo (false === $pager['prev']) ? ' disabled' : ''; ?>">
-                <?php if (false !== $pager['prev']) :?>
-                    <a  href="/?module=movie&action=comment/index&id=<?php echo $vars['id'];?>&page=<?php echo $pager['prev'];?>&scope=<?php echo $vars['scope'];?>"
-                        class="movie-comments-container-pager"
-                    >&larr; 上一页</a>
-                <?php endif; ?>
-            </li>
-            <li><?php echo $pager['current'];?> / <?php echo $pager['pageCount'];?></li>
-            <li class="next<?php echo (false === $pager['next']) ? ' disabled' : ''; ?>">
-                <?php if (false !== $pager['next']) :?>
-                    <a  href="/?module=movie&action=comment/index&id=<?php echo $vars['id'];?>&page=<?php echo $pager['next'];?>&scope=<?php echo $vars['scope'];?>"
-                        class="movie-comments-container-pager"
-                    >下一页&rarr;</a>
-                <?php endif; ?>
-            </li>
-        </ul>
-    </nav>
-</div>
+    
+    <?php $vars['pager']->setPrevPageButtonClass('movie-comments-container-pager'); ?>
+    <?php $vars['pager']->setNextPageButtonClass('movie-comments-container-pager'); ?>
+    <?php $vars['pager']->show(); ?>
 <?php endif; ?>

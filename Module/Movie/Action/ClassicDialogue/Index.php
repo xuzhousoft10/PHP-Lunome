@@ -25,7 +25,7 @@ class Index extends Visual {
         
         $moduleConfig = $this->getModule()->getConfiguration();
         $pageSize = $moduleConfig->get('movie_detail_classic_dialogue_page_size');
-        $page = (0 >= (int)$page) ? 1 : $page;
+        $page = (0 >= (int)$page) ? 1 : (int)$page;
         $criteria = new Criteria();
         $criteria->limit = $pageSize;
         $criteria->position = ($page-1)*$pageSize;
