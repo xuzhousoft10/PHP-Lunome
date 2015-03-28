@@ -37,7 +37,7 @@ class Index extends Visual {
         $pager->setTotalNumber($characterManager->count());
         $pager->setPageSize($pageSize);
         $pager->setCurrentPage($page);
-        $pager->setPagerURL($this->createURL('/',array('module'=>'movie', 'action'=>'character/index','id'=>$id, 'page'=>'{$pager}')));
+        $pager->setPagerURL($this->createURL('/',array('module'=>'movie', 'action'=>'character/index','id'=>$id, 'page'=>'{$page}')));
         
         $movieAccount = $movieService->getCurrentAccount();
         $name   = 'CHARACTER_INDEX';

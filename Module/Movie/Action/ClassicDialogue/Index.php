@@ -3,14 +3,12 @@ namespace X\Module\Movie\Action\ClassicDialogue;
 /**
  * 
  */
-use X\Core\X;
 use X\Module\Lunome\Util\Action\Visual;
 use X\Module\Movie\Service\Movie\Service as MovieService;
 use X\Service\XDatabase\Core\ActiveRecord\Criteria;
-use X\Module\Movie\Service\Movie\Core\Instance\Movie;
+use X\Module\Lunome\Widget\Pager\Simple as SimplePager;
 /**
- * The action class for movie/classicDialogue/index action.
- * @author Michael Luthor <michaelluthor@163.com>
+ * 
  */
 class Index extends Visual { 
     /**
@@ -19,31 +17,31 @@ class Index extends Visual {
      */
     public function runAction( $id, $page=1 ) {
         /* @var $movieService MovieService */
-        $movieService = X::system()->getServiceManager()->get(MovieService::getServiceName());
-        $moduleConfig = $this->getModule()->getConfiguration();
-        $pageSize = $moduleConfig->get('movie_detail_classic_dialogue_page_size');
-        
-        $page = intval($page);
-        if ( 0 >= $page ) {
-            $page = 1;
+        $movieService = $this->getService(MovieService::getServiceName());
+        $movie = $movieService->get($id);
+        if ( null === $movie ) {
+            $this->throw404();
         }
         
-        $movie = $movieService->get($id);
-        $dialogueManager = $movie->getClassicDialogueManager();
-        
+        $moduleConfig = $this->getModule()->getConfiguration();
+        $pageSize = $moduleConfig->get('movie_detail_classic_dialogue_page_size');
+        $page = (0 >= (int)$page) ? 1 : $page;
         $criteria = new Criteria();
         $criteria->limit = $pageSize;
         $criteria->position = ($page-1)*$pageSize;
+        $dialogueManager = $movie->getClassicDialogueManager();
         $dialogues = $dialogueManager->find($criteria);
         
-        $pager = array();
-        $pager['prev'] = (1 >= $page) ? false : $page-1;
-        $pager['next'] = (($page)*$pageSize >= $dialogueManager->count()) ? false : $page+1;
+        $pager = new SimplePager();
+        $pager->setPagerURL($this->createURL('/',array('module'=>'movie','action'=>'classicDialogue/index','id'=>$id,'page'=>'{$page}')));
+        $pager->setCurrentPage($page);
+        $pager->setPageSize($pageSize);
+        $pager->setTotalNumber($dialogueManager->count());
         
-        $isWatched = Movie::MARK_WATCHED === $movieService->getCurrentAccount()->getMark($id);
+        $movieAccount = $movieService->getCurrentAccount();
         $name   = 'CLASSIC_DIALOGUES_INDEX';
         $path   = $this->getParticleViewPath('ClassicDialogues');
-        $data   = array('dialogues'=>$dialogues, 'id'=>$id, 'pager'=>$pager, 'isWatched'=>$isWatched);
+        $data   = array('dialogues'=>$dialogues, 'id'=>$id, 'pager'=>$pager, 'isWatched'=>$movieAccount->isWatched($id));
         $view = $this->getView()->getParticleViewManager()->load($name, $path);
         $view->getDataManager()->merge($data);
         $view->display();

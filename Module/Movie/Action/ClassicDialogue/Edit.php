@@ -3,23 +3,25 @@ namespace X\Module\Movie\Action\ClassicDialogue;
 /**
  * 
  */
-use X\Core\X;
-use X\Module\Lunome\Util\Action\Basic;
+use X\Module\Lunome\Util\Action\JSON;
 use X\Module\Movie\Service\Movie\Service as MovieService;
 /**
- * The action class for movie/classicDialogue/edit action.
- * @author Michael Luthor <michaelluthor@163.com>
+ * 
  */
-class Edit extends Basic { 
+class Edit extends JSON { 
     /**
      * @param string $id
      * @param string $content
      */
     public function runAction( $id, $content ) {
         /* @var $movieService MovieService */
-        $movieService = X::system()->getServiceManager()->get(MovieService::getServiceName());
+        $movieService = $this->getService(MovieService::getServiceName());
         $movie = $movieService->get($id);
+        if ( null === $movie ) {
+            return $this->error('Movie does not exists.');
+        }
+        
         $movie->getClassicDialogueManager()->add()->set('content', $content)->save();
-        echo json_encode(array('status'=>'success'));
+        $this->success();
     }
 }

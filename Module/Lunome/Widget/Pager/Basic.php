@@ -86,7 +86,7 @@ abstract class Basic extends WidgetBasic {
         if ( !$this->isPrevPageAvailable() ) {
             return '#';
         } else {
-            return str_replace('%7B%24pager%7D', $this->currentPage-1, $this->url);
+            return str_replace('%7B%24page%7D', $this->currentPage-1, $this->url);
         }
     }
     
@@ -97,7 +97,7 @@ abstract class Basic extends WidgetBasic {
         if ( !$this->isNextPageAvailabel() ) {
             return '#';
         } else {
-            return str_replace('%7B%24pager%7D', $this->currentPage+1, $this->url);
+            return str_replace('%7B%24page%7D', $this->currentPage+1, $this->url);
         }
     }
     
