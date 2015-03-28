@@ -109,10 +109,11 @@ class ConfigurationArray implements \ArrayAccess, \Iterator {
     /**
      * @param string $name
      * @param mixed $value
-     * @return void
+     * @return \X\Core\Util\ConfigurationArray
      */
     public function set( $name, $value ) {
         $this->data[$name] = $value;
+        return $this;
     }
     
     /**

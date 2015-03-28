@@ -228,6 +228,30 @@ class Account {
     }
     
     /**
+     * @param string $movieID
+     * @return boolean
+     */
+    public function isWatched( $movieID ) {
+        return Movie::MARK_WATCHED === $this->getMark($movieID);
+    }
+    
+    /**
+     * @param string $movieID
+     * @return boolean
+     */
+    public function isInterested( $movieID ) {
+        return Movie::MARK_INTERESTED === $this->getMark($movieID);
+    }
+    
+    /**
+     * @param string $movieID
+     * @return boolean
+     */
+    public function isIgnored( $movieID ) {
+        return Movie::MARK_IGNORED === $this->getMark($movieID);
+    }
+    
+    /**
      * @param integer $mark
      * @return integer
      */

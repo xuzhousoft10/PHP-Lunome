@@ -26,31 +26,18 @@
             </div>
         </div>
     <?php endforeach; ?>
+    <?php if ( $vars['isWatched'] ): ?>
+        <?php ob_start(); ?>
+        <?php ob_implicit_flush(false); ?>
+        <li id="movie-characters-add">
+            <a href="#" data-toggle="modal" data-target="#movie-characters-edit-dialog">
+                添加角色
+            </a>
+        </li>
+    <?php endif; ?>
+    
+    <?php $vars['pager']->addViewToCenter(ob_get_clean()); ?>
+    <?php $vars['pager']->setPrevPageButtonClass('movie-characters-container-pager'); ?>
+    <?php $vars['pager']->setNextPageButtonClass('movie-characters-container-pager'); ?>
+    <?php $vars['pager']->show(); ?>
 <?php endif; ?>
-<div>
-    <nav>
-        <ul class="pager">
-            <li class="previous<?php echo (false === $vars['pager']['prev']) ? ' disabled' : ''; ?>">
-                <?php if (false !== $vars['pager']['prev']) :?>
-                    <a  href="/?module=movie&action=character/index&id=<?php echo $vars['id']; ?>&page=<?php echo $vars['pager']['prev'];?>"
-                        class="movie-characters-container-pager"
-                    >&larr; 上一页</a>
-                <?php endif; ?>
-            </li>
-            <?php if ( $vars['isWatched'] ): ?>
-            <li id="movie-characters-add">
-                <a href="#" data-toggle="modal" data-target="#movie-characters-edit-dialog">
-                    添加角色
-                </a>
-            </li>
-            <?php endif; ?>
-            <li class="next<?php echo (false === $vars['pager']['next']) ? ' disabled' : ''; ?>">
-                <?php if (false !== $vars['pager']['next']) :?>
-                    <a  href="/?module=movie&action=character/index&id=<?php echo $vars['id']; ?>&page=<?php echo $vars['pager']['next'];?>"
-                        class="movie-characters-container-pager"
-                    >下一页&rarr;</a>
-                <?php endif; ?>
-            </li>
-        </ul>
-    </nav>
-</div>

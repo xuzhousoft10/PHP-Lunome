@@ -7,15 +7,14 @@ use X\Core\X;
 use X\Module\Lunome\Util\Action\Visual;
 use X\Module\Movie\Service\Movie\Service as MovieService;
 use X\Service\XDatabase\Core\ActiveRecord\Criteria;
-use X\Module\Movie\Service\Movie\Core\Instance\Movie;
+use X\Module\Lunome\Widget\Pager\Simple as SimplePager;
 /**
- * The action class for movie/character/index action.
- * @author Michael Luthor <michaelluthor@163.com>
+ * 
  */
 class Index extends Visual { 
     /**
-     * @param string $id
-     * @param integer $page
+     * (non-PHPdoc)
+     * @see \X\Service\XAction\Core\Util\Action::runAction()
      */
     public function runAction( $id, $page=1 ) {
         $moduleConfig = $this->getModule()->getConfiguration();
@@ -33,17 +32,22 @@ class Index extends Visual {
         }
         $characterManager = $movie->getCharacterManager();
         $characters = $characterManager->find($criteria);
-        $pager = array();
-        $pager['prev'] = (1 >= $page) ? false : $page-1;
-        $pager['next'] = (($page)*$pageSize >= $characterManager->count()) ? false : $page+1;
+        
+        $pager = new SimplePager();
+        $pager->setTotalNumber($characterManager->count());
+        $pager->setPageSize($pageSize);
+        $pager->setCurrentPage($page);
+        $pager->setPagerURL($this->createURL('/',array('module'=>'movie', 'action'=>'character/index','id'=>$id, 'page'=>'{$pager}')));
         
         $movieAccount = $movieService->getCurrentAccount();
-        $isWatched = Movie::MARK_WATCHED === $movieAccount->getMark($id);
         $name   = 'CHARACTER_INDEX';
         $path   = $this->getParticleViewPath('Characters');
-        $data   = array('characters'=>$characters, 'id'=>$id, 'pager'=>$pager, 'isWatched'=>$isWatched);
         $view = $this->getView()->getParticleViewManager()->load($name, $path);
-        $view->getDataManager()->merge($data);
+        $view->getDataManager()
+            ->set('characters', $characters)
+            ->set('id', $id)
+            ->set('pager', $pager)
+            ->set('isWatched', $movieAccount->isWatched($id));
         $view->display();
     }
 }
