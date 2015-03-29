@@ -3,53 +3,48 @@ namespace X\Module\Movie\Action\Poster;
 /**
  * 
  */
-use X\Core\X;
-use X\Module\Lunome\Util\Action\Basic;
+use X\Module\Lunome\Util\Action\JSON;
 use X\Module\Movie\Service\Movie\Service as MovieService;
+use X\Library\FileUploadHandler\Handler as FileUploadHandler;
 /**
  * The action class for movie/poster/upload action.
  * @author Michael Luthor <michaelluthor@163.com>
  */
-class Upload extends Basic { 
+class Upload extends JSON { 
     /**
-     * @param string $id The id of the movie.
+     * (non-PHPdoc)
+     * @see \X\Service\XAction\Core\Util\Action::runAction()
      */
     public function runAction( $id ) {
         /* @var $movieService MovieService */
-        $movieService = X::system()->getServiceManager()->get(MovieService::getServiceName());
-        $moduleConfig = $this->getModule()->getConfiguration();
+        $movieService = $this->getService(MovieService::getServiceName());
         $movie = $movieService->get($id);
-        
         if ( null === $movie ) {
-            $this->responseError('电影不存在。');
+            return $this->error('Movie does not exists.');
         }
         
-        if ( !isset($_FILES['poster']) ) {
-            $this->responseError('上传文件不存在');
+        $uploadHandler = FileUploadHandler::setup('poster');
+        if ( !$uploadHandler->hasFile() ) {
+            return $this->error('Poster image is required.');
         }
         
+        $moduleConfig = $this->getModule()->getConfiguration();
         $allowedPosterType = $moduleConfig->get('movie_poster_file_type');
-        if ( !in_array($_FILES['poster']['type'], $allowedPosterType) ) {
-            $this->responseError('海报文件格式不正确。');
+        $poster = $uploadHandler->getFile();
+        if ( $poster->hasError() ) {
+            return $this->error('Filed to upload poster.');
         }
         
-        if ( $_FILES['poster']['error'] > 0 ) {
-            $this->responseError('文件上传失败。');
+        $posterValidator = $poster->getValidator();
+        $posterValidator->setTypes($allowedPosterType);
+        if ( !$posterValidator->validateType() ) {
+            return $this->error('Poster file type is not supported.');
         }
         
-        $tmpFile = tempnam(sys_get_temp_dir(), 'MPUP');
-        move_uploaded_file($_FILES['poster']['tmp_name'],$tmpFile);
-        $movie->getPosterManager()->add()->setImage($tmpFile)->save();
-        unlink($tmpFile);
+        $poster->moveToTempPath();
+        $movie->getPosterManager()->add()->setImage($poster->getPath())->save();
+        $poster->delete();
         
-        echo json_encode(array('status'=>'success'));
-    }
-    
-    /**
-     * @param unknown $message
-     */
-    private function responseError( $message ) {
-        echo json_encode(array('error'=>$message));
-        X::system()->stop();
+        return $this->success();
     }
 }

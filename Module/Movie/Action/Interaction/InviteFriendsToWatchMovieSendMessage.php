@@ -3,14 +3,13 @@ namespace X\Module\Movie\Action\Interaction;
 /**
  * 
  */
-use X\Core\X;
-use X\Module\Lunome\Util\Action\Basic;
+use X\Module\Lunome\Util\Action\JSON;
 use X\Module\Movie\Service\Movie\Service as MovieService;
 /**
  * InviteFriendsToWatchMovieSendMessage
  * @author Michael Luthor <michaelluthor@163.com>
  */
-class InviteFriendsToWatchMovieSendMessage extends Basic {
+class InviteFriendsToWatchMovieSendMessage extends JSON {
     /**
      * (non-PHPdoc)
      * @see \X\Service\XAction\Core\Util\Action::runAction()
@@ -21,15 +20,14 @@ class InviteFriendsToWatchMovieSendMessage extends Basic {
         $movieAccount = $movieService->getCurrentAccount();
         
         $friends = explode(',', $friends);
-        if ( empty($friends) ) {
-            echo json_encode(array('status'=>'err'));
-            X::system()->stop();
+        if ( empty($friends) || empty($friends[0]) ) {
+            return $this->error('Friend list can not be empty.');
         }
         
         $view = $this->getModule()->getPath('View/Particle/Interaction/NotificationGetMovieInvitation.php');
         foreach ( $friends as $friend ) {
             $movieAccount->sendWatchMovieInvitation($friend, $movie, $comment, $view);
         }
-        echo json_encode(array('status'=>'ok'));
+        return $this->success();
     }
 }

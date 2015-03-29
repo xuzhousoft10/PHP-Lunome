@@ -1,48 +1,44 @@
 <?php
 namespace X\Module\Movie\Action\Home;
 /**
- * use statements
+ * 
  */
 use X\Module\Lunome\Util\Action\VisualUserHome;
 use X\Module\Movie\Service\Movie\Service as MovieService;
 use X\Module\Account\Service\Account\Service as AccountService;
 use X\Module\Movie\Service\Movie\Core\Instance\Movie;
 use X\Service\XDatabase\Core\ActiveRecord\Criteria;
+use X\Module\Lunome\Widget\Pager\Simple as SimplePager;
 /**
- * Index
- * @author Michael Luthor <michaelluthor@163.com>
+ * 
  */
 class Index extends VisualUserHome {
     /**
-     * @var unknown
+     * @var integer
      */
     private $currentMark = null;
     
     /**
-     * @param string $id
-     * @param integer $mark
-     * @param integer $page
+     * @param unknown $id
+     * @param string $mark
+     * @param number $page
      */
-    public function runAction( $id, $mark=null, $page=1 ) {
-        $accountService = $this->getService(AccountService::getServiceName());
+    public function runAction( $id, $mark=Movie::MARK_INTERESTED, $page=1 ) {
         /* @var $accountService AccountService */
-        $account = $accountService->getCurrentAccount();
-        if ( null === $account ) {
-            $this->throw404();
+        $accountService = $this->getService(AccountService::getServiceName());
+        if ( !$accountService->exists($id) ) {
+            return $this->throw404();
         }
         
-        $mark = intval($mark);
+        $mark = (int)$mark;
         $this->currentMark = $mark;
-        if ( Movie::MARK_UNMARKED === $mark ) {
-            $mark = Movie::MARK_INTERESTED;
-        }
         
         $moduleConfig = $this->getModule()->getConfiguration();
-        $pageSize = $moduleConfig->get('movie_user_home_page_size');
         $marks = $moduleConfig->get('movie_mark_names');
         unset($marks[Movie::MARK_UNMARKED]);
         $marks = array('data'=>$marks, 'actived'=>$mark);
         
+        $pageSize = $moduleConfig->get('movie_user_home_page_size');
         $page = intval($page);
         $page = ( 0 >= $page ) ? 1 : $page;
         $position = ($page-1)*$pageSize;
@@ -55,26 +51,24 @@ class Index extends VisualUserHome {
         $movieAccount = $movieService->getAccount($id);
         $movies = $movieAccount->findMarked($mark, $criteria);
         
-        /* setup pager */
-        $pager = array('prev'=>false, 'next'=>false);
-        $count = $movieAccount->countMarked($mark);
-        $pager['total'] = (0===$count%$pageSize) ? ($count/$pageSize) : (intval($count/$pageSize)+1);
-        $pager['current'] = $page;
-        $pager['prev'] = (0 >= $page-1) ? false : $page-1;
-        $pager['next'] = ($pager['total']<$page+1) ? false : $page+1;
+        $pager = new SimplePager();
+        $pager->setPageSize($pageSize);
+        $pager->setCurrentPage($page);
+        $pager->setTotalNumber($movieAccount->countMarked($mark));
+        $pager->setPagerURL($this->createURL('/?module=movie&action=home/index', array('id'=>$id, 'mark'=>$mark, 'page'=>'{$page}')));
+        $pager->enablePageInformation();
         
         /* User home index */
         $name   = 'MOVIE_HOME_INDEX';
         $path   = $this->getParticleViewPath('HomeIndex');
-        $option = array();
         $data   = array(
-            'accountID' => $id, 
-            'marks'     => $marks, 
-            'movies'    => $movies, 
-            'pager'     => $pager
+            'accountID'     => $id, 
+            'marks'         => $marks, 
+            'movies'        => $movies, 
+            'pager'         => $pager,
+            'movieAccount'  => $movieAccount,
         );
-        $this->loadParticle($name, $path, $option, $data);
-        
+        $this->loadParticle($name, $path)->getDataManager()->merge($data);
         $this->homeUserAccountID = $id;
     }
     

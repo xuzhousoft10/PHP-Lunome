@@ -3,7 +3,6 @@ namespace X\Module\Movie\Action\Interaction;
 /**
  * use statements
  */
-use X\Core\X;
 use X\Module\Lunome\Util\Action\Userinteraction;
 use X\Module\Movie\Service\Movie\Service as MovieService;
 use X\Service\XDatabase\Core\ActiveRecord\Criteria;
@@ -23,24 +22,23 @@ class FindTopic extends Userinteraction {
      */
     public function runAction( $id ) {
         $moduleConfig = $this->getModule()->getConfiguration();
-        /* @var $accountService AccountService */
-        $accountService = $this->getService(AccountService::getServiceName());
         $this->movieService = $this->getService(MovieService::getServiceName());
         
         $currentAccount = $this->getCurrentAccount();
         $accounts = array($currentAccount->getID(), $id);
         $criteria = new Criteria();
-        $criteria->limit = intval($moduleConfig->get('movie_topic_suggested_size'));
+        $criteria->limit = (int)$moduleConfig->get('movie_topic_suggested_size');
         $likedMovies = $this->movieService->getLikedByAccounts($accounts, $criteria);
         $dislikedMovies = $this->movieService->getDislikedByAccounts($accounts, $criteria);
         
+        /* @var $accountService AccountService */
+        $accountService = $this->getService(AccountService::getServiceName());
         $name   = 'MOVIE_INTERACTION_FIND_TOPIC';
         $path   = $this->getParticleViewPath('Interaction/FindTopic');
-        $option = array();
         $data   = array(
             'movies'=>array('liked'=>$likedMovies, 'disliked'=>$dislikedMovies), 
             'friendInformation'=>$accountService->get($id));
-        $this->loadParticle($name, $path, $option, $data);
+        $this->loadParticle($name, $path)->getDataManager()->merge($data);
         $this->getView()->title = '想与TA聊聊电影';
         
         $this->setActiveInteractionMenuItem(self::INTERACTION_MENU_ITEM_GET_TOPIC);

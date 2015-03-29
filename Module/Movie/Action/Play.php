@@ -5,13 +5,12 @@ namespace X\Module\Movie\Action;
  */
 use X\Module\Lunome\Util\Action\Basic;
 /**
- * The action class for movie/play action.
- * @author Michael Luthor <michaelluthor@163.com>
+ * 
  */
 class Play extends Basic {
     /**
-     * @param string $source The website name of view source.
-     * @param string $link The link path of view.
+     * (non-PHPdoc)
+     * @see \X\Service\XAction\Core\Util\Action::runAction()
      */
     public function runAction( $source, $link ) {
         $videoSourceURL = null;

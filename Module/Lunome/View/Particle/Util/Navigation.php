@@ -18,7 +18,7 @@ $user = $vars['user'];
             <ul class="nav navbar-nav navbar-right">
                 <?php if ( $user['isGuest'] ) : ?>
                     <li>
-                        <a href="/index.php?module=lunome&action=user/login/index">登录</a>
+                        <a href="/index.php?module=account&action=login/index">登录</a>
                     </li>
                 <?php else : ?>
                     <li>
@@ -65,7 +65,7 @@ $user = $vars['user'];
                             <?php endif; ?>
                             <li class="divider"></li>
                             <li>
-                                <a href="/?module=lunome&action=user/logout">
+                                <a href="/?module=account&action=logout">
                                     <span class="glyphicon glyphicon-off"></span>
                                     退出
                                 </a>

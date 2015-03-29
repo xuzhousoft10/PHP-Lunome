@@ -22,7 +22,38 @@ class Simple extends Basic {
      * @return string
      */
     public function getCenterViewContents() {
+        if ( $this->isPageInformationEnabled() && (1<($totalPage = $this->getTotalPageNumber())) ) {
+            $this->addViewToCenter(sprintf('<li>%d/%d</li>', $this->currentPage, $totalPage));
+        }
         return implode("\n", $this->centerViews);
+    }
+    
+    /**
+     * @var boolean
+     */
+    private $displayPageInformation = false;
+    
+    /**
+     * @return \X\Module\Lunome\Widget\Pager\Simple
+     */
+    public function enablePageInformation() {
+        $this->displayPageInformation = true;
+        return $this;
+    }
+    
+    /**
+     * @return \X\Module\Lunome\Widget\Pager\Simple
+     */
+    public function disablePageInformation() {
+        $this->displayPageInformation = false;
+        return $this;
+    }
+    
+    /**
+     * @return boolean
+     */
+    public function isPageInformationEnabled() {
+        return $this->displayPageInformation;
     }
     
     /**

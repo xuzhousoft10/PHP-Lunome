@@ -3,7 +3,6 @@ namespace X\Module\Movie\Action;
 /**
  * 
  */
-use X\Core\X;
 use X\Library\Html\Parser;
 use X\Module\Lunome\Util\Action\Visual;
 use X\Service\XSession\Service as SessionService;
@@ -16,9 +15,9 @@ class GlobalSearch extends Visual {
      * @param unknown $name
      */
     public function runAction( $name ) {
-        $movieData = array();
-        X::system()->getServiceManager()->get(SessionService::getServiceName())->close();
+        $this->getService(SessionService::getServiceName())->close();
         
+        $movieData = array();
         /* search movies from youku. */
         $url = 'http://www.soku.com/search_video/q_'.urlencode($name);
         $html = new Parser($url);
@@ -157,9 +156,9 @@ class GlobalSearch extends Visual {
         /* setup global search view. */
         $name   = 'GLOBAL_SEARCH_RESULT_INDEX';
         $path   = $this->getParticleViewPath('GlobalSearchResult');
-        $option = array();
         $data   = array('movies'=>$movieData);
-        $view = $this->loadParticle($name, $path, $option, $data);
+        $view = $this->loadParticle($name, $path);
+        $view->getDataManager()->merge($data);
         $view->display();
     }
 }

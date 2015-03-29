@@ -20,10 +20,18 @@ use X\Module\Movie\Service\Movie\Core\Manager\ClassicDialogueManager;
 use X\Module\Movie\Service\Movie\Core\Manager\PosterManager;
 use X\Module\Movie\Service\Movie\Core\Manager\CharacterManager;
 use X\Module\Movie\Service\Movie\Core\Manager\ShortCommentManager;
+use X\Util\Service\Instance\Model;
 /**
  * 
  */
-class Movie {
+class Movie extends Model {
+    /**
+     * @return string
+     */
+    protected static function getModelClass() {
+        return get_class(MovieModel::model());
+    }
+    
     /**
      * @var MovieModel
      */

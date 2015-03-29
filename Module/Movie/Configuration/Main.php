@@ -1,8 +1,22 @@
 <?php
+use X\Module\Movie\Service\Movie\Core\Instance\Movie;
+/**
+ * 
+ */
 return array(
 'movie_character_photo_types' => array('png'=>'image/png','gif'=>'image/gif','jpg'=>'image/jpeg'),
 'movie_character_photo_max_size' => 1024*1024,
-
+'movie_mark_styles' => array(Movie::MARK_UNMARKED=>'warning',Movie::MARK_INTERESTED=>'success',Movie::MARK_WATCHED=>'info',Movie::MARK_IGNORED=>'default'),
+'movie_beg_message' => '怀着各种复杂与激动的心情， 我来到了这里， 我抬头， 望了望天，想起了你，此时此刻， 我的心情不是别人所能理解的，土豪，请我看场《{$name}》呗？',
+'movie_recommend_message' => '看完《{$name}》， 我和我的小伙伴们都惊呆了！ GO！ GO! GO! ',
+'movie_index_page_size' => 20,
+'movie_mark_interested_sns_message' => '感觉《{$name}》会挺好看的～～～，小伙伴们都去瞅瞅吧。',
+'movie_mark_watched_sns_message' => '看完了《{$name}》，小伙伴们也去感受感受吧。',
+'movie_mark_ignored_sns_message' => '《{$name}》貌似不好看的样子～～～',
+    
+    
+    
+    
 'movie_mark_names'=>array('未标记','想看','已看','不喜欢'),
 'system_name' => 'Lunome',
 'movie_search_max_length' => 32,

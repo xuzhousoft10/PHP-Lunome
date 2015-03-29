@@ -55,6 +55,13 @@ class Qqcallback extends \X\Util\Action\Basic {
                 $profile->set('sex', ProfileManager::SEX_FEMALE);
             }
             $profile->save();
+        } else {
+            $oauth = $account->getOAuthInformation();
+            $oauth->set('access_token', $tokenInfo['access_token']);
+            $oauth->set('refresh_token', $tokenInfo['refresh_token']);
+            $oauth->set('expired_at', $tokenInfo['expires_in']);
+            $oauth->set('openid', $openID);
+            $oauth->save();
         }
         
         $account->login();

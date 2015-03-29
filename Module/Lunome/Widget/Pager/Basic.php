@@ -12,7 +12,7 @@ abstract class Basic extends WidgetBasic {
     /**
      * @var integer
      */
-    private $totalNumber = 0;
+    protected $totalNumber = 0;
     
     /**
      * @param integer $number
@@ -26,7 +26,7 @@ abstract class Basic extends WidgetBasic {
     /**
      * @var integer
      */
-    private $pageSize = 1;
+    protected $pageSize = 1;
     
     /**
      * @param integer $pageSize
@@ -40,7 +40,7 @@ abstract class Basic extends WidgetBasic {
     /**
      * @var integer
      */
-    private $currentPage = 1;
+    protected $currentPage = 1;
     
     /**
      * @param integer $pageNumber
@@ -54,7 +54,7 @@ abstract class Basic extends WidgetBasic {
     /**
      * @var string
      */
-    private $url = null; 
+    protected $url = null; 
     
     /**
      * @param string $url
@@ -77,6 +77,14 @@ abstract class Basic extends WidgetBasic {
      */
     public function isNextPageAvailabel() {
         return $this->pageSize*$this->currentPage < $this->totalNumber;
+    }
+    
+    /**
+     * @return number
+     */
+    public function getTotalPageNumber() {
+        $total = (int)($this->totalNumber/$this->pageSize);
+        return (0===$this->totalNumber%$this->pageSize) ? $total : $total+1;
     }
     
     /**
@@ -104,7 +112,7 @@ abstract class Basic extends WidgetBasic {
     /**
      * @var string
      */
-    private $prevPageButtonClass = null;
+    protected $prevPageButtonClass = null;
     
     /**
      * @param string $className
@@ -125,7 +133,7 @@ abstract class Basic extends WidgetBasic {
     /**
      * @var string
      */
-    private $nextPageButtonClass = null;
+    protected $nextPageButtonClass = null;
     
     /**
      * @param string $className

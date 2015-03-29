@@ -3,7 +3,6 @@ namespace X\Module\Movie\Action;
 /**
  * 
  */
-use X\Core\X;
 use X\Module\Lunome\Util\Action\Visual;
 use X\Module\Movie\Service\Movie\Service as MovieService;
 use X\Module\Movie\Service\Movie\Core\Instance\Movie;
@@ -13,17 +12,16 @@ use X\Module\Movie\Service\Movie\Core\Instance\Movie;
  */
 class Detail extends Visual {
     /**
-     * @param string $id The id of the movie.
+     * (non-PHPdoc)
+     * @see \X\Service\XAction\Core\Util\Action::runAction()
      */
     public function runAction( $id ) {
         /* @var $movieService MovieService */
-        $movieService = X::system()->getServiceManager()->get(MovieService::getServiceName());
-        if ( !$movieService->has($id) ) {
-            $this->throw404();
+        $movieService = $this->getService(MovieService::getServiceName());
+        $movie = $movieService->get($id);
+        if ( null === $movie ) {
+            return $this->throw404();
         }
-        
-        $currentAccount = $this->getCurrentAccount();
-        $isGuest = (null === $currentAccount);
         
         $view = $this->getView();
         $view->setLayout($this->getLayoutViewPath('BlankThin'));
@@ -31,65 +29,39 @@ class Detail extends Visual {
         $path       = $this->getParticleViewPath('Detail');
         $detailView = $view->getParticleViewManager()->load($viewName, $path);
         
-        /* add movie data to view. */
-        $movie = $movieService->get($id);
         $detailView->getDataManager()->set('movie', $movie);
+        
         $detailView->getDataManager()->set('markCount', $this->getMovieMarkCounts($movieService, $movie));
         
+        $currentAccount = $this->getCurrentAccount();
+        $detailView->getDataManager()->set('currentUser', $currentAccount);
+        
+        $isGuest = (null === $currentAccount);
+        $detailView->getDataManager()->set('isGuestUser', $isGuest);
+        
         $movieAccount = $movieService->getCurrentAccount();
-        /* add my mark of this movie to view. */
         $myMark = $isGuest ? Movie::MARK_UNMARKED : $movieAccount->getMark($movie->get('id'));
         $detailView->getDataManager()->set('myMark', $myMark);
         
-        /* add mark styles. */
-        $styles = array(
-            Movie::MARK_UNMARKED      => 'warning',
-            Movie::MARK_INTERESTED    => 'success',
-            Movie::MARK_WATCHED       => 'info',
-            Movie::MARK_IGNORED       => 'default'
-        );
-        $detailView->getDataManager()->set('markStyles', $styles);
-        
-        /* add share message to view. */
-        $message = '';
-        /* try to use share message from category, or use the default share message. */
-        $categories = $movie->getCategories();
-        if ( 0 < count($categories) ) {
-            $index = rand(0, count($categories)-1);
-            /* @var $category \X\Module\Lunome\Model\Movie\MovieCategoryModel */
-            $category = $categories[$index];
-            switch ( $myMark ) {
-            case Movie::MARK_INTERESTED  : $message=$category->get('beg_message');break;
-            case Movie::MARK_WATCHED     : $message=$category->get('recommend_message');break;
-            default                             : $message=$category->get('share_message');break;
-            }
-        }
-        if ( empty($message) ) {
-            switch ( $myMark ) {
-            case Movie::MARK_INTERESTED :$message='怀着各种复杂与激动的心情， 我来到了这里， 我抬头， 望了望天，想起了你，此时此刻， 我的心情不是别人所能理解的，土豪，请我看场《'.$movie->get('name').'》呗？';break;
-            case Movie::MARK_WATCHED    :$message='看完《'.$movie->get('name').'》， 我和我的小伙伴们都惊呆了！ GO！ GO! GO! ';break;
-            default:$message='';break;
-            }
-        }
-        $detailView->getDataManager()->set('shareMessage', $message);
-        
-        /* add share message title to view. */
-        $shareMessageTitle = '分享';
-        if ( Movie::MARK_INTERESTED === $myMark ) {
-            $shareMessageTitle = '求包养';
-        } else if ( Movie::MARK_WATCHED === $myMark ) {
-            $shareMessageTitle = '推荐给好友';
-        } else {
-            $shareMessageTitle = '分享';
-        }
-        $detailView->getDataManager()->set('shareMessageTitle', $shareMessageTitle);
-        
         $moduleConfig = $this->getModule()->getConfiguration();
+        $detailView->getDataManager()->set('markStyles', $moduleConfig->get('movie_mark_styles'));
+        
+        $detailView->getDataManager()->set('shareMessage', $this->getShareMessage($movieService, $movie));
+        
+        switch ( $myMark ) {
+        case Movie::MARK_INTERESTED:
+            $detailView->getDataManager()->set('shareMessageTitle', '求包养');
+            break;
+        case Movie::MARK_WATCHED:
+            $detailView->getDataManager()->set('shareMessageTitle', '推荐给好友');
+            break;
+        default:
+            $detailView->getDataManager()->set('shareMessageTitle', '分享');
+            break;
+        }
+        
         $markNames = $moduleConfig->get('movie_mark_names');
-        /* add other data to view. */
         $detailView->getDataManager()->set('markNames', $markNames);
-        $detailView->getDataManager()->set('isGuestUser', $isGuest);
-        $detailView->getDataManager()->set('currentUser', $currentAccount);
         
         $view->title = $movie->get('name');
     }
@@ -111,6 +83,39 @@ class Detail extends Visual {
             $markCount[$mark]['friend'] = $movieAccount->countMarkedFriends($movie->get('id'), $mark);
         }
         return $markCount;
+    }
+    
+    /**
+     * @param Movie $movie
+     * @return string
+     */
+    private function getShareMessage( MovieService $service, Movie $movie ) {
+        $movieAccount = $service->getCurrentAccount();
+        $myMark = $movieAccount->getMark($movie->get('id'));
+        $moduleConfig = $this->getModule()->getConfiguration();
+        
+        $message = '';
+        $categories = $movie->getCategories();
+        if ( 0 < count($categories) ) {
+            $index = rand(0, count($categories)-1);
+            /* @var $category \X\Module\Lunome\Model\Movie\MovieCategoryModel */
+            $category = $categories[$index];
+            switch ( $myMark ) {
+            case Movie::MARK_INTERESTED  : $message=$category->get('beg_message');break;
+            case Movie::MARK_WATCHED     : $message=$category->get('recommend_message');break;
+            default                      : $message=$category->get('share_message');break;
+            }
+        }
+        if ( empty($message) ) {
+            switch ( $myMark ) {
+            case Movie::MARK_INTERESTED :$message=$moduleConfig->get('movie_beg_message'); break;
+            case Movie::MARK_WATCHED    :$message=$moduleConfig->get('movie_recommend_message'); break;
+            default:$message='';break;
+            }
+            $message = str_replace('{$name}', $movie->get('name'), $message);
+        }
+        
+        return $message;
     }
     
     /**

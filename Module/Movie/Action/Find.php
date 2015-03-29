@@ -3,7 +3,6 @@ namespace X\Module\Movie\Action;
 /**
  * 
  */
-use X\Core\X;
 use X\Module\Lunome\Util\Action\Visual;
 use X\Service\XSession\Service as SessionService;
 use X\Module\Movie\Service\Movie\Service as MovieService;
@@ -22,34 +21,18 @@ class Find extends Visual {
      * @param boolean $score
      */
     public function runAction( $mark=0, $condition=null, $position=0, $score=false ) {
-        X::system()->getServiceManager()->get(SessionService::getServiceName())->close();
+        $this->getService(SessionService::getServiceName())->close();
         
-        /* 格式化查询条件参数。 */
-        $mark       = intval($mark);
+        $moduleConfig = $this->getModule()->getConfiguration();
+        
+        $mark       = (int)$mark;
         $position   = intval($position);
-        $length     = 20;
+        $length     = $moduleConfig->get('movie_index_page_size');
         $score      = $score ? true : false;
-        $condition  = (empty($condition) || !is_array($condition))? array() : $condition;
-        if ( isset($condition['name']) ) {
-            $extConditions = explode(';', $condition['name']);
-            $fixedExtConditions = array();
-            $map = array('导演'=>'director', '演员'=>'actor');
-            foreach ( $extConditions as $index => $extCondition ) {
-                $extCondition = explode(':', $extCondition);
-                if ( isset($map[$extCondition[0]]) && isset($extCondition[1]) ) {
-                    $fixedExtConditions[$map[$extCondition[0]]] = explode(',', $extCondition[1]);
-                    unset($extConditions[$index]);
-                }
-            }
-            $fixedExtConditions['name'] = implode(';', $extConditions);
-            $condition = array_merge($condition, $fixedExtConditions);
-            if ( empty($condition['name']) ) {
-                unset($condition['name']);
-            }
-        }
+        $condition  = $this->buildCondition($condition);
         
         /* @var $movieService MovieService */
-        $movieService = X::system()->getServiceManager()->get(MovieService::getServiceName());
+        $movieService = $this->getService(MovieService::getServiceName());
         $movieAccount = $movieService->getCurrentAccount();
         
         $criteria = new Criteria();
@@ -64,29 +47,28 @@ class Find extends Visual {
             $count = $movieAccount->countMarked($mark);
         }
         
-        /* Add mark actions to view. */
-        $moduleConfig = $this->getModule()->getConfiguration();
-        $markNames = $moduleConfig->get('movie_mark_names');
+        $markStyles = $moduleConfig->get('movie_mark_styles');
         $actions = array();
         switch ( $mark ) {
         case Movie::MARK_UNMARKED:
-            $actions[Movie::MARK_INTERESTED]    = array('style'=>'success');
-            $actions[Movie::MARK_WATCHED]       = array('style'=>'info');
-            $actions[Movie::MARK_IGNORED]       = array('style'=>'default');
+            $actions[Movie::MARK_INTERESTED]    = array('style'=>$markStyles[Movie::MARK_INTERESTED]);
+            $actions[Movie::MARK_WATCHED]       = array('style'=>$markStyles[Movie::MARK_WATCHED]);
+            $actions[Movie::MARK_IGNORED]       = array('style'=>$markStyles[Movie::MARK_IGNORED]);
             break;
         case Movie::MARK_INTERESTED:
-            $actions[Movie::MARK_WATCHED]       = array('style'=>'info');
-            $actions[Movie::MARK_IGNORED]       = array('style'=>'default');
+            $actions[Movie::MARK_WATCHED]       = array('style'=>$markStyles[Movie::MARK_WATCHED]);
+            $actions[Movie::MARK_IGNORED]       = array('style'=>$markStyles[Movie::MARK_IGNORED]);
             break;
         case Movie::MARK_WATCHED:
-            $actions[Movie::MARK_IGNORED]       = array('style'=>'default');
+            $actions[Movie::MARK_IGNORED]       = array('style'=>$markStyles[Movie::MARK_IGNORED]);
             break;
         case Movie::MARK_IGNORED:
-            $actions[Movie::MARK_INTERESTED]    = array('style'=>'success');
-            $actions[Movie::MARK_WATCHED]       = array('style'=>'info');
+            $actions[Movie::MARK_INTERESTED]    = array('style'=>$markStyles[Movie::MARK_INTERESTED]);
+            $actions[Movie::MARK_WATCHED]       = array('style'=>$markStyles[Movie::MARK_WATCHED]);
             break;
         default:break;
         }
+        $markNames = $moduleConfig->get('movie_mark_names');
         foreach ( $actions as $markKey => $markAction ) {
             $actions[$markKey]['name'] = $markNames[$markKey];
         }
@@ -111,5 +93,58 @@ class Find extends Visual {
         $jsonResult['medias'] = $particleView->toString();
         $jsonResult['sign'] = $resultGroupSign;
         echo json_encode($jsonResult);
+    }
+    
+    /**
+     * 处理电影列表页面的请求。
+     * 如果标记不存在，则视为未标记处理。
+     * 目前支持的查询条件如下：
+     * region:电影区域ID
+     * category:电影类型ID
+     * language:电影语言ID
+     * name:查询文本
+     * 其中， 查询文本格式如下：
+     * [condition]:value[;[condition2]:value]
+     * 支持的condition有：演员和导演
+     * 如果Condition没有指定， 则作为电影名称和简介处理。
+     * 
+     * @param array $condition
+     * @return array
+     */
+    private function buildCondition( $condition ) {
+        if ( empty($condition) || !is_array($condition) ) {
+            return array();
+        }
+        
+        if ( isset($condition['name']) && !empty($condition['name']) ) {
+            $extConditions = explode(';', $condition['name']);
+            $fixedExtConditions = array();
+            
+            $map = array('导演'=>'director', '演员'=>'actor');
+            foreach ( $extConditions as $index => $extCondition ) {
+                $extCondition = trim($extCondition);
+                if ( empty($extCondition) ) {
+                    continue;
+                }
+                
+                $extCondition = explode(':', $extCondition);
+                if ( isset($map[$extCondition[0]]) && isset($extCondition[1]) ) {
+                    $extCondition[1] = trim($extCondition[1]);
+                    if ( !empty($extCondition[1]) ) {
+                        $fixedExtConditions[$map[$extCondition[0]]] = explode(',', $extCondition[1]);
+                    }
+                    unset($extConditions[$index]);
+                }
+            }
+            
+            $fixedExtConditions['name'] = implode(';', $extConditions);
+            $condition = array_merge($condition, $fixedExtConditions);
+        }
+        
+        if ( isset($condition['name']) ) {
+            unset($condition['name']);
+        }
+        
+        return $condition;
     }
 }

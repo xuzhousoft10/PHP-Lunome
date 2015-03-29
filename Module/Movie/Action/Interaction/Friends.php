@@ -3,7 +3,6 @@ namespace X\Module\Movie\Action\Interaction;
 /**
  * 
  */
-use X\Core\X;
 use X\Module\Lunome\Util\Action\FriendManagement;
 use X\Module\Movie\Service\Movie\Service as MovieService;
 use X\Module\Account\Service\Account\Service as AccountService;
@@ -19,13 +18,13 @@ class Friends extends FriendManagement {
      */
     public function runAction( $friends ) {
         if ( empty($friends) || !is_array($friends) ) {
-            $this->goBack();
+            $friends = array(0);
         }
         
         $moduleConfig = $this->getModule()->getConfiguration();
         $peopleCount = intval($moduleConfig->get('user_interaction_max_friend_count'));
         if ( count($friends) > $peopleCount ) {
-            $this->goBack();
+            $friends = array_slice($friends, 0, $peopleCount);
         }
         
         $friends[] = $this->getCurrentAccount()->getID();
@@ -35,7 +34,7 @@ class Friends extends FriendManagement {
         
         array_pop($friends);
         /* @var $accountService AccountService */
-        $accountService = X::system()->getServiceManager()->get(AccountService::getServiceName());
+        $accountService = $this->getService(AccountService::getServiceName());
         $friends = $accountService->find(array('id'=>$friends));
         $selectedFriendIDs = array();
         $selectedFriendNames = array();

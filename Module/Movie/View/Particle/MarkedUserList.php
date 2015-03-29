@@ -3,8 +3,6 @@ $vars = get_defined_vars();
 $pager = $vars['pager'];
 $assetsURL = $vars['assetsURL'];
 $accounts = $vars['accounts'];
-$pagerParms = array('id'=>$vars['id'], 'mark'=>$vars['mark'], 'scope'=>$vars['scope']);
-$pagerParms = http_build_query($pagerParms);
 $listID = 'marked-user-list-'.uniqid();
 $sexNames = $vars['sexNames'];
 $sexMarks = $vars['sexMarks'];
@@ -46,28 +44,9 @@ $emotionStatuNames = $vars['emotionStatuNames'];
         <?php echo '</a>'; ?>
     <?php endforeach; ?>
     
-    <?php if ( false !== $pager['prev'] || false !== $pager['next'] ) : ?>
-    <div>
-        <nav>
-            <ul class="pager">
-                <li class="previous<?php echo (false === $pager['prev']) ? ' disabled' : ''; ?>">
-                    <?php if (false !== $pager['prev']) :?>
-                        <a  href="/?module=lunome&action=movie/markedUserList&<?php echo $pagerParms; ?>&page=<?php echo $pager['prev'];?>"
-                            class="marked-user-list-pager"
-                        >&larr; 上一页</a>
-                    <?php endif; ?>
-                </li>
-                <li class="next<?php echo (false === $pager['next']) ? ' disabled' : ''; ?>">
-                    <?php if (false !== $pager['next']) :?>
-                        <a  href="/?module=lunome&action=movie/markedUserList&<?php echo $pagerParms; ?>&page=<?php echo $pager['next'];?>"
-                            class="marked-user-list-pager"
-                        >下一页&rarr;</a>
-                    <?php endif; ?>
-                </li>
-            </ul>
-        </nav>
-    </div>
-    <?php endif; ?>
+    <?php $vars['pager']->setPrevPageButtonClass('marked-user-list-pager'); ?>
+    <?php $vars['pager']->setNextPageButtonClass('marked-user-list-pager'); ?>
+    <?php $vars['pager']->show(); ?>
 </div>
 
 <script>

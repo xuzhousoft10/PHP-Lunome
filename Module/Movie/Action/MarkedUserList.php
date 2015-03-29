@@ -8,6 +8,7 @@ use X\Module\Lunome\Util\Action\Visual;
 use X\Module\Movie\Service\Movie\Service as MovieService;
 use X\Service\XDatabase\Core\ActiveRecord\Criteria;
 use X\Module\Account\Module as AccountModule;
+use X\Module\Lunome\Widget\Pager\Simple as SimplePager;
 /**
  * MarkedUserList
  * @author Michael Luthor <michaelluthor@163.com>
@@ -20,24 +21,22 @@ class MarkedUserList extends Visual {
      */
     public function runAction( $id, $mark, $scope, $page=1 ) {
         /* @var $movieService MovieService */
-        $movieService = X::system()->getServiceManager()->get(MovieService::getServiceName());
-        $movieAccount = $movieService->getCurrentAccount();
+        $movieService = $this->getService(MovieService::getServiceName());
         $movie = $movieService->get($id);
         if ( null === $movie ) {
             $this->throw404();
         }
         
         $moduleConfig = $this->getModule()->getConfiguration();
-        $pageSize = $moduleConfig->get('movie_detail_marked_user_list_page_size');
+        $pageSize = 1;//$moduleConfig->get('movie_detail_marked_user_list_page_size');
         
-        /* check parameters. */
-        $page = intval($page);
-        $page = ( 1 > $page ) ? 1 : $page;
+        $page = ( 1 > (int)$page ) ? 1 : (int)$page;
         $criteria = new Criteria();
         $criteria->condition = array('movie_id'=>$id, 'mark'=>$mark);
         $criteria->position = ($page-1)*$pageSize;
         $criteria->limit = $pageSize;
         if ( 'friends' === $scope ) {
+            $movieAccount = $movieService->getCurrentAccount();
             $accounts = $movieAccount->findMarkedFriends($criteria);
             $count = $movieAccount->countMarkedFriends($id, $mark);
         } else {
@@ -45,12 +44,11 @@ class MarkedUserList extends Visual {
             $count = $movie->countMarked($mark);
         }
         
-        /* setup pager. */
-        $pager = array();
-        $pager['current'] = $page;
-        $pager['pageCount'] = (0===$count%$pageSize) ? $count/$pageSize : intval($count/$pageSize)+1;
-        $pager['prev'] = ( 1 >= $page*1 ) ? false : $page-1;
-        $pager['next'] = ( $count<=$pageSize || $page*$pageSize >= $count ) ? false : $page+1;
+        $pager = new SimplePager();
+        $pager->setCurrentPage($page);
+        $pager->setTotalNumber($count);
+        $pager->setPageSize($pageSize);
+        $pager->setPagerURL($this->createURL('/?module=movie&action=markedUserList', array('id'=>$id, 'mark'=>$mark, 'scope'=>$scope, 'page'=>'{$page}')));
         
         /* setup view. */
         $view       = $this->getView();
@@ -58,7 +56,7 @@ class MarkedUserList extends Visual {
         $path       = $this->getParticleViewPath('MarkedUserList');
         $listView   = $this->loadParticle($viewName, $path);
         
-        $accountModuel = X::system()->getModuleManager()->get(AccountModule::getModuleName());
+        $accountModuel = $this->getModule(AccountModule::getModuleName());
         $accountModuelConfiguration = $accountModuel->getConfiguration();
         /* add data to view. */
         $this->setDataToParticle($viewName, 'accounts', $accounts);

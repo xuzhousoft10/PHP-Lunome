@@ -3,7 +3,6 @@ namespace X\Module\Movie\Action;
 /**
  * 
  */
-use X\Core\X;
 use X\Module\Lunome\Util\Action\Visual;
 use X\Module\Movie\Service\Movie\Service AS MovieService;
 /**
@@ -17,10 +16,9 @@ class Top extends Visual {
      */
     protected function runAction() {
         /* @var $movieService MovieService */
-        $movieService = X::system()->getServiceManager()->get(MovieService::getServiceName());
+        $movieService = $this->getService(MovieService::getServiceName());
         
         $view = $this->getView();
-        $movieService = $this->getMovieService();
         $topListLimitation = $this->getModule()->getConfiguration()->get('top_list_limitation');
         
         /* Setup view */

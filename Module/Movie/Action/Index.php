@@ -20,19 +20,6 @@ class Index extends VisualMain {
     private $currentMark = Movie::MARK_UNMARKED;
     
     /**
-     * 处理电影列表页面的请求。
-     * 如果标记不存在，则视为未标记处理。
-     * 目前支持的查询条件如下：
-     * region:电影区域ID
-     * category:电影类型ID
-     * language:电影语言ID
-     * name:查询文本
-     * 其中， 查询文本格式如下：
-     * [condition]:value[;[condition2]:value]
-     * 支持的condition有：演员和导演
-     * 如果Condition没有指定， 则作为电影名称和简介处理。
-     * 该方法不做查询处理，只将查询条件传递给前台由其他action处理。
-     * 
      * @param integer $mark 标记码。默认为未标记。
      * @param array $query 查询条件。 默认为空。
      * 
@@ -98,7 +85,7 @@ class Index extends VisualMain {
         $particleView->getDataManager()->set('dataURL', $dataURL);
         
         /* @var $movieService MovieService */
-        $movieService = X::system()->getServiceManager()->get(MovieService::getServiceName());
+        $movieService = $this->getService(MovieService::getServiceName());
         /* Add search condition data to view.  */
         $searchConditionData = array();
         $searchConditionData['regions']     = $movieService->getRegionManger()->find();
@@ -119,7 +106,7 @@ class Index extends VisualMain {
      */
     private function getMarkInformation( $marks ) {
         /* @var $movieService MovieService */
-        $movieService = X::system()->getServiceManager()->get(MovieService::getServiceName());
+        $movieService = $this->getService(MovieService::getServiceName());
         $account = $movieService->getCurrentAccount();
         $markInfo = array();
         foreach ( $marks as $mark => $markName ) {

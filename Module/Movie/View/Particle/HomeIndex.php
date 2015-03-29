@@ -6,6 +6,7 @@ $marks = $vars['marks'];
 $accountID = $vars['accountID'];
 /* @var $movie \X\Module\Movie\Service\Movie\Core\Instance\Movie */
 $movies = $vars['movies']; 
+$movieAccount = $vars['movieAccount'];
 ?>
 <div class="btn-group btn-group-justified">
     <?php foreach ( $marks['data'] as $key => $value ) : ?>
@@ -37,7 +38,7 @@ $movies = $vars['movies'];
             </div>
             <div class="white-space-nowrap lnm-media-list-item-container-name">
                 <?php if (Movie::MARK_WATCHED === $marks['actived']) : ?>
-                    <div class="movie-item-rate-container" data-score="<?php echo $movie['score']; ?>"></div>
+                    <div class="movie-item-rate-container" data-score="<?php echo $movieAccount->getScore($movie->get('id')); ?>"></div>
                     <br>
                 <?php endif; ?>
                 <strong><?php echo $movie->get('name'); ?></strong>
@@ -47,27 +48,5 @@ $movies = $vars['movies'];
         <?php endforeach; ?>
     </div>
     
-    <?php $pager = $vars['pager']; ?>
-    <?php if ( false !== $pager['prev'] || false !== $pager['next'] ) : ?>
-    <div>
-        <nav>
-            <ul class="pager">
-                <li class="previous<?php echo (false === $pager['prev']) ? ' disabled' : ''; ?>">
-                    <?php if (false !== $pager['prev']) :?>
-                        <a  href="/?module=lunome&action=movie/home/index&id=<?php echo $accountID; ?>&mark=<?php echo $marks['actived']; ?>&page=<?php echo $pager['prev'];?>"
-                        >&larr; 上一页</a>
-                    <?php endif; ?>
-                </li>
-                <li><?php echo $pager['current'];?> / <?php echo $pager['total'];?></li>
-                <li class="next<?php echo (false === $pager['next']) ? ' disabled' : ''; ?>">
-                    <?php if (false !== $pager['next']) :?>
-                        <a  href="/?module=lunome&action=movie/home/index&id=<?php echo $accountID; ?>&mark=<?php echo $marks['actived']; ?>&page=<?php echo $pager['next'];?>"
-                            class="movie-characters-container-pager"
-                        >下一页&rarr;</a>
-                    <?php endif; ?>
-                </li>
-            </ul>
-        </nav>
-    </div>
-    <?php endif; ?>
+    <?php $vars['pager']->show(); ?>
 <?php endif; ?>
