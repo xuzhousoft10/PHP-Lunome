@@ -7,8 +7,7 @@ use X\Library\Html\Parser;
 use X\Module\Lunome\Util\Action\Visual;
 use X\Service\XSession\Service as SessionService;
 /**
- * The action class for movie/globalSearch action.
- * @author Michael Luthor <michaelluthor@163.com>
+ * 
  */
 class GlobalSearch extends Visual {
     /**

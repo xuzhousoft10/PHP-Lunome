@@ -9,8 +9,7 @@ use X\Module\Account\Service\Account\Service as AccountService;
 use X\Module\Movie\Service\Movie\Core\Model\MovieInvitationModel;
 
 /**
- * Friends
- * @author Michael Luthor <michaelluthor@163.com>
+ * 
  */
 class Friends extends FriendManagement {
     /**

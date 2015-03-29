@@ -7,8 +7,7 @@ use X\Module\Lunome\Util\Action\Visual;
 use X\Module\Movie\Service\Movie\Service as MovieService;
 use X\Module\Movie\Service\Movie\Core\Instance\Movie;
 /**
- * The action class for movie/detail action.
- * @author Michael Luthor <michaelluthor@163.com>
+ * 
  */
 class Detail extends Visual {
     /**

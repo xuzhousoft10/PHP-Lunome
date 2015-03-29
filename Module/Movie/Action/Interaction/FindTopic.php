@@ -1,15 +1,14 @@
 <?php
 namespace X\Module\Movie\Action\Interaction;
 /**
- * use statements
+ * 
  */
 use X\Module\Lunome\Util\Action\Userinteraction;
 use X\Module\Movie\Service\Movie\Service as MovieService;
 use X\Service\XDatabase\Core\ActiveRecord\Criteria;
 use X\Module\Account\Service\Account\Service as AccountService;
 /**
- * FindTopic
- * @author Michael Luthor <michaelluthor@163.com>
+ * 
  */
 class FindTopic extends Userinteraction {
     /**

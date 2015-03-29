@@ -6,8 +6,7 @@ namespace X\Module\Movie\Action\Interaction;
 use X\Module\Lunome\Util\Action\JSON;
 use X\Module\Movie\Service\Movie\Service as MovieService;
 /**
- * InviteFriendsToWatchMovieSendMessage
- * @author Michael Luthor <michaelluthor@163.com>
+ * 
  */
 class InviteFriendsToWatchMovieSendMessage extends JSON {
     /**

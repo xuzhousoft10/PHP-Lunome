@@ -9,8 +9,7 @@ use X\Module\Movie\Service\Movie\Service as MovieService;
 use X\Module\Movie\Service\Movie\Core\Instance\Movie;
 use X\Service\XDatabase\Core\ActiveRecord\Criteria;
 /**
- * The action class for movie/find action.
- * @author Michael Luthor <michaelluthor@163.com>
+ * 
  */
 class Find extends Visual {
     /**

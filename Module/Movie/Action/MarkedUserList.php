@@ -10,8 +10,7 @@ use X\Service\XDatabase\Core\ActiveRecord\Criteria;
 use X\Module\Account\Module as AccountModule;
 use X\Module\Lunome\Widget\Pager\Simple as SimplePager;
 /**
- * MarkedUserList
- * @author Michael Luthor <michaelluthor@163.com>
+ * 
  */
 class MarkedUserList extends Visual {
     /**

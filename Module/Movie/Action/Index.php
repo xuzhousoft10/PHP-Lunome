@@ -9,8 +9,7 @@ use X\Module\Lunome\Util\Action\VisualMain;
 use X\Module\Movie\Service\Movie\Service as MovieService;
 use X\Module\Movie\Service\Movie\Core\Instance\Movie;
 /**
- * The action class for movie/index action.
- * @author Michael Luthor <michaelluthor@163.com>
+ * 
  */
 class Index extends VisualMain {
     /**

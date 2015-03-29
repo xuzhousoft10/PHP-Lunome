@@ -6,8 +6,7 @@ namespace X\Module\Movie\Action;
 use X\Module\Lunome\Util\Action\Visual;
 use X\Module\Movie\Service\Movie\Service AS MovieService;
 /**
- * The action class for movie/top action.
- * @author Michael Luthor <michaelluthor@163.com>
+ * 
  */
 class Top extends Visual {
     /**

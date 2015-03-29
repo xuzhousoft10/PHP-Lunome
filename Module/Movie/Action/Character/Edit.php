@@ -9,8 +9,7 @@ use X\Module\Lunome\Util\Action\JSON;
 use X\Module\Movie\Service\Movie\Service as MovieService;
 use X\Library\FileUploadHandler\Handler as FileUploadHandler;
 /**
- * The action class for movie/character/edit action.
- * @author Michael Luthor <michaelluthor@163.com>
+ * 
  */
 class Edit extends JSON { 
     /**

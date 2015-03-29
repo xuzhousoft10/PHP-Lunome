@@ -8,8 +8,7 @@ use X\Module\Movie\Service\Movie\Core\Instance\Movie;
 use X\Service\QQ\Service as QQService;
 use X\Module\Lunome\Util\Action\JSON;
 /**
- * The action class for movie/mark action.
- * @author Michael Luthor <michaelluthor@163.com>
+ * 
  */
 class Mark extends JSON { 
     /**
