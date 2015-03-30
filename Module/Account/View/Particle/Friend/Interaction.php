@@ -2,6 +2,10 @@
 $vars = get_defined_vars();
 $friends = $vars['friends']; 
 $peopleCount = $vars['peopleCount'];
+
+/* @var $this \X\Service\XView\Core\Util\HtmlView\ParticleView */
+$scriptManager = $this->getManager()->getHost()->getScriptManager();
+$scriptManager->add('account-friend-interaction')->setSource('js/user/interaction.js');
 ?>
 <div class="col-md-9">
     <form action="/?module=movie" method="post">

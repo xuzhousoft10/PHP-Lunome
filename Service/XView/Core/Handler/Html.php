@@ -56,9 +56,9 @@ class Html extends \X\Service\XView\Core\Util\View {
      */
     public function __construct() {
         $this->styleManager = new StyleManager();
-        $this->linkManager = new LinkManager();
+        $this->linkManager = new LinkManager($this);
         $this->metaManager = new MetaManager();
-        $this->scriptManager = new ScriptManager();
+        $this->scriptManager = new ScriptManager($this);
         $this->particleViewManager = new ParticleViewManager($this);
         $this->dataManager = new ConfigurationArray();
     }
@@ -103,6 +103,28 @@ class Html extends \X\Service\XView\Core\Util\View {
      */
     public function getDataManager() {
         return $this->dataManager;
+    }
+    
+    /**
+     * @var string
+     */
+    private $assetsBaseURL = 'assets';
+    
+    /**
+     * @param string $url
+     * @return \X\Service\XView\Core\Handler\Html
+     */
+    public function setAssetsBaseURL( $url ) {
+        $this->assetsBaseURL = $url;
+        return $this;
+    }
+    
+    /**
+     * @param string $path
+     * @return string
+     */
+    public function getAsset( $path ) {
+        return $this->assetsBaseURL.'/'.$path;
     }
     
     /**

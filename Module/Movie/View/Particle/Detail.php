@@ -1,6 +1,7 @@
 <?php use X\Module\Movie\Service\Movie\Core\Instance\Movie; ?>
 <?php /* @var $movie \X\Module\Movie\Service\Movie\Core\Instance\Movie */ ?>
 <?php /* @var $currentUser \X\Module\Account\Service\Account\Core\Instance\Account */ ?>
+<?php /* @var $this \X\Service\XView\Core\Util\HtmlView\ParticleView */ ?>
 <?php 
 $vars = get_defined_vars();
 $movie = $vars['movie'];
@@ -14,6 +15,10 @@ $shareMessageContent = $vars['shareMessage'];
 $currentUser = $vars['currentUser'];
 $isGuestUser = $vars['isGuestUser'];
 $currentUserProfile = $isGuestUser ? null : $currentUser->getProfileManager();
+
+$scriptManager = $this->getManager()->getHost()->getScriptManager();
+$scriptManager->add('ajaxfileupload')->setSource('library/jquery/plugin/ajaxfileupload.js');
+$scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequirements('ajaxfileupload');
 ?>
 <div class="row margin-top-5">
     <ol class="breadcrumb">

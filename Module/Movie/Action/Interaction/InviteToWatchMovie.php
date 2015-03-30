@@ -42,14 +42,4 @@ class InviteToWatchMovie extends Userinteraction {
         $this->setActiveInteractionMenuItem(self::INTERACTION_MENU_ITEM_INVITE_TO_WATCH_MOVIE);
         $this->interactionMenuParams = array('id'=>$id);
     }
-    
-    /**
-     * (non-PHPdoc)
-     * @see \X\Util\Action\Visual::beforeDisplay()
-     */
-    protected function beforeDisplay() {
-        parent::beforeDisplay();
-        $assetsURL = $this->getAssetsURL();
-        $this->addScriptFile('invite', $assetsURL.'/js/movie/invite.js');
-    }
 }

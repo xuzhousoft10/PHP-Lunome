@@ -5,6 +5,9 @@ $movies = $vars['movies'];
 $friendInformation = $vars['friendInformation'];
 $friendProfile = $friendInformation->getProfileManager();
 $assetsURL = $vars['assetsURL']; 
+
+/* @var $this \X\Service\XView\Core\Util\HtmlView\ParticleView */
+$this->getManager()->getHost()->getScriptManager()->add('topic')->setSource('js/movie/topic.js');
 ?>
 <div class="col-md-9">
     <?php if (empty($movies['liked']) && empty($movies['disliked'])) : ?>

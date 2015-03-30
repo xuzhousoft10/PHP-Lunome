@@ -5,6 +5,9 @@ $assetsURL = $vars['assetsURL'];
 /* @var $friendInformation \X\Module\Account\Service\Account\Core\Instance\Account */
 $friendInformation = $vars['friendInformation'];
 $profile = $friendInformation->getProfileManager();
+
+/* @var $this \X\Service\XView\Core\Util\HtmlView\ParticleView */
+$this->getManager()->getHost()->getScriptManager()->add('invite')->setSource('js/movie/invite.js');
 ?>
 <div class="col-md-9">
     <?php if (empty($movies)) : ?>

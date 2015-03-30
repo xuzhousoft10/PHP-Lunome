@@ -85,14 +85,4 @@ class Search extends FriendManagement {
     protected function getActiveSettingItem() {
         return self::FRIEND_MENU_ITEM_SEARCH;
     }
-    
-    /**
-     * (non-PHPdoc)
-     * @see \X\Util\Action\Visual::beforeDisplay()
-     */
-    protected function beforeDisplay() {
-        parent::beforeDisplay();
-        $assetsURL = $this->getAssetsURL();
-        $this->addScriptFile('User-Setting-Information', $assetsURL.'/js/user/search.js');
-    }
 }

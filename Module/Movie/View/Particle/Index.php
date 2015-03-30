@@ -1,4 +1,6 @@
 <?php 
+/* @var $this \X\Service\XView\Core\Util\HtmlView\ParticleView */
+
 use X\Module\Movie\Service\Movie\Core\Instance\Movie;
 $vars = get_defined_vars();
 $query = $vars['query'];
@@ -12,6 +14,15 @@ $searchMaxLength = $vars['searchMaxLength'];
 $maxAutoLoadTimeCount = $vars['maxAutoLoadTimeCount'];
 $mediaItemWaitingImage = $vars['mediaItemWaitingImage'];
 $mediaLoaderLoaddingImage = $vars['mediaLoaderLoaddingImage'];
+$scriptManager = $this->getManager()->getHost()->getScriptManager();
+$linkManager = $this->getManager()->getHost()->getLinkManager();
+
+$scriptManager->add('cookie')->setSource('library/jquery/plugin/cookie.js')->setRequirements('jquery');
+$scriptManager->add('movie-index')->setSource('js/movie/index.js')->setRequirements('jquery', 'bootstrap', 'cookie');
+if ( Movie::MARK_WATCHED === $currentMark ) {
+    $linkManager->addCSS('rate-it', 'library/jquery/plugin/rate/rateit.css');
+    $scriptManager->add('rate-it')->setSource('library/jquery/plugin/rate/rateit.js')->setRequirements('jquery');
+}
 ?>
 <div class="panel panel-default">
     <!-- Media Index Header Start -->

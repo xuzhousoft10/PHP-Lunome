@@ -37,14 +37,4 @@ class Index extends Visual {
         $this->getView()->setLayout($this->getLayoutViewPath('BlankThin'));
         $this->getView()->title = '与'.$friendProfile->get('nickname').'聊天中';
     }
-    
-    /**
-     * (non-PHPdoc)
-     * @see \X\Util\Action\Visual::beforeDisplay()
-     */
-    protected function beforeDisplay() {
-        parent::beforeDisplay();
-        $assetsURL = $this->getAssetsURL();
-        $this->addScriptFile('user-chat', $assetsURL.'/js/user/chat.js');
-    }
 }

@@ -42,19 +42,4 @@ class Sns extends UserSetting {
     protected function getActiveSettingItem() {
         return self::SETTING_ITEM_SNS;
     }
-    
-    /**
-     * (non-PHPdoc)
-     * @see \X\Util\Action\Visual::beforeDisplay()
-     */
-    protected function beforeDisplay() {
-        parent::beforeDisplay();
-        $assetsURL = $this->getAssetsURL();
-        
-        $this->addCssLink('Bootstrap-Switch', $assetsURL.'/library/bootstrap/plugin/bootstrap-switch/css/bootstrap3/bootstrap-switch.min.css');
-        $this->addScriptFile('Bootstrap-Switch', $assetsURL.'/library/bootstrap/plugin/bootstrap-switch/js/bootstrap-switch.min.js');
-        
-        $switchOption = json_encode(array('size'=>'mini', 'onText'=>'已开启', 'offText'=>'已关闭'));
-        $this->getView()->getScriptManager()->addString('Bootstrap-Switch-Enable', '$(document).ready(function(){$("#sns-auto-share").bootstrapSwitch('.$switchOption.');});');
-    }
 }

@@ -43,14 +43,4 @@ class FindTopic extends Userinteraction {
         $this->setActiveInteractionMenuItem(self::INTERACTION_MENU_ITEM_GET_TOPIC);
         $this->interactionMenuParams = array('id'=>$id);
     }
-    
-    /**
-     * (non-PHPdoc)
-     * @see \X\Util\Action\Visual::beforeDisplay()
-     */
-    protected function beforeDisplay() {
-        parent::beforeDisplay();
-        $assetsURL = $this->getAssetsURL();
-        $this->addScriptFile('user-home-movie-index', $assetsURL.'/js/movie/topic.js');
-    }
 }

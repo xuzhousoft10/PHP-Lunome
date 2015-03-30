@@ -5,6 +5,9 @@ $assetsURL = $vars['assetsURL'];
 $selectedFriendIDs = $vars['selectedFriendIDs'];
 $selectedFriendNames = $vars['selectedFriendNames'];
 $commentLength = $vars['commentLength'];
+
+/* @var $this \X\Service\XView\Core\Util\HtmlView\ParticleView */
+$this->getManager()->getHost()->getScriptManager()->add('invite-friends')->setSource('js/movie/invite_friends.js');
 ?>
 <div class="col-md-9">
     <?php foreach ( $movies as $movie ) : ?>

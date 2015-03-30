@@ -5,6 +5,15 @@ $account = $vars['account'];
 $sexMap = $vars['sexMap'];
 $sexualityMap = $vars['sexualityMap'];
 $emotionMap = $vars['emotionMap'];
+
+/* @var $this \X\Service\XView\Core\Util\HtmlView\ParticleView */
+$scriptManager = $this->getManager()->getHost()->getScriptManager();
+$linkManager = $this->getManager()->getHost()->getLinkManager();
+
+$linkManager->addCSS('bootstrap-date-picker', 'library/bootstrap/plugin/bootstrap-datepicker/css/datepicker3.css');
+$scriptManager->add('bootstrap-date-picker')->setSource('library/bootstrap/plugin/bootstrap-datepicker/js/bootstrap-datepicker.js');
+$scriptManager->add('bootstrap-date-picker-language')->setSource('library/bootstrap/plugin/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js');
+$scriptManager->add('user-setting-information', 'js/user/information.js');
 ?>
 <form action="/?module=account&action=setting/information" method="post" class="form-horizontal">
 <div class="col-md-9 thumbnail">

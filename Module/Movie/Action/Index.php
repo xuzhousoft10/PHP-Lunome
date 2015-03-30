@@ -122,20 +122,4 @@ class Index extends VisualMain {
         }
         return $markInfo;
     }
-    
-    /**
-     * (non-PHPdoc)
-     * @see \X\Util\Action\Visual::beforeDisplay()
-     */
-    protected function beforeDisplay() {
-        parent::beforeDisplay();
-        $assetsURL = $this->getAssetsURL();
-        $this->getView()->getScriptManager()->addFile('media-index', $assetsURL.'/js/movie/index.js');
-        $this->getView()->getScriptManager()->addFile('cookie', $assetsURL.'/library/jquery/plugin/cookie.js');
-        
-        if ( Movie::MARK_WATCHED === $this->currentMark ) {
-            $this->getView()->getScriptManager()->addFile('rate-it', $assetsURL.'/library/jquery/plugin/rate/rateit.js');
-            $this->getView()->getLinkManager()->addCSS('rate-it', $assetsURL.'/library/jquery/plugin/rate/rateit.css');
-        }
-    }
 }

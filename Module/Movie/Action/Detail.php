@@ -116,16 +116,4 @@ class Detail extends Visual {
         
         return $message;
     }
-    
-    /**
-     * (non-PHPdoc)
-     * @see \X\Util\Action\Visual::beforeDisplay()
-     */
-    protected function beforeDisplay() {
-        parent::beforeDisplay();
-        $assetsURL = $this->getAssetsURL();
-        $scriptManager = $this->getView()->getScriptManager();
-        $scriptManager->addFile('ajaxfileupload', $assetsURL.'/library/jquery/plugin/ajaxfileupload.js');
-        $scriptManager->addFile('detail-detail', $assetsURL.'/js/movie/detail.js');
-    }
 }

@@ -14,6 +14,12 @@
 <?php /* @var $accountService AccountService */ ?>
 <?php $accountService = X::system()->getServiceManager()->get(AccountService::getServiceName()); ?>
 <?php $reginManager = $accountService->getRegionManager(); ?>
+
+<?php 
+/* @var $this \X\Service\XView\Core\Util\HtmlView\ParticleView */
+$scriptManager = $this->getManager()->getHost()->getScriptManager();
+$scriptManager->add('account-chat-index')->setSource('js/user/chat.js');
+?>
 <div class="thumbnail clearfix">
     <div class="pull-left">
         <img    class="thumbnail padding-0 margin-0" 

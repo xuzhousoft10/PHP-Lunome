@@ -9,6 +9,7 @@ namespace X\Util\Action;
  */
 use X\Core\X;
 use X\Service\XView\Service as XViewService;
+use X\Module\Lunome\Module as LunomeModule;
 
 /**
  * The basic action class
@@ -110,22 +111,6 @@ abstract class Visual extends Basic {
     }
     
     /**
-     * @param unknown $name
-     * @param unknown $path
-     */
-    public function addScriptFile($name, $path) {
-        $this->getView()->getScriptManager()->addFile($name, $path);
-    }
-    
-    /**
-     * @param unknown $name
-     * @param unknown $path
-     */
-    public function addCssLink( $name, $path ) {
-        $this->getView()->getLinkManager()->addCSS($name, $path);
-    }
-    
-    /**
      * (non-PHPdoc)
      * @see \X\Service\XAction\Core\Action::beforeRunAction()
      */
@@ -141,6 +126,9 @@ abstract class Visual extends Basic {
         
         $viewObject->getMetaManager()->setCharset('UTF-8');
         $viewObject->getDataManager()->set('assetsURL', $this->getAssetsURL());
+        $viewObject->setAssetsBaseURL($this->getAssetsURL());
+        $basicAssetsLoader = $this->getParticleViewPath('Util/BasicAssetsLoader', LunomeModule::getModuleName());
+        $viewObject->getParticleViewManager()->load('basic-assets-loader', $basicAssetsLoader);
         parent::beforeRunAction();
     }
     

@@ -7,6 +7,13 @@ $accountID = $vars['accountID'];
 /* @var $movie \X\Module\Movie\Service\Movie\Core\Instance\Movie */
 $movies = $vars['movies']; 
 $movieAccount = $vars['movieAccount'];
+
+/* @var $this \X\Service\XView\Core\Util\HtmlView\ParticleView */
+$this->getManager()->getHost()->getScriptManager()->add('movie-home')->setSource('js/movie/home.js');
+if (Movie::MARK_WATCHED === $vars['currentMark'] ) {
+    $this->getManager()->getHost()->getLinkManager()->addCSS('rate-it', 'library/jquery/plugin/rate/rateit.css');
+    $this->getManager()->getHost()->getScriptManager()->add('rate-it')->setSource('library/jquery/plugin/rate/rateit.js');
+}
 ?>
 <div class="btn-group btn-group-justified">
     <?php foreach ( $marks['data'] as $key => $value ) : ?>

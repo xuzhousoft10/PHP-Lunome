@@ -27,7 +27,7 @@ class MarkedUserList extends Visual {
         }
         
         $moduleConfig = $this->getModule()->getConfiguration();
-        $pageSize = 1;//$moduleConfig->get('movie_detail_marked_user_list_page_size');
+        $pageSize = $moduleConfig->get('movie_detail_marked_user_list_page_size');
         
         $page = ( 1 > (int)$page ) ? 1 : (int)$page;
         $criteria = new Criteria();

@@ -62,14 +62,4 @@ class Friends extends FriendManagement {
     protected function getActiveSettingItem() {
         return self::FRIEND_MENU_ITEM_INTERACTION;
     }
-    
-    /**
-     * (non-PHPdoc)
-     * @see \X\Util\Action\Visual::beforeDisplay()
-     */
-    protected function beforeDisplay() {
-        parent::beforeDisplay();
-        $assetsURL = $this->getAssetsURL();
-        $this->addScriptFile('invite', $assetsURL.'/js/movie/invite_friends.js');
-    }
 }

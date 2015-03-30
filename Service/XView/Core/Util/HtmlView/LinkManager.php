@@ -9,6 +9,18 @@ use X\Service\XView\Core\Util\Exception;
  */
 class LinkManager {
     /**
+     * @var \X\Service\XView\Core\Handler\Html
+     */
+    private $view = null;
+    
+    /**
+     * @param \X\Service\XView\Core\Handler\Html $view
+     */
+    public function __construct( $view ) {
+        $this->view = $view;
+    }
+    
+    /**
      * The links list in head element.
      * @var array
      */
@@ -30,6 +42,10 @@ class LinkManager {
      * @param string $link The link address of the css.
      */
     public function addCSS( $identifier, $link ) {
+        if ( '//' !== substr($link, 0, 2) ) {
+            $link = $this->view->getAsset($link);
+        }
+        
         $this->addLink($identifier, 'stylesheet', 'text/css', $link);
     }
     

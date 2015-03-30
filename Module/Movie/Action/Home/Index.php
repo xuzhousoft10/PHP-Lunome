@@ -67,23 +67,9 @@ class Index extends VisualUserHome {
             'movies'        => $movies, 
             'pager'         => $pager,
             'movieAccount'  => $movieAccount,
+            'currentMark'   => $this->currentMark,
         );
         $this->loadParticle($name, $path)->getDataManager()->merge($data);
         $this->homeUserAccountID = $id;
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see \X\Util\Action\Visual::beforeDisplay()
-     */
-    protected function beforeDisplay() {
-        parent::beforeDisplay();
-        $assetsURL = $this->getAssetsURL();
-        $this->addScriptFile('movie-index', $assetsURL.'/js/movie/home.js');
-        
-        if (Movie::MARK_WATCHED === $this->currentMark) {
-            $this->addScriptFile('rate-it', $assetsURL.'/library/jquery/plugin/rate/rateit.js');
-            $this->addCssLink('rate-it', $assetsURL.'/library/jquery/plugin/rate/rateit.css');
-        }
     }
 }

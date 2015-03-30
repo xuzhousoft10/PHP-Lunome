@@ -64,17 +64,4 @@ class Information extends UserSetting {
     protected function getActiveSettingItem() {
         return self::SETTING_ITEM_INFO;
     }
-    
-    /**
-     * (non-PHPdoc)
-     * @see \X\Util\Action\Visual::beforeDisplay()
-     */
-    protected function beforeDisplay() {
-        parent::beforeDisplay();
-        $assetsURL = $this->getAssetsURL();
-        $this->addCssLink('Bootstrap-Date-Picker', $assetsURL.'/library/bootstrap/plugin/bootstrap-datepicker/css/datepicker3.css'); 
-        $this->addScriptFile('Bootstrap-Date-Picker', $assetsURL.'/library/bootstrap/plugin/bootstrap-datepicker/js/bootstrap-datepicker.js'); 
-        $this->addScriptFile('Bootstrap-Date-Picker-Language', $assetsURL.'/library/bootstrap/plugin/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js'); 
-        $this->addScriptFile('User-Setting-Information', $assetsURL.'/js/user/information.js'); 
-    }
 }

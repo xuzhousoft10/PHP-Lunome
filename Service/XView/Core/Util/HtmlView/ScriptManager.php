@@ -9,62 +9,38 @@ use X\Service\XView\Core\Util\Exception;
  */
 class ScriptManager {
     /**
-     * This value contains all the script stuff.
-     * @var array
+     * @var \X\Service\XView\Core\Handler\Html 
      */
-    protected $scripts = array(
-    /* 'identifier' => array(
-     *      'type'=>'text/javascript',
-     *      'src'=>'',
-     *      'content'=>'',
-     *      'defer'=>false,
-     *      'charset'=>'UTF-8',
-     *      'asyns'=>false,
-     * ), */
-    );
+    private $view = null;
     
     /**
-     * Add script to current page.
-     * @param string $identifier The name of script
-     * @param string $script The content of script
-     * @param string $type The type of script
+     * @param \X\Service\XView\Core\Handler\Html $view
      */
-    public function addString( $name, $script, $type='text/javascript' ) {
-        if ( empty($script) ) {
-            return;
-        }
-        
-        $this->scripts[$name] = array(
-                'type'      => $type,
-                'src'       => null,
-                'content'   => $script,
-                'defer'     => false,
-                'charset'   => null,
-                'asyns'     => false,
-        );
+    public function __construct( $view ) {
+        $this->view = $view;
     }
     
     /**
-     * Add script file to current page.
-     * @param string $identifier The name of script
-     * @param string $link The link of script
-     * @param string $type The type of script
-     * @param string $charset The charset of script 
-     * @param string $asyns The asyns of script
+     * @return \X\Service\XView\Core\Handler\Html
      */
-    public function addFile( $name, $link, $type='text/javascript', $charset='UTF-8', $asyns=false ) {
-        if ( empty($link) ) {
-            return;
-        }
-        
-        $this->scripts[$name] = array(
-            'type'      => $type,
-            'src'       => $link,
-            'content'   => null,
-            'defer'     => false,
-            'charset'   => $charset,
-            'asyns'     => $asyns,
-        );
+    public function getView() {
+        return $this->view;
+    }
+    
+    /**
+     * This value contains all the script stuff.
+     * @var Script[]
+     */
+    protected $scripts = array();
+    
+    /**
+     * @param string $name
+     * @return \X\Service\XView\Core\Util\HtmlView\Script
+     */
+    public function add( $name ) {
+        $script = new Script($this);
+        $this->scripts[$name] = $script;
+        return $script;
     }
     
     /**
@@ -107,24 +83,44 @@ class ScriptManager {
     }
     
     /**
+     * @var array
+     */
+    private $scriptStrings = array();
+    
+    /**
      * Get the content of scripts
      * @return string
      */
     public function toString() {
-        $scriptList = array();
-        foreach ( $this->scripts as $script ) {
-            if ( !empty($script['src']) ) {
-                $scriptList[] = '<script type="'.$script['type'].'" src="'.$script['src'].'" charset="'.$script['charset'].'"></script>';
-            } else if ( !empty($script['content']) ) {
-                $scriptList[] = "<script type=\"{$script['type']}\">\n{$script['content']}\n</script>";
-            }
+        $this->scriptStrings = array();
+        foreach ( $this->scripts as $name => $script ) {
+            $this->renderScript($name);
         }
-        
-        if ( 0 === count($scriptList) ) {
+        if ( empty($this->scriptStrings) ) {
             return null;
         }
-        
-        $scriptList = implode("\n", $scriptList);
+        $scriptList = implode("\n", $this->scriptStrings);
         return $scriptList;
+    }
+    
+    /**
+     * @param string $name
+     */
+    private function renderScript( $name ) {
+        if ( isset($this->scriptStrings[$name]) ) {
+            return;
+        }
+        
+        if ( !isset($this->scripts[$name]) ) {
+            throw new Exception('Script "'.$name.'" does not exists.');
+        }
+        
+        $script = $this->scripts[$name];
+        $requirements = $script->getRequirements();
+        foreach ( $requirements as $requirement ) {
+            $this->renderScript($requirement);
+        }
+        
+        $this->scriptStrings[$name] = $script->toString();
     }
 }

@@ -23,6 +23,10 @@ $emotionStatusNames = $moduleConfiguration->get('account_profile_emotion_status'
 /* @var $accountService AccountService */
 $accountService = X::system()->getServiceManager()->get(AccountService::getServiceName());
 $regionManager = $accountService->getRegionManager();
+
+/* @var $this \X\Service\XView\Core\Util\HtmlView\ParticleView */
+$scriptManager = $this->getManager()->getHost()->getScriptManager();
+$scriptManager->add('account-friend-search')->setSource('js/user/search.js');
 ?>
 <form action="/?module=account&action=friend/search" method="post" class="form-horizontal">
 <div class="col-md-9 clearfix">
