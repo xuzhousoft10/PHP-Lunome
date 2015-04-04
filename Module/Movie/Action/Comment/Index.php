@@ -36,7 +36,9 @@ class Index extends Visual {
             foreach ( $friends as $index => $friend ) {
                 $friends[$index] = $friend->getID();
             }
-            $criteria->condition = array('commented_by'=>$friends);
+            if ( !empty( $friends ) ) {
+                $criteria->condition = array('commented_by'=>$friends);
+            }
         }
         
         $shortCommentManager = $movie->getShortCommentManager();

@@ -20,5 +20,7 @@ abstract class Model extends Basic {
     /**
      * @return string
      */
-    abstract protected static function getModelClass();
+    protected static function getModelClass() {
+        return null;
+    }
 }

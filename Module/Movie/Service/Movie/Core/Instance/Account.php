@@ -257,6 +257,9 @@ class Account {
      */
     public function countMarkedFriends( $movieID, $mark ) {
         $friends = $this->account->getFriendManager()->find();
+        if ( empty($friends) ) {
+            return 0;
+        }
         foreach ( $friends as $index => $friend ) {
             $friends[$index] = $friend->getID();
         }

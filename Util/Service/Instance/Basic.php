@@ -7,5 +7,7 @@ abstract class Basic {
     /**
      * @return mixed
      */
-    abstract public static function getMeta();
+    public static function getMeta() {
+        return null;
+    }
 }
