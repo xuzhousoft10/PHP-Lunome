@@ -1,4 +1,5 @@
 <?php use X\Module\Movie\Service\Movie\Core\Instance\Movie; ?>
+<?php use X\Service\XView\Core\Handler\Html; ?>
 <?php /* @var $movie \X\Module\Movie\Service\Movie\Core\Instance\Movie */ ?>
 <?php /* @var $currentUser \X\Module\Account\Service\Account\Core\Instance\Account */ ?>
 <?php /* @var $this \X\Service\XView\Core\Util\HtmlView\ParticleView */ ?>
@@ -23,7 +24,7 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
 <div class="row margin-top-5">
     <ol class="breadcrumb">
         <li><a href="/?module=movie&action=index">电影</a></li>
-        <li class="active"><?php echo $movie->get('name');?></li>
+        <li class="active"><?php echo Html::HTMLEncode($movie->get('name'));?></li>
     </ol>
     
     <div class="col-md-3 padding-0">
@@ -32,11 +33,11 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
     <div class="col-md-9">
         <div class="clearfix">
             <h4 class="pull-left margin-top-0">
-                <?php echo $movie->get('name');?>
+                <?php echo Html::HTMLEncode($movie->get('name'));?>
                 <small>
                      --
                      <span class="label label-<?php echo $markStyles[$myMark];?>">
-                        <?php echo $markNames[$myMark];?>
+                        <?php echo Html::HTMLEncode($markNames[$myMark]);?>
                      </span>
                 </small>
             </h4>
@@ -52,7 +53,7 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
                     <?php $lastMark = count($movieCategories)-1; ?>
                     <?php foreach ( $movieCategories as $index => $category ) : ?>
                         <a href="/?module=movie&action=index&query[category]=<?php echo $category->get('id');?>">
-                            <?php echo $category->get('name');?>
+                            <?php echo Html::HTMLEncode($category->get('name'));?>
                         </a>
                         <?php if($index!==$lastMark):?>/<?php endif; ?>
                     <?php endforeach; ?>
@@ -66,7 +67,7 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
                     其他
                 <?php else: ?>
                     <a href="/?module=movie&action=index&query[language]=<?php echo $movieLanguage->get('id');?>">
-                        <?php echo $movieLanguage->get('name');?>
+                        <?php echo Html::HTMLEncode($movieLanguage->get('name'));?>
                     </a>
                 <?php endif; ?>
             </li>
@@ -78,7 +79,7 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
                     其他
                 <?php else : ?>
                     <a href="/?module=movie&action=index&query[region]=<?php echo $movieRegion->get('id');?>">
-                        <?php echo $movieRegion->get('name');?>
+                        <?php echo Html::HTMLEncode($movieRegion->get('name'));?>
                     </a>
                 <?php endif; ?>
             </li>
@@ -94,7 +95,7 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
                 <?php $lastMark = count($directors)-1; ?>
                 <?php foreach ( $directors as $index => $director ) : ?>
                     <a href="/?module=movie&action=index&query[name]=<?php echo urlencode('导演:'.$director->get('name'));?>">
-                        <?php echo $director->get('name'); ?>
+                        <?php echo Html::HTMLEncode($director->get('name')); ?>
                     </a>
                     <?php if($index!==$lastMark):?>/<?php endif; ?>
                 <?php endforeach; ?>
@@ -106,7 +107,7 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
                 <?php $lastMark = count($actors)-1; ?>
                 <?php foreach ( $actors as $index => $actor ) : ?>
                     <a href="/?module=movie&action=index&query[name]=<?php echo urlencode('演员:'.$actor->get('name'));?>">
-                        <?php echo $actor->get('name'); ?>
+                        <?php echo Html::HTMLEncode($actor->get('name')); ?>
                     </a>
                     <?php if($index!==$lastMark):?>/<?php endif; ?>
                 <?php endforeach; ?>
@@ -235,7 +236,7 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
 <div id="movie-online-play-container"></div>
 
 <div class="margin-top-5">
-    <p><?php echo $movie->get('introduction');?></p>
+    <p><?php echo Html::HTMLEncode($movie->get('introduction'));?></p>
 </div>
 <hr>
 
@@ -281,7 +282,7 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
         <!-- comment list -->
         <div    id                  = "movie-short-comment-container"
                 data-is-guest-user  = "<?php echo ($isGuestUser)?'true':'false'; ?>"
-                data-user-nickname  = "<?php echo ($isGuestUser)?'': $currentUserProfile->get('nickname'); ?>"
+                data-user-nickname  = "<?php echo ($isGuestUser)?'': Html::HTMLEncode($currentUserProfile->get('nickname')); ?>"
                 data-user-photo     = "<?php echo ($isGuestUser)?'':$currentUserProfile->get('photo'); ?>"
                 data-media-id       = "<?php echo $movie->get('id'); ?>"
                 data-index-url      = "/?module=movie&action=comment/index&id=<?php echo $movie->get('id'); ?>"
@@ -291,7 +292,7 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
             <div class="clearfix">
                 <div class="col-md-4 padding-0">
                     <img src="<?php echo $isGuestUser?'':$currentUserProfile->get('photo'); ?>" width="90" height="90" class="thumbnail margin-bottom-0">
-                    <span><?php echo $isGuestUser?'':$currentUserProfile->get('nickname'); ?></span>
+                    <span><?php echo $isGuestUser?'':Html::HTMLEncode($currentUserProfile->get('nickname')); ?></span>
                 </div>
                 <div class="col-md-8 padding-0">
                     <form action="/?module=movie&action=comment/add">

@@ -217,4 +217,15 @@ class Html extends \X\Service\XView\Core\Util\View {
         $this->layout['content'] = null;
         $this->getParticleViewManager()->cleanUp();
     }
+    
+    /**
+     * @param string $string
+     * @return string
+     */
+    public static function HTMLEncode( $string ) {
+        return htmlentities($string);
+    }
+    public static function HTMLAttributeEncode() {}
+    public static function JavascriptValueEncode(){}
+    public static function URLEncode() {}
 }
