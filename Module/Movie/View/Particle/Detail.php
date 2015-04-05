@@ -28,7 +28,7 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
     </ol>
     
     <div class="col-md-3 padding-0">
-        <img class="img-thumbnail padding-0" src="<?php echo $movie->getCoverURL();?>" width="200" height="300">
+        <img class="img-thumbnail padding-0 lunome-movie-cover-200-300" src="<?php echo $movie->getCoverURL();?>">
     </div>
     <div class="col-md-9">
         <div class="clearfix">
