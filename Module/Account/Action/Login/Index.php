@@ -18,6 +18,12 @@ class Index extends Visual {
         /* @var $accountService AccountService */
         $accountService = X::system()->getServiceManager()->get(AccountService::getServiceName());
         
+        $isDebug = X::system()->getConfiguration()->get('is_debug', true);
+        if ( $isDebug ) {
+            $account = $accountService->get('00000000-0000-0000-0000-000000000000');
+            $account->login();
+        }
+        
         if ( null === $accountService->getCurrentAccount() ) {
             $this->gotoURL('/index.php?module=account&action=login/qq');
         } else {
