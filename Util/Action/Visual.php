@@ -80,7 +80,7 @@ abstract class Visual extends Basic {
      * @param unknown $layout
      * @return Ambigous <string, unknown>
      */
-    public function getLayoutViewPath( $layout, $module ) {
+    public function getLayoutViewPath( $layout, $module=null ) {
         $view = sprintf('View/Layout/%s.php', $layout);
         $view = $this->getModule($module)->getPath($view);
         return $view;
