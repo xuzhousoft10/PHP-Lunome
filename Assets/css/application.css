@@ -25,6 +25,7 @@
 
 
 /* 定义用于显示电影的样式。 */
+.lunome-movie-cover-200-300 {height: 300px;width:200px;}
 .lunome-movie-item {text-align: center;line-height: 3em;width:200px;margin: 0px 10px;}
 .lunome-movie-item a {text-decoration:none;}
 .lunome-movie-poster {background-size: 200px 300px; height: 300px; width:200px;}

@@ -6,6 +6,7 @@ namespace X\Module\Movie\Action;
 use X\Module\Lunome\Util\Action\Visual;
 use X\Module\Movie\Service\Movie\Service as MovieService;
 use X\Module\Movie\Service\Movie\Core\Instance\Movie;
+use X\Module\Lunome\Module as LunomeModule;
 /**
  * 
  */
@@ -23,7 +24,7 @@ class Detail extends Visual {
         }
         
         $view = $this->getView();
-        $view->setLayout($this->getLayoutViewPath('BlankThin'));
+        $view->setLayout($this->getLayoutViewPath('TwoColumnsBigLeft', LunomeModule::getModuleName()));
         $viewName   = 'MEDIA_DETAIL';
         $path       = $this->getParticleViewPath('Detail');
         $detailView = $view->getParticleViewManager()->load($viewName, $path);

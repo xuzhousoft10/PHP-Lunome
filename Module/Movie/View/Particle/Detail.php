@@ -26,14 +26,12 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
         <li class="active"><?php echo $movie->get('name');?></li>
     </ol>
     
-    <div class="col-md-2 padding-0">
-        <a class="thumbnail" href="http://v.baidu.com/v?word=<?php echo urlencode(mb_convert_encoding($movie->get('name'),'gb2312','utf-8' )); ?>" target="_black">
-            <img src="<?php echo $movie->getCoverURL();?>" width="200" height="300">
-        </a>
+    <div class="col-md-3 padding-0">
+        <img class="img-thumbnail padding-0" src="<?php echo $movie->getCoverURL();?>" width="200" height="300">
     </div>
-    <div class="col-md-10">
+    <div class="col-md-9">
         <div class="clearfix">
-            <h4 class="pull-left">
+            <h4 class="pull-left margin-top-0">
                 <?php echo $movie->get('name');?>
                 <small>
                      --
@@ -44,134 +42,137 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
             </h4>
         </div>
         
+        <ul class="list-unstyled">
+            <li>
+                <strong>类型</strong>&nbsp;&nbsp;&nbsp;
+                <?php $movieCategories = $movie->getCategories(); ?> 
+                <?php if ( empty($movieCategories) ) : ?>
+                    其他
+                <?php else: ?>
+                    <?php $lastMark = count($movieCategories)-1; ?>
+                    <?php foreach ( $movieCategories as $index => $category ) : ?>
+                        <a href="/?module=movie&action=index&query[category]=<?php echo $category->get('id');?>">
+                            <?php echo $category->get('name');?>
+                        </a>
+                        <?php if($index!==$lastMark):?>/<?php endif; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </li>
+            
+            <li>
+                <strong>语言</strong>&nbsp;&nbsp;&nbsp;
+                <?php $movieLanguage = $movie->getLanguage(); ?>
+                <?php if ( null === $movieLanguage ) : ?>
+                    其他
+                <?php else: ?>
+                    <a href="/?module=movie&action=index&query[language]=<?php echo $movieLanguage->get('id');?>">
+                        <?php echo $movieLanguage->get('name');?>
+                    </a>
+                <?php endif; ?>
+            </li>
+            
+            <li>
+                <strong>地区</strong>&nbsp;&nbsp;&nbsp;
+                <?php $movieRegion=$movie->getRegion();?>
+                <?php if ( null === $movieRegion ): ?>
+                    其他
+                <?php else : ?>
+                    <a href="/?module=movie&action=index&query[region]=<?php echo $movieRegion->get('id');?>">
+                        <?php echo $movieRegion->get('name');?>
+                    </a>
+                <?php endif; ?>
+            </li>
+            
+            <li>
+                <strong>时长</strong>&nbsp;&nbsp;&nbsp;
+                <?php echo intval($movie->get('length')/60);?>分钟
+            </li>
+            
+            <li>
+                <strong>导演</strong>&nbsp;&nbsp;&nbsp;
+                <?php $directors = $movie->getDirectors(); ?>
+                <?php $lastMark = count($directors)-1; ?>
+                <?php foreach ( $directors as $index => $director ) : ?>
+                    <a href="/?module=movie&action=index&query[name]=<?php echo urlencode('导演:'.$director->get('name'));?>">
+                        <?php echo $director->get('name'); ?>
+                    </a>
+                    <?php if($index!==$lastMark):?>/<?php endif; ?>
+                <?php endforeach; ?>
+            </li>
+            
+            <li>
+                <strong>主演</strong>&nbsp;&nbsp;&nbsp;
+                <?php $actors = $movie->getActors(); ?>
+                <?php $lastMark = count($actors)-1; ?>
+                <?php foreach ( $actors as $index => $actor ) : ?>
+                    <a href="/?module=movie&action=index&query[name]=<?php echo urlencode('演员:'.$actor->get('name'));?>">
+                        <?php echo $actor->get('name'); ?>
+                    </a>
+                    <?php if($index!==$lastMark):?>/<?php endif; ?>
+                <?php endforeach; ?>
+            </li>
+            
+            <li><br></li>
+            
+            <li>
+               <strong>想看</strong>&nbsp;&nbsp;&nbsp;
+                <a  href="#"
+                    class="detail-marked-account-list"
+                    data-id="<?php echo $movie->get('id'); ?>"
+                    data-mark="<?php echo Movie::MARK_INTERESTED; ?>"
+                    data-scope="friends"
+                    data-loadding-img = "<?php echo $assetsURL.'/image/loadding.gif';?>"
+                >好友:<?php echo $markCount[Movie::MARK_INTERESTED]['friend'];?></a>
+                /
+                <a  href="#"
+                    class="detail-marked-account-list"
+                    data-id="<?php echo $movie->get('id'); ?>"
+                    data-mark="<?php echo Movie::MARK_INTERESTED; ?>"
+                    data-scope="all"
+                    data-loadding-img = "<?php echo $assetsURL.'/image/loadding.gif';?>"
+                >全网:<?php echo $markCount[Movie::MARK_INTERESTED]['all'];?></a>
+            </li>
+            
+            <li>
+                <strong>已看</strong>&nbsp;&nbsp;&nbsp;
+                <a  href="#"
+                    class="detail-marked-account-list" 
+                    data-id="<?php echo $movie->get('id'); ?>"
+                    data-mark="<?php echo Movie::MARK_WATCHED; ?>"
+                    data-scope="friends"
+                    data-loadding-img = "<?php echo $assetsURL.'/image/loadding.gif';?>"
+                >好友:<?php echo $markCount[Movie::MARK_WATCHED]['friend'];?></a>
+                /
+                <a  href="#"
+                    class="detail-marked-account-list" 
+                    data-id="<?php echo $movie->get('id'); ?>"
+                    data-mark="<?php echo Movie::MARK_WATCHED; ?>"
+                    data-scope="all"
+                    data-loadding-img = "<?php echo $assetsURL.'/image/loadding.gif';?>"
+                >全网:<?php echo $markCount[Movie::MARK_WATCHED]['all'];?></a>
+            </li>
+            
+            <li>
+                <strong>忽略</strong>&nbsp;&nbsp;&nbsp;
+                <a  href="#"
+                    class="detail-marked-account-list" 
+                    data-id="<?php echo $movie->get('id'); ?>"
+                    data-mark="<?php echo Movie::MARK_IGNORED; ?>"
+                    data-scope="friends"
+                    data-loadding-img = "<?php echo $assetsURL.'/image/loadding.gif';?>"
+                >好友:<?php echo $markCount[Movie::MARK_IGNORED]['friend'];?></a>
+                /
+                <a  href="#"
+                    class="detail-marked-account-list" 
+                    data-id="<?php echo $movie->get('id'); ?>"
+                    data-mark="<?php echo Movie::MARK_IGNORED; ?>"
+                    data-scope="all"
+                    data-loadding-img = "<?php echo $assetsURL.'/image/loadding.gif';?>"
+                >全网:<?php echo $markCount[Movie::MARK_IGNORED]['all'];?></a>
+            </li>
+        </ul>
+        
         <br>
-        <table class="table table-bordered">
-            <tr>
-                <td>时长: <?php echo intval($movie->get('length')/60);?>分钟</td>
-                <td>
-                    地区: 
-                    <?php $movieRegion=$movie->getRegion();?>
-                    <?php if ( null === $movieRegion ): ?>
-                        其他
-                    <?php else : ?>
-                        <a href="/?module=movie&action=index&query[region]=<?php echo $movieRegion->get('id');?>">
-                            <?php echo $movieRegion->get('name');?>
-                        </a>
-                    <?php endif; ?>
-                </td>
-                <td>
-                    类型:
-                    <?php $movieCategories = $movie->getCategories(); ?> 
-                    <?php if ( empty($movieCategories) ) : ?>
-                        其他
-                    <?php else: ?>
-                        <?php foreach ( $movieCategories as $category ) : ?>
-                            <a href="/?module=movie&action=index&query[category]=<?php echo $category->get('id');?>">
-                                <?php echo $category->get('name');?>
-                            </a>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </td>
-                <td>
-                    语言: 
-                    <?php $movieLanguage = $movie->getLanguage(); ?>
-                    <?php if ( null === $movieLanguage ) : ?>
-                        其他
-                    <?php else: ?>
-                        <a href="/?module=movie&action=index&query[language]=<?php echo $movieLanguage->get('id');?>">
-                            <?php echo $movieLanguage->get('name');?>
-                        </a>
-                    <?php endif; ?>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    导演: 
-                    <?php foreach ( $movie->getDirectors() as $director ) : ?>
-                        <a href="/?module=movie&action=index&query[name]=<?php echo urlencode('导演:'.$director->get('name'));?>">
-                            <?php echo $director->get('name'); ?>
-                        </a>
-                    <?php endforeach; ?>
-                </td>
-                <td colspan="3">
-                    主演： 
-                    <?php foreach ( $movie->getActors() as $actor ) : ?>
-                        <a href="/?module=movie&action=index&query[name]=<?php echo urlencode('演员:'.$actor->get('name'));?>">
-                            <?php echo $actor->get('name'); ?>
-                        </a>
-                    <?php endforeach; ?>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4">&nbsp;</td>
-            <tr>
-            <tr>
-                <td colspan="4">&nbsp;</td>
-            </tr>
-            <tr>
-                <td>
-                    想看: &nbsp;&nbsp;
-                    <small>
-                        <a  href="#"
-                            class="detail-marked-account-list"
-                            data-id="<?php echo $movie->get('id'); ?>"
-                            data-mark="<?php echo Movie::MARK_INTERESTED; ?>"
-                            data-scope="friends"
-                            data-loadding-img = "<?php echo $assetsURL.'/image/loadding.gif';?>"
-                        >好友:<?php echo $markCount[Movie::MARK_INTERESTED]['friend'];?></a>
-                        /
-                        <a  href="#"
-                            class="detail-marked-account-list"
-                            data-id="<?php echo $movie->get('id'); ?>"
-                            data-mark="<?php echo Movie::MARK_INTERESTED; ?>"
-                            data-scope="all"
-                            data-loadding-img = "<?php echo $assetsURL.'/image/loadding.gif';?>"
-                        >全网:<?php echo $markCount[Movie::MARK_INTERESTED]['all'];?></a>
-                    </small>
-                </td>
-                <td>
-                    已看:  &nbsp;&nbsp;
-                    <small>
-                        <a  href="#"
-                            class="detail-marked-account-list" 
-                            data-id="<?php echo $movie->get('id'); ?>"
-                            data-mark="<?php echo Movie::MARK_WATCHED; ?>"
-                            data-scope="friends"
-                            data-loadding-img = "<?php echo $assetsURL.'/image/loadding.gif';?>"
-                        >好友:<?php echo $markCount[Movie::MARK_WATCHED]['friend'];?></a>
-                        /
-                        <a  href="#"
-                            class="detail-marked-account-list" 
-                            data-id="<?php echo $movie->get('id'); ?>"
-                            data-mark="<?php echo Movie::MARK_WATCHED; ?>"
-                            data-scope="all"
-                            data-loadding-img = "<?php echo $assetsURL.'/image/loadding.gif';?>"
-                        >全网:<?php echo $markCount[Movie::MARK_WATCHED]['all'];?></a>
-                    </small>
-                </td>
-                <td>
-                    忽略:  &nbsp;&nbsp;
-                    <small>
-                        <a  href="#"
-                            class="detail-marked-account-list" 
-                            data-id="<?php echo $movie->get('id'); ?>"
-                            data-mark="<?php echo Movie::MARK_IGNORED; ?>"
-                            data-scope="friends"
-                            data-loadding-img = "<?php echo $assetsURL.'/image/loadding.gif';?>"
-                        >好友:<?php echo $markCount[Movie::MARK_IGNORED]['friend'];?></a>
-                        /
-                        <a  href="#"
-                            class="detail-marked-account-list" 
-                            data-id="<?php echo $movie->get('id'); ?>"
-                            data-mark="<?php echo Movie::MARK_IGNORED; ?>"
-                            data-scope="all"
-                            data-loadding-img = "<?php echo $assetsURL.'/image/loadding.gif';?>"
-                        >全网:<?php echo $markCount[Movie::MARK_IGNORED]['all'];?></a>
-                    </small>
-                </td>
-                <td></td>
-            </tr>
-        </table>
         <div class="clearfix">
             <div class="btn-group pull-left">
                 <?php foreach ( $markNames as $markKey => $markName ) : ?>
@@ -184,6 +185,7 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
                 <?php endforeach; ?>
             </div>
             
+            <!--  
             <div class="pull-left padding-left-10">
                 <button class                       = "btn btn-default"
                         data-online-play-trigger    = "true"
@@ -224,6 +226,7 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
                     <script src="http://qzonestyle.gtimg.cn/qzone/app/qzlike/qzopensl.js#jsdate=20111201" charset="utf-8"></script>
                 </div>
             </div>
+            -->
         </div>
     </div>
 </div>
