@@ -26,18 +26,18 @@
             </div>
         </div>
     <?php endforeach; ?>
-    <?php if ( $vars['isWatched'] ): ?>
-        <?php ob_start(); ?>
-        <?php ob_implicit_flush(false); ?>
-        <li id="movie-characters-add">
-            <a href="#" data-toggle="modal" data-target="#movie-characters-edit-dialog">
-                添加角色
-            </a>
-        </li>
-    <?php endif; ?>
-    
-    <?php $vars['pager']->addViewToCenter(ob_get_clean()); ?>
-    <?php $vars['pager']->setPrevPageButtonClass('movie-characters-container-pager'); ?>
-    <?php $vars['pager']->setNextPageButtonClass('movie-characters-container-pager'); ?>
-    <?php $vars['pager']->show(); ?>
 <?php endif; ?>
+
+<?php if ( $vars['isWatched'] ): ?>
+    <?php ob_start(); ?>
+    <?php ob_implicit_flush(false); ?>
+    <li id="movie-characters-add">
+        <a href="#" data-toggle="modal" data-target="#movie-characters-edit-dialog">
+            添加角色
+        </a>
+    </li>
+<?php endif; ?>
+<?php $vars['pager']->addViewToCenter(ob_get_clean()); ?>
+<?php $vars['pager']->setPrevPageButtonClass('movie-characters-container-pager'); ?>
+<?php $vars['pager']->setNextPageButtonClass('movie-characters-container-pager'); ?>
+<?php $vars['pager']->show(); ?>

@@ -7,7 +7,9 @@ namespace X\Util\Model;
 /**
  * Use statements
  */
+use X\Core\X;
 use X\Service\XDatabase\Core\ActiveRecord\XActiveRecord;
+use X\Module\Account\Service\Account\Service as AccountService;
 
 /**
  * The basic model class
@@ -22,6 +24,14 @@ abstract class Basic extends XActiveRecord {
         if ( $this->has('id') ) {
             $this->getAttribute('id')->setValueBuilder(array($this, 'buildId'));
         }
+        
+        if ( $this->has('record_created_at') ) {
+            $this->getAttribute('record_created_at')->setValueBuilder(array($this, 'buildRecordCreatedAt'));
+        }
+        
+        if ( $this->has('record_created_by') ) {
+            $this->getAttribute('record_created_at')->setValueBuilder(array($this, 'buildRecordCreatedBy'));
+        }
     }
     
     /**
@@ -29,6 +39,23 @@ abstract class Basic extends XActiveRecord {
      */
     public function buildId( $record ) {
         return$this->generateUUID();
+    }
+    
+    /**
+     * @return string
+     */
+    public function buildRecordCreatedAt() {
+        return date('Y-m-d H:i:s');
+    }
+    
+    /**
+     * @return string
+     */
+    public function buildRecordCreatedBy() {
+        /* @var $accountService AccountService */
+        $accountService = X::system()->getServiceManager()->get(AccountService::getServiceName());
+        $currentAccount = $accountService->getCurrentAccount();
+        return (null===$currentAccount) ? null : $currentAccount->getID();
     }
     
     /**

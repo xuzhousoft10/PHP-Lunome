@@ -33,7 +33,20 @@ class Character {
      * @return string
      */
     public function getPhotoURL() {
-        return 'http://7te9pc.com1.z0.glb.clouddn.com/'.$this->model->id;
+        $photoURL = $this->model->photo_url;
+        if ( empty($photoURL) ) {
+            $assetsURL = X::system()->getConfiguration()->get('assets-base-url');
+            $photoURL = $assetsURL.'/image/movie_default_character_photo.jpg';
+        }
+        
+        return $photoURL;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getName() {
+        return $this->model->name;
     }
     
     /**

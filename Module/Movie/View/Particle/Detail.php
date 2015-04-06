@@ -1,5 +1,6 @@
 <?php use X\Module\Movie\Service\Movie\Core\Instance\Movie; ?>
 <?php use X\Service\XView\Core\Handler\Html; ?>
+<?php use X\Service\XDatabase\Core\ActiveRecord\Criteria;?>
 <?php /* @var $movie \X\Module\Movie\Service\Movie\Core\Instance\Movie */ ?>
 <?php /* @var $currentUser \X\Module\Account\Service\Account\Core\Instance\Account */ ?>
 <?php /* @var $this \X\Service\XView\Core\Util\HtmlView\ParticleView */ ?>
@@ -238,14 +239,62 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
 <div class="margin-top-5">
     <p><?php echo Html::HTMLEncode($movie->get('introduction'));?></p>
 </div>
-<hr>
 
+<br>
+<h4 class="margin-bottom-5 clearfix">
+    人物角色
+    <span class="pull-right">
+        <a href="#">
+            <small>查看所有&gt;&gt;</small>
+        </a>
+    </span>
+</h4>
+<hr class="margin-top-0">
+<div class="clearfix">
+    <?php $criteria = new Criteria(); ?>
+    <?php $criteria->limit = 9; ?>
+    <?php $characters = $movie->getCharacterManager()->find($criteria); ?>
+    <?php if (empty($characters)) : ?>
+        <span>
+            <small>
+                暂时没有该影片的角色数据～～～
+                <?php if ( Movie::MARK_WATCHED === $myMark) : ?>
+                    , 你可以进入
+                    <a href="/?module=movie&action=character/index">
+                    管理页面
+                    </a>
+                    添加角色。
+                <?php endif; ?>
+            </small>
+        </span>
+    <?php else:?>
+    <ul class="list-inline">
+        <?php foreach ( $characters as $character ): ?>
+            <?php /* @var $character \ \X\Module\Movie\Service\Movie\Core\Instance\Character */ ?>
+            <li>
+                <?php printf('<a href="/?module=movie&action=character/detail&id=%s">', $movie->get('id'));?>
+                <div class="text-center">
+                    <img    class="img-rounded lunome-movie-character-photo-80-80" 
+                            src="<?php echo $character->getPhotoURL(); ?>"
+                            width="80"
+                            height="80"
+                    >
+                    <br>
+                    <?php echo Html::HTMLEncode($character->getName());?>
+                </div>
+                <?php printf('</a>'); ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+    <?php endif; ?>
+</div>
+<br>
+<br>
 <div class="row">
     <div class="col-md-8">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#movie-classic-dialogues-container" data-toggle="tab">经典台词</a></li>
             <li><a href="#movie-posters-container" data-toggle="tab">宣传海报</a></li>
-            <li><a href="#movie-characters-container" data-toggle="tab">人物角色</a></li>
         </ul>
         
         <!-- Tab panes -->
@@ -264,15 +313,6 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
                     id                  = "movie-posters-container"
                     data-resource-type  = "poster"
                     data-index-url      = "/?module=movie&action=poster/index&id=<?php echo $movie->get('id'); ?>"
-                    data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
-                    data-movie-id       = "<?php echo $movie->get('id'); ?>"
-            ></div>
-            
-            <!-- character Tab -->
-            <div    class               = "tab-pane"
-                    id                  = "movie-characters-container"
-                    data-resource-type  = "character"
-                    data-index-url      = "/?module=movie&action=character/index&id=<?php echo $movie->get('id'); ?>"
                     data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
                     data-movie-id       = "<?php echo $movie->get('id'); ?>"
             ></div>
