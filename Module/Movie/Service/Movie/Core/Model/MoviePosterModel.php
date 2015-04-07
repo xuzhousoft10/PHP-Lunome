@@ -7,6 +7,10 @@ use X\Module\Lunome\Util\Model\Basic;
 /**
  * @property string $id
  * @property string $movie_id
+ * @property string $description
+ * @property string $url
+ * @property string $record_created_at
+ * @property string $record_created_by
  **/
 class MoviePosterModel extends Basic {
     /**
@@ -17,6 +21,10 @@ class MoviePosterModel extends Basic {
         $columns = array();
         $columns['id']                  = 'PRIMARY VARCHAR(36) NOTNULL';
         $columns['movie_id']            = 'VARCHAR(36) NOTNULl';
+        $columns['description']         = 'VARCHAR(1024)';
+        $columns['url']                 = 'VARCHAR(256)';
+        $columns['record_created_at']   = 'DATETIME';
+        $columns['record_created_by']   = 'VARCHAR(36)';
         return $columns;
     }
 

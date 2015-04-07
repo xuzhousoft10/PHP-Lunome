@@ -22,7 +22,7 @@ $scriptManager = $this->getManager()->getHost()->getScriptManager();
 $scriptManager->add('ajaxfileupload')->setSource('library/jquery/plugin/ajaxfileupload.js');
 $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequirements('ajaxfileupload');
 ?>
-<div class="row margin-top-5">
+<div class="clearfix margin-top-5">
     <ol class="breadcrumb">
         <li><a href="/?module=movie&action=index">电影</a></li>
         <li class="active"><?php echo Html::HTMLEncode($movie->get('name'));?></li>
@@ -289,7 +289,54 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
     <?php endif; ?>
 </div>
 <br>
+
+<h4 class="margin-bottom-5 clearfix">
+    相关图片
+    <span class="pull-right">
+        <a href="#">
+            <small>查看所有&gt;&gt;</small>
+        </a>
+    </span>
+</h4>
+<hr class="margin-top-0">
+<div class="clearfix">
+    <?php $criteria = new Criteria(); ?>
+    <?php $criteria->limit = 9; ?>
+    <?php $posters = $movie->getPosterManager()->find($criteria); ?>
+    <?php if (empty($posters)) : ?>
+        <span>
+            <small>
+                暂时没有该影片的图片数据数据～～～
+                <?php if ( Movie::MARK_WATCHED === $myMark) : ?>
+                    , 你可以进入
+                    <a href="/?module=movie&action=poster/index">
+                    管理页面
+                    </a>
+                    添加图片。
+                <?php endif; ?>
+            </small>
+        </span>
+    <?php else:?>
+    <ul class="list-inline">
+        <?php foreach ( $posters as $poster ): ?>
+            <?php /* @var $poster \X\Module\Movie\Service\Movie\Core\Instance\Poster */ ?>
+            <li>
+                <?php printf('<a href="/?module=movie&action=poster/detail&id=%s">', $movie->get('id'));?>
+                <div class="text-center">
+                    <img    class="img-rounded lunome-movie-character-photo-80-80" 
+                            src="<?php echo $poster->getURL(); ?>"
+                            width="80"
+                            height="80"
+                    >
+                </div>
+                <?php printf('</a>'); ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+    <?php endif; ?>
+</div>
 <br>
+
 <div class="row">
     <div class="col-md-8">
         <ul class="nav nav-tabs">

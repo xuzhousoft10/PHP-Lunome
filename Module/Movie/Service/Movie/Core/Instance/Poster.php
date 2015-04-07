@@ -71,6 +71,6 @@ class Poster {
      * @return string
      */
     public function getURL() {
-        return 'http://7sbyuj.com1.z0.glb.clouddn.com/'.$this->model->id;
+        return $this->model->url;
     }
 }
