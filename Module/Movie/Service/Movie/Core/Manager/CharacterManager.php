@@ -46,11 +46,23 @@ class CharacterManager {
         }
         
         $criteria->condition->andAlso()->is('movie_id', $this->movieID);
-        $characters = MovieCharacterModel::model()->findAll($condition);
+        $characters = MovieCharacterModel::model()->findAll($criteria);
         foreach ( $characters as $index => $character ) {
             $characters[$index] = new Character($character);
         }
         return $characters;
+    }
+    
+    /**
+     * @param string $id
+     * @return \X\Module\Movie\Service\Movie\Core\Instance\Character
+     */
+    public function get( $id ) {
+        $character = MovieCharacterModel::model()->findByPrimaryKey($id);
+        if ( null === $character ) {
+            return null;
+        }
+        return new Character($character);
     }
     
     /**

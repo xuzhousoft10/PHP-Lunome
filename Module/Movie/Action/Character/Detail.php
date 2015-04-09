@@ -10,12 +10,12 @@ use X\Module\Movie\Service\Movie\Service as MovieService;
 /**
  * 
  */
-class Index extends Visual { 
+class Detail extends Visual { 
     /**
      * (non-PHPdoc)
      * @see \X\Service\XAction\Core\Util\Action::runAction()
      */
-    public function runAction( $movie ) {
+    public function runAction( $movie, $character ) {
         /* @var $movieService MovieService */
         $movieService = $this->getService(MovieService::getServiceName());
         $movie = $movieService->get($movie);
@@ -24,18 +24,22 @@ class Index extends Visual {
         }
         
         $characterManager = $movie->getCharacterManager();
-        $characters = $characterManager->find();
+        $character = $characterManager->get($character);
+        if ( null === $character ) {
+            $this->throw404();
+        }
+        
         $movieAccount = $movieService->getCurrentAccount();
         
         $view = $this->getView();
         $view->setLayout($this->getLayoutViewPath('TwoColumnsBigLeft', LunomeModule::getModuleName()));
-        $particleView = $view->getParticleViewManager()->load('CHARACTER_INDEX', $this->getParticleViewPath('Character/Index'));
+        $particleView = $view->getParticleViewManager()->load('CHARACTER_INDEX', $this->getParticleViewPath('Character/Detail'));
         $particleView->getDataManager()
-            ->set('characters', $characters)
-            ->set('id', $movie->get('id'))
+            ->set('character', $character)
             ->set('movie', $movie)
-            ->set('isWatched', $movieAccount->isWatched($movie->get('id')));
+            ->set('movieAccount', $movieAccount)
+            ->set('currentAccount', $this->getCurrentAccount());
         
-        $view->title = $movie->get('name').'的人物角色';
+        $view->title = $movie->get('name').'的人物角色 -- '.$character->get('name');
     }
 }

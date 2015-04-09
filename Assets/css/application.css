@@ -23,6 +23,7 @@
 .media-index-tool-bar-item > a {color: #DDDDDD;text-decoration: none;}
 
 
+.lunome-height-80 {height: 80px}
 
 /* 定义用于显示电影的样式。 */
 .lunome-movie-cover-200-300 {height: 300px;width:200px;}

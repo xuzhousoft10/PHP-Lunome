@@ -244,7 +244,7 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
 <h4 class="margin-bottom-5 clearfix">
     人物角色
     <span class="pull-right">
-        <a href="#">
+        <a href="/?module=movie&action=character/index&movie=<?php echo $movie->get('id');?>">
             <small>查看所有&gt;&gt;</small>
         </a>
     </span>
