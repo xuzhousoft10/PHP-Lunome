@@ -6,6 +6,8 @@ namespace X\Module\Movie\Service\Movie\Core\Instance;
 use X\Core\X;
 use X\Module\Movie\Service\Movie\Core\Model\MovieCharacterModel;
 use X\Service\QiNiu\Service as QiNiuService;
+use X\Util\Service\Manager\ShortCommentManager;
+use X\Module\Movie\Service\Movie\Core\Model\MovieCharacterCommentModel;
 /**
  * 
  */
@@ -85,5 +87,20 @@ class Character {
             $qiniu->putFile($this->photoPath, null, $this->model->id);
         }
         return $this;
+    }
+    
+    /**
+     * @var ShortCommentManager
+     */
+    private $commentManager = null;
+    
+    /**
+     * @return \X\Util\Service\Manager\ShortCommentManager
+     */
+    public function getCommentManager() {
+        if ( null === $this->commentManager ) {
+            $this->commentManager = new ShortCommentManager($this, MovieCharacterCommentModel::getClassName());
+        }
+        return $this->commentManager;
     }
 }

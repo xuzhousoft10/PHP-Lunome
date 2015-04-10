@@ -30,7 +30,7 @@ abstract class Basic extends XActiveRecord {
         }
         
         if ( $this->has('record_created_by') ) {
-            $this->getAttribute('record_created_at')->setValueBuilder(array($this, 'buildRecordCreatedBy'));
+            $this->getAttribute('record_created_by')->setValueBuilder(array($this, 'buildRecordCreatedBy'));
         }
     }
     
@@ -68,5 +68,20 @@ abstract class Basic extends XActiveRecord {
                 mt_rand( 0, 0x0fff ) | 0x4000,
                 mt_rand( 0, 0x3fff ) | 0x8000,
                 mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ));
+    }
+    
+    /**
+     * @return string
+     */
+    public static function getClassName() {
+        return get_called_class();
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \X\Service\XDatabase\Core\ActiveRecord\XActiveRecord::getTableNamePrefix()
+     */
+    protected function getTableNamePrefix() {
+        return 'lunome_';
     }
 }

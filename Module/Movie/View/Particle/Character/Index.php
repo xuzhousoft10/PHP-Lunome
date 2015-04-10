@@ -20,6 +20,7 @@
     </div>
 <?php else : ?>
     <?php foreach ( $characters as $character ) :?>
+    <?php /* @var $character \X\Module\Movie\Service\Movie\Core\Instance\Character */ ?>
     <div class="media">
         <div class="media-left">
             <img class="media-object img-rounded lunome-movie-character-photo-80-80" 
@@ -50,7 +51,7 @@
         &nbsp;
         
         <a href="/?module=movie&action=character/detail&movie=<?php echo $movie->get('id')?>&character=<?php echo $character->get('id');?>">
-            <span>评论(<?php echo rand(10, 10000000);?>)</span>
+            <span>评论(<?php echo $character->getCommentManager()->count();?>)</span>
         </a>
         &nbsp;
     </div>
