@@ -32,14 +32,12 @@
 </div>
 
 <div class="text-right">
-    <a href="/?module=movie&action=character/voteup&movie=<?php echo $movie->get('id')?>&character=<?php echo $character->get('id');?>">
-        <span class="glyphicon glyphicon-thumbs-up" >(<?php echo rand(10, 10000000);?>)</span>
-    </a>
+    <a href="/?module=movie&action=character/vote&movie=<?php echo $movie->get('id')?>&character=<?php echo $character->get('id');?>&vote=up"
+    ><span class="glyphicon glyphicon-thumbs-up" >(<?php echo $character->getVoteManager()->countVoteUp(); ?>)</span></a>
     &nbsp;
     
-    <a href="/?module=movie&action=character/votedown&movie=<?php echo $movie->get('id')?>&character=<?php echo $character->get('id');?>">
-        <span class="glyphicon glyphicon-thumbs-down" >(<?php echo rand(10, 10000000);?>)</span>
-    </a>
+    <a href="/?module=movie&action=character/vote&movie=<?php echo $movie->get('id')?>&character=<?php echo $character->get('id');?>&vote=down"
+    ><span class="glyphicon glyphicon-thumbs-down" >(<?php echo $character->getVoteManager()->countVoteDown();?>)</span></a>
 </div>
 
 <br>

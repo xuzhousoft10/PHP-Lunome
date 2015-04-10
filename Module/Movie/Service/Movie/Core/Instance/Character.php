@@ -8,6 +8,8 @@ use X\Module\Movie\Service\Movie\Core\Model\MovieCharacterModel;
 use X\Service\QiNiu\Service as QiNiuService;
 use X\Util\Service\Manager\ShortCommentManager;
 use X\Module\Movie\Service\Movie\Core\Model\MovieCharacterCommentModel;
+use X\Util\Service\Manager\VoteManager;
+use X\Module\Movie\Service\Movie\Core\Model\MovieCharacterVoteModel;
 /**
  * 
  */
@@ -102,5 +104,20 @@ class Character {
             $this->commentManager = new ShortCommentManager($this, MovieCharacterCommentModel::getClassName());
         }
         return $this->commentManager;
+    }
+    
+    /**
+     * @var VoteManager
+     */
+    private $voteManger = null;
+    
+    /**
+     * @return \X\Util\Service\Manager\VoteManager
+     */
+    public function getVoteManager() {
+        if ( null === $this->voteManger ) {
+            $this->voteManger = new VoteManager($this, MovieCharacterVoteModel::getClassName());
+        }
+        return $this->voteManger;
     }
 }
