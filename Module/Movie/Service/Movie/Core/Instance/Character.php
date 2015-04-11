@@ -10,6 +10,8 @@ use X\Util\Service\Manager\ShortCommentManager;
 use X\Module\Movie\Service\Movie\Core\Model\MovieCharacterCommentModel;
 use X\Util\Service\Manager\VoteManager;
 use X\Module\Movie\Service\Movie\Core\Model\MovieCharacterVoteModel;
+use X\Util\Service\Manager\FavouriteManager;
+use X\Module\Movie\Service\Movie\Core\Model\MovieCharacterFavouriteModel;
 /**
  * 
  */
@@ -119,5 +121,20 @@ class Character {
             $this->voteManger = new VoteManager($this, MovieCharacterVoteModel::getClassName());
         }
         return $this->voteManger;
+    }
+    
+    /**
+     * @var FavouriteManager
+     */
+    private $favouriteManager = null;
+    
+    /**
+     * @return \X\Util\Service\Manager\FavouriteManager
+     */
+    public function getFavouriteManager() {
+        if ( null === $this->favouriteManager ) {
+            $this->favouriteManager = new FavouriteManager($this, MovieCharacterFavouriteModel::getClassName());
+        }
+        return $this->favouriteManager;
     }
 }

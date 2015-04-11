@@ -1,37 +1,45 @@
 <?php use X\Core\X; ?>
 <?php use X\Service\XView\Core\Handler\Html; ?>
 <?php $vars = get_defined_vars(); ?>
-<?php $assetsURL = X::system()->getConfiguration()->get('assets-base-url'); ?>
 <?php /* @var $character \X\Module\Movie\Service\Movie\Core\Instance\Character */ ?>
 <?php $character = $vars['character']; ?>
 <?php $movie = $vars['movie']; ?>
-<?php $currentAccount = $vars['currentAccount']; ?>
 <ol class="breadcrumb">
     <li><a href="/?module=movie&action=index">电影</a></li>
     <li><a href="/?module=movie&action=detail&id=<?php echo $movie->get('id'); ?>"><?php echo Html::HTMLEncode($movie->get('name'));?></a></li>
     <li><a href="/?module=movie&action=character/index&movie=<?php echo $movie->get('id');?>">人物角色</a></li>
-    <li class="active"><?php echo $character->get('name'); ?></li>
+    <li class="active"><?php echo Html::HTMLEncode($character->get('name')); ?></li>
 </ol>
     
 <div class="media">
     <div class="media-left">
         <img class="media-object img-rounded lunome-movie-character-photo-80-80" 
             src="<?php echo $character->getPhotoURL(); ?>" 
-            alt="<?php echo $character->get('name'); ?>"
+            alt="<?php echo Html::HTMLAttributeEncode($character->get('name')); ?>"
         >
     </div>
     
     <div class="media-body">
         <h4 class="media-heading">
             <a href="/?module=movie&action=character/detail&movie=<?php echo $movie->get('id')?>&character=<?php echo $character->get('id');?>">
-                <?php echo $character->get('name');?>
+                <?php echo Html::HTMLEncode($character->get('name'));?>
             </a>
         </h4>
-        <?php echo $character->get('description');?>
+        <?php echo Html::HTMLEncode($character->get('description'));?>
     </div>
 </div>
 
 <div class="text-right">
+    <?php $favouriteManager = $character->getFavouriteManager(); ?>
+    <?php if ( $favouriteManager->isMyFavourite() ):  ?>
+        <a href="/?module=movie&action=character/like&movie=<?php echo $movie->get('id')?>&character=<?php echo $character->get('id');?>&like=no"
+        ><span class="glyphicon glyphicon-heart" >(<?php echo $character->getFavouriteManager()->count(); ?>)</span></a>
+    <?php else : ?>
+        <a href="/?module=movie&action=character/like&movie=<?php echo $movie->get('id')?>&character=<?php echo $character->get('id');?>&like=yes"
+        ><span class="glyphicon glyphicon-heart-empty" >(<?php echo $character->getFavouriteManager()->count(); ?>)</span></a>
+    <?php endif; ?>
+    &nbsp;
+    
     <a href="/?module=movie&action=character/vote&movie=<?php echo $movie->get('id')?>&character=<?php echo $character->get('id');?>&vote=up"
     ><span class="glyphicon glyphicon-thumbs-up" >(<?php echo $character->getVoteManager()->countVoteUp(); ?>)</span></a>
     &nbsp;
@@ -45,6 +53,7 @@
 <hr class="margin-0">
 <?php /* @var $movieAccount \X\Module\Movie\Service\Movie\Core\Instance\Account */ ?>
 <?php /* @var $currentAccount \X\Module\Account\Service\Account\Core\Instance\Account */ ?>
+<?php $currentAccount = $vars['currentAccount']; ?>
 <?php $movieAccount = $vars['movieAccount']; ?>
 <?php if ( $movieAccount->isWatched($movie->get('id')) ) : ?>
     <form action="/?module=movie&action=character/comment" method="post">
@@ -54,7 +63,7 @@
             <div class="media-left">
                 <img class="media-object img-rounded lunome-movie-character-photo-80-80" 
                     src="<?php echo $currentAccount->getProfileManager()->get('photo'); ?>" 
-                    alt="<?php echo $currentAccount->getProfileManager()->get('nickname'); ?>"
+                    alt="<?php echo Html::HTMLAttributeEncode($currentAccount->getProfileManager()->get('nickname')); ?>"
                 >
             </div>
             

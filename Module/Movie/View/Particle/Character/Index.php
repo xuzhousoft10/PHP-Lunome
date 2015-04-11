@@ -25,21 +25,31 @@
         <div class="media-left">
             <img class="media-object img-rounded lunome-movie-character-photo-80-80" 
                 src="<?php echo $character->getPhotoURL(); ?>" 
-                alt="<?php echo $character->get('name'); ?>"
+                alt="<?php echo Html::HTMLAttributeEncode($character->get('name')); ?>"
             >
         </div>
         
         <div class="media-body">
             <h4 class="media-heading">
                 <a href="/?module=movie&action=character/detail&movie=<?php echo $movie->get('id')?>&character=<?php echo $character->get('id');?>">
-                    <?php echo $character->get('name');?>
+                    <?php echo Html::HTMLEncode($character->get('name'));?>
                 </a>
             </h4>
-            <?php echo $character->get('description');?>
+            <?php echo Html::HTMLEncode($character->get('description'));?>
         </div>
     </div>
     
     <div class="text-right">
+        <?php $favouriteManager = $character->getFavouriteManager(); ?>
+        <?php if ( $favouriteManager->isMyFavourite() ):  ?>
+            <a href="/?module=movie&action=character/like&movie=<?php echo $movie->get('id')?>&character=<?php echo $character->get('id');?>&like=no"
+            ><span class="glyphicon glyphicon-heart" >(<?php echo $character->getFavouriteManager()->count(); ?>)</span></a>
+        <?php else : ?>
+            <a href="/?module=movie&action=character/like&movie=<?php echo $movie->get('id')?>&character=<?php echo $character->get('id');?>&like=yes"
+            ><span class="glyphicon glyphicon-heart-empty" >(<?php echo $character->getFavouriteManager()->count(); ?>)</span></a>
+        <?php endif; ?>
+        &nbsp;
+        
         <a href="/?module=movie&action=character/vote&movie=<?php echo $movie->get('id')?>&character=<?php echo $character->get('id');?>&vote=up"
         ><span class="glyphicon glyphicon-thumbs-up" >(<?php echo $character->getVoteManager()->countVoteUp(); ?>)</span></a>
         &nbsp;
