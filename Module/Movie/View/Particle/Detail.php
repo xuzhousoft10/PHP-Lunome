@@ -378,21 +378,11 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
 <div class="row">
     <div class="col-md-8">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#movie-classic-dialogues-container" data-toggle="tab">经典台词</a></li>
             <li><a href="#movie-posters-container" data-toggle="tab">宣传海报</a></li>
         </ul>
         
         <!-- Tab panes -->
         <div class="tab-content">
-            <!-- classic dialogue Tab -->
-            <div    class               = "tab-pane active" 
-                    id                  = "movie-classic-dialogues-container"
-                    data-resource-type  = "dialogue"
-                    data-index-url      = "/?module=movie&action=classicDialogue/index&id=<?php echo $movie->get('id'); ?>"
-                    data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
-                    data-movie-id       = "<?php echo $movie->get('id'); ?>"
-            ></div>
-            
             <!-- poster Tab -->
             <div    class               = "tab-pane" 
                     id                  = "movie-posters-container"
