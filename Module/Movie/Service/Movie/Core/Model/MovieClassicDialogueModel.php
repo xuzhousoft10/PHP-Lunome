@@ -7,6 +7,7 @@ use X\Module\Lunome\Util\Model\Basic;
 /**
  * @property string $id
  * @property string $movie_id
+ * @property string $character_id
  * @property string $content
  **/
 class MovieClassicDialogueModel extends Basic {
@@ -17,8 +18,11 @@ class MovieClassicDialogueModel extends Basic {
     protected function describe() {
         $columns = array();
         $columns['id']                  = 'PRIMARY VARCHAR(36) NOTNULL';
-        $columns['movie_id']            = 'VARCHAR(36) NOTNULl';
-        $columns['content']             = 'VARCHAR(1024) NOTNULl';
+        $columns['movie_id']            = 'VARCHAR(36) NOTNULL';
+        $columns['character_id']        = 'VARCHAR(36) NOTNULL';
+        $columns['content']             = 'VARCHAR(1024) NOTNULL';
+        $columns['record_created_at']   = 'DATETIME';
+        $columns['record_created_by']   = 'VARCHAR(36)';
         return $columns;
     }
 

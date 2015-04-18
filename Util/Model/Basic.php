@@ -13,6 +13,8 @@ use X\Module\Account\Service\Account\Service as AccountService;
 
 /**
  * The basic model class
+ * @property string $record_created_at
+ * @property string $record_created_by
  */
 abstract class Basic extends XActiveRecord {
     /**

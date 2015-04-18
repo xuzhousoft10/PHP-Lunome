@@ -39,6 +39,16 @@ abstract class Action {
         $this->groupName = $groupName;
     }
     
+    private $parameters = array();
+    
+    /**
+     * @param unknown $name
+     * @return Ambigous <NULL, multitype:>
+     */
+    public function getParameter( $name ) {
+        return key_exists($name, $this->parameters) ? $this->parameters[$name] : null;
+    }
+    
     /**
      * Execute this Action. If beforeRunAction returns false, then
      * it would not execute the Action and return false as Action 
@@ -54,6 +64,7 @@ abstract class Action {
      * @return boolean|unknown
      */
     public function run( $parameters=array() ){
+        $this->parameters = $parameters;
         $this->beforeRunAction();
         $result = $this->doRunAction($parameters);
         $this->afterRunAction();

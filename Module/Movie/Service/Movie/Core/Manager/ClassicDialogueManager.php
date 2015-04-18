@@ -49,7 +49,7 @@ class ClassicDialogueManager {
         $criteria->condition->andAlso()->is('movie_id', $this->movieID);
         $dialogues = MovieClassicDialogueModel::model()->findAll($criteria);
         foreach ( $dialogues as $index => $dialogue ) {
-            $dialogues[$index] = new ClassicDialogue($dialogue);
+            $dialogues[$index] = new ClassicDialogue($dialogue, $this->movieModel);
         }
         return $dialogues;
     }
@@ -73,7 +73,7 @@ class ClassicDialogueManager {
      */
     public function get( $id ) {
         $dialogue = MovieClassicDialogueModel::model()->findByPrimaryKey($id);
-        return (null===$dialogue) ? null : new ClassicDialogue($dialogue);
+        return (null===$dialogue) ? null : new ClassicDialogue($dialogue, $this->movieModel);
     }
     
     /**

@@ -272,7 +272,7 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
         <?php foreach ( $characters as $character ): ?>
             <?php /* @var $character \ \X\Module\Movie\Service\Movie\Core\Instance\Character */ ?>
             <li>
-                <?php printf('<a href="/?module=movie&action=character/detail&id=%s">', $movie->get('id'));?>
+                <?php printf('<a href="/?module=movie&action=character/detail&character=%s&movie=%s">', $character->get('id'), $movie->get('id'));?>
                 <div class="text-center">
                     <img    class="img-rounded lunome-movie-character-photo-80-80" 
                             src="<?php echo $character->getPhotoURL(); ?>"
@@ -335,8 +335,46 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
     </ul>
     <?php endif; ?>
 </div>
-<br>
 
+<br>
+<h4 class="margin-bottom-5 clearfix">
+    经典台词
+    <span class="pull-right">
+        <a href="/?module=movie&action=dialogue/index&movie=<?php echo $movie->get('id');?>">
+            <small>查看所有&gt;&gt;</small>
+        </a>
+    </span>
+</h4>
+<hr class="margin-top-0">
+<div class="clearfix">
+    <?php $criteria = new Criteria(); ?>
+    <?php $criteria->limit = 9; ?>
+    <?php $dialogues = $movie->getClassicDialogueManager()->find($criteria); ?>
+    <?php if ( empty($dialogues) ) : ?>
+        <span>
+            <small>
+                暂时没有该影片的台词数据数据～～～
+                <?php if ( Movie::MARK_WATCHED === $myMark) : ?>
+                    , 你可以进入
+                    <a href="/?module=movie&action=dialogue/index&movie=<?php echo $movie->get('id');?>">
+                    管理页面
+                    </a>
+                    添加图片。
+                <?php endif; ?>
+            </small>
+        </span>
+    <?php else:?>
+        <?php foreach ( $dialogues as $dialogue ): ?>
+            <?php /* @var $dialogue \X\Module\Movie\Service\Movie\Core\Instance\ClassicDialogue */ ?>
+                <p>
+                    <a href="/?module=movie&action=dialogue/detail&movie=<?php echo $movie->get('id'); ?>&dialogue=<?php echo $dialogue->get('id'); ?>">
+                        <?php echo $dialogue->get('content');?>
+                    </a>
+                </p>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</div>
+<br>
 <div class="row">
     <div class="col-md-8">
         <ul class="nav nav-tabs">

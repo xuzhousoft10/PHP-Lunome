@@ -6,16 +6,14 @@ namespace X\Module\Movie\Service\Movie\Core\Instance;
 use X\Core\X;
 use X\Module\Movie\Service\Movie\Core\Model\MovieCharacterModel;
 use X\Service\QiNiu\Service as QiNiuService;
-use X\Util\Service\Manager\ShortCommentManager;
 use X\Module\Movie\Service\Movie\Core\Model\MovieCharacterCommentModel;
-use X\Util\Service\Manager\VoteManager;
 use X\Module\Movie\Service\Movie\Core\Model\MovieCharacterVoteModel;
-use X\Util\Service\Manager\FavouriteManager;
 use X\Module\Movie\Service\Movie\Core\Model\MovieCharacterFavouriteModel;
+use X\Module\Movie\Service\Movie\Util\InteractionInstance;
 /**
  * 
  */
-class Character {
+class Character extends InteractionInstance {
     /**
      * @var MovieCharacterModel
      */
@@ -94,47 +92,23 @@ class Character {
     }
     
     /**
-     * @var ShortCommentManager
+     * @return string
      */
-    private $commentManager = null;
-    
-    /**
-     * @return \X\Util\Service\Manager\ShortCommentManager
-     */
-    public function getCommentManager() {
-        if ( null === $this->commentManager ) {
-            $this->commentManager = new ShortCommentManager($this, MovieCharacterCommentModel::getClassName());
-        }
-        return $this->commentManager;
+    public function getCommentModel() { 
+        return MovieCharacterCommentModel::getClassName(); 
     }
     
     /**
-     * @var VoteManager
+     * @return string
      */
-    private $voteManger = null;
-    
-    /**
-     * @return \X\Util\Service\Manager\VoteManager
-     */
-    public function getVoteManager() {
-        if ( null === $this->voteManger ) {
-            $this->voteManger = new VoteManager($this, MovieCharacterVoteModel::getClassName());
-        }
-        return $this->voteManger;
+    public function getVoteModel() {
+        return MovieCharacterVoteModel::getClassName();
     }
     
     /**
-     * @var FavouriteManager
+     * @return string
      */
-    private $favouriteManager = null;
-    
-    /**
-     * @return \X\Util\Service\Manager\FavouriteManager
-     */
-    public function getFavouriteManager() {
-        if ( null === $this->favouriteManager ) {
-            $this->favouriteManager = new FavouriteManager($this, MovieCharacterFavouriteModel::getClassName());
-        }
-        return $this->favouriteManager;
+    public function getFavouriteModel() {
+        return MovieCharacterFavouriteModel::getClassName();
     }
 }
