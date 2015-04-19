@@ -55,6 +55,16 @@ class ShortCommentManager {
     }
     
     /**
+     * 
+     * @param unknown $id
+     * @return Ambigous \X\Module\Movie\Service\Movie\Core\Instance\ShortComment
+     */
+    public function get( $id ) {
+        $comment = MovieShortCommentModel::model()->findByPrimaryKey($id);
+        return (null===$comment) ? null : new ShortComment($comment);
+    }
+    
+    /**
      * @param string $condition
      * @return number
      */

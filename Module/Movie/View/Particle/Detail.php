@@ -366,15 +366,61 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
     <?php else:?>
         <?php foreach ( $dialogues as $dialogue ): ?>
             <?php /* @var $dialogue \X\Module\Movie\Service\Movie\Core\Instance\ClassicDialogue */ ?>
-                <p>
-                    <a href="/?module=movie&action=dialogue/detail&movie=<?php echo $movie->get('id'); ?>&dialogue=<?php echo $dialogue->get('id'); ?>">
-                        <?php echo $dialogue->get('content');?>
-                    </a>
-                </p>
+            <p>
+                <a href="/?module=movie&action=dialogue/detail&movie=<?php echo $movie->get('id'); ?>&dialogue=<?php echo $dialogue->get('id'); ?>">
+                    <?php echo $dialogue->get('content');?>
+                </a>
+            </p>
         <?php endforeach; ?>
     <?php endif; ?>
 </div>
 <br>
+
+<h4 class="margin-bottom-5 clearfix">
+    一句话点评
+    <span class="pull-right">
+        <a href="/?module=movie&action=shortComment/index&movie=<?php echo $movie->get('id');?>">
+            <small>查看所有&gt;&gt;</small>
+        </a>
+    </span>
+</h4>
+<hr class="margin-top-0">
+<div class="clearfix">
+    <?php $criteria = new Criteria(); ?>
+    <?php $criteria->limit = 9; ?>
+    <?php $shortComments = $movie->getShortCommentManager()->find($criteria); ?>
+    <?php if (empty($shortComments)) : ?>
+        <span>
+            <small>
+                暂时没有该影片的图片数据数据～～～
+                <?php if ( Movie::MARK_WATCHED === $myMark) : ?>
+                    , 你可以进入
+                    <a href="/?module=movie&action=poster/index">
+                    管理页面
+                    </a>
+                    添加图片。
+                <?php endif; ?>
+            </small>
+        </span>
+    <?php else:?>
+    <ul class="list-inline">
+        <?php foreach ( $shortComments as $shortComment ): ?>
+            <?php /* @var $poster \X\Module\Movie\Service\Movie\Core\Instance\ShortComment */ ?>
+            <li>
+                <p>
+                    <?php echo $shortComment->getCommenter()->getProfileManager()->get('nickname'); ?> 
+                    <small class="text-muted">(<?php echo $shortComment->get('commented_at');?>)</small> : 
+                    <a href="/?module=movie&action=comment/detail&movie=<?php echo $movie->get('id'); ?>&comment=<?php echo $shortComment->get('id'); ?>">
+                        <?php echo $shortComment->get('content');?>
+                    </a>
+                </p>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+    <?php endif; ?>
+</div>
+<br>
+
 <div class="row">
     <div class="col-md-8">
         <ul class="nav nav-tabs">

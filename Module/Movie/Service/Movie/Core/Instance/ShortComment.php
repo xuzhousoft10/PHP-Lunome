@@ -6,10 +6,14 @@ namespace X\Module\Movie\Service\Movie\Core\Instance;
 use X\Core\X;
 use X\Module\Account\Service\Account\Service as AccountService;
 use X\Module\Movie\Service\Movie\Core\Model\MovieShortCommentModel;
+use X\Module\Movie\Service\Movie\Util\InteractionInstance;
+use X\Module\Movie\Service\Movie\Core\Model\MovieShortCommentFavouriteModel;
+use X\Module\Movie\Service\Movie\Core\Model\MovieShortCommentVoteModel;
+use X\Module\Movie\Service\Movie\Core\Model\MovieShortCommentCommentModel;
 /**
  * 
  */
-class ShortComment {
+class ShortComment extends InteractionInstance {
     /**
      * @var MovieShortCommentModel
      */
@@ -55,5 +59,29 @@ class ShortComment {
         $accountService = X::system()->getServiceManager()->get(AccountService::getServiceName());
         $commenter = $accountService->get($this->model->commented_by);
         return $commenter;
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \X\Module\Movie\Service\Movie\Util\InteractionInstance::getFavouriteModel()
+     */
+    protected function getFavouriteModel() {
+        return MovieShortCommentFavouriteModel::getClassName();
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \X\Module\Movie\Service\Movie\Util\InteractionInstance::getVoteModel()
+     */
+    protected function getVoteModel() {
+        return MovieShortCommentVoteModel::getClassName();
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \X\Module\Movie\Service\Movie\Util\InteractionInstance::getCommentModel()
+     */
+    protected function getCommentModel() {
+        return MovieShortCommentCommentModel::getClassName();
     }
 }
