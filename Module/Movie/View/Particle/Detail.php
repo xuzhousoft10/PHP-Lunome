@@ -367,7 +367,7 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
         <?php foreach ( $dialogues as $dialogue ): ?>
             <?php /* @var $dialogue \X\Module\Movie\Service\Movie\Core\Instance\ClassicDialogue */ ?>
             <p>
-                <a href="/?module=movie&action=dialogue/detail&movie=<?php echo $movie->get('id'); ?>&dialogue=<?php echo $dialogue->get('id'); ?>">
+                <a class="text-muted" href="/?module=movie&action=dialogue/detail&movie=<?php echo $movie->get('id'); ?>&dialogue=<?php echo $dialogue->get('id'); ?>">
                     <?php echo $dialogue->get('content');?>
                 </a>
             </p>
@@ -410,7 +410,7 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
                 <p>
                     <?php echo $shortComment->getCommenter()->getProfileManager()->get('nickname'); ?> 
                     <small class="text-muted">(<?php echo $shortComment->get('commented_at');?>)</small> : 
-                    <a href="/?module=movie&action=comment/detail&movie=<?php echo $movie->get('id'); ?>&comment=<?php echo $shortComment->get('id'); ?>">
+                    <a class="text-muted" href="/?module=movie&action=comment/detail&movie=<?php echo $movie->get('id'); ?>&comment=<?php echo $shortComment->get('id'); ?>">
                         <?php echo $shortComment->get('content');?>
                     </a>
                 </p>
@@ -420,6 +420,53 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
     <?php endif; ?>
 </div>
 <br>
+
+<h4 class="margin-bottom-5 clearfix">
+    相关新闻
+    <span class="pull-right">
+        <a href="/?module=movie&action=news/index&movie=<?php echo $movie->get('id');?>">
+            <small>查看所有&gt;&gt;</small>
+        </a>
+    </span>
+</h4>
+<hr class="margin-top-0">
+<div class="clearfix">
+    <?php $criteria = new Criteria(); ?>
+    <?php $criteria->limit = 10; ?>
+    <?php $news = $movie->getNewsManager()->find($criteria); ?>
+    <?php if (empty($news)) : ?>
+        <span>
+            <small>
+                暂时没有该影片的新闻数据数据～～～
+                <?php if ( Movie::MARK_WATCHED === $myMark) : ?>
+                    , 你可以进入
+                    <a href="/?module=movie&action=poster/index">
+                    管理页面
+                    </a>
+                    添加新闻。
+                <?php endif; ?>
+            </small>
+        </span>
+    <?php else:?>
+    <ul class="list-unstyled">
+        <?php foreach ( $news as $newsItem ): ?>
+            <?php /* @var $newsItem \X\Module\Movie\Service\Movie\Core\Instance\News */ ?>
+            <li>
+                <p>
+                    <a class="text-muted" href="<?php echo $newsItem->get('link');?>" target="_blank">
+                        <?php echo Html::HTMLEncode($newsItem->get('title')); ?>
+                    </a>
+                    <small>
+                        <img src="<?php echo $newsItem->get('logo');?>">
+                        <?php echo Html::HTMLEncode($newsItem->get('source'));?>
+                        <?php echo $newsItem->get('time');?>
+                    </small>
+                </p>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+    <?php endif; ?>
+</div>
 
 <div class="row">
     <div class="col-md-8">

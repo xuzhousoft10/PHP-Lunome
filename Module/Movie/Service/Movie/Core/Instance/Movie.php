@@ -21,6 +21,7 @@ use X\Module\Movie\Service\Movie\Core\Manager\PosterManager;
 use X\Module\Movie\Service\Movie\Core\Manager\CharacterManager;
 use X\Module\Movie\Service\Movie\Core\Manager\ShortCommentManager;
 use X\Util\Service\Instance\Model;
+use X\Module\Movie\Service\Movie\Core\Manager\NewsManager;
 /**
  * 
  */
@@ -238,5 +239,12 @@ class Movie extends Model {
      */
     public function getShortCommentManager() {
         return new ShortCommentManager($this->movieModel);
+    }
+    
+    /**
+     * @return \X\Module\Movie\Service\Movie\Core\Manager\NewsManager
+     */
+    public function getNewsManager() {
+        return new NewsManager($this);
     }
 }
