@@ -379,7 +379,7 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
 <h4 class="margin-bottom-5 clearfix">
     一句话点评
     <span class="pull-right">
-        <a href="/?module=movie&action=shortComment/index&movie=<?php echo $movie->get('id');?>">
+        <a href="/?module=movie&action=comment/index&movie=<?php echo $movie->get('id');?>">
             <small>查看所有&gt;&gt;</small>
         </a>
     </span>
