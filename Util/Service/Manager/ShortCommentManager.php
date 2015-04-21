@@ -25,7 +25,6 @@ class ShortCommentManager {
         $commentModel = new $this->commentModelName();
         $commentModel->content = $content;
         $commentModel->host_id = $this->host->get('id');
-        $commentModel->validate();
         $commentModel->save();
         return new ShortComment($commentModel, $this->host);
     }
