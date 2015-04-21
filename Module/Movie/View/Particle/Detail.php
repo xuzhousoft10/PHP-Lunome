@@ -468,6 +468,55 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
     <?php endif; ?>
 </div>
 
+<br>
+<h4 class="margin-bottom-5 clearfix">
+    影评
+    <span class="pull-right">
+        <a href="/?module=movie&action=criticism/index&movie=<?php echo $movie->get('id');?>">
+            <small>查看所有&gt;&gt;</small>
+        </a>
+    </span>
+</h4>
+<hr class="margin-top-0">
+<div class="clearfix">
+    <?php $criteria = new Criteria(); ?>
+    <?php $criteria->limit = 10; ?>
+    <?php $criticisms = $movie->getCriticismManager()->find($criteria); ?>
+    <?php if (empty($criticisms)) : ?>
+        <span>
+            <small>
+                暂时没有该影片的影评数据～～～
+                <?php if ( Movie::MARK_WATCHED === $myMark) : ?>
+                    , 你可以进入
+                    <a href="/?module=movie&action=poster/index">
+                    管理页面
+                    </a>
+                    添加影评。
+                <?php endif; ?>
+            </small>
+        </span>
+    <?php else:?>
+    <ul class="list-unstyled">
+        <?php foreach ( $criticisms as $criticism ): ?>
+            <?php /* @var $criticism \X\Module\Movie\Service\Movie\Core\Instance\Criticism */ ?>
+            <li>
+                <p>
+                    <a class="text-muted" href="/?module=movie&action=criticism/detail&movie=<?php echo $movie->get('id'); ?>&criticism=<?php echo $criticism->get('id'); ?>">
+                        <?php echo Html::HTMLEncode($criticism->get('title')); ?>
+                    </a>
+                    <small>
+                        <?php $profile = $criticism->getCommenter()->getProfileManager(); ?>
+                        <img src="<?php echo $profile->get('photo');?>" width="16" height="16">
+                        <?php echo Html::HTMLEncode($profile->get('nickname'));?>
+                        <?php echo $criticism->getTime();?>
+                    </small>
+                </p>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+    <?php endif; ?>
+</div>
+
 <div class="row">
     <div class="col-md-8">
         <ul class="nav nav-tabs">

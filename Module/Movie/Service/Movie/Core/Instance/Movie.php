@@ -22,6 +22,7 @@ use X\Module\Movie\Service\Movie\Core\Manager\CharacterManager;
 use X\Module\Movie\Service\Movie\Core\Manager\ShortCommentManager;
 use X\Util\Service\Instance\Model;
 use X\Module\Movie\Service\Movie\Core\Manager\NewsManager;
+use X\Module\Movie\Service\Movie\Core\Manager\CriticismManager;
 /**
  * 
  */
@@ -246,5 +247,12 @@ class Movie extends Model {
      */
     public function getNewsManager() {
         return new NewsManager($this);
+    }
+    
+    /**
+     * @return \X\Module\Movie\Service\Movie\Core\Manager\CriticismManager
+     */
+    public function getCriticismManager() {
+        return new CriticismManager($this);
     }
 }
