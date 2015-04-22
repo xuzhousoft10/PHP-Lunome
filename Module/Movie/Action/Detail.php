@@ -63,6 +63,15 @@ class Detail extends Visual {
         $markNames = $moduleConfig->get('movie_mark_names');
         $detailView->getDataManager()->set('markNames', $markNames);
         
+        $isWatched = $movieAccount->isWatched($movie->get('id'));
+        if ( $isWatched ) {
+            $ratePanel = $this->getParticleViewPath('DetailRatePanel');
+            $ratePanel = $view->getParticleViewManager()->load('DETAIL_RATE_PANEL', $ratePanel);
+            $ratePanel->getOptionManager()->set('zone', 'right');
+            $ratePanel->getDataManager()->set('movie', $movie);
+            $ratePanel->getDataManager()->set('movieAccount', $movieAccount);
+        }
+        
         $suggestionBar = $this->getParticleViewPath('DetailSuggestionBar');
         $suggestionBar = $view->getParticleViewManager()->load('DETAIL_SUGGESTION_BAR', $suggestionBar);
         $suggestionBar->getOptionManager()->set('zone', 'right');
