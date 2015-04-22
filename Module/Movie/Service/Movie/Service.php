@@ -29,7 +29,29 @@ class Service extends \X\Core\Service\XService {
      */
     protected static $serviceName = 'Movie';
     
-    public function find() {}
+    /**
+     * @param string $condition
+     * @return \X\Module\Movie\Service\Movie\Core\Instance\Movie[]
+     */
+    public function find($condition=null) {
+        if ( !($condition instanceof Criteria) ) {
+            $criteria = new Criteria();
+            $criteria->condition = $condition;
+            $condition = $criteria;
+        } else {
+            $criteria = $condition;
+        }
+        
+        if ( !$criteria->hasOrder() ) {
+            $criteria->addOrder('date', 'DESC');
+        }
+        
+        $movies = MovieModel::model()->findAll($criteria);
+        foreach ( $movies as $index => $movie ) {
+            $movies[$index] = new Movie($movie);
+        }
+        return $movies;
+    }
     public function count() {}
     public function getDirectoryManager() {}
     public function getActorManager() {}

@@ -63,6 +63,12 @@ class Detail extends Visual {
         $markNames = $moduleConfig->get('movie_mark_names');
         $detailView->getDataManager()->set('markNames', $markNames);
         
+        $suggestionBar = $this->getParticleViewPath('DetailSuggestionBar');
+        $suggestionBar = $view->getParticleViewManager()->load('DETAIL_SUGGESTION_BAR', $suggestionBar);
+        $suggestionBar->getOptionManager()->set('zone', 'right');
+        $suggestionBar->getDataManager()->set('markStyles', $moduleConfig->get('movie_mark_styles'));
+        $suggestionBar->getDataManager()->set('markNames', $markNames);
+        
         $view->title = $movie->get('name');
     }
     
