@@ -53,26 +53,26 @@ $movie = $vars['movie'];
     </div>
     
     <div class="text-right">
-        <?php #$favouriteManager = $comment->getFavouriteManager(); ?>
-        <?php #if ( $favouriteManager->isMyFavourite() ):  ?>
-            <a href="/?module=movie&action=comment/like&movie=<?php #echo $movie->get('id'); ?>&comment=<?php #echo $comment->get('id');?>&like=no"
-            ><span class="glyphicon glyphicon-heart" >(<?php #echo $comment->getFavouriteManager()->count(); ?>)</span></a>
-        <?php #else : ?>
-            <a href="/?module=movie&action=comment/like&movie=<?php #echo $movie->get('id'); ?>&comment=<?php #echo $comment->get('id');?>&like=yes"
-            ><span class="glyphicon glyphicon-heart-empty" >(<?php #echo $comment->getFavouriteManager()->count(); ?>)</span></a>
-        <?php #endif; ?>
+        <?php $favouriteManager = $criticism->getFavouriteManager(); ?>
+        <?php if ( $favouriteManager->isMyFavourite() ):  ?>
+            <a href="/?module=movie&action=criticism/like&movie=<?php echo $movie->get('id'); ?>&criticism=<?php echo $criticism->get('id');?>&like=no"
+            ><span class="glyphicon glyphicon-heart" >(<?php echo $criticism->getFavouriteManager()->count(); ?>)</span></a>
+        <?php else : ?>
+            <a href="/?module=movie&action=criticism/like&movie=<?php echo $movie->get('id'); ?>&criticism=<?php echo $criticism->get('id');?>&like=yes"
+            ><span class="glyphicon glyphicon-heart-empty" >(<?php echo $criticism->getFavouriteManager()->count(); ?>)</span></a>
+        <?php endif; ?>
         &nbsp;
         
-        <a href="/?module=movie&action=comment/vote&movie=<?php #echo $movie->get('id'); ?>&comment=<?php #echo $comment->get('id');?>&vote=up"
-        ><span class="glyphicon glyphicon-thumbs-up" >(<?php #echo $comment->getVoteManager()->countVoteUp(); ?>)</span></a>
+        <a href="/?module=movie&action=criticism/vote&movie=<?php echo $movie->get('id'); ?>&criticism=<?php echo $criticism->get('id');?>&vote=up"
+        ><span class="glyphicon glyphicon-thumbs-up" >(<?php echo $criticism->getVoteManager()->countVoteUp(); ?>)</span></a>
         &nbsp;
         
-        <a href="/?module=movie&action=comment/vote&movie=<?php #echo $movie->get('id'); ?>&comment=<?php #echo $comment->get('id');?>&vote=down"
-        ><span class="glyphicon glyphicon-thumbs-down" >(<?php #echo $comment->getVoteManager()->countVoteDown();?>)</span></a>
+        <a href="/?module=movie&action=criticism/vote&movie=<?php echo $movie->get('id'); ?>&criticism=<?php echo $criticism->get('id');?>&vote=down"
+        ><span class="glyphicon glyphicon-thumbs-down" >(<?php echo $criticism->getVoteManager()->countVoteDown();?>)</span></a>
         &nbsp;
         
-        <a href="/?module=movie&action=comment/detail&movie=<?php #echo $movie->get('id'); ?>&comment=<?php #echo $comment->get('id');?>"
-        ><span>评论(<?php #echo $comment->getCommentManager()->count();?>)</span></a>
+        <a href="/?module=movie&action=criticism/detail&movie=<?php echo $movie->get('id'); ?>&criticism=<?php echo $criticism->get('id');?>"
+        ><span>评论(<?php echo $criticism->getCommentManager()->count();?>)</span></a>
         &nbsp;
     </div>
     <?php endforeach; ?>

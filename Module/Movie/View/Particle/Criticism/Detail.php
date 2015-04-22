@@ -29,19 +29,19 @@
 <div class="text-right">
     <?php $favouriteManager = $criticism->getFavouriteManager(); ?>
     <?php if ( $favouriteManager->isMyFavourite() ):  ?>
-        <a href="/?module=movie&action=comment/like&movie=<?php echo $movie->get('id')?>&comment=<?php echo $criticism->get('id');?>&like=no"
+        <a href="/?module=movie&action=criticism/like&movie=<?php echo $movie->get('id')?>&criticism=<?php echo $criticism->get('id');?>&like=no"
         ><span class="glyphicon glyphicon-heart" >(<?php echo $criticism->getFavouriteManager()->count(); ?>)</span></a>
     <?php else : ?>
-        <a href="/?module=movie&action=comment/like&movie=<?php echo $movie->get('id')?>&comment=<?php echo $criticism->get('id');?>&like=yes"
+        <a href="/?module=movie&action=criticism/like&movie=<?php echo $movie->get('id')?>&criticism=<?php echo $criticism->get('id');?>&like=yes"
         ><span class="glyphicon glyphicon-heart-empty" >(<?php echo $criticism->getFavouriteManager()->count(); ?>)</span></a>
     <?php endif; ?>
     &nbsp;
     
-    <a href="/?module=movie&action=comment/vote&movie=<?php echo $movie->get('id')?>&comment=<?php echo $criticism->get('id');?>&vote=up"
+    <a href="/?module=movie&action=criticism/vote&movie=<?php echo $movie->get('id')?>&criticism=<?php echo $criticism->get('id');?>&vote=up"
     ><span class="glyphicon glyphicon-thumbs-up" >(<?php echo $criticism->getVoteManager()->countVoteUp(); ?>)</span></a>
     &nbsp;
     
-    <a href="/?module=movie&action=comment/vote&movie=<?php echo $movie->get('id')?>&comment=<?php echo $criticism->get('id');?>&vote=down"
+    <a href="/?module=movie&action=criticism/vote&movie=<?php echo $movie->get('id')?>&criticism=<?php echo $criticism->get('id');?>&vote=down"
     ><span class="glyphicon glyphicon-thumbs-down" >(<?php echo $criticism->getVoteManager()->countVoteDown();?>)</span></a>
 </div>
 
@@ -53,9 +53,9 @@
 <?php $currentAccount = $vars['currentAccount']; ?>
 <?php $movieAccount = $vars['movieAccount']; ?>
 <?php if ( $movieAccount->isWatched($movie->get('id')) ) : ?>
-    <form action="/?module=movie&action=comment/comment" method="post">
+    <form action="/?module=movie&action=criticism/comment" method="post">
         <input type="hidden" name="movie" value="<?php echo $movie->get('id');?>" >
-        <input type="hidden" name="comment" value="<?php echo $criticism->get('id'); ?>" >
+        <input type="hidden" name="criticism" value="<?php echo $criticism->get('id'); ?>" >
         <div class="media">
             <div class="media-left">
                 <img class="media-object img-rounded lunome-movie-character-photo-80-80" 

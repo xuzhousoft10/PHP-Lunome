@@ -1,5 +1,5 @@
 <?php
-namespace X\Module\Movie\Action\Comment;
+namespace X\Module\Movie\Action\Criticism;
 /**
  * 
  */
@@ -12,13 +12,13 @@ class Vote extends MovieAttributeBasicAction {
      * (non-PHPdoc)
      * @see \X\Service\XAction\Core\Util\Action::runAction()
      */
-    public function runAction( $movie, $comment, $vote ) {
-        $comment = $this->getMovie()->getShortCommentManager()->get($comment);
-        if ( null === $comment ) {
+    public function runAction( $movie, $criticism, $vote ) {
+        $criticism = $this->getMovie()->getCriticismManager()->get($criticism);
+        if ( null === $criticism ) {
             return $this->throw404();
         }
         
-        $voteManager = $comment->getVoteManager();
+        $voteManager = $criticism->getVoteManager();
         if ( 'up' === $vote ) {
             $voteManager->voteUp();
         } else {

@@ -1,5 +1,5 @@
 <?php
-namespace X\Module\Movie\Action\Comment;
+namespace X\Module\Movie\Action\Criticism;
 /**
  * 
  */
@@ -12,13 +12,13 @@ class Comment extends MovieAttributeBasicAction {
      * (non-PHPdoc)
      * @see \X\Service\XAction\Core\Util\Action::runAction()
      */
-    public function runAction( $movie, $comment, $content ) {
-        $comment = $this->getMovie()->getShortCommentManager()->get($comment);
-        if ( null === $comment ) {
+    public function runAction( $movie, $criticism, $content ) {
+        $criticism = $this->getMovie()->getCriticismManager()->get($criticism);
+        if ( null === $criticism ) {
             return $this->throw404();
         }
         
-        $comment->getCommentManager()->add($content);
+        $criticism->getCommentManager()->add($content);
         $this->goBack();
     }
 }
