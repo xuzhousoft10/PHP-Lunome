@@ -25,16 +25,18 @@ class MovieModel extends Basic {
      */
     protected function describe() {
         $columns = array();
-        $columns['id']              = 'PRIMARY VARCHAR(36) NOTNULL';
-        $columns['name']            = 'VARCHAR(128)';
-        $columns['length']          = 'INT UNSIGNED';
-        $columns['date']            = 'DATE';
-        $columns['region_id']       = 'VARCHAR(36)';
-        $columns['language_id']     = 'VARCHAR(36)';
-        $columns['introduction']    = 'VARCHAR(2048)';
-        $columns['has_cover']       = 'TINYINT [0]';
-        $columns['url']             = 'VARCHAR(255)';
-        $columns['source']          = 'VARCHAR(45)';
+        $columns['id']                  = 'PRIMARY VARCHAR(36) NOTNULL';
+        $columns['name']                = 'VARCHAR(128)';
+        $columns['length']              = 'INT UNSIGNED';
+        $columns['date']                = 'DATE';
+        $columns['region_id']           = 'VARCHAR(36)';
+        $columns['language_id']         = 'VARCHAR(36)';
+        $columns['introduction']        = 'VARCHAR(2048)';
+        $columns['has_cover']           = 'TINYINT [0]';
+        $columns['url']                 = 'VARCHAR(255)';
+        $columns['source']              = 'VARCHAR(45)';
+        $columns['record_created_at']   = 'DATETIME';
+        $columns['record_created_by']   = 'VARCHAR(36)';
         return $columns;
     }
 
