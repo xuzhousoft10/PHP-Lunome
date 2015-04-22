@@ -65,7 +65,6 @@ class Service extends \X\Core\Service\XService {
         
         $query = SQLBuilder::build()->select()
             ->expression('medias.id', 'id')
-            ->expression('medias.name', 'name')
             ->expression(new Count('marks.id'), 'mark_count')
             ->from($modelTableName, 'medias')
             ->from($markTableName, 'marks')
@@ -75,7 +74,12 @@ class Service extends \X\Core\Service\XService {
             ->orderBy('mark_count', 'DESC')
             ->toString();
         $result = $DBService->getDatabaseManager()->get()->query($query);
-        return $result;
+        
+        $list = array();
+        foreach ( $result as $item ) {
+            $list[] = $item['id'];
+        }
+        return $this->find(array('id'=>$list));
     }
     
     /**
