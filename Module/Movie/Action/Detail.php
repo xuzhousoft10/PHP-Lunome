@@ -72,6 +72,12 @@ class Detail extends Visual {
             $ratePanel->getDataManager()->set('movieAccount', $movieAccount);
         }
         
+        $sharePanel = $this->getParticleViewPath('DetailSharePanel');
+        $sharePanel = $view->getParticleViewManager()->load('DETAIL_SHARE_PANEL', $sharePanel);
+        $sharePanel->getOptionManager()->set('zone', 'right');
+        $sharePanel->getDataManager()->set('movie', $movie);
+        $sharePanel->getDataManager()->set('movieAccount', $movieAccount);
+        
         $suggestionBar = $this->getParticleViewPath('DetailSuggestionBar');
         $suggestionBar = $view->getParticleViewManager()->load('DETAIL_SUGGESTION_BAR', $suggestionBar);
         $suggestionBar->getOptionManager()->set('zone', 'right');

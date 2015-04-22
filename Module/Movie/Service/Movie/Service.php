@@ -79,6 +79,9 @@ class Service extends \X\Core\Service\XService {
         foreach ( $result as $item ) {
             $list[] = $item['id'];
         }
+        if ( empty($list) ) {
+            return array();
+        }
         return $this->find(array('id'=>$list));
     }
     

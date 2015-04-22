@@ -233,6 +233,8 @@ class Html extends \X\Service\XView\Core\Util\View {
     public static function HTMLAttributeEncode($string) {
         return htmlentities($string);
     }
-    public static function JavascriptValueEncode(){}
+    public static function JavascriptValueEncode($string){
+        return json_encode($string);
+    }
     public static function URLEncode() {}
 }
