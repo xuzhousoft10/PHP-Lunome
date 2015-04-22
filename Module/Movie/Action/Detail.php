@@ -68,6 +68,7 @@ class Detail extends Visual {
         $suggestionBar->getOptionManager()->set('zone', 'right');
         $suggestionBar->getDataManager()->set('markStyles', $moduleConfig->get('movie_mark_styles'));
         $suggestionBar->getDataManager()->set('markNames', $markNames);
+        $suggestionBar->getDataManager()->set('movie', $movie);
         
         $view->title = $movie->get('name');
     }
