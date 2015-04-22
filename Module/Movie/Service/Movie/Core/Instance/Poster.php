@@ -6,10 +6,14 @@ namespace X\Module\Movie\Service\Movie\Core\Instance;
 use X\Core\X;
 use X\Module\Movie\Service\Movie\Core\Model\MoviePosterModel;
 use X\Service\QiNiu\Service as QiniuService;
+use X\Module\Movie\Service\Movie\Util\InteractionInstance;
+use X\Module\Movie\Service\Movie\Core\Model\MoviePosterFavouriteModel;
+use X\Module\Movie\Service\Movie\Core\Model\MoviePosterCommentModel;
+use X\Module\Movie\Service\Movie\Core\Model\MoviePosterVoteModel;
 /**
  * 
  */
-class Poster {
+class Poster extends InteractionInstance {
     /**
      * @var MoviePosterModel
      */
@@ -72,5 +76,26 @@ class Poster {
      */
     public function getURL() {
         return $this->model->url;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getFavouriteModel() {
+        return MoviePosterFavouriteModel::getClassName();
+    }
+    
+    /**
+     * @return string
+     */
+    public function getCommentModel() {
+        return MoviePosterCommentModel::getClassName();
+    }
+    
+    /**
+     * @return string
+     */
+    public function getVoteModel() {
+        return MoviePosterVoteModel::getClassName();
     }
 }

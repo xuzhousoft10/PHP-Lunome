@@ -54,6 +54,15 @@ class PosterManager {
     }
     
     /**
+     * @param unknown $id
+     * @return \X\Module\Movie\Service\Movie\Core\Instance\Poster
+     */
+    public function get( $id ) {
+        $poster = MoviePosterModel::model()->findByPrimaryKey($id);
+        return (null===$poster) ? null : new Poster($poster);
+    }
+    
+    /**
      * @param string $condition
      * @return number
      */

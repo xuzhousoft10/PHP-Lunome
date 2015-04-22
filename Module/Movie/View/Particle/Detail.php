@@ -293,7 +293,7 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
 <h4 class="margin-bottom-5 clearfix">
     相关图片
     <span class="pull-right">
-        <a href="#">
+        <a href="/?module=movie&action=poster/index&movie=<?php echo $movie->get('id');?>">
             <small>查看所有&gt;&gt;</small>
         </a>
     </span>
@@ -321,7 +321,7 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
         <?php foreach ( $posters as $poster ): ?>
             <?php /* @var $poster \X\Module\Movie\Service\Movie\Core\Instance\Poster */ ?>
             <li>
-                <?php printf('<a href="/?module=movie&action=poster/detail&id=%s">', $movie->get('id'));?>
+                <?php printf('<a href="/?module=movie&action=poster/detail&id=%s&poster=%d">', $movie->get('id'), $poster->get('id'));?>
                 <div class="text-center">
                     <img    class="img-rounded lunome-movie-character-photo-80-80" 
                             src="<?php echo $poster->getURL(); ?>"
@@ -515,162 +515,4 @@ $scriptManager->add('movie-detail')->setSource('js/movie/detail.js')->setRequire
         <?php endforeach; ?>
     </ul>
     <?php endif; ?>
-</div>
-
-<div class="row">
-    <div class="col-md-8">
-        <ul class="nav nav-tabs">
-            <li><a href="#movie-posters-container" data-toggle="tab">宣传海报</a></li>
-        </ul>
-        
-        <!-- Tab panes -->
-        <div class="tab-content">
-            <!-- poster Tab -->
-            <div    class               = "tab-pane" 
-                    id                  = "movie-posters-container"
-                    data-resource-type  = "poster"
-                    data-index-url      = "/?module=movie&action=poster/index&id=<?php echo $movie->get('id'); ?>"
-                    data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
-                    data-movie-id       = "<?php echo $movie->get('id'); ?>"
-            ></div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <!-- comment list -->
-        <div    id                  = "movie-short-comment-container"
-                data-is-guest-user  = "<?php echo ($isGuestUser)?'true':'false'; ?>"
-                data-user-nickname  = "<?php echo ($isGuestUser)?'': Html::HTMLEncode($currentUserProfile->get('nickname')); ?>"
-                data-user-photo     = "<?php echo ($isGuestUser)?'':$currentUserProfile->get('photo'); ?>"
-                data-media-id       = "<?php echo $movie->get('id'); ?>"
-                data-index-url      = "/?module=movie&action=comment/index&id=<?php echo $movie->get('id'); ?>"
-                data-container      = "#movie-short-comment-list-container"
-                data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
-        >
-            <div class="clearfix">
-                <div class="col-md-4 padding-0">
-                    <img src="<?php echo $isGuestUser?'':$currentUserProfile->get('photo'); ?>" width="90" height="90" class="thumbnail margin-bottom-0">
-                    <span><?php echo $isGuestUser?'':Html::HTMLEncode($currentUserProfile->get('nickname')); ?></span>
-                </div>
-                <div class="col-md-8 padding-0">
-                    <form action="/?module=movie&action=comment/add">
-                        <input type="hidden" name="id" value="<?php echo $movie->get('id'); ?>" >
-                        <textarea name="content" class="width-full" rows="" cols=""></textarea>
-                        <br>
-                        <button class="btn btn-primary" name="save" type="button">发表</button>
-                    </form>
-                </div>
-            </div>
-            <hr>
-            <div class="clearfix" id="movie-short-comment-list-container"></div>
-        </div>
-    </div>
-</div>
-
-<!-- Classic dialogues edit modal -->
-<div class="modal fade" id="movie-classic-dialogues-edit-dialog" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form   action="/?module=movie&action=classicDialogue/edit" 
-                    data-dialog="#movie-classic-dialogues-edit-dialog" 
-                    data-resource-type="dialogue"
-                    data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
-            >
-                <input type="hidden" name="id" value="<?php echo $movie->get('id'); ?>">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel">添加经典台词</h4>
-                </div>
-                <div class="modal-body">
-                    <textarea class="width-full" name="content"></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary dialog-save-button">保存</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- poster edit model -->
-<div class="modal fade" id="movie-posters-add-dialog" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form   action="/?module=movie&action=poster/upload" 
-                    data-dialog="#movie-posters-add-dialog" 
-                    data-resource-type="poster"
-                    data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
-            >
-                <input type="hidden" name="id" value="<?php echo $movie->get('id'); ?>">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel">添加海报</h4>
-                </div>
-                <div class="modal-body">
-                    <input type="file" name="poster" id="movie-poster-file">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary dialog-save-button">保存</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- character edit dialog -->
-<div class="modal fade" id="movie-characters-edit-dialog" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form   action="/?module=movie&action=character/edit" 
-                    data-dialog="#movie-characters-edit-dialog" 
-                    data-resource-type="character"
-                    data-loadding-image = "<?php echo $assetsURL.'/image/loadding.gif'?>"
-            >
-                <input type="hidden" name="movie" value="<?php echo $movie->get('id'); ?>">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel">增加人物角色</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label>角色名称</label>
-                        <input name="character[name]" type="text" class="form-control" >
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>角色描述</label>
-                        <textarea name="character[description]" class="form-control" rows="" cols=""></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>角色头像</label>
-                        <input id="movie-character-image" type="file" name="image">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary dialog-save-button">保存</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- poster view dialog -->
-<div class="modal fade" id="movie-posters-view-dialog" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">查看海报</h4>
-            </div>
-            <div class="modal-body">
-                <img src="#" class="img-thumbnail" id="movie-poster-view-container" >
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            </div>
-        </div>
-    </div>
 </div>
