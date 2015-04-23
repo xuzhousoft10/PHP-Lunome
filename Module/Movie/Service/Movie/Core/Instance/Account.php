@@ -16,6 +16,7 @@ use X\Module\Movie\Service\Movie\Core\Model\MovieActorMapModel;
 use X\Module\Movie\Service\Movie\Core\Model\MovieCategoryMapModel;
 use X\Module\Movie\Service\Movie\Core\Model\MovieShortCommentModel;
 use X\Module\Movie\Service\Movie\Core\Model\MovieInvitationModel;
+use X\Module\Movie\Service\Movie\Core\Model\Interaction\MovieSuggestionModel;
 /**
  * 
  */
@@ -349,6 +350,26 @@ class Account {
         $this->account->getNotificationManager()->create()
             ->setView($view)
             ->setSourceDataModel($invitation)
+            ->setRecipiendID($accountID)
+            ->send();
+    }
+    
+    /**
+     * @param unknown $accountID
+     * @param unknown $movieID
+     * @param unknown $comment
+     * @param unknown $view
+     */
+    public function sendSuggestion($accountID, $movieID, $comment, $view) {
+        $suggestion = new MovieSuggestionModel();
+        $suggestion->recipient_id = $accountID;
+        $suggestion->movie_id = $movieID;
+        $suggestion->comment = $comment;
+        $suggestion->save();
+        
+        $this->account->getNotificationManager()->create()
+            ->setView($view)
+            ->setSourceDataModel($suggestion)
             ->setRecipiendID($accountID)
             ->send();
     }

@@ -3,6 +3,8 @@ namespace X\Module\Account\Service\Account\Core\Instance;
 /**
  * 
  */
+use X\Core\X;
+use X\Module\Account\Service\Account\Service as AccountService;
 use X\Module\Account\Service\Account\Core\Model\AccountNotificationModel;
 use X\Module\Account\Service\Account\Core\Util\Exception;
 /**
@@ -100,5 +102,15 @@ class Notification {
         $this->notificationModel->status = AccountNotificationModel::STATUS_CLOSED;
         $this->notificationModel->save();
         return $this;
+    }
+    
+    /**
+     * @return \X\Module\Account\Service\Account\Core\Instance\Account
+     */
+    public function getProducer() {
+        /* @var $accountService AccountService */
+        $accountService = X::system()->getServiceManager()->get(AccountService::getServiceName());
+        $requester = $accountService->get($this->notificationModel->produced_by);
+        return $requester;
     }
 }
