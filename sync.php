@@ -138,3 +138,4 @@ foreach ( $fileState as $filePath => $fileInfo ) {
 
 ftp_quit($connect);
 file_put_contents('status.php', "<?php \n return ".var_export($fileState, true).';');
+echo "DONE!\n";
